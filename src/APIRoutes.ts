@@ -66,3 +66,5 @@ export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
+
+

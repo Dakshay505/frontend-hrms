@@ -15,6 +15,11 @@ import dot from "../assets/DotsThreeVertical.png"
 import signin from "../assets/SignIn.png"
 import { useDispatch, useSelector } from "react-redux";
 import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
+import notification from "../assets/Bell.png"
+
+import { logoutUserAsync } from "../redux/Slice/loginSlice";
+
+
 
 const getCurrentDate = () => {
   const currentDate = new Date();
@@ -43,17 +48,17 @@ const navItems: NavItem[] = [
     Link: "/employee-leaves-home",
   },
   { id: "Documents", name: "Documents", icon: doc, Link: "/empdocuments" },
-  { id: "Notification", name: "Notification", icon: bellIcon, Link: "/employee-notifications" },
+  { id: "Notification", name: "Notification", icon: bellIcon, Link: "#" },
   { id: "Salaries", name: "Salaries", icon: salary, Link: "" },
   {
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "/emptraning-dashboard",
+    Link: "#",
   },
 ];
 
-const asideButtonCSS = `flex items-center font-semibold gap-[8px] px-[16px] py-[12px] cursor-pointer`;
+const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] px-[16px] py-[12px] cursor-pointer`;
 
 type Props = {
   children: React.ReactNode
@@ -86,8 +91,8 @@ const handleChangePassword = () => {
     // main
     <div className="flex flex-col w-full h-full">
       {/* nav */}
-      <nav className="flex items-center justify-between px-5 flex-row border w-full h-[74px]">
-        <Link to='/'>
+      <nav className="flex items-center fixed bg-white z-10 justify-between px-5 flex-row border w-full h-[74px]">
+        <Link to='#'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
             <h1 className="text-red text-[20px] font-medium">Chawla Ispat</h1>
@@ -97,7 +102,7 @@ const handleChangePassword = () => {
         <div className="flex items-center  gap-[16px]">
           <Link to='/employee-notifications'>
             <div>
-              <img src={bellIcon} alt="notification" className="w-[24px]" />
+              <img src={notification} alt="notification" className="w-[24px]" />
             </div>
           </Link>
           <div className="w-[1px] h-6 bg-primary-txt"></div>
@@ -107,8 +112,9 @@ const handleChangePassword = () => {
       </nav>
       {/* aside */}
 
-      <div className="flex">
-        <aside className="flex flex-col px-[12px] gap-[13.5rem] py-5 justify-between border-r w-[256px] h-auto">
+      <div className="flex mt-[80px]">
+      <aside className="flex flex-col px-[12px] gap-[30px] py-5 border-r w-[270px] ">
+
           <div className="flex flex-col gap-[8px]">
             {navItems.map((item) => (
               <Link
@@ -126,7 +132,7 @@ const handleChangePassword = () => {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className={`w-6 h-6 cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
+                    className={`w-[20px] h-[20px] cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
                       }`}
                   />
                   {item.name}
@@ -158,19 +164,22 @@ const handleChangePassword = () => {
             </div>
 
             {isDropdownOpen && (
-              <div className="absolute w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] top-[44rem] left-[3%] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
+              <div className="absolute w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] top-[31rem] left-[3%] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
                 <Link to="/change-password"
                   onClick={handleChangePassword}
                   className="block w-full px-4 py-2 text-center text-sm underline"
                 >
                   Change Password
                 </Link>
-                <Link to="/" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
+                <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
                     <img src={signin} alt=""  className='h-[10px] w-[10px]'/>
                     <input type='submit' 
                         value="Logout"
                         className='cursor-pointer'
-                    />
+                        onClick={() => {
+                          dispatch(logoutUserAsync());
+                        }}
+                    /> 
                 </Link>
               </div>
             )}

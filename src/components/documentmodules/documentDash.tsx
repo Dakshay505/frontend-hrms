@@ -116,7 +116,7 @@ export const DocumentDash = () => {
               <div className="flex justify-center items-center gap-[5px] hover:underline"> Resume <img src={resume} alt="" className="h-[12px] w-[12px]" /> </div>
             </Link>
             <div className="flex items-start gap-[8px] w-[238px]">
-              <button className="bg-primary-blue rounded-[2px] w-[122px] items-center flex gap-[5px] px-[16px] py-[12px] text-white font-semibold h-[40px]" onClick={handleApprove}>
+              <button className="bg-primary-blue rounded-[2px] w-[122px] items-center flex gap-[5px] px-[16px] py-[12px] text-white font-semibold h-[40px] justify-center" onClick={handleApprove}>
                 <img src={approve} alt="" className="h-[25px] w-[25px]" />
                 Approved</button>
 
