@@ -9,7 +9,7 @@ import doc from "../assets/doc.svg"
 import leave from "../assets/airplane.svg"
 import salary from "../assets/salary.svg"
 import training from "../assets/video.svg"
-
+import notification from "../assets/Bell.png"
 import calenderr from "../assets/attendence.svg";
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
 import { useDispatch } from "react-redux";
@@ -22,9 +22,6 @@ const getCurrentDate = () => {
   const formattedDate = currentDate.toLocaleDateString(undefined, options);
   return formattedDate;
 };
-
-
-
 
 
 type NavItem = {
@@ -53,7 +50,7 @@ const navItems: NavItem[] = [
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "/traning-dashboard",
+    Link: "",
   },
 ];
 
@@ -62,7 +59,7 @@ const navItems: NavItem[] = [
 
 
 
-const asideButtonCSS = `flex items-center font-semibold gap-[8px] px-[16px] py-[12px] cursor-pointer`;
+const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] px-[16px] py-[12px] cursor-pointer`;
 
 type Props = {
   children: React.ReactNode;
@@ -75,8 +72,8 @@ export default function aside(props: Props) {
     // main
     <div className="flex flex-col w-full h-full">
       {/* nav */}
-      <nav className="flex items-center justify-between px-5 flex-row border w-full h-[74px]">
-        <Link to='/emp'>
+      <nav className="flex items-center fixed bg-white z-10 justify-between px-5 flex-row border w-full h-[74px]">
+        <Link to='/'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
             <h1 className="text-red text-[20px] font-medium">Chawla Ispat</h1>
@@ -86,7 +83,7 @@ export default function aside(props: Props) {
         <div className="flex items-center  gap-[16px]">
           <Link to='/'>
             <div>
-              <img src={bellIcon} alt="notification" className="w-[24px]" />
+              <img src={notification} alt="notification" className="w-[24px]" />
             </div>
           </Link>
           <div className="w-[1px] h-6 bg-primary-txt"></div>
@@ -96,14 +93,14 @@ export default function aside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="flex">
-        <aside className="flex flex-col px-[12px] gap-[13.5rem] py-5 justify-between border-r w-[256px] h-full">
+      <div className="flex mt-[80px]">
+      <aside className="flex flex-col px-[12px] gap-[30px] py-5 border-r w-[270px] ">
           <div className="flex flex-col gap-[8px]">
             {navItems.map((item) => (
               <Link
                 key={item.id}
                 to={item.Link}
-                className={`p-2 rounded flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
+                className={`p-2 rounded  flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
                   }`}
               >
                 <div
@@ -115,7 +112,7 @@ export default function aside(props: Props) {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className={`w-6 h-6 cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
+                    className={`w-[20px] h-[20px] cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
                       }`}
                   />
                   {item.name}

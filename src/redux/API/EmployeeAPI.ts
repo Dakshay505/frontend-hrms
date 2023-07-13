@@ -17,12 +17,12 @@ export const updateEmployee = async (employeeData: any) => {
     console.log(employeeData)
     const { data } = await axios.patch(`${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData.data, { withCredentials: true });
     return data;
-  }
+  } 
   catch (error: any) {
     console.log(error.response.data)
   }
 }
-
+ 
 
 // READ
 export const getAllEmployee = async () => {
