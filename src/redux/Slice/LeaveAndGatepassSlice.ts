@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createLeavesAndGatePass, getAllAcceptedGatePass, getAllAcceptedLeaves, getAllApprovedGatePass, getAllApprovedLeaves, getAllPendingGatePass, getAllPendingLeaves, getAllRejectedGatePass, getAllRejectedLeaves, getMyLeavesAndGatePass, updateAcceptedGatePass, updateAcceptedLeaves, updatePendingGatePass, updatePendingLeaves } from '../API/LeaveAndGatepassAPI';
+import { createLeavesAndGatePass, getAllAcceptedGatePass, getAllAcceptedLeaves, getAllApprovedGatePass, getAllApprovedLeaves, getAllLeavesAndGatePass, getAllPendingGatePass, getAllPendingLeaves, getAllRejectedGatePass, getAllRejectedLeaves, getMyLeavesAndGatePass, updateAcceptedGatePass, updateAcceptedLeaves, updatePendingGatePass, updatePendingLeaves } from '../API/LeaveAndGatepassAPI';
 
 const initialState = {
+    // LEAVES AND GATEPSS
+    allLeavesAndGatePass: [],
     // LEAVES
     pendingLeaves: [],
     approvedLeaves: [],
@@ -75,6 +77,18 @@ export const getMyLeavesAndGatePassAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getMyLeavesAndGatePass();
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+// READ MY LEAVES AND GATEPASS
+export const getAllLeavesAndGatePassAsync: any = createAsyncThunk(
+    'getAllLeavesAndGatePassAsync',
+    async () => {
+        try {
+            const response: any = await getAllLeavesAndGatePass();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -208,6 +222,13 @@ export const LeaveSlice = createSlice({
                 state.status = 'idle';
                 state.pendingLeaves =  action.payload.pendingLeaveWithFilteredPeriods;
             })
+            .addCase(getAllLeavesAndGatePassAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.allLeavesAndGatePass =  action.payload.allLeaves;
+            })
             .addCase(getAllApprovedLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
@@ -227,7 +248,6 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getMyLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                console.log(action.payload)
                 state.myLeaves =  action.payload.leaves.fromTo;
                 state.myGatePass =  action.payload.leaves.gatePass;
                 state.upperLevelEmployee = action.payload.upperLevelEmployee
@@ -242,16 +262,14 @@ export const LeaveSlice = createSlice({
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updatePendingLeavesAsync.fulfilled, function (state: any, action: any) {
+            .addCase(updatePendingLeavesAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                state.pendingLeaves =  action.payload.updatedPendingLeaveWithFilteredPeriods;
             })
             .addCase(updateAcceptedLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
+            .addCase(updateAcceptedLeavesAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                state.acceptedLeaves =  action.payload.updatedAcceptedLeaveWithFilteredPeriods;
             })
             // GATEPASS
             .addCase(getAllPendingGatePassAsync.pending, (state) => {
@@ -285,17 +303,14 @@ export const LeaveSlice = createSlice({
             .addCase(updatePendingGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updatePendingGatePassAsync.fulfilled, function (state: any, action: any) {
+            .addCase(updatePendingGatePassAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                console.log("@@@@@@@", action.payload);
-                state.pendingGatePasses =  action.payload.updatedPendingGatePassWithFilteredPeriods;
             })
             .addCase(updateAcceptedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateAcceptedGatePassAsync.fulfilled, function (state: any, action: any) {
+            .addCase(updateAcceptedGatePassAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                state.acceptedGatePasses =  action.payload.updatedacceptedGatePassWithFilteredPeriods;
             })
     },
 });

@@ -27,7 +27,7 @@ export const PendingLeaves = () => {
     dispatch(getAllRejectedLeavesAsync());
     // GATEPASS
     dispatch(getAllApprovedGatePassAsync());
-    dispatch(getAllAcceptedGatePassAsync())
+    dispatch(getAllAcceptedGatePassAsync());
     dispatch(getAllRejectedGatePassAsync());
   }, [])
 
@@ -101,7 +101,11 @@ export const PendingLeaves = () => {
                           status: "approved",
                           from: (lastLeave.from).slice(0, 10),
                           to: (lastLeave.to).slice(0, 10)
-                        }))}
+                        })).then(() => {
+                          dispatch(getAllApprovedLeavesAsync());
+                          dispatch(getAllAcceptedLeavesAsync());
+                          dispatch(getAllRejectedLeavesAsync());
+                        })}
                           className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
                         <button
                           onClick={() => dispatch(updateAcceptedLeavesAsync({
@@ -109,7 +113,11 @@ export const PendingLeaves = () => {
                             status: "rejected",
                             from: (lastLeave.from).slice(0, 10),
                             to: (lastLeave.to).slice(0, 10)
-                          }))}
+                          })).then(() => {
+                            dispatch(getAllApprovedLeavesAsync());
+                            dispatch(getAllAcceptedLeavesAsync());
+                            dispatch(getAllRejectedLeavesAsync());
+                          })}
                           className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
                       </div>
                     </div>
@@ -147,7 +155,11 @@ export const PendingLeaves = () => {
                             status: "approved",
                             gatePassDate: (lastGatePass.date).slice(0, 10),
                             gatePassTime: lastGatePass.time
-                          }))}
+                          })).then(() => {
+                            dispatch(getAllApprovedGatePassAsync());
+                            dispatch(getAllAcceptedGatePassAsync());
+                            dispatch(getAllRejectedGatePassAsync());
+                          })}
                           className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
                         <button
                           onClick={() => dispatch(updateAcceptedGatePassAsync({
@@ -156,7 +168,11 @@ export const PendingLeaves = () => {
                             status: "rejected",
                             gatePassDate: (lastGatePass.date).slice(0, 10),
                             gatePassTime: lastGatePass.time
-                          }))}
+                          })).then(() => {
+                            dispatch(getAllApprovedGatePassAsync());
+                            dispatch(getAllAcceptedGatePassAsync());
+                            dispatch(getAllRejectedGatePassAsync());
+                          })}
                           className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
                       </div>
                     </div>
