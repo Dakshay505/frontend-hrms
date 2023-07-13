@@ -8,11 +8,10 @@ export const ApplyForLeave = () => {
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const [applicationTypeValue, setapplicationTypeValue] = useState("")
-    const { handleSubmit, register } = useForm();
+    const { handleSubmit, register, reset } = useForm();
     const handleApplicationTypeChange = (event: any) => {
         setapplicationTypeValue(event.target.value);
     }
-
 
     function convertToAmPm(time: any) {
         const [hours, minutes] = time.split(':');
@@ -40,20 +39,13 @@ export const ApplyForLeave = () => {
             <div className="mt-10">
                 <form
                     onSubmit={handleSubmit((data: any) => {
-                        const {gatePassTime, date, from, to} = data;
+                        const {gatePassTime, from, to} = data;
                         console.log(data);
                         if(gatePassTime){
                             const updatedTime = convertToAmPm(gatePassTime);
                             data = {
                                 ...data,
                                 time: updatedTime
-                            }
-                        }
-                        if(date){
-                            const updateDate = convertToDateDMY(date)
-                            data = {
-                                ...data,
-                                date: updateDate
                             }
                         }
                         if(from){
@@ -77,6 +69,7 @@ export const ApplyForLeave = () => {
                                 gatePassDate: data.date
                             }
                             dispatch(createLeavesAndGatePassAsync(createData));
+                            reset();
                             console.log(createData);
                         }
                         if(applicationTypeValue === "Leave"){
@@ -86,6 +79,7 @@ export const ApplyForLeave = () => {
                                 message: data.message
                             }
                             dispatch(createLeavesAndGatePassAsync(createData));
+                            reset();
                             console.log(createData);
                         }
                     })}

@@ -105,6 +105,7 @@ const AddTraningResources = () => {
                         dispatch(addTrainingLinksAsync(sendData));
                     }
                     if (showDocumentsForm) {
+                        console.log(data);
                         const formData = new FormData();
                         formData.append('file', data.file[0]);
                         formData.append('fileName', data.fileName);
@@ -210,6 +211,7 @@ const AddTraningResources = () => {
                                     <div className="flex items-center justify-center border border-dashed border-[#9198F7] bg-[#ECEDFE] w-[300px] h-14 rounded-sm">
                                         <label htmlFor="file" className="text-[12px] leading-5 font-normal text-[#666666]">Drag & Drop or<span className="text-[#283093] underline cursor-pointer"> Browse</span></label>
                                         <input
+                                        {...register("file", {required: true})}
                                             type="file"
                                             name="file"
                                             id="file"
@@ -217,7 +219,7 @@ const AddTraningResources = () => {
                                             onChange={handleFileChange}
                                         />
                                     </div>
-                                )}
+                                 )}
                             </div>
                         </div>
                     </div>
