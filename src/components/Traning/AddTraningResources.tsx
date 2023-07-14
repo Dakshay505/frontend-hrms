@@ -107,7 +107,7 @@ const AddTraningResources = () => {
                     if (showDocumentsForm) {
                         console.log(data);
                         const formData = new FormData();
-                        formData.append('file', data.file[0]);
+                        formData.append('file', selectedFile);
                         formData.append('fileName', data.fileName);
                         formData.append('departmentName', departmentName);
                         formData.append('JobProfileName', jobProfileName);
