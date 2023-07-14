@@ -36,15 +36,7 @@ export const Uploaddocument = () => {
         reset
     } = useForm();
 
-    const handleFormSubmit = (data: any) => {
-        const formData = new FormData();
-        formData.append('file', data.file[0]);
-        formData.append('resourceDocsName', data.resourceDocsName);
-        formData.append('departmentName', data.departmentName);
-        formData.append('JobProfileName', data.JobProfileName);
-        uploadDocuments(formData);
-    }
-
+    
     
     const [selectedFile, setSelectedFile] = useState<any>(null);
 
@@ -53,6 +45,14 @@ export const Uploaddocument = () => {
         setSelectedFile(file);
     };
 
+        const handleFormSubmit = (data: any) => {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('resourceDocsName', data.resourceDocsName);
+            formData.append('departmentName', data.departmentName);
+            formData.append('JobProfileName', data.JobProfileName);
+            uploadDocuments(formData);
+        }
     const handleFileReset = () => {
         setSelectedFile(null);
     };

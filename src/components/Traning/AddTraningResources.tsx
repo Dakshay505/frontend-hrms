@@ -107,7 +107,7 @@ const AddTraningResources = () => {
                     if (showDocumentsForm) {
                         console.log(data);
                         const formData = new FormData();
-                        formData.append('file', data.file[0]);
+                        formData.append('file', selectedFile);
                         formData.append('fileName', data.fileName);
                         formData.append('departmentName', departmentName);
                         formData.append('JobProfileName', jobProfileName);
@@ -209,17 +209,17 @@ const AddTraningResources = () => {
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center border border-dashed border-[#9198F7] bg-[#ECEDFE] w-[300px] h-14 rounded-sm">
-                                        <label htmlFor="file" className="text-[12px] leading-5 font-normal text-[#666666]">Drag & Drop or<span className="text-[#283093] underline cursor-pointer"> Browse</span></label>
+                                        <label htmlFor="files" className="text-[12px] leading-5 font-normal text-[#666666]">Drag & Drop or<span className="text-[#283093] underline cursor-pointer"> Browse</span></label>
                                         <input
                                         {...register("file", {required: true})}
                                             type="file"
                                             name="file"
-                                            id="file"
+                                            id="files"
                                             className="absolute opacity-0"
                                             onChange={handleFileChange}
                                         />
                                     </div>
-                                 )}
+                                  )}
                             </div>
                         </div>
                     </div>
