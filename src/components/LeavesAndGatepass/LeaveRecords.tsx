@@ -10,6 +10,7 @@ import { getAllApprovedLeavesAsync } from "../../redux/Slice/LeaveAndGatepassSli
 export const LeaveRecords = () => {
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
+  const [suggestions, setSuggestions] = useState<any>([]);
   const dispatch = useDispatch();
   const departmentList = useSelector((state: any) => state.department.departments);
   const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
@@ -20,25 +21,41 @@ export const LeaveRecords = () => {
   }, [])
   const {
     register,
-   
+
   } = useForm();
 
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
       setLabelVisible(false);
+  
+      const inputValue = event.target.value;
+      setSearch(inputValue);
+    getSuggestions(inputValue);
     }
     else {
       setLabelVisible(true);
+      setSuggestions([]);
     }
-    setSearch(event.target.value);
   };
   console.log(search);
 
   const handleTableRowClick = (data: any) => {
     console.log(data._id)
   }
-
+  const getSuggestions = (inputValue: any) => {
+    // Implement your logic to fetch suggestions from an API or any data source
+    // For simplicity, let's assume suggestions are stored in an array
+    const fetchedSuggestions: any = [];
+    allApprovedLeaveList.map((element: any) => {
+      console.log(element.employeeId?.name)
+      return fetchedSuggestions.push(element.employeeId?.name)
+    })
+    const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
+      suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setSuggestions(filteredSuggestions);
+  };
   return (
     <div className="mx-10 w-[70%]">
       <div className="mt-8">
@@ -80,8 +97,18 @@ export const LeaveRecords = () => {
                     type="search"
                     id="searchInput"
                     onChange={handleInputChange}
-                    className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:shadow focus:outline-none"
+                    className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
                   />
+                  {suggestions.length > 0 && (
+                    <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
+                      {suggestions.map((suggestion:any, index:any) => (
+                        <input type="text" readOnly key={index} 
+                        className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
+                        value={suggestion}
+                        onClick={(event) => console.log((event.target as HTMLInputElement).value)} />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -91,37 +118,37 @@ export const LeaveRecords = () => {
       <div className='w-[100%]'>
         <div className='mt-10 overflow-auto'>
           <div className='py-6'>
-          {/* TABLE STARTS HERE */}
-          <table>
-            <tbody>
-              <tr className='bg-[#ECEDFE] cursor-default'>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave From</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave to</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Message</td>
-              </tr>
-              {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
-                const fromToArray = element.fromTo;
-                const lastObject = fromToArray[fromToArray.length - 1];
-                console.log(`last${index}`, lastObject)
-
-                return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.from ? (lastObject.from).slice(0,10) : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.to ? (lastObject.to).slice(0, 10) : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy ? lastObject.acceptedBy : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.message ? lastObject.message : "Not Avilable"}</td>
+            {/* TABLE STARTS HERE */}
+            <table>
+              <tbody>
+                <tr className='bg-[#ECEDFE] cursor-default'>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave From</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave to</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Message</td>
                 </tr>
-              })}
-            </tbody>
-          </table>
-          {/* TABLE ENDS HERE */}
+                {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
+                  const fromToArray = element.fromTo;
+                  const lastObject = fromToArray[fromToArray.length - 1];
+                  console.log(`last${index}`, lastObject)
+
+                  return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.from ? (lastObject.from).slice(0, 10) : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.to ? (lastObject.to).slice(0, 10) : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy ? lastObject.acceptedBy : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.message ? lastObject.message : "Not Avilable"}</td>
+                  </tr>
+                })}
+              </tbody>
+            </table>
+            {/* TABLE ENDS HERE */}
+          </div>
         </div>
       </div>
-    </div>
     </div >
   )
 }
