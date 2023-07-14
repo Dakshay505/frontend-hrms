@@ -21,7 +21,7 @@ const AddDepartment = () => {
     return (
         <>
             <div className="mx-10">
-                <div className="mt-8">
+                <div className="pt-8">
                     <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Department</h1>
                 </div>
                 <form onSubmit={handleSubmit((data) => {

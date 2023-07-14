@@ -5,7 +5,8 @@ import { getAdminLoginAsync, getLoggedInUserDataAsync } from '../redux/Slice/log
 import eye from "../assets/Eye.png"
 import signin from "../assets/SignIn.png"
 import { Navigate } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 type Inputs = {
     email: string;
     password: string;
@@ -17,9 +18,17 @@ export function Login() {
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const onSubmit = (data: Inputs) => {
-        dispatch(getAdminLoginAsync(data)).then(() => {
-            dispatch(getLoggedInUserDataAsync());
-        }); 
+        if (data.email === "" && data.password === "") {
+            toast.error("Please enter a correct username and password.");
+        } else if (data.email === "") {
+            toast.error("Please enter a correct email.");
+        } else if (data.password === "") {
+            toast.error("Please enter a correct password.");
+        } else {
+            dispatch(getAdminLoginAsync(data)).then(() => {
+                dispatch(getLoggedInUserDataAsync());
+            });
+        }
     };
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());

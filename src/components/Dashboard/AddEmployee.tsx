@@ -48,7 +48,7 @@ const AddEmployee = () => {
 
     return (
         <div className="mx-8">
-            <div className='mt-8'>
+            <div className='pt-8'>
                 <h1 className='text-[24px] font-bold leading-8 text-[#2E2E2E]'>Add Employee</h1>
             </div>
             {/* FORM */}

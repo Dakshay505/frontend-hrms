@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createEmployee, deleteEmployee, getAllEmployee, getSingleEmployee, updateEmployee } from '../API/EmployeeAPI';
+import { addDocuments, createEmployee, deleteEmployee, getAllEmployee, getSingleEmployee, updateEmployee } from '../API/EmployeeAPI';
 
 const initialState = {
     employees: [],
@@ -70,6 +70,18 @@ export const deleteEmployeeAsync: any = createAsyncThunk(
     }
 );
 
+export const addDocumentsAsync: any = createAsyncThunk(
+    'addDocuments',
+    async (data) => {
+        try {
+            const response: any = await addDocuments(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+
 
 export const EmployeeSlice = createSlice({
     name: 'employee',
@@ -114,8 +126,13 @@ export const EmployeeSlice = createSlice({
                 state.status = 'idle';
                 state.singleEmployee =  {};
             })
+            .addCase(addDocumentsAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addDocumentsAsync.fulfilled, function (state: any) {
+                state.status = 'idle';
+            })
     },
 });
 
 export default EmployeeSlice.reducer;
-    

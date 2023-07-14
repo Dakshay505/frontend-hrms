@@ -5,8 +5,8 @@ import glass from "../../assets/MagnifyingGlass.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
-import { uploadDocuments } from "../../redux/API/UploadDocument";
 import X from '../../assets/X.svg'
+import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
 
 export const Uploaddocument = () => {
     const dispatch = useDispatch();
@@ -36,23 +36,26 @@ export const Uploaddocument = () => {
         reset
     } = useForm();
 
-    
-    
+    const handleFormSubmit = (data: any) => {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('fileName', data.resourceDocsName);
+        formData.append('departmentName', data.departmentName);
+        formData.append('JobProfileName', data.JobProfileName);
+        for (const entry of formData.entries()) {
+            console.log(entry[0] + ": " + entry[1]);
+        }
+        dispatch(addDocumentsAsync(formData))
+    }
+
+
     const [selectedFile, setSelectedFile] = useState<any>(null);
 
-    const handleFileChange = (event:any) => {
+    const handleFileChange = (event: any) => {
         const file = event.target.files[0];
         setSelectedFile(file);
     };
 
-        const handleFormSubmit = (data: any) => {
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-            formData.append('resourceDocsName', data.resourceDocsName);
-            formData.append('departmentName', data.departmentName);
-            formData.append('JobProfileName', data.JobProfileName);
-            uploadDocuments(formData);
-        }
     const handleFileReset = () => {
         setSelectedFile(null);
     };
@@ -136,10 +139,11 @@ export const Uploaddocument = () => {
                                     <div className="flex items-center justify-center border border-dashed border-[#9198F7] bg-[#ECEDFE] w-[300px] h-14 rounded-sm">
                                         <label htmlFor="file" className="text-[12px] leading-5 font-normal text-[#666666]">Drag & Drop or<span className="text-[#283093] underline cursor-pointer"> Browse</span></label>
                                         <input
+                                            {...register(`file`, { required: true })}
                                             type="file"
                                             name="file"
                                             id="file"
-                                            className="absolute opacity-0"
+                                            className="absolute opacity-0 cursor-pointer"
                                             onChange={handleFileChange}
                                         />
                                     </div>

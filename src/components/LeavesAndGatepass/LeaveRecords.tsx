@@ -28,10 +28,8 @@ export const LeaveRecords = () => {
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
       setLabelVisible(false);
-  
-      const inputValue = event.target.value;
-      setSearch(inputValue);
-    getSuggestions(inputValue);
+      setSearch(event.target.value);
+      getSuggestions(event.target.value);
     }
     else {
       setLabelVisible(true);
@@ -57,7 +55,7 @@ export const LeaveRecords = () => {
     setSuggestions(filteredSuggestions);
   };
   return (
-    <div className="mx-10 w-[70%]">
+    <div className="mx-10">
       <div className="mt-8">
         <div className="flex w-[688px] items-start gap-[291px]">
           <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
@@ -101,11 +99,11 @@ export const LeaveRecords = () => {
                   />
                   {suggestions.length > 0 && (
                     <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-                      {suggestions.map((suggestion:any, index:any) => (
-                        <input type="text" readOnly key={index} 
-                        className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
-                        value={suggestion}
-                        onClick={(event) => console.log((event.target as HTMLInputElement).value)} />
+                      {suggestions.map((suggestion: any, index: any) => (
+                        <input type="text" readOnly key={index}
+                          className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
+                          value={suggestion}
+                          onClick={(event) => console.log((event.target as HTMLInputElement).value)} />
                       ))}
                     </div>
                   )}
@@ -115,7 +113,7 @@ export const LeaveRecords = () => {
           </div>
         </div>
       </div>
-      <div className='w-[100%]'>
+      <div className=''>
         <div className='mt-10 overflow-auto'>
           <div className='py-6'>
             {/* TABLE STARTS HERE */}
@@ -135,11 +133,11 @@ export const LeaveRecords = () => {
                   console.log(`last${index}`, lastObject)
 
                   return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.from ? (lastObject.from).slice(0, 10) : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.to ? (lastObject.to).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy ? lastObject.acceptedBy : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy?.name ? lastObject.acceptedBy?.name : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.message ? lastObject.message : "Not Avilable"}</td>
                   </tr>
                 })}

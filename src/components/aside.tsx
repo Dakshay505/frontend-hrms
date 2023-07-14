@@ -59,7 +59,7 @@ const navItems: NavItem[] = [
 
 
 
-const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] px-[16px] py-[12px] cursor-pointer`;
+const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
 
 type Props = {
   children: React.ReactNode;
@@ -70,9 +70,9 @@ export default function aside(props: Props) {
   const [activeItem, setActiveItem] = useState<string>("home");
   return (
     // main
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col">
       {/* nav */}
-      <nav className="flex items-center fixed bg-white z-10 justify-between px-5 flex-row border w-full h-[74px]">
+      <nav className="flex items-center fixed bg-[#FFFFFF] z-10 justify-between px-5 flex-row border w-full h-[74px]">
         <Link to='/'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
@@ -93,47 +93,46 @@ export default function aside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="flex mt-[80px]">
-      <aside className="flex flex-col fixed bg-white top-[62px] px-[12px] gap-[30px] py-5 border-r w-[270px] ">
-          <div className="flex flex-col gap-[8px]">
+      <div className="">
+        <aside className="flex flex-col justify-between fixed mt-[32px] bg-white top-[62px] border-r w-[270px] h-[80%]">
+          <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
               <Link
                 key={item.id}
-                to={item.Link} 
-                className={`p-2 rounded  flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
+                to={item.Link}
+                onClick={() => setActiveItem(item.id)}
+                className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
                   }`}
               >
                 <div
-                  onClick={() => setActiveItem(item.id)}
-                  className={`${activeItem === item.id ? "text-blue-800" : ""
-                    } ${asideButtonCSS}`}
-
+                  className={`${activeItem === item.id ? "text-blue-800" : ""} ${asideButtonCSS}`}
                 >
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className={`w-[20px] h-[20px] cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
-                      }`}
+                    className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}`}
                   />
-                  {item.name}
+                  <p className="whitespace-nowrap text-sm font-medium">{item.name}</p>
                 </div>
               </Link>
             ))}
           </div>
+          <div className="px-6">
           <Link to="/">
             <div className="flex items-center justify-center">
               <button onClick={() => {
                 dispatch(logoutUserAsync());
-              }} className="border-primary-blue border w-full px-[20px] py-[16px] rounded-md text-primary-blue text-[1rem]">
+              }} 
+              className= " flex items-center justify-center border-primary-blue border-[1.5px] w-[208px] h-11 px-5 py-4 rounded-lg text-primary-blue text-[16px] leading-6 font-medium">
                 Logout
               </button>
             </div>
           </Link>
+          </div>
         </aside>
         {/* Your Content here */}
-        <div className="ml-[20%]">
-
-        {props.children}
+        <div className="ml-[270px] mt-[74px]">
+          {props.children}
         </div>
       </div>
 

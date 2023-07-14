@@ -100,11 +100,11 @@ export const EmployeeProfile = () => {
 
 
     return (
-        <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px] w-[770px]'>
-            <div className=" flex pt-6 justify-between items-center self-stretch w-[100%]">
+        <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px]'>
+            <div className=" flex pt-6 justify-between items-center self-stretch">
                 <div className=" flex items-start gap-6">
                     <div className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
-                        Attendance Database
+                    Employee Information
                     </div>
 
                 </div>
