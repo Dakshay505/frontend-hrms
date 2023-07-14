@@ -1,5 +1,5 @@
-// export const apiPath = `http://localhost:5050`;
-export const apiPath = ``;
+export const apiPath = `http://localhost:5050`;
+// export const apiPath = ``;
 
 // JOB PROFILE API
 
@@ -54,6 +54,7 @@ export const getAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/acceptedgatep
 export const getRejectedGatePassApiPath = `${apiPath}/api/v1/leave/rejectedgatepass`
 export const updatePendingGatePassApiPath = `${apiPath}/api/v1/leave/acceptgatepass`
 export const updateAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/approvegatepass`
+export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 
 // attendance 
 export const getPresentNumberApiPath = `${apiPath}/api/v1/attendance/getPresentNumber`
@@ -65,3 +66,5 @@ export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
+
+

@@ -8,7 +8,7 @@ import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
-
+ 
 interface Employee {
     id: number;
     title: string;
