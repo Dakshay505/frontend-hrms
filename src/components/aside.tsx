@@ -54,11 +54,6 @@ const navItems: NavItem[] = [
   },
 ];
 
-
-
-
-
-
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
 
 type Props = {

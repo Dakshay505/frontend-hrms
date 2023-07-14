@@ -14,7 +14,6 @@ export const LeaveRecords = () => {
   const dispatch = useDispatch();
   const departmentList = useSelector((state: any) => state.department.departments);
   const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
-  console.log(allApprovedLeaveList)
   useEffect(() => {
     dispatch(getAllApprovedLeavesAsync());
     dispatch(getAllDepartmentsAsync());
@@ -24,6 +23,9 @@ export const LeaveRecords = () => {
 
   } = useForm();
 
+  const handleTableRowClick = (data: any) => {
+    console.log(data._id)
+  }
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -38,9 +40,6 @@ export const LeaveRecords = () => {
   };
   console.log(search);
 
-  const handleTableRowClick = (data: any) => {
-    console.log(data._id)
-  }
   const getSuggestions = (inputValue: any) => {
     // Implement your logic to fetch suggestions from an API or any data source
     // For simplicity, let's assume suggestions are stored in an array

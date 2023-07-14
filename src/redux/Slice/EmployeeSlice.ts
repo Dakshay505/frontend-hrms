@@ -23,9 +23,9 @@ export const createEmployeeAsync: any = createAsyncThunk(
 // READ
 export const getAllEmployeeAsync: any = createAsyncThunk(
     'getallemployees',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllEmployee();
+            const response: any = await getAllEmployee(data);
             return response;
         } catch (error: any) {
             console.log(error.message);

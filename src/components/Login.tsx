@@ -40,12 +40,10 @@ export function Login() {
     };
     return (
         <>
-
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
             {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/employee-leaves-home' replace={true}></Navigate>}
-
-            <div>
-                <div className='flex flex-col w-[768px] px-[40px] pt-[32px] items-start gap-[32px]'>
+            <div className='flex justify-center items-center w-full mt-20'>
+                <div className='flex flex-col items-center justify-center gap-[32px]'>
                     <div className="flex flex-start text-neutral-n-600 text-2xl font-inter font-bold leading-8">
                         HR Admin Login
                     </div>
@@ -71,7 +69,7 @@ export function Login() {
                                     />
                                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                                         <img
-                                            className="h-6 text-gray-700 cursor-pointer"
+                                            className="h-4 w-4 text-gray-700 cursor-pointer"
                                             src={eye}
                                             alt="Show Password"
                                             onClick={handleShowPassword}
@@ -86,7 +84,7 @@ export function Login() {
                             </div>
                         </div>
 
-                        <div className=" flex gap-[5px] w-[130px] mt-5 rounded-sm  items-center text-lg font-semibold bg-primary-blue  text-white  px-6 py-3  shadow-xl">
+                        <div className=" flex gap-[5px] w-[130px] mt-5 rounded-sm items-center text-lg font-semibold bg-primary-blue text-white px-6 py-3 shadow-xl">
                             <img src={signin} alt="" className='h-[20px] w-[20px]' />
                             <input type='submit'
                                 value={"Login"}

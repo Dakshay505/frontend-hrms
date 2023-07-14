@@ -58,7 +58,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] px-[16px] py-[12px] cursor-pointer`;
+const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
 
 type Props = {
   children: React.ReactNode
@@ -89,9 +89,9 @@ export default function EmployeeAside(props: Props) {
   };
   return (
     // main
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col">
       {/* nav */}
-      <nav className="flex items-center fixed bg-white z-10 justify-between px-5 flex-row border w-full h-[74px]">
+      <nav className="flex items-center fixed bg-[#FFFFFF] z-10 justify-between px-5 flex-row border w-full h-[74px]">
         <Link to='/'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
@@ -112,16 +112,16 @@ export default function EmployeeAside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="flex mt-[80px]">
-        <aside className="flex flex-col fixed bg-white top-[62px] px-[12px] gap-[30px] py-5 border-r w-[270px] ">
+      <div className="">
+        <aside className="flex flex-col justify-between fixed mt-[32px] bg-white top-[62px] border-r w-[270px] h-[80%]">
 
-          <div className="flex flex-col gap-[8px]">
+          <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
               <Link
                 key={item.id}
                 to={item.Link}
-                className={`p-2 rounded flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
-                  }`}
+                className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
+              }`}
               >
                 <div
                   onClick={() => setActiveItem(item.id)}
@@ -132,9 +132,9 @@ export default function EmployeeAside(props: Props) {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className={`w-[20px] h-[20px] cursor-pointer ${activeItem === item.id ? "filter brightness-0" : ""}`}
+                    className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}`}
                   />
-                  {item.name}
+                  <p className="whitespace-nowrap text-sm font-medium">{item.name}</p>
                 </div>
               </Link>
             ))}
@@ -187,7 +187,7 @@ export default function EmployeeAside(props: Props) {
 
         </aside>
         {/* Your Content here */}
-        <div className="ml-[20%]">
+        <div className="ml-[270px] mt-[74px]">
 
         {props.children}
         </div>
