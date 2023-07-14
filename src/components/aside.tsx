@@ -94,12 +94,12 @@ export default function aside(props: Props) {
       {/* aside */}
 
       <div className="flex mt-[80px]">
-      <aside className="flex flex-col px-[12px] gap-[30px] py-5 border-r w-[270px] ">
+      <aside className="flex flex-col fixed bg-white top-[62px] px-[12px] gap-[30px] py-5 border-r w-[270px] ">
           <div className="flex flex-col gap-[8px]">
             {navItems.map((item) => (
               <Link
                 key={item.id}
-                to={item.Link}
+                to={item.Link} 
                 className={`p-2 rounded  flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
                   }`}
               >
@@ -131,7 +131,10 @@ export default function aside(props: Props) {
           </Link>
         </aside>
         {/* Your Content here */}
+        <div className="ml-[20%]">
+
         {props.children}
+        </div>
       </div>
 
     </div>

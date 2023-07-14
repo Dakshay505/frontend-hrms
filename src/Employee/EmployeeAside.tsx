@@ -1,5 +1,5 @@
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import logo from "../assets/meta.png"
 import bellIcon from '../assets/Bell.svg'
@@ -71,22 +71,22 @@ export default function EmployeeAside(props: Props) {
   const [activeItem, setActiveItem] = useState<string>("home");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const dispatch=useDispatch()
-    const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee) 
-    useEffect(() => {
-        dispatch(getLoggedInUserDataAsync())
-    }, [])
-const handleDropdownToggle = () => {
-  setIsDropdownOpen(!isDropdownOpen);
-};
+  const dispatch = useDispatch()
+  const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
+  useEffect(() => {
+    dispatch(getLoggedInUserDataAsync())
+  }, [])
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
-const handleLogout = () => {
-  // Perform logout logic here
-};
+  const handleLogout = () => {
+    // Perform logout logic here
+  };
 
-const handleChangePassword = () => {
-  // Perform change password logic here
-};
+  const handleChangePassword = () => {
+    // Perform change password logic here
+  };
   return (
     // main
     <div className="flex flex-col w-full h-full">
@@ -113,7 +113,7 @@ const handleChangePassword = () => {
       {/* aside */}
 
       <div className="flex mt-[80px]">
-      <aside className="flex flex-col px-[12px] gap-[30px] py-5 border-r w-[270px] ">
+        <aside className="flex flex-col fixed bg-white top-[62px] px-[12px] gap-[30px] py-5 border-r w-[270px] ">
 
           <div className="flex flex-col gap-[8px]">
             {navItems.map((item) => (
@@ -148,7 +148,7 @@ const handleChangePassword = () => {
                 <img src={img} alt="" className="w-[32px] h-[32px]" />
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">
-                    {Employee ? Employee.name :"employee"}
+                    {Employee ? Employee.name : "employee"}
                   </p>
                   <p className="overflow-hidden text-[#666] truncate leading-[16px] text-cap leading-trim-both font-inter text-xs font-normal tracking-[0.5px]">
                     Production Manager
@@ -172,14 +172,14 @@ const handleChangePassword = () => {
                   Change Password
                 </Link>
                 <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
-                    <img src={signin} alt=""  className='h-[10px] w-[10px]'/>
-                    <input type='submit' 
-                        value="Logout"
-                        className='cursor-pointer'
-                        onClick={() => {
-                          dispatch(logoutUserAsync());
-                        }}
-                    /> 
+                  <img src={signin} alt="" className='h-[10px] w-[10px]' />
+                  <input type='submit'
+                    value="Logout"
+                    className='cursor-pointer'
+                    onClick={() => {
+                      dispatch(logoutUserAsync());
+                    }}
+                  />
                 </Link>
               </div>
             )}
@@ -188,7 +188,10 @@ const handleChangePassword = () => {
 
         </aside>
         {/* Your Content here */}
+        <div className="ml-[20%]">
+
         {props.children}
+        </div>
       </div>
 
     </div>
