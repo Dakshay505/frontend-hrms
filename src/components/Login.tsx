@@ -19,7 +19,7 @@ export function Login() {
     const onSubmit = (data: Inputs) => {
         dispatch(getAdminLoginAsync(data)).then(() => {
             dispatch(getLoggedInUserDataAsync());
-        });
+        }); 
     };
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());

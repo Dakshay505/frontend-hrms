@@ -17,7 +17,7 @@ import { Leavereate } from './components/AttendanceDash/leavereate';
 import { AttendenceDashboardList } from './components/AttendanceDash/attendenceDashboardList';
 import { DocumentDash } from './components/documentmodules/documentDash';
 import { Uploaddocument } from './components/documentmodules/uploaddocument';
-
+import NotFound from "./components/NotFound";
 import { Requestdocument } from './components/documentmodules/requestdocuments';
 import ViewDoc from './components/documentmodules/viewdocuments';
 import { Toaster } from 'react-hot-toast'
@@ -382,6 +382,12 @@ const router = createBrowserRouter([
         <Employeehome></Employeehome>{" "}
       </Employeeaside>
       </ProductedRouteEmployee>
+    ),
+  },
+  {
+    path: "*",
+    element: (
+        <NotFound></NotFound>
     ),
   },
 ]);
