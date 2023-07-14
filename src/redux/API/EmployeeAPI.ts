@@ -36,9 +36,22 @@ export const updateEmployee = async (employeeData: any) => {
 };
 
 // READ
-export const getAllEmployee = async () => {
+function convertToQueryString(data: any) {
+  let queryStr = '';
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
+      if (queryStr !== '') {
+        queryStr += '&';
+      }
+      queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+    }
+  }
+  return queryStr;
+}
+export const getAllEmployee = async (sendData: any) => {
   try {
-    const { data } = await axios.get(`${getEmployeeApiPath}`, {
+     const queryStr = convertToQueryString(sendData);
+    const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
       withCredentials: true,
     });
     return data;

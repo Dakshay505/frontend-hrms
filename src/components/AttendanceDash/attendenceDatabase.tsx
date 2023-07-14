@@ -10,7 +10,6 @@ import { useEffect } from 'react'
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
   const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
-  console.log(todayStaffAttandence);
   useEffect(() => {
     dispatch(postAttandenceByDateAsync())
   }, [])
@@ -21,7 +20,6 @@ export const AttendenceDtabase = () => {
   return (
     <div >
       <Attendence></Attendence>
-
       <div className="flex flex-col items-start w-[768px] py-[48px] px-[40px] flex-1">
         <div className=" flex justify-between w-[688px] item-center">
           <div className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">

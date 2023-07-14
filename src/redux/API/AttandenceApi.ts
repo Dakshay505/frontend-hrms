@@ -25,9 +25,23 @@ export const getMyAttandence = async () => {
   }
 };
 // post
-export const postAttandenceByDate = async (date: any) => {
+function convertToQueryString(data: any) {
+  let queryStr = '';
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
+      if (queryStr !== '') {
+        queryStr += '&';
+      }
+      queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+    }
+  }
+  return queryStr;
+}
+export const postAttandenceByDate = async (sendData: any) => {
   try {
-    const { data } = await axios.post(`${postAttandenceByDateApiPath}`, date, {
+    const filterDatta = convertToQueryString(sendData);
+    console.log(`${postAttandenceByDateApiPath}?${filterDatta}`)
+    const { data } = await axios.get(`${postAttandenceByDateApiPath}?${filterDatta}`, {
       withCredentials: true,
     });
     return data;
