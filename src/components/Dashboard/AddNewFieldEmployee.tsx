@@ -54,7 +54,7 @@ const AddNewFieldEmployee = () => {
       };
     return (
         <div className="mx-10">
-            <div className="mt-8">
+            <div className="pt-8">
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Add New Fields for Employee</h1>
             </div>
             <div className='mt-10'>

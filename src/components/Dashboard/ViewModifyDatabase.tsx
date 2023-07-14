@@ -39,8 +39,8 @@ const ViewModifyDatabase = () => {
 
     return (
 
-        <div className='mx-10 w-[70%]'>
-            <div className="flex justify-between mt-8">
+        <div className='mx-10'>
+            <div className="flex justify-between pt-8">
                 <div className="flex gap-7 items-center justify-center">
                     <div>
                         <h1 className="text-2xl font-bold text-[#2E2E2E]">View Database</h1>
@@ -81,7 +81,7 @@ const ViewModifyDatabase = () => {
                     </Link>
                 </div>
             </div>
-            <div className='w-[100%]'>
+            <div className=''>
                 <div className='mt-10 overflow-auto'>
                     <div className='py-6'>
                         {/* TABLE FOR EMPLOYEE */}

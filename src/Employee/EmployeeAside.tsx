@@ -92,7 +92,7 @@ export default function EmployeeAside(props: Props) {
     <div className="flex flex-col w-full h-full">
       {/* nav */}
       <nav className="flex items-center fixed bg-white z-10 justify-between px-5 flex-row border w-full h-[74px]">
-        <Link to='#'>
+        <Link to='/'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
             <h1 className="text-red text-[20px] font-medium">Chawla Ispat</h1>
@@ -132,8 +132,7 @@ export default function EmployeeAside(props: Props) {
                   <img
                     src={item.icon}
                     alt={item.name}
-                    className={`w-[20px] h-[20px] cursor-pointer  ${activeItem === item.id ? "filter brightness-0" : ""
-                      }`}
+                    className={`w-[20px] h-[20px] cursor-pointer ${activeItem === item.id ? "filter brightness-0" : ""}`}
                   />
                   {item.name}
                 </div>
