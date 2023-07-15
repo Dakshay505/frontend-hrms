@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllTodayPunchesApiPath, getMyAttandenceApiPath, postAttandenceByDateApiPath, updateAllTodayPunchesApiPath } from "../../APIRoutes";
+import { getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, postAttandenceByDateApiPath, updateAllTodayPunchesApiPath } from "../../APIRoutes";
 
 
 // READ
@@ -17,6 +17,17 @@ export const getAllTodayPunches = async () => {
 export const getMyAttandence = async () => {
   try {
     const { data } = await axios.get(`${getMyAttandenceApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+// READ
+export const getPresentBelow = async () => {
+  try {
+    const { data } = await axios.get(`${getPresentBelowApiPath}`, {
       withCredentials: true,
     });
     return data;

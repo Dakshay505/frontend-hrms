@@ -62,6 +62,7 @@ export const getAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/getallpun
 export const updateAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/approveAttendance`
 export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance`
+export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
