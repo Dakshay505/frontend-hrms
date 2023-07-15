@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   createEmployeeApiPath,
   getEmployeeApiPath,
+  getEmployeeImageApiPath,
   getSingleEmployeeApiPath,
   updateEmployeeApiPath,
   uploadDocumentApiPath,
@@ -83,7 +84,7 @@ export const addDocuments = async (document: any) => {
   }
 };
 export const addImage = async (document: any) => {
-  console.log(document)
+  console.log(document);
   try {
     const { data } = await axios.post(`${uploadImageApiPath}`, document, {
       withCredentials: true,
@@ -91,5 +92,17 @@ export const addImage = async (document: any) => {
     return data;
   } catch (err: any) {
     console.log(err.response.data);
+  }
+};
+
+export const getEmployeeImage = async (employeeId: any) => {
+  try {
+    console.log("employeeId", employeeId);
+    const { data } = await axios.get(`${getEmployeeImageApiPath}/${employeeId.employeeId}`,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
   }
 };

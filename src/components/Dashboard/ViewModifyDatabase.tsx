@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllDepartmentsAsync, getSingleDepartmentAsync } from '../../redux/Slice/DepartmentSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
@@ -53,6 +53,7 @@ const ViewModifyDatabase = () => {
     const handleTableRowClick = (data: any) => {
         const employeeId = { employeeId: data._id }
         dispatch(getSingleEmployeeAsync(employeeId));
+        dispatch(getEmployeeImageAsync(employeeId));
         navigate(`/employee-profile`, { state: { data: data } });
     }
     const handleDepartmentTableRowClick = (data: any) => {
