@@ -41,8 +41,8 @@ export const GatepassRecord = () => {
   }
 
   return (
-    <div className="mx-10 w-[70%]">
-      <div className="mt-8">
+    <div className="mx-10">
+      <div className="pt-8">
         <div className="flex w-[688px] items-start gap-[291px]">
           <p className="text-2xl text-[#2E2E2E] font-bold leading-8">
           Gatepass Records
@@ -89,7 +89,7 @@ export const GatepassRecord = () => {
           </div>
         </div>
       </div>
-      <div className='w-[100%]'>
+      <div className=''>
         <div className='mt-10 overflow-auto'>
           <div className='py-6'>
           {/* TABLE STARTS HERE */}

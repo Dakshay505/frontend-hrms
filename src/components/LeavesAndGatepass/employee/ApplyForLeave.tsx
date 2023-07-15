@@ -33,7 +33,7 @@ export const ApplyForLeave = () => {
       }
     return (
         <div className="mx-10">
-            <div className="mt-8">
+            <div className="pt-8">
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Apply for a Leave/Gatepass</h1>
             </div>
             <div className="mt-10">
