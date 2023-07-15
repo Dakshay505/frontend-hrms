@@ -31,14 +31,15 @@ export const createEmployeeAsync: any = createAsyncThunk(
 
 // READ
 export const getAllEmployeeAsync: any = createAsyncThunk(
-  "getallemployees",
-  async () => {
-    try {
-      const response: any = await getAllEmployee();
-      return response;
-    } catch (error: any) {
-      console.log(error.message);
-    }
+
+    'getallemployees',
+    async (data) => {
+        try {
+            const response: any = await getAllEmployee(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
   }
 );
 // READ SINFLE EMPLOYEE

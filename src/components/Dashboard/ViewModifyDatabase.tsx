@@ -19,6 +19,7 @@ const ViewModifyDatabase = () => {
     })
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter));
+        console.log("hi")
     }, [filter])
     
     // SEARCH
