@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addDocuments, createEmployee, deleteEmployee, getAllEmployee, getSingleEmployee, updateEmployee } from '../API/EmployeeAPI';
+import { addDocuments, addImage, createEmployee, deleteEmployee, getAllEmployee, getSingleEmployee, updateEmployee } from '../API/EmployeeAPI';
 
 const initialState = {
     employees: [],
@@ -23,9 +23,9 @@ export const createEmployeeAsync: any = createAsyncThunk(
 // READ
 export const getAllEmployeeAsync: any = createAsyncThunk(
     'getallemployees',
-    async (data) => {
+    async () => {
         try {
-            const response: any = await getAllEmployee(data);
+            const response: any = await getAllEmployee();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -81,6 +81,18 @@ export const addDocumentsAsync: any = createAsyncThunk(
         }
     }
 );
+export const addImageAsync: any = createAsyncThunk(
+    'addImage',
+    async (data) => {
+        console.log("sl",data)
+        try {
+            const response: any = await addImage(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
 
 
 export const EmployeeSlice = createSlice({
@@ -130,6 +142,12 @@ export const EmployeeSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(addDocumentsAsync.fulfilled, function (state: any) {
+                state.status = 'idle';
+            })
+            .addCase(addImageAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addImageAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
             })
     },

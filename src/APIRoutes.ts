@@ -24,7 +24,7 @@ export const updateHierarchyApiPath = `${apiPath}/api/v1/jobProfile/updateHierar
 export const updateHierarchyDepartmentApiPath = `${apiPath}/api/v1/department/update/hr`
 
 // UPLOAD DOCUMENT
-
+export const uploadImageApiPath = `${apiPath}/api/v1/employee/docs/uploadImage`;
 export const uploadDocumentApiPath = `${apiPath}/api/v1/employee/docs/upload`;
 
 // LOGIN API
