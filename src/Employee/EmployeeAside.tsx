@@ -9,7 +9,6 @@ import doc from "../assets/doc.svg"
 import leave from "../assets/airplane.svg"
 import salary from "../assets/salary.svg"
 import training from "../assets/video.svg"
-import img from "../assets/Ellipse 1.png"
 import calenderr from "../assets/attendence.svg";
 import dot from "../assets/DotsThreeVertical.png"
 import signin from "../assets/SignIn.png"
@@ -19,6 +18,9 @@ import notification from "../assets/Bell.png"
 
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
 import { getEmployeeImageAsync } from "../redux/Slice/EmployeeSlice";
+import arrowside from "../assets/gray-left.png"
+import open from "../assets/r-arrow.png"
+
 
 
 
@@ -95,6 +97,8 @@ export default function EmployeeAside(props: Props) {
   const handleChangePassword = () => {
     setIsDropdownOpen(false);
   };
+  
+  const [showSidebar, setShowSidebar] = useState(false);
   return (
     // main
     <div className="flex flex-col">
@@ -121,8 +125,20 @@ export default function EmployeeAside(props: Props) {
       {/* aside */}
 
       <div className="">
-        <aside className="flex flex-col justify-between fixed mt-[32px] bg-white top-[62px] border-r w-[270px] h-[80%]">
-
+      {showSidebar ? (
+            <button
+              className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
+              onClick={() => setShowSidebar(!showSidebar)}
+            >
+              <img src={open} alt="" className="h-[24px]  p-[5px] w-[24px] shadow-lg border rounded-full border-border-primary " />
+            </button>
+          ) : (
+            <img src={arrowside} alt=""  onClick={() => setShowSidebar(!showSidebar)}
+            className="fixed h-[24px] w-[24px] border p-[5px]  rounded-full border-border-primary shadow-lg  z-30 flex items-center cursor-pointer left-[258px] top-[14%]"/>
+           
+          )}
+        <aside className={`flex flex-col px-[9px] justify-between fixed mt-[32px] bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-270px]" : "translate-x-0"
+            } transition-all ease-in-out duration-500`}>
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
               <Link
