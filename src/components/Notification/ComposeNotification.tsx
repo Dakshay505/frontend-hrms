@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import { useForm } from "react-hook-form";
-// import Dropzone from "react-dropzone";
+
 import FileArrowUp from "../../assets/FileArrowUp.png";
 import axios from "axios";
 import io from "socket.io-client";
-// import { toast } from "react-hot-toast";
+
 import { toast, ToastOptions } from "react-toastify";
+import { apiPath } from "../../APIRoutes";
 type Notification = {
   message: string;
   notificationType: string;
@@ -33,7 +34,16 @@ const ComposeNotification = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  const [socket, setSocket] = useState<any>(null);
+  const user = useSelector((state:any)=>state.login.loggedInUserData)
+  let id:string = "";
+  if(user && user.admin){
+     id = user.admin._id
+  }else if(user && user.employee){
+     id = user.employee._id
+  }else{
+    id = ""
+  }
+  // const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => { 
     dispatch(getAllDepartmentsAsync());
@@ -53,25 +63,27 @@ const ComposeNotification = () => {
   const { register, handleSubmit } = useForm();
   const notificationTypeList = ["High alert", "Alert", "Info"];
 
-  const onSubmit = async (data: any) => {
-    const newNotification = {
-      message: data.textContent,
-      notificationType: data.notificationType,
-      departmentId: data.allDepartments !== "All Departments" ? data.allDepartments : undefined,
-      jobProfileId: data.allJobProfiles !== "All Job Profiles" ? data.allJobProfiles : undefined,
-    };
-
-    const res = await axios.post("/api/v1/notifications", newNotification);
-    console.log(res)
-    if (socket && socket.connected) {
-      socket.emit('notification', JSON.stringify(newNotification));
+  const onSubmit = async (data:any) => {
+    try {
+      await sendNotification(data);
+    } catch (error) {
+      console.error('Error sending notification:', error);
     }
+  };
 
+  const sendNotification = async (data:any) => {
+    try {
+      console.log(data)
+      await axios.post(`${apiPath}/api/v1/notifications`, data);
+      console.log('Notification sent successfully');
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
   };
 
   useEffect(() => {
-    const newSocket = io(`?employeeId=64a66a68d7f356bbae75262d`);
-    setSocket(newSocket);
+    const newSocket = io(`${apiPath}?employeeId=${id}`);
+    // setSocket(newSocket);
     
     newSocket.on('connect', () => {
       console.log("Connected to websocket");
@@ -79,8 +91,6 @@ const ComposeNotification = () => {
 
     newSocket.on('notification', (notification: string) => {
       const newNotification = JSON.parse(notification);
-      toast.warn(newNotification.message,toastOptions);
-      console.log(newNotification)
       setNotifications((prevNotifications) => [
         newNotification,
         ...prevNotifications,
@@ -121,8 +131,8 @@ const ComposeNotification = () => {
             </p>
             <div>
               <select
-                {...register("allDepartments", {
-                  required: "Phone No. required",
+                {...register("departmentName", {
+                  required: true,
                 })}
                 defaultValue={"All Departments"}
                 className="flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5"
@@ -144,8 +154,8 @@ const ComposeNotification = () => {
             </div>
             <div>
               <select
-                {...register("allJobProfiles", {
-                  required: "Phone No. required",
+                {...register("jobProfileName", {
+                  required: true,
                 })}
                 defaultValue={"All Job Profiles"}
                 className="flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5"
@@ -174,7 +184,7 @@ const ComposeNotification = () => {
             </div>
             <div>
               <input
-                {...register("textContent", { required: true })}
+                {...register("message", { required: true })}
                 type="text"
                 className="border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[320px]"
               />

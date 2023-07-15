@@ -1,9 +1,17 @@
 import { useForm } from "react-hook-form";
 import BluePlus from '../../assets/BluePlus.png'
 import FileArrowUp from '../../assets/FileArrowUp.png'
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 
 import glass from "../../assets/MagnifyingGlass.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
+import axios from "axios";
+import { apiPath } from "../../APIRoutes";
+import { io } from "socket.io-client";
+import { toast } from "react-toastify";
+
 interface LinkFormData {
     resourceName: string;
     resourceLink: string;
@@ -11,9 +19,16 @@ interface LinkFormData {
 
 
 export const Requestdocument = () => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-    const departmentList = ["Department 1", "Department 2", "Department 3"];
-    const jobProfileList = ["Job 1", "Job 2", "Job 3"];
+    const dispatch = useDispatch();
+    const departmentList = useSelector((state: any) => state.department.departments);
+    const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+
+    useEffect(() => {
+        dispatch(getAllDepartmentsAsync())
+        dispatch(getAllJobProfileAsync())
+    }, [])
 
     // LINK FORM CODE STARTS
     const [showLinkForm, setShowLinkForm] = useState<LinkFormData[]>([]);
@@ -50,21 +65,81 @@ export const Requestdocument = () => {
     React.useEffect(() => {
       console.log(search);
     }, [search]);
-  
-
-
 
     // INPUT FILES END
-
+    const user = useSelector((state:any)=>state.login.loggedInUserData)
+    let id:string = "";
+    if(user && user.admin){
+       id = user.admin._id
+    }else if(user && user.employee){
+       id = user.employee._id
+    }else{
+      id = ""
+    }
+    const onSubmit = async (data:any) => {
+        try {
+          await sendNotification(data);
+        } catch (error) {
+          console.error('Error sending notification:', error);
+        }
+      };
+    
+      const sendNotification = async (data:any) => {
+        try {
+          console.log(data)
+          await axios.post(`${apiPath}/api/v1/notifications`, data);
+          console.log('Notification sent successfully');
+        } catch (error) {
+          console.error('Error sending notification:', error);
+        }
+      };
+      useEffect(() => {
+        const newSocket = io(`${apiPath}?employeeId=${id}`);
+        // setSocket(newSocket);
+        
+        newSocket.on('connect', () => {
+          console.log("Connected to websocket");
+        });
+    
+        newSocket.on('notification', (notification: string) => {
+          const newNotification = JSON.parse(notification);
+          setNotifications((prevNotifications) => [
+            newNotification,
+            ...prevNotifications,
+          ]);
+        });
+    
+        newSocket.on('disconnect', () => {
+          console.log("Disconnected from websocket");
+        });
+    
+        newSocket.on('error', (error: any) => {
+          console.log(error.message);
+        });
+    
+        return () => {
+          newSocket.close();
+        };
+      }, []);
+    
     const {
         register,
         handleSubmit,
+        reset
     } = useForm();
     return (
         <div className="mx-10">
             <form
                 onSubmit={handleSubmit((data) => {
-                    console.log(data)
+                    const sendData = {
+                        departmentName: data.departmentName,
+                        jobProfileName: data.jobProfileName,
+                        message: data.resourceName + ": " + data.format,
+                        notificationType: "Document"
+                    }
+                    console.log(sendData);
+                    onSubmit(sendData);
+                    reset();
                 })}>
                 <div className="flex flex-col gap-3">
                     <div className="mt-8">
@@ -74,21 +149,21 @@ export const Requestdocument = () => {
                         <p className="text-[#000000] text-[16px] leading-6 font-bold">For:</p>
                         <div>
                             <select
-                                {...register('allDepartments', { required: "Phone No. required" })}
+                                {...register('departmentName', { required: true })}
                                 defaultValue={"All Departments"} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
                                 <option value="All Departments">All Departments</option>
-                                {departmentList.map((element) => {
-                                    return <option value={element} key={element} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element}</option>
+                                {departmentList.map((element: any, index: number) => {
+                                    return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.departmentName}</option>
                                 })}
                             </select>
                         </div>
                         <div>
                             <select
-                                {...register('allJobProfiles', { required: "Phone No. required" })}
+                                {...register('jobProfileName', { required: true })}
                                 defaultValue={"All Job Profiles"} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
                                 <option value="All Job Profiles">All Job Profiles</option>
-                                {jobProfileList.map((element) => {
-                                    return <option value={element} key={element} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element}</option>
+                                {jobProfileList.map((element: any, index: number) => {
+                                    return <option value={element.jobProfileName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.jobProfileName}</option>
                                 })}
                             </select>
                         </div>
@@ -101,8 +176,8 @@ export const Requestdocument = () => {
                                     type="text"
                                     name="search" onChange={handleInputChange}
 
-                                    className=" focus:outline-none "
                                     placeholder="Search"
+                                    className=" focus:outline-none "
                                 />
                         </div>
                     </div>
@@ -124,7 +199,7 @@ export const Requestdocument = () => {
                                 </div>
                                 <div> 
                                     <input
-                                        {...register(`resourceName${index + 1}`, { required: true })}
+                                        {...register(`resourceName`, { required: true })}
                                         onChange={(e) => handleLinkInputChange(index, 'resourceName', e.target.value)}
                                         value={element.resourceName}
                                         type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[300px]' />
@@ -135,13 +210,13 @@ export const Requestdocument = () => {
                                     <p className='text-sm font-normal text-[#1C1C1C]'>Format</p>
                                 </div>
                                 <select
+                                {...register("format", {required: true})}
                                     value={selectedValue}
                                     onChange={handleChange}
                                     className="border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[300px]"
                                 >
-                                    <option value="Format1">Format 1</option>
-                                    <option value="Format2">Format 2</option>
-                                    <option value="Format3">Format 3</option>
+                                    <option value="Format1">pdf</option>
+                                    <option value="Format2">jpeg</option>
                                 </select>
                             </div>
                         </div>

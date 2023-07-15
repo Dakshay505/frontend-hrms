@@ -20,7 +20,6 @@ import { Uploaddocument } from './components/documentmodules/uploaddocument';
 import NotFound from "./components/NotFound";
 import { Requestdocument } from './components/documentmodules/requestdocuments';
 import ViewDoc from './components/documentmodules/viewdocuments';
-import { Toaster } from 'react-hot-toast'
 import ComposeNotification from './components/Notification/ComposeNotification';
 import { PendingLeaves } from './components/LeavesAndGatepass/pending';
 import { LeaveRecords } from './components/LeavesAndGatepass/LeaveRecords';
@@ -49,9 +48,13 @@ import { EmployeeLeaveHome } from "./components/LeavesAndGatepass/employee/Emplo
 import { ApplyForLeave } from "./components/LeavesAndGatepass/employee/ApplyForLeave";
 import { ViewLeavesRecord } from "./components/LeavesAndGatepass/employee/ViewLeavesRecord";
 import { ProductedRoute } from "./ProtectedRoute/ProductedRoute";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { ProductedRouteEmployee } from "./ProtectedRoute/ProtectedRouteEmployee";
-
+import { useSelector } from "react-redux";
+import {useEffect} from "react"
+import { io } from "socket.io-client";
+import { apiPath } from "./APIRoutes";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -432,6 +435,54 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const user = useSelector((state: any) => state.login.loggedInUserData);
+  let idd: string = "";
+
+  if (user && user.admin) {
+    idd = user.admin._id;
+  } else if (user && user.employee) {
+    idd = user.employee._id;
+  }
+
+  useEffect(() => {
+    setupSocketConnection();
+  }, []);
+
+
+  const setupSocketConnection = () => {
+    const socket = io(apiPath, { query: { employeeId: idd } });
+
+    socket.on("connect", () => {
+      console.log("Connected to websocket");
+    });
+
+    socket.on("notification", (notification: any) => {
+      console.log("notification.... ",notification);
+      const length = notification.notification.length;
+      toast(notification.notification[length-1].message,{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        });
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from websocket");
+    });
+
+    socket.on("error", (error: any) => {
+      console.log(error.message);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  };
   return (
     <React.StrictMode>
       <RouterProvider router={router} />
@@ -445,9 +496,8 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
-      <Toaster position="top-right" reverseOrder={false} />
     </React.StrictMode>
   );
 }
