@@ -19,6 +19,8 @@ export const createEmployeeApiPath = `${apiPath}/api/v1/employee/add`;
 export const getEmployeeApiPath = `${apiPath}/api/v1/employee`;
 export const getSingleEmployeeApiPath = `${apiPath}/api/v1/employee/getSingle`;
 export const updateEmployeeApiPath = `${apiPath}/api/v1/employee`
+export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfile`
+
 // UPDATE Hierarchy
 export const updateHierarchyApiPath = `${apiPath}/api/v1/jobProfile/updateHierarchy`
 export const updateHierarchyDepartmentApiPath = `${apiPath}/api/v1/department/update/hr`

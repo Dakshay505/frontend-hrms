@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "#",
+    Link: "/traning-dashboard",
   },
 ];
 
@@ -121,7 +121,7 @@ export default function EmployeeAside(props: Props) {
                 key={item.id}
                 to={item.Link}
                 className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
-              }`}
+                  }`}
               >
                 <div
                   onClick={() => setActiveItem(item.id)}
@@ -144,7 +144,9 @@ export default function EmployeeAside(props: Props) {
           <Link to="#">
             <div className="flex justify-between border border-primary-border bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
               <div className="flex items-center gap-[10px] flex-1 pr-0">
-                <img src={img} alt="" className="w-[32px] h-[32px]" />
+                <Link to="/emp">
+                  <img src={img} alt="" className="w-[32px] h-[32px]" />
+                </Link>
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">
                     {Employee ? Employee.name : "employee"}
@@ -189,7 +191,7 @@ export default function EmployeeAside(props: Props) {
         {/* Your Content here */}
         <div className="ml-[270px] mt-[74px]">
 
-        {props.children}
+          {props.children}
         </div>
       </div>
 

@@ -7,7 +7,6 @@ import {useEffect} from 'react'
 export const ProductedRouteEmployee = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.login.loggedInUserData);
-    console.log("userInProtectedRoute",user)
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
     },[dispatch])
