@@ -208,15 +208,15 @@ const router = createBrowserRouter([
       </Aside>
     ),
   },
-  {
-    path: "/compose-notification",
-    element: (
-      <Aside>
-        {" "}
-        <ComposeNotification />{" "}
-      </Aside>
-    ),
-  },
+  // {
+  //   path: "/compose-notification",
+  //   element: (
+  //     <Aside>
+  //       {" "}
+  //       <ComposeNotification />{" "}
+  //     </Aside>
+  //   ),
+  // },
     {
       path: "/fileDataTransfer",
       element: <Aside> <FormFileData></FormFileData> </Aside>,

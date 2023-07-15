@@ -18,6 +18,7 @@ import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
 import notification from "../assets/Bell.png"
 
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
+import { getEmployeeImageAsync } from "../redux/Slice/EmployeeSlice";
 
 
 
@@ -73,8 +74,13 @@ export default function EmployeeAside(props: Props) {
 
   const dispatch = useDispatch()
   const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
+  const profileData = useSelector((state: any) => state.employee.singleEmployee.profileId?.profilePicture)
+  console.log("image", profileData)
+
   useEffect(() => {
-    dispatch(getLoggedInUserDataAsync())
+    dispatch(getLoggedInUserDataAsync()).then((data: any) => {
+      dispatch(getEmployeeImageAsync({ employeeId: data.payload.employee._id }));
+    })
   }, [])
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -143,9 +149,9 @@ export default function EmployeeAside(props: Props) {
 
           <Link to="#">
             <div className="flex justify-between border border-primary-border bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
-              <div className="flex items-center gap-[10px] flex-1 pr-0">
+              <div className="flex items-center ms-3 gap-[10px] flex-1 pr-0">
                 <Link to="/emp">
-                  <img src={img} alt="" className="w-[32px] h-[32px]" />
+                  <img src={profileData} alt="" className="object-cover w-[35px]" />
                 </Link>
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">

@@ -7,7 +7,7 @@ import X from '../../src/assets/X.svg'
 import { addImageAsync } from '../redux/Slice/EmployeeSlice';
 
 const UploadPhotoPage: React.FC = () => {
-
+  
   const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
   const [emp, setEmp] = useState()
   useEffect(() => {
@@ -44,6 +44,7 @@ const UploadPhotoPage: React.FC = () => {
         onSubmit={handleSubmit((data) => {
           console.log("data", data)
           handleFormSubmit(data);
+          setSelectedFile(null)
         })}
       >
 

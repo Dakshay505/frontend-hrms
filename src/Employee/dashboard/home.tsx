@@ -4,17 +4,21 @@ import { useDispatch, useSelector } from "react-redux"
 import round from "../../assets/Group 1.png"
 import { useEffect } from "react"
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice"
+import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice"
 
 
 export const Employeehome = () => {
-    const dispatch=useDispatch()
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
-    if(Employee){
-        console.log(Employee)
-    }    
+    const profileData = useSelector((state: any) => state.employee.singleEmployee.profileId?.profilePicture)
+    const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(getLoggedInUserDataAsync())
+        dispatch(getLoggedInUserDataAsync()).then((data: any) => {
+            dispatch(getEmployeeImageAsync({ employeeId: data.payload.employee._id }));
+        })
     }, [])
+    console.log(Employee)
+
+
     return (
         <div className="flex flex-col items-start self-stretch max-w-[768px] pt-[32px]  px-[40px] gap-[32px]">
             <div className="flex flex-col items-start self-stretch gap-[32px]">
@@ -50,7 +54,7 @@ export const Employeehome = () => {
 
 
                 <div className="flex justify-between items-end self-stretch pt-24">
-                
+
                 </div>
             </div>
 

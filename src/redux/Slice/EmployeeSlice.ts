@@ -103,6 +103,7 @@ export const getEmployeeImageAsync: any = createAsyncThunk(
   "getEmployeeImage",
   async (data) => {
     try {
+      console.log("sc",data)
       const response: any = await getEmployeeImage(data);
       return response;
     } catch (error: any) {
@@ -180,6 +181,7 @@ export const EmployeeSlice = createSlice({
         getEmployeeImageAsync.fulfilled,
         function (state: any, action: any) {
           state.status = "idle";
+          console.log("action.payload", action.payload);
           state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
         }
       );
