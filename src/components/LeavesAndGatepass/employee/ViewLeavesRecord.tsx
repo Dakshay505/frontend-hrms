@@ -50,7 +50,7 @@ export const ViewLeavesRecord = () => {
     };
     return (
         <div className="mx-10">
-            <div className='flex gap-7 mt-8'>
+            <div className='flex gap-7 pt-8'>
                 <div>
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>View Database</h1>
                 </div>

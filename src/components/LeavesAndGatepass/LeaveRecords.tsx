@@ -55,7 +55,7 @@ export const LeaveRecords = () => {
   };
   return (
     <div className="mx-10">
-      <div className="mt-8">
+      <div className="pt-8">
         <div className="flex w-[688px] items-start gap-[291px]">
           <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
             Leave Records

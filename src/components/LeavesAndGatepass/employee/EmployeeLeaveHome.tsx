@@ -47,7 +47,7 @@ export const EmployeeLeaveHome = () => {
 
   return (
     <div className='mx-10'>
-      <div className='flex w-[770px] flex-col items-start mt-8'>
+      <div className='flex w-[770px] flex-col items-start pt-8'>
         <div className='flex gap-4'>
           <Link to='/employee-apply-for-leave' className='flex gap-4 items-center p-6 bg-[#ECEDFE] rounded-lg w-[336px] h-[80px]'>
             <img className='w-[32px] h-[32px] color-red-500' src={HourGlass} alt="" />

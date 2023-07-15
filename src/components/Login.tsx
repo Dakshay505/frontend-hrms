@@ -41,7 +41,7 @@ export function Login() {
     return (
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
-            {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/employee-leaves-home' replace={true}></Navigate>}
+            {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/emphome' replace={true}></Navigate>}
             <div className='flex justify-center items-center w-full mt-20'>
                 <div className='flex flex-col items-center justify-center gap-[32px]'>
                     <div className="flex flex-start text-neutral-n-600 text-2xl font-inter font-bold leading-8">
