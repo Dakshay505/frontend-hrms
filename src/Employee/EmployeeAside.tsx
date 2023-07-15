@@ -153,7 +153,7 @@ export default function EmployeeAside(props: Props) {
             <div className="flex justify-between border border-primary-border w-[208px] h-11 bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
               <div className="flex items-center gap-[10px] flex-1 pr-0">
                 <Link to="/emp">
-                  <img src={profileData} alt="" className="w-[32px] h-[32px]" />
+                  <img src={profileData} alt="" className="w-[1.5rem] ms-2" />
                 </Link>
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">
