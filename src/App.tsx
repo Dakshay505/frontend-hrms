@@ -25,7 +25,6 @@ import ComposeNotification from './components/Notification/ComposeNotification';
 import { PendingLeaves } from './components/LeavesAndGatepass/pending';
 import { LeaveRecords } from './components/LeavesAndGatepass/LeaveRecords';
 import { GatepassRecord } from './components/LeavesAndGatepass/GatepassRecord';
-import FormFileData from './FormFileData';
 import { Login } from './components/Login';
 
 import { EmployeeProfile } from './components/Employeeprofile/profile';
@@ -73,154 +72,184 @@ const router = createBrowserRouter([
   {
     path: "/addemployee",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddEmployee />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/view-modify-database",
     element: (
+      <ProductedRoute>
       <Aside>
         <ViewModifyDatabase />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/add-department",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddDepartment />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/update-hierarchy",
     element: (
+      <ProductedRoute>
       <Aside>
         <UpdateHierarcy />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/add-job-profile",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddJobProfile />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/addnewfieldsemployee",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddNewFieldEmployee />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/add-new-fields-for-job-profile",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddNewFieldsForJobProfile />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/add-new-fields-for-department",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddNewFieldsForDepartments />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/traning-dashboard",
     element: (
+      <ProductedRoute>
       <Aside>
         <TraningDashboard />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/add-traning-resources",
     element: (
+      <ProductedRoute>
       <Aside>
         <AddTraningResources />
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/attendance",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <AttendenceDtabase></AttendenceDtabase>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/leaves",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <Leavereate></Leavereate>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/attendance-database",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <AttendenceDashboardList></AttendenceDashboardList>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/document",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <DocumentDash></DocumentDash>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/upload",
-    element: <Aside> <Uploaddocument></Uploaddocument> </Aside>,
+    element: <ProductedRoute><Aside> <Uploaddocument></Uploaddocument> </Aside></ProductedRoute>,
   },
   {
     path: "/request",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <Requestdocument></Requestdocument>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/viewdocuments",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <ViewDoc></ViewDoc>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/compose-notification",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <ComposeNotification />{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
-    {
-      path: "/fileDataTransfer",
-      element: <Aside> <FormFileData></FormFileData> </Aside>,
-    },
    {
     path:"/emp",
     element:<Employeeaside> <UploadPhotoPage></UploadPhotoPage> </Employeeaside>
@@ -253,82 +282,89 @@ const router = createBrowserRouter([
   {
     path: "/pending-leaves",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <PendingLeaves></PendingLeaves>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/leave-records",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <LeaveRecords></LeaveRecords>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/gatepass-records",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <GatepassRecord></GatepassRecord>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/employee-profile",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <EmployeeProfile></EmployeeProfile>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/requesting-document",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <EmployeeRequestingdocument></EmployeeRequestingdocument>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/uploading-document",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <EmployeeUploadingdocument></EmployeeUploadingdocument>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/jobprofile-info",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <JobProfileInfo></JobProfileInfo>{" "}
       </Aside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/departments-info",
     element: (
+      <ProductedRoute>
       <Aside>
         {" "}
         <DepartmentInfo></DepartmentInfo>{" "}
       </Aside>
-    ),
-  },
-  {
-    path: "/fileDataTransfer",
-    element: (
-      <Aside>
-        {" "}
-        <FormFileData></FormFileData>{" "}
-      </Aside>
+      </ProductedRoute>
     ),
   },
 
@@ -336,50 +372,55 @@ const router = createBrowserRouter([
   {
     path: "/employee-leaves-home",
     element: (
-      <ProductedRoute>
+      <ProductedRouteEmployee>
         <Employeeaside>
           {" "}
           <EmployeeLeaveHome />{" "}
         </Employeeaside>
-      </ProductedRoute>
+      </ProductedRouteEmployee>
     ),
   },
   {
     path: "/emp",
     element: (
+      <ProductedRoute>
       <Employeeaside>
         {" "}
         <UploadPhotoPage></UploadPhotoPage>{" "}
       </Employeeaside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/employee-apply-for-leave",
     element: (
-      <Aside>
-        {" "}
-        <ApplyForLeave />{" "}
-      </Aside>
+      <ProductedRoute>
+      <Employeeaside>
+        <ApplyForLeave />
+      </Employeeaside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/employee-view-leave-record",
     element: (
-      <Aside>
+      <ProductedRoute>
+      <Employeeaside>
         {" "}
         <ViewLeavesRecord />
-      </Aside>
+      </Employeeaside>
+      </ProductedRoute>
     ),
   },
   {
     path: "/emphome",
     element: (
-      <ProductedRouteEmployee>
+      <ProductedRoute>
       <Employeeaside>
         {" "}
         <Employeehome></Employeehome>{" "}
       </Employeeaside>
-      </ProductedRouteEmployee>
+      </ProductedRoute>
     ),
   },
   {
