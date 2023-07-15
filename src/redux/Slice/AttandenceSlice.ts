@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllTodayPunches, getMyAttandence, postAttandenceByDate, updateAllTodayPunches } from '../API/AttandenceApi';
+import { getAllTodayPunches, getMyAttandence, getPresentBelow, postAttandenceByDate, updateAllTodayPunches } from '../API/AttandenceApi';
 
 const initialState = {
     todaysPunches: [],
     staffAttandence: [],
     myAttandence: [],
+    presentBelow: [],
     status: 'idle',
 };
 
@@ -26,6 +27,18 @@ export const getMyAttandenceAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getMyAttandence();
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+// READ
+export const getPresentBelowAsync: any = createAsyncThunk(
+    'getPresentBelowAsync',
+    async () => {
+        try {
+            const response: any = await getPresentBelow();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -76,6 +89,13 @@ export const AttandenceSlice = createSlice({
             .addCase(getMyAttandenceAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
                 state.myAttandence =  action.payload.attendanceRecords;
+            })
+            .addCase(getPresentBelowAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getPresentBelowAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.presentBelow =  action.payload;
             })
             .addCase(updateAllTodaysPunchesAsync.pending, (state) => {
                 state.status = 'loading';
