@@ -5,6 +5,7 @@ import {
   getSingleEmployeeApiPath,
   updateEmployeeApiPath,
   uploadDocumentApiPath,
+  uploadImageApiPath,
 } from "../../APIRoutes";
 
 // CREATE
@@ -36,22 +37,9 @@ export const updateEmployee = async (employeeData: any) => {
 };
 
 // READ
-function convertToQueryString(data: any) {
-  let queryStr = '';
-  for (let key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
-      if (queryStr !== '') {
-        queryStr += '&';
-      }
-      queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
-    }
-  }
-  return queryStr;
-}
-export const getAllEmployee = async (sendData: any) => {
+export const getAllEmployee = async () => {
   try {
-     const queryStr = convertToQueryString(sendData);
-    const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
+    const { data } = await axios.get(`${getEmployeeApiPath}`, {
       withCredentials: true,
     });
     return data;
@@ -87,6 +75,17 @@ export const deleteEmployee = async (employeeData: any) => {
 export const addDocuments = async (document: any) => {
   try {
     const { data } = await axios.post(`${uploadDocumentApiPath}`, document, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const addImage = async (document: any) => {
+  console.log(document)
+  try {
+    const { data } = await axios.post(`${uploadImageApiPath}`, document, {
       withCredentials: true,
     });
     return data;
