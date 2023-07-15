@@ -76,7 +76,7 @@ export const Employeehome = () => {
                                     </p>
 
                                 </div>
-                                <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>Product Managers</p>
+                                <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>{element.jobProfile ? element.jobProfile : "Not Avilable"}</p>
                             </div>
                         })}
                     </div>

@@ -85,7 +85,7 @@ export default function EmployeeAside(props: Props) {
   };
 
   const handleChangePassword = () => {
-    // Perform change password logic here
+    setIsDropdownOpen(false);
   };
   return (
     // main
@@ -141,8 +141,8 @@ export default function EmployeeAside(props: Props) {
           </div>
 
 
-          <Link to="#">
-            <div className="flex justify-between border border-primary-border bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
+          <div className="relative flex justify-center">
+            <div className="flex justify-between border border-primary-border w-[208px] h-11 bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
               <div className="flex items-center gap-[10px] flex-1 pr-0">
                 <Link to="/emp">
                   <img src={img} alt="" className="w-[32px] h-[32px]" />
@@ -163,29 +163,28 @@ export default function EmployeeAside(props: Props) {
                 <img src={dot} alt="" className="h-[21px] w-[21px]" />
               </button>
             </div>
+          {isDropdownOpen && (
+            <div className="absolute -top-32 w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
+              <Link to="/change-password"
+                onClick={handleChangePassword}
+                className="block w-full px-4 py-2 text-center text-sm underline"
+              >
+                Change Password
+              </Link>
+              <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
+                <img src={signin} alt="" className='h-[10px] w-[10px]' />
+                <input type='submit'
+                  value="Logout"
+                  className='cursor-pointer'
+                  onClick={() => {
+                    dispatch(logoutUserAsync());
+                  }}
+                />
+              </Link>
+            </div>
+          )}
+          </div>
 
-            {isDropdownOpen && (
-              <div className="absolute w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] top-[31rem] left-[3%] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
-                <Link to="/change-password"
-                  onClick={handleChangePassword}
-                  className="block w-full px-4 py-2 text-center text-sm underline"
-                >
-                  Change Password
-                </Link>
-                <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
-                  <img src={signin} alt="" className='h-[10px] w-[10px]' />
-                  <input type='submit'
-                    value="Logout"
-                    className='cursor-pointer'
-                    onClick={() => {
-                      dispatch(logoutUserAsync());
-                    }}
-                  />
-                </Link>
-              </div>
-            )}
-
-          </Link>
 
         </aside>
         {/* Your Content here */}
