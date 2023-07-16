@@ -76,7 +76,7 @@ export default function aside(props: Props) {
         </Link>
 
         <div className="flex items-center  gap-[16px]">
-          <Link to='/'>
+          <Link to='/show-notifications'>
             <div>
               <img src={notification} alt="notification" className="w-[24px]" />
             </div>
