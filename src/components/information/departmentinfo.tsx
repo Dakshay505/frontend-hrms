@@ -17,10 +17,12 @@ export const DepartmentInfo = () => {
     const [departmentId, setDepartmentId] = useState("")
 
     const departments = useSelector((state: any) => state.department.department)
-
     useEffect(() => {
-        setDepartmentId(departments._id);
-    }, [departments])
+        setDepartmentId(departments.departmentData?._id);
+    }, [departments]);
+    console.log("departmentId", departmentId)
+    // console.log(departments)
+
     const [search, setSearch] = React.useState('');
 
 
@@ -33,16 +35,18 @@ export const DepartmentInfo = () => {
 
     // employee info
 
-    const department=[
+    const department = [
         {
             id: 1,
-            title:"Department Name",
-            data:departments.departmentData.departmentName
+            title: "Department Name",
+            data: departments?.departmentData?.departmentName,
+            inputName: "departmentName"
         },
         {
             id: 2,
-           title:"Department Description",
-           data:departments.departmentData.description
+            title: "Department Description",
+            data: departments?.departmentData?.description,
+            inputName: "description"
         }
     ]
 
@@ -53,15 +57,7 @@ export const DepartmentInfo = () => {
     const handleEditClick = (employee: Employee) => {
         setSelectedEmployee(employee);
         setEditMode(true);
-        console.log('Edit employee:', employee);
     };
-
-    const handleSaveClick = () => {
-        // Implement save functionality here
-        setEditMode(false);
-        // console.log(selectedEmployee.jobTitle);
-    };
-
     const dispatch = useDispatch();
     return (
         <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px] w-[770px]'>
@@ -72,8 +68,12 @@ export const DepartmentInfo = () => {
                 <div className="container mx-auto px-4">
                     <form
                         onSubmit={handleSubmit((data) => {
-                            const sendData = { employeeId: departmentId, data: data }
-                            dispatch(updateDepartmentAsync(sendData));
+                            console.log("departmentId", departmentId)
+                            const sendData = { departmentId: departmentId, data: data }
+                            console.log("sendData", sendData)
+                            dispatch(updateDepartmentAsync(sendData)).then(() => {
+                                // dispatch(getSingleDepartmentAsync(departmentId));
+                            });
                             setEditMode(false);
                         })}>
                         {department && department.map((element: any) => (
@@ -81,17 +81,17 @@ export const DepartmentInfo = () => {
                                 <div className={`flex flex-col bg-primary-bg border border-primary-border rounded-xl py-[16px] px-[10px] items-start gap-[10px] ${editMode && selectedEmployee && selectedEmployee.id === element.id ? 'bg-white' : ''}`}>
                                     <div className="flex">
                                         <h2 className="text-lg font-semibold">{element.title}</h2>
-                                        <button className="text-white font-bold py-2 px-4" onClick={() => handleEditClick(element)}>
+                                        <div className="text-white font-bold py-2 px-4" onClick={() => handleEditClick(element)}>
                                             <img src={edit} alt="" className="h-[16px] w-[16px]" />
-                                        </button>
+                                        </div>
                                     </div>
                                     <div>
                                         {editMode && selectedEmployee && selectedEmployee.id === element.id ? (
                                             <div className="flex gap-[20px] p-[7px]  border border-primary-border rounded-xl">
                                                 <input
-                                                    {...register(element.data, { required: true })}
+                                                    {...register(element.inputName, { required: true })}
                                                     type="text" className="w-full py-2 px-3 outline-none text-grey-darker" value={selectedEmployee.data} onChange={(e) => setSelectedEmployee({ ...selectedEmployee, data: e.target.value })} />
-                                                <button className="bg-primary-blue text-white font-bold py-2 px-4 rounded" onClick={handleSaveClick}>
+                                                <button type='submit' className="bg-primary-blue text-white font-bold py-2 px-4 rounded">
                                                     <img src={check} alt="" className="w-[18px] h-[18px]" />
                                                 </button>
                                             </div>

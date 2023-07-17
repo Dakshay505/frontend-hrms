@@ -8,6 +8,7 @@ import {
   getEmployeeImage,
   getSingleEmployee,
   updateEmployee,
+  pagination
 } from "../API/EmployeeAPI";
 
 const initialState = {
@@ -41,7 +42,29 @@ export const getAllEmployeeAsync: any = createAsyncThunk(
             console.log(error.message);
         }
   }
+
 );
+
+
+// pagination
+
+export const getPaginationAsync = createAsyncThunk(
+  'pagination',
+  async (page) => {
+    try {
+      const response = await pagination(page);
+      console.log("hello", response)
+      return response;
+    } catch (error:any) {
+      console.log(error.message);
+      throw error;
+    }
+  }
+);
+  
+
+
+
 // READ SINFLE EMPLOYEE
 export const getSingleEmployeeAsync: any = createAsyncThunk(
   "getSingleemployees",
@@ -182,8 +205,14 @@ export const EmployeeSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
-        }
-      );
+        })
+      .addCase(getPaginationAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getPaginationAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.employees =  action.payload.employees;
+      })
   },
 });
 

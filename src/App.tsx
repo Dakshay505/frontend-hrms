@@ -36,7 +36,7 @@ import { StaffCheckin } from './Employee/dashboard/staffcheckin';
 import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
 import { EmpViewdoc } from './Employee/documents/viewdoc';
 import { Yourdoc } from './Employee/documents/yourdoc';
-import  {ChangePassword}  from './Employee/changepassword';
+import { ChangePassword } from './Employee/changepassword';
 
 import AddNewFieldsForJobProfile from "./components/Dashboard/AddNewFieldsForJobProfile";
 import AddNewFieldsForDepartments from "./components/Dashboard/AddNewFieldsForDepartments";
@@ -52,14 +52,15 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ProductedRouteEmployee } from "./ProtectedRoute/ProtectedRouteEmployee";
 import { useSelector } from "react-redux";
-import {useEffect} from "react"
+import { useEffect } from "react"
 import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
+import ShowNotication from "./components/Notification/showNotication";
 const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-        <Login></Login>
+      <Login></Login>
     ),
   },
   {
@@ -76,9 +77,9 @@ const router = createBrowserRouter([
     path: "/addemployee",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddEmployee />
-      </Aside>
+        <Aside>
+          <AddEmployee />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -86,9 +87,9 @@ const router = createBrowserRouter([
     path: "/view-modify-database",
     element: (
       <ProductedRoute>
-      <Aside>
-        <ViewModifyDatabase />
-      </Aside>
+        <Aside>
+          <ViewModifyDatabase />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -96,9 +97,9 @@ const router = createBrowserRouter([
     path: "/add-department",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddDepartment />
-      </Aside>
+        <Aside>
+          <AddDepartment />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -106,9 +107,9 @@ const router = createBrowserRouter([
     path: "/update-hierarchy",
     element: (
       <ProductedRoute>
-      <Aside>
-        <UpdateHierarcy />
-      </Aside>
+        <Aside>
+          <UpdateHierarcy />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -116,9 +117,9 @@ const router = createBrowserRouter([
     path: "/add-job-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddJobProfile />
-      </Aside>
+        <Aside>
+          <AddJobProfile />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -126,9 +127,9 @@ const router = createBrowserRouter([
     path: "/addnewfieldsemployee",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldEmployee />
-      </Aside>
+        <Aside>
+          <AddNewFieldEmployee />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -136,9 +137,9 @@ const router = createBrowserRouter([
     path: "/add-new-fields-for-job-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldsForJobProfile />
-      </Aside>
+        <Aside>
+          <AddNewFieldsForJobProfile />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -146,9 +147,9 @@ const router = createBrowserRouter([
     path: "/add-new-fields-for-department",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldsForDepartments />
-      </Aside>
+        <Aside>
+          <AddNewFieldsForDepartments />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -156,9 +157,9 @@ const router = createBrowserRouter([
     path: "/traning-dashboard",
     element: (
       <ProductedRoute>
-      <Aside>
-        <TraningDashboard />
-      </Aside>
+        <Aside>
+          <TraningDashboard />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -166,9 +167,9 @@ const router = createBrowserRouter([
     path: "/add-traning-resources",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddTraningResources />
-      </Aside>
+        <Aside>
+          <AddTraningResources />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -176,10 +177,10 @@ const router = createBrowserRouter([
     path: "/attendance",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <AttendenceDtabase></AttendenceDtabase>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <AttendenceDtabase></AttendenceDtabase>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -187,10 +188,10 @@ const router = createBrowserRouter([
     path: "/leaves",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <Leavereate></Leavereate>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <Leavereate></Leavereate>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -198,10 +199,10 @@ const router = createBrowserRouter([
     path: "/attendance-database",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <AttendenceDashboardList></AttendenceDashboardList>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <AttendenceDashboardList></AttendenceDashboardList>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -209,10 +210,10 @@ const router = createBrowserRouter([
     path: "/document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <DocumentDash></DocumentDash>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <DocumentDash></DocumentDash>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -224,10 +225,10 @@ const router = createBrowserRouter([
     path: "/request",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <Requestdocument></Requestdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <Requestdocument></Requestdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -235,10 +236,10 @@ const router = createBrowserRouter([
     path: "/viewdocuments",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <ViewDoc></ViewDoc>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <ViewDoc></ViewDoc>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -246,10 +247,10 @@ const router = createBrowserRouter([
     path: "/compose-notification",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <ComposeNotification />{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <ComposeNotification />{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -277,10 +278,10 @@ const router = createBrowserRouter([
     path: "/pending-leaves",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <PendingLeaves></PendingLeaves>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <PendingLeaves></PendingLeaves>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -288,10 +289,10 @@ const router = createBrowserRouter([
     path: "/leave-records",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <LeaveRecords></LeaveRecords>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <LeaveRecords></LeaveRecords>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -299,10 +300,10 @@ const router = createBrowserRouter([
     path: "/gatepass-records",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <GatepassRecord></GatepassRecord>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <GatepassRecord></GatepassRecord>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -310,10 +311,10 @@ const router = createBrowserRouter([
     path: "/employee-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeProfile></EmployeeProfile>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeProfile></EmployeeProfile>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -321,10 +322,10 @@ const router = createBrowserRouter([
     path: "/requesting-document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeRequestingdocument></EmployeeRequestingdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeRequestingdocument></EmployeeRequestingdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -332,10 +333,10 @@ const router = createBrowserRouter([
     path: "/uploading-document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeUploadingdocument></EmployeeUploadingdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeUploadingdocument></EmployeeUploadingdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -343,22 +344,22 @@ const router = createBrowserRouter([
     path: "/jobprofile-info",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <JobProfileInfo></JobProfileInfo>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <JobProfileInfo></JobProfileInfo>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
   {
     path: "/departments-info",
     element: (
-      <ProductedRoute>
-      <Aside>
-        {" "}
-        <DepartmentInfo></DepartmentInfo>{" "}
-      </Aside>
-      </ProductedRoute>
+      // <ProductedRoute>
+        <Aside>
+          {" "}
+          <DepartmentInfo></DepartmentInfo>{" "}
+        </Aside>
+      // </ProductedRoute>
     ),
   },
 
@@ -378,10 +379,10 @@ const router = createBrowserRouter([
     path: "/emp",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <UploadPhotoPage></UploadPhotoPage>{" "}
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <UploadPhotoPage></UploadPhotoPage>{" "}
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -389,9 +390,9 @@ const router = createBrowserRouter([
     path: "/employee-apply-for-leave",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        <ApplyForLeave />
-      </Employeeaside>
+        <Employeeaside>
+          <ApplyForLeave />
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -399,10 +400,10 @@ const router = createBrowserRouter([
     path: "/employee-view-leave-record",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <ViewLeavesRecord />
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <ViewLeavesRecord />
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -410,17 +411,28 @@ const router = createBrowserRouter([
     path: "/emphome",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <Employeehome></Employeehome>{" "}
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <Employeehome></Employeehome>{" "}
+        </Employeeaside>
       </ProductedRoute>
+    ),
+  },
+  {
+    path: "/show-notifications",
+    element: (
+      // <ProductedRoute>
+      <Aside>
+        {" "}
+        <ShowNotication />{" "}
+      </Aside>
+      //  </ProductedRoute>
     ),
   },
   {
     path: "*",
     element: (
-        <NotFound></NotFound>
+      <NotFound></NotFound>
     ),
   },
 ]);
@@ -448,9 +460,9 @@ function App() {
     });
 
     socket.on("notification", (notification: any) => {
-      console.log("notification.... ",notification);
+      console.log("notification.... ", notification);
       const length = notification.notification.length;
-      toast(notification.notification[length-1].message,{
+      toast(notification.notification[length - 1].message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

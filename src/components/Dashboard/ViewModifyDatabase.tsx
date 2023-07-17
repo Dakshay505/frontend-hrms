@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync,getPaginationAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllDepartmentsAsync, getSingleDepartmentAsync } from '../../redux/Slice/DepartmentSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
@@ -92,6 +92,35 @@ const ViewModifyDatabase = () => {
         );
         setSuggestions(filteredSuggestions);
     };
+
+     // pagination 
+     const [currentPage, setCurrentPage] = useState(1);
+     const itemsPerPage = 4; // Number of items per page
+     const count = 9;
+ 
+     // Calculate the total number of pages
+     const employeePagination = Math.ceil((count || 0) / itemsPerPage);
+ 
+     const dispatchPagination = (pageNumber: number) => {
+         setCurrentPage(pageNumber);
+         dispatch(getPaginationAsync(pageNumber));
+     };
+ 
+     const handleNextPage = () => {
+         const nextPage = currentPage + 1;
+         if (nextPage <= employeePagination) {
+             dispatchPagination(nextPage);
+         }
+     };
+ 
+     const handlePreviousPage = () => {
+         const previousPage = currentPage - 1;
+         if (previousPage >= 1) {
+             dispatchPagination(previousPage);
+         }
+     };
+     const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
+    
     return (
 
         <div className='mx-10'>
@@ -265,6 +294,45 @@ const ViewModifyDatabase = () => {
                                         </td>
                                     </tr>
                                 })}
+
+                                
+<tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <td>
+                                            <div className="flex gap-[10px] justify-center mt-4">
+                                                <button
+                                                    className="px-3 py-2 mx-1"
+                                                    onClick={handlePreviousPage}
+                                                    disabled={currentPage === 1}
+                                                >
+                                                    &laquo;
+
+                                                </button>
+
+                                                {pageNumbers.map((page) => (
+                                                    <button
+                                                        key={page}
+                                                        className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
+                                                        onClick={() => dispatchPagination(page)}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                ))}
+
+                                                <button
+                                                    className="px-3 py-2 mx-1"
+                                                    onClick={handleNextPage}
+                                                    disabled={currentPage === employeePagination}
+                                                >
+                                                    &raquo;
+                                                </button>
+                                            </div>
+                                        </td>
+
+                                    </tr>
                             </tbody>
                         </table>}
                         {/* TABLE FOR EMPLOYEE ENDS */}

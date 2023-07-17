@@ -45,9 +45,8 @@ export const getSingleDepartment = async (departmentId: any) => {
 };
 export const updateDepartment = async (departmentData: any) => {
   try {
-    const { data } = await axios.patch(
-      `${updateDepartmentApiPath}/${departmentData.employeeId}`,
-      departmentData.data,
+    console.log("departmentData", departmentData);
+    const { data } = await axios.patch(`${updateDepartmentApiPath}/${departmentData.departmentId}`,departmentData.data,
       { withCredentials: true }
     );
     return data;
