@@ -78,9 +78,9 @@ export const DepartmentSlice = createSlice({
             .addCase(updateDepartmentAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateDepartmentAsync.fulfilled, function (state: any, action: any) {
+            .addCase(updateDepartmentAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                state.departments =  action.payload.docs;
+                // state.departments =  action.payload;
             })
             .addCase(getSingleDepartmentAsync.pending, (state) => {
                 state.status = 'loading';
