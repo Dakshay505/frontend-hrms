@@ -354,12 +354,12 @@ const router = createBrowserRouter([
   {
     path: "/departments-info",
     element: (
-      <ProductedRoute>
+      // <ProductedRoute>
         <Aside>
           {" "}
           <DepartmentInfo></DepartmentInfo>{" "}
         </Aside>
-      </ProductedRoute>
+      // </ProductedRoute>
     ),
   },
 
