@@ -72,4 +72,8 @@ export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
 
 
 // notifications
-export const getNotificationApiPath = `${apiPath}/api/v1/notifications/64af97a9a65746e0eac533c5`
+export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
+
+// jobprofile
+export const getSingleJobProfileApiPath = `${apiPath}/api/v1/jobprofile`
+export const updateJobProfileApiPath = `${apiPath}/api/v1/jobprofile/update`
