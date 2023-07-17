@@ -61,6 +61,24 @@ export const getAllEmployee = async (sendData: any) => {
   }
 };
 
+
+// pagination
+export const pagination = async (page:any) => {
+  try {
+    const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
+      withCredentials: true,
+    });
+    console.log(response,"hey")
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+}
+
+
+
+
 // READ SINGLE EMPLOYEE
 export const getSingleEmployee = async (employeeId: any) => {
   try {
