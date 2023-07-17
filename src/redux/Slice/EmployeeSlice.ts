@@ -42,6 +42,7 @@ export const getAllEmployeeAsync: any = createAsyncThunk(
             console.log(error.message);
         }
   }
+
 );
 
 
@@ -204,8 +205,7 @@ export const EmployeeSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
-        }
-      )
+        })
       .addCase(getPaginationAsync.pending, (state) => {
         state.status = 'loading';
       })

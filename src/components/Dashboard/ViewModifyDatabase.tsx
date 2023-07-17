@@ -157,9 +157,9 @@ const ViewModifyDatabase = () => {
                     </div>
                 </div>
                 <div className='flex gap-6'>
-                    <Link to="/update-hierarchy">
+                    {databaseValue !== "Employess" && <Link to="/update-hierarchy">
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={Pencil} className='w-4' alt="" /><p className="px-2">Update Hierarchy</p></div>
-                    </Link>
+                    </Link>}
                     <Link to={path}>
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add</p></div>
                     </Link>

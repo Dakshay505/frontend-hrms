@@ -254,35 +254,26 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
-  {
-    path: "/emp",
-    element: <Employeeaside> <UploadPhotoPage></UploadPhotoPage> </Employeeaside>
-  },
-  {
-    path: "/emphome",
-    element: <Employeeaside> <Employeehome></Employeehome> </Employeeaside>
-  },
-
-  {
-    path: "/empcheckin",
-    element: <Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside>
-  },
-  {
-    path: "/employee-attendence",
-    element: <Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside>
-  },
-  {
-    path: "/empdocuments",
-    element: <Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside>
-  },
-  {
-    path: "/your-documents",
-    element: <Employeeaside> <Yourdoc></Yourdoc> </Employeeaside>
-  },
-  {
-    path: "/change-password",
-    element: <Employeeaside> <ChangePassword></ChangePassword> </Employeeaside>
-  },
+   {
+    path:"/empcheckin",
+    element: <ProductedRoute><Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/employee-attendence",
+    element:<ProductedRoute><Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/empdocuments",
+    element:<ProductedRoute><Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/your-documents",
+    element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/change-password",
+    element:<ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
+   },
   {
     path: "/pending-leaves",
     element: (
@@ -479,8 +470,8 @@ function App() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
-      });
+        theme: "colored",
+        });
     });
 
     socket.on("disconnect", () => {
@@ -508,7 +499,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
       />
     </React.StrictMode>
   );

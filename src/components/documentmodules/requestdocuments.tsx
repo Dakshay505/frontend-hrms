@@ -12,6 +12,7 @@ import { apiPath } from "../../APIRoutes";
 import { io } from "socket.io-client";
 import { toast } from "react-toastify";
 
+
 interface LinkFormData {
     resourceName: string;
     resourceLink: string;
@@ -19,7 +20,7 @@ interface LinkFormData {
 
 
 export const Requestdocument = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+//   const [notifications, setNotifications] = useState<Notification[]>([]);
 
     const dispatch = useDispatch();
     const departmentList = useSelector((state: any) => state.department.departments);
@@ -88,7 +89,18 @@ export const Requestdocument = () => {
         try {
           console.log(data)
           await axios.post(`${apiPath}/api/v1/notifications`, data);
-          console.log('Notification sent successfully');
+
+          toast.success("Request for document sent successfully",{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          })
+          reset();
         } catch (error) {
           console.error('Error sending notification:', error);
         }
@@ -103,10 +115,7 @@ export const Requestdocument = () => {
     
         newSocket.on('notification', (notification: string) => {
           const newNotification = JSON.parse(notification);
-          setNotifications((prevNotifications) => [
-            newNotification,
-            ...prevNotifications,
-          ]);
+          console.log(newNotification)
         });
     
         newSocket.on('disconnect', () => {
@@ -131,6 +140,7 @@ export const Requestdocument = () => {
         <div className="mx-10">
             <form
                 onSubmit={handleSubmit((data) => {
+                 
                     const sendData = {
                         departmentName: data.departmentName,
                         jobProfileName: data.jobProfileName,
@@ -139,7 +149,7 @@ export const Requestdocument = () => {
                     }
                     console.log(sendData);
                     onSubmit(sendData);
-                    reset();
+                    
                 })}>
                 <div className="flex flex-col gap-3">
                     <div className="mt-8">
@@ -149,9 +159,9 @@ export const Requestdocument = () => {
                         <p className="text-[#000000] text-[16px] leading-6 font-bold">For:</p>
                         <div>
                             <select
-                                {...register('departmentName', { required: true })}
-                                defaultValue={"All Departments"} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
-                                <option value="All Departments">All Departments</option>
+                                {...register('departmentName')}
+                                defaultValue={""} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
+                                <option value="">All Departments</option>
                                 {departmentList.map((element: any, index: number) => {
                                     return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.departmentName}</option>
                                 })}
@@ -159,9 +169,9 @@ export const Requestdocument = () => {
                         </div>
                         <div>
                             <select
-                                {...register('jobProfileName', { required: true })}
-                                defaultValue={"All Job Profiles"} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
-                                <option value="All Job Profiles">All Job Profiles</option>
+                                {...register('jobProfileName')}
+                                defaultValue={""} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
+                                <option value="">All Job Profiles</option>
                                 {jobProfileList.map((element: any, index: number) => {
                                     return <option value={element.jobProfileName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.jobProfileName}</option>
                                 })}
@@ -215,8 +225,8 @@ export const Requestdocument = () => {
                                     onChange={handleChange}
                                     className="border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[300px]"
                                 >
-                                    <option value="Format1">pdf</option>
-                                    <option value="Format2">jpeg</option>
+                                    <option value="pdf">pdf</option>
+                                    <option value="jpeg">jpeg</option>
                                 </select>
                             </div>
                         </div>

@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import Plus from "../../assets/Plus.png"
-// import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { createDepartmentAsync, getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
 import {useEffect, useState} from "react"
@@ -28,12 +27,10 @@ const AddDepartment = () => {
                     if(parentDepartmentValue === "All Departments"){
                         data = {
                             departmentName: data.departmentName,
-                            description: data.description
                         }
                     } else{
                         data = {
                             departmentName: data.departmentName,
-                            description: data.description,
                             parentDepartmentName: data.parentDepartmentName
                         }
                     }
@@ -57,17 +54,6 @@ const AddDepartment = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
-                                <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Description</p>
-                                </div>
-                                <div>
-                                    <input
-                                        {...register('description', { required: true })}
-                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='flex gap-10 mt-5'>
                             <div className='flex flex-col gap-3'>
                                 <div>
                                     <p className='text-sm font-normal text-[#1C1C1C]'>Parent Department Name</p>
@@ -83,6 +69,7 @@ const AddDepartment = () => {
                                         })}
                                     </select>
                                 </div>
+                            </div>
                             </div>
                         </div>
                         <div className="mt-10">
