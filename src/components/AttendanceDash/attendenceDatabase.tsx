@@ -25,12 +25,12 @@ export const AttendenceDtabase = () => {
           <div className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
             Attendance Database
           </div>
-          <Link to="/leaves">
+          <Link to="/attendance-database">
             <div className="flex px-[16px] cursor-pointer py-[12px] justify-center items-center">
-              <p className="text-[#666666] leading-trim font-inter text-capitalize text-lg font-medium leading-6 tracking-wider">
+              <p className="text-[#666666] text-[16px] font-medium leading-6">
                 See All
               </p>
-              <img src={right} alt="" className="h-[16px] w-[16px]" />
+              <img src={right} alt="" className="h-4 w-4" />
             </div>
           </Link>
         </div>

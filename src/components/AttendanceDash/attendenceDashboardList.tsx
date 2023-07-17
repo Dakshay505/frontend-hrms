@@ -6,29 +6,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { postAttandenceByDateAsync } from "../../redux/Slice/AttandenceSlice";
 import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
+import CaretLeft from "../../assets/CaretLeft.svg"
+import CaretRight from "../../assets/CaretRight1.svg"
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
 
-
-
   const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
   const departmentList = useSelector((state: any) => state.department.departments);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     dispatch(postAttandenceByDateAsync()).then((data: any) => {
       const employeeData = data.payload.employees;
       const arr = [];
       for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
+        arr.push(employeeData[i].employeeId.name)
       }
       setFetchedSuggestions(arr)
-  });
-  console.log(fetchedSuggestions);
+    });
+    console.log(fetchedSuggestions);
     dispatch(getAllDepartmentsAsync())
     dispatch(getAllJobProfileAsync())
   }, [])
@@ -47,46 +49,57 @@ export const AttendenceDashboardList = () => {
     date: ""
   })
 
+  useEffect(() => {
+    setFilter({
+      ...filter,
+      date: (new Date(date)).toISOString().split('T')[0]
+    })
+    console.log("hi")
+  }, [date])
 
   useEffect(() => {
     console.log(filter);
     dispatch(postAttandenceByDateAsync(filter))
   }, [filter])
 
-  
+
 
   const handleTableRowClick = (data: any) => {
     console.log(data._id)
   }
 
+  const formatDate = (date: any) => {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
-        setLabelVisible(false);
-        setSearch(event.target.value);
-        setFilter({
-            ...filter,
-            name: event.target.value
-        })
-        getSuggestions(event.target.value);
+      setLabelVisible(false);
+      setSearch(event.target.value);
+      setFilter({
+        ...filter,
+        name: event.target.value
+      })
+      getSuggestions(event.target.value);
     }
     else {
-        setLabelVisible(true);
-        setSearch(event.target.value);
-        setFilter({
-            ...filter,
-            name: event.target.value
-        })
-        setSuggestions([]);
+      setLabelVisible(true);
+      setSearch(event.target.value);
+      setFilter({
+        ...filter,
+        name: event.target.value
+      })
+      setSuggestions([]);
     }
-};
+  };
 
-const getSuggestions = (inputValue: any) => {
+  const getSuggestions = (inputValue: any) => {
     const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-        suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+      suggestion?.toLowerCase().includes(inputValue.toLowerCase())
     );
     setSuggestions(filteredSuggestions);
-};
+  };
 
 
   return (
@@ -108,7 +121,7 @@ const getSuggestions = (inputValue: any) => {
               <img src={FunnelSimple} className='w-4 h-4' alt="" />
               <p className='text-sm font-medium text-[#2E2E2E]'>Filter</p>
             </div>
-            {showFilter && <div className='absolute flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
+            {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
               <div className='flex gap-3 justify-between'>
                 <div>
                   <p className='text-sm font-medium text-[#2E2E2E]'>Department</p>
@@ -137,7 +150,7 @@ const getSuggestions = (inputValue: any) => {
               </div>
               <div className='flex gap-3 justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Job Profile</p>
+                  <p className='text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</p>
                 </div>
                 <div>
                   <select
@@ -154,24 +167,6 @@ const getSuggestions = (inputValue: any) => {
                       return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
                     })}
                   </select>
-                </div>
-              </div>
-              <div className='flex gap-3 justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Date</p>
-                </div>
-                <div>
-                  <input
-                  type="date"
-                    onChange={(event) => {
-                      setFilter({
-                        ...filter,
-                        date: event.target.value
-                      })
-                    }}
-                    value={filter.date}
-                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'                    
-                  />
                 </div>
               </div>
             </div>}
@@ -212,9 +207,9 @@ const getSuggestions = (inputValue: any) => {
           </div>
         </div>
       </div>
-      <div className='py-6'>
+      <div className='py-6 relative min-h-[70vh]'>
         {/* TABLE STARTS HERE */}
-        <table>
+        <table className="z-0">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -238,6 +233,21 @@ const getSuggestions = (inputValue: any) => {
           </tbody>
         </table>
         {/* TABLE ENDS HERE */}
+      <div className="absolute bottom-0 right-0 left-0 flex justify-center">
+        <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+          <button onClick={() => {
+            const nextDate = new Date(date);
+            nextDate.setDate(date.getDate() - 1);
+            setDate(nextDate);
+          }}><img src={CaretLeft} alt="" className="w-4 h-4" /></button>
+          <p className="text-sm font-medium text-[#283093]">{formatDate(date)}</p>
+          <button onClick={() => {
+            const nextDate = new Date(date);
+            nextDate.setDate(date.getDate() + 1);
+            setDate(nextDate);
+          }}><img src={CaretRight} className="w-4 h-4" alt="" /></button>
+        </div>
+      </div>
       </div>
 
     </div>
