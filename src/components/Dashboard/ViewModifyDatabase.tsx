@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync,getPaginationAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync, getPaginationAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllDepartmentsAsync, getSingleDepartmentAsync } from '../../redux/Slice/DepartmentSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
-import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
+import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from '../../assets/MagnifyingGlass.png'
 
@@ -21,7 +21,7 @@ const ViewModifyDatabase = () => {
         dispatch(getAllEmployeeAsync(filter));
         console.log("hi")
     }, [filter])
-    
+
     // SEARCH
 
     const [isLabelVisible, setLabelVisible] = useState(true);
@@ -57,10 +57,17 @@ const ViewModifyDatabase = () => {
         dispatch(getEmployeeImageAsync(employeeId));
         navigate(`/employee-profile`, { state: { data: data } });
     }
+
     const handleDepartmentTableRowClick = (data: any) => {
         const departmentId = { departmentId: data._id }
         dispatch(getSingleDepartmentAsync(departmentId));
         navigate(`/departments-info`, { state: { data: data } });
+    }
+    const handleJobprofileTableRowClick = (data: any) => {
+        const jobProfileId = { jobProfileId: data._id }
+        console.log(jobProfileId)
+        dispatch(getSingleJobProfileAsync(jobProfileId));
+        navigate(`/jobprofile-info`, { state: { data: data } });
     }
 
 
@@ -93,34 +100,34 @@ const ViewModifyDatabase = () => {
         setSuggestions(filteredSuggestions);
     };
 
-     // pagination 
-     const [currentPage, setCurrentPage] = useState(1);
-     const itemsPerPage = 4; // Number of items per page
-     const count = 9;
- 
-     // Calculate the total number of pages
-     const employeePagination = Math.ceil((count || 0) / itemsPerPage);
- 
-     const dispatchPagination = (pageNumber: number) => {
-         setCurrentPage(pageNumber);
-         dispatch(getPaginationAsync(pageNumber));
-     };
- 
-     const handleNextPage = () => {
-         const nextPage = currentPage + 1;
-         if (nextPage <= employeePagination) {
-             dispatchPagination(nextPage);
-         }
-     };
- 
-     const handlePreviousPage = () => {
-         const previousPage = currentPage - 1;
-         if (previousPage >= 1) {
-             dispatchPagination(previousPage);
-         }
-     };
-     const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
-    
+    // pagination 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4; // Number of items per page
+    const count = 9;
+
+    // Calculate the total number of pages
+    const employeePagination = Math.ceil((count || 0) / itemsPerPage);
+
+    const dispatchPagination = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        dispatch(getPaginationAsync(pageNumber));
+    };
+
+    const handleNextPage = () => {
+        const nextPage = currentPage + 1;
+        if (nextPage <= employeePagination) {
+            dispatchPagination(nextPage);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        const previousPage = currentPage - 1;
+        if (previousPage >= 1) {
+            dispatchPagination(previousPage);
+        }
+    };
+    const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
+
     return (
 
         <div className='mx-10'>
@@ -183,19 +190,19 @@ const ViewModifyDatabase = () => {
                             </div>
                             <div>
                                 <select
-                                onChange={(event) => {
-                                    setFilter({
-                                        ...filter,
-                                        departmentName: event.target.value
-                                    })
-                                }}
-                                value={filter.departmentName}
-                                className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
+                                    onChange={(event) => {
+                                        setFilter({
+                                            ...filter,
+                                            departmentName: event.target.value
+                                        })
+                                    }}
+                                    value={filter.departmentName}
+                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                     <option value=""></option>
                                     {departmentList && departmentList.map((element: any, index: number) => {
                                         return <option
-                                        key={index}
-                                        value={element.departmentName}
+                                            key={index}
+                                            value={element.departmentName}
                                         >
                                             {element.departmentName}
                                         </option>
@@ -209,14 +216,14 @@ const ViewModifyDatabase = () => {
                             </div>
                             <div>
                                 <select
-                                onChange={(event) => {
-                                    setFilter({
-                                        ...filter,
-                                        jobProfileName: event.target.value
-                                    })
-                                }}
-                                value={filter.jobProfileName}
-                                className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
+                                    onChange={(event) => {
+                                        setFilter({
+                                            ...filter,
+                                            jobProfileName: event.target.value
+                                        })
+                                    }}
+                                    value={filter.jobProfileName}
+                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                     <option value=""></option>
                                     {jobProfileList && jobProfileList.map((element: any, index: number) => {
                                         return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
@@ -235,7 +242,7 @@ const ViewModifyDatabase = () => {
                             </label>
                         </div>}
                         <input
-                        onClick={() => setshowFilter(false)}
+                            onClick={() => setshowFilter(false)}
                             type="search"
                             id="searchInput"
                             onChange={handleInputChange}
@@ -292,44 +299,44 @@ const ViewModifyDatabase = () => {
                                     </tr>
                                 })}
 
-                                
-<tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
 
-                                        <td>
-                                            <div className="flex gap-[10px] justify-center mt-4">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                    <td>
+                                        <div className="flex gap-[10px] justify-center mt-4">
+                                            <button
+                                                className="px-3 py-2 mx-1"
+                                                onClick={handlePreviousPage}
+                                                disabled={currentPage === 1}
+                                            >
+                                                &laquo;
+
+                                            </button>
+
+                                            {pageNumbers.map((page) => (
                                                 <button
-                                                    className="px-3 py-2 mx-1"
-                                                    onClick={handlePreviousPage}
-                                                    disabled={currentPage === 1}
+                                                    key={page}
+                                                    className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
+                                                    onClick={() => dispatchPagination(page)}
                                                 >
-                                                    &laquo;
-
+                                                    {page}
                                                 </button>
+                                            ))}
 
-                                                {pageNumbers.map((page) => (
-                                                    <button
-                                                        key={page}
-                                                        className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
-                                                        onClick={() => dispatchPagination(page)}
-                                                    >
-                                                        {page}
-                                                    </button>
-                                                ))}
+                                            <button
+                                                className="px-3 py-2 mx-1"
+                                                onClick={handleNextPage}
+                                                disabled={currentPage === employeePagination}
+                                            >
+                                                &raquo;
+                                            </button>
+                                        </div>
+                                    </td>
 
-                                                <button
-                                                    className="px-3 py-2 mx-1"
-                                                    onClick={handleNextPage}
-                                                    disabled={currentPage === employeePagination}
-                                                >
-                                                    &raquo;
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                    </tr>
+                                </tr>
                             </tbody>
                         </table>}
                         {/* TABLE FOR EMPLOYEE ENDS */}
@@ -361,7 +368,7 @@ const ViewModifyDatabase = () => {
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Employement Type</td>
                                 </tr>
                                 {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleTableRowClick(element)}>
+                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleJobprofileTableRowClick(element)}>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.jobProfileName ? element.jobProfileName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobDescription ? element.jobDescription : "Not Avilable"}</td>
