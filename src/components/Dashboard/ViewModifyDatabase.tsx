@@ -33,8 +33,8 @@ const ViewModifyDatabase = () => {
     const employeeDetailList = useSelector((state: any) => state.employee.employees);
     const departmentList = useSelector((state: any) => state.department.departments);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles)
-    const [path, setPath] = useState('')
-    const [databaseValue, setDatabaseValue] = useState("Employess");
+    const [path, setPath] = useState('/addemployee')
+    const [databaseValue, setDatabaseValue] = useState("Employees");
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [showFilter, setshowFilter] = useState(false);
     useEffect(() => {
@@ -134,22 +134,25 @@ const ViewModifyDatabase = () => {
                             onChange={(event: any) => {
                                 setDatabaseValue(event.target.value);
                                 const selectedValue = event.target.value;
-                                if (selectedValue !== "Employess") {
+                                
+                                    if (selectedValue === "Employees") {
+                                        setPath("/addemployee")
+                                    }
                                     if (selectedValue === "Departments") {
                                         setPath("/add-department")
                                     }
                                     if (selectedValue === "Job Profiles") {
                                         setPath("/add-job-profile")
-                                    }
+                                
                                 }
                             }
                             }
                         >
                             <select
                                 className="bg-[#ECEDFE] rounded-lg py-3 px-5 text-[#283093] text-sm font-medium"
-                                defaultValue="Employess"
+                                defaultValue="Employees"
                             >
-                                <option>Employess</option>
+                                <option>Employees</option>
                                 <option>Departments</option>
                                 <option>Job Profiles</option>
                             </select>
@@ -157,7 +160,7 @@ const ViewModifyDatabase = () => {
                     </div>
                 </div>
                 <div className='flex gap-6'>
-                    {databaseValue !== "Employess" && <Link to="/update-hierarchy">
+                    {databaseValue !== "Employees" && <Link to="/update-hierarchy">
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={Pencil} className='w-4' alt="" /><p className="px-2">Update Hierarchy</p></div>
                     </Link>}
                     <Link to={path}>
@@ -165,7 +168,7 @@ const ViewModifyDatabase = () => {
                     </Link>
                 </div>
             </div>
-            {databaseValue === "Employess" && <div className='my-10 flex gap-5'>
+            {databaseValue === "Employees" && <div className='my-10 flex gap-5'>
                 <div className='relative'>
                     <div
                         onClick={() => {
@@ -265,7 +268,7 @@ const ViewModifyDatabase = () => {
                 <div className='mt-10 overflow-auto'>
                     <div className='py-6'>
                         {/* TABLE FOR EMPLOYEE */}
-                        {databaseValue === "Employess" && <table>
+                        {databaseValue === "Employees" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>

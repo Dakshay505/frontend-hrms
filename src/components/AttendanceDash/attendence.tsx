@@ -39,34 +39,34 @@ export const Attendence: React.FC = () => {
         <div className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
           Attendance Overview
         </div>
-        <Link to="/attendance-database" className="flex px-[16px] cursor-pointer py-[12px] justify-center items-center">
-          <p className="text-[#666666] leading-trim font-inter text-capitalize text-lg font-medium leading-6 tracking-wider">
+        <Link to="/leaves" className="flex px-[16px] cursor-pointer py-[12px] justify-center items-center">
+          <p className="text-[#666666] text-[16px] font-medium leading-6">
             See All
           </p>
           <img src={right} alt="" className="h-[16px] w-[16px]" />
         </Link>
 
       </div>
-      <div className="flex flex-start pt-[16px] gap-[32px]">
-        <div className="flex flex-col w-[250px] h-[108px] justify-center items-center gap-4 p-[24px] rounded-2xl bg-[#ECEDFE]">
+      <div className="flex flex-start pt-4 gap-6">
+        <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
           <div className="flex justify-center items-center">
-            <span className="text-[#283093] text-2xl font-inter font-semibold leading-8">
+            <span className="text-[#283093] text-2xl font-semibold">
               {data && data.Number_Present_Employee}
             </span>
             <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
           </div>
-          <p className="text-neutral-n-600 text-lg font-inter font-medium leading-6 tracking-tighter">
+          <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
             Present
           </p>
         </div>
-        <div className="flex flex-col w-[250px] h-[108px] justify-center items-center gap-4 p-[24px] rounded-2xl bg-[#ECEDFE]">
+        <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
           <div className="flex justify-center items-center">
-            <span className="text-[#283093] text-2xl font-inter font-semibold leading-8">
+            <span className="text-[#283093] text-2xl font-semibold">
               {data && data.AbsentEmployess}
             </span>
             <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
           </div>
-          <p className="text-neutral-n-600 text-lg font-inter font-medium leading-6 tracking-tighter">
+          <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
             Absent
           </p>
         </div>

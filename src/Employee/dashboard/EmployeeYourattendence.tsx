@@ -38,7 +38,7 @@ export const Employeeattendence = () => {
 
     return (
         <div>
-            <div className="mt-8 px-[40px]">
+            <div className="pt-8 px-[40px]">
                 <div className="flex w-[688px] items-start gap-[291px]">
                     <p className="text-2xl text-[#2E2E2E] font-bold leading-8">
                         Attendance Database
@@ -120,6 +120,7 @@ export const Employeeattendence = () => {
                                         <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
                                         <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
                                     </tr>
+                                    
                                     {todayStaffAttandence && todayStaffAttandence.map((element: any, index: number) => {
                                         const latestAttandence = element.attendance[0];
                                         const latestPunches = latestAttandence.punches[0]

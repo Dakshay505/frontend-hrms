@@ -34,6 +34,7 @@ const AddJobProfile = () => {
           dispatch(createJobProfileAsync(data)).then(() => {
             dispatch(getAllJobProfileAsync());
           })
+          setNewFields([]);
           reset()
         })}
         >
@@ -120,7 +121,7 @@ const AddJobProfile = () => {
                       className='flex items-center justify-center rounded-lg w-[149px] h-10 text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4 cursor-pointer'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Column</p></div>
                   </div>
                 </div>
-                {(newFields.length > 0) && <div className="flex mt-6">
+                {(newFields.length > 0) && <div className="flex flex-wrap mt-6">
                   <div className="flex justify-center items-center bg-[#ECEDFE] w-12 h-[42px]">
                     <img src={BlackPlus} className="w-6 h-6" alt="" />
                   </div>

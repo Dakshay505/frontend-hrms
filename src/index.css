@@ -21,7 +21,7 @@
 }
 
 .react-calendar__navigation button {
-  color: #283093; /* Replace with your desired button text color */
+  color: #283093;
   font-size: 14px;
   line-height: 14px;
   font-weight: 600;
@@ -38,6 +38,6 @@
   letter-spacing: 1.5px;
 }
 
-.weekdays .react-calendar__month-view__weekdays__weekday abbr{
+.react-calendar__month-view__weekdays__weekday abbr{
   text-decoration: none;
 }
