@@ -254,33 +254,24 @@ const router = createBrowserRouter([
     ),
   },
    {
-    path:"/emp",
-    element:<Employeeaside> <UploadPhotoPage></UploadPhotoPage> </Employeeaside>
-   },
-   {
-    path:"/emphome",
-    element:<Employeeaside> <Employeehome></Employeehome> </Employeeaside>
-   },
-   
-   {
     path:"/empcheckin",
-    element:<Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside>
+    element: <ProductedRoute><Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside></ProductedRoute>
    },
    {
     path:"/employee-attendence",
-    element:<Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside></ProductedRoute>
    },
    {
     path:"/empdocuments",
-    element:<Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside></ProductedRoute>
    },
    {
     path:"/your-documents",
-    element:<Employeeaside> <Yourdoc></Yourdoc> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
    },
    {
     path:"/change-password",
-    element:<Employeeaside> <ChangePassword></ChangePassword> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
    },
   {
     path: "/pending-leaves",
