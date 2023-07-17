@@ -9,6 +9,7 @@ import axios from "axios";
 import { apiPath } from "../../APIRoutes";
 import JobProfileNode from "./jobProfileNode";
 import DepartmentNode from "./DepartmentNode";
+import Hierarchy1 from "../../hierarchy1";
 
 const UpdateHierarcy = () => {
   const [selectedValue, setSelectedValue] = useState("Departments");
@@ -83,7 +84,7 @@ const UpdateHierarcy = () => {
               })
           }
         })}>
-        <div className="flex gap-7 pt-8">
+        <div className="flex gap-7 mt-8">
           <div>
             <h1 className="text-2xl font-bold text-[#2E2E2E]">Update Hierarchy</h1>
           </div>
@@ -93,6 +94,7 @@ const UpdateHierarcy = () => {
               className="py-3 px-5 bg-[#ECEDFE] h-10 rounded-lg text-sm font-medium text-[#283093]">
               <option>Departments</option>
               <option>Job Profile</option>
+              <option>Employee</option>
             </select>
           </div>
         </div>
@@ -107,6 +109,9 @@ const UpdateHierarcy = () => {
           {noParentDepartmentArray && noParentDepartmentArray.map((element: any, index: number) => {
             return <DepartmentNode key={index} department={element} />
           })}
+        </div> : ""}
+        {selectedValue === "Employee" ? <div className="mt-10 border border-solid border-[#DEDEDE] py-3 rounded bg-[#FAFAFA]">
+         <Hierarchy1/>
         </div> : ""}
 
         {(selectedValue === "Departments") ? <div className="flex gap-10 mt-10">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from 'react';
+import { useEffect, useState, } from 'react';
 import eye from "../assets/Eye.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,12 +6,7 @@ import { updateEmployeeAsync } from '../redux/Slice/EmployeeSlice';
 
 
 
-type Inputs = {
-  id: number;
-  Oldpassword: string;
-  Newpassword: string;
-  confirmpassword: string;
-};
+
 
 export function ChangePassword() {
   const [showPassword, setShowPassword] = useState(false);

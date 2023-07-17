@@ -9,7 +9,6 @@ import doc from "../assets/doc.svg"
 import leave from "../assets/airplane.svg"
 import salary from "../assets/salary.svg"
 import training from "../assets/video.svg"
-import img from "../assets/Ellipse 1.png"
 import calenderr from "../assets/attendence.svg";
 import dot from "../assets/DotsThreeVertical.png"
 import signin from "../assets/SignIn.png"
@@ -18,6 +17,7 @@ import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
 import notification from "../assets/Bell.png"
 
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
+import { getEmployeeImageAsync } from "../redux/Slice/EmployeeSlice";
 
 
 
@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "#",
+    Link: "/traning-dashboard",
   },
 ];
 
@@ -73,9 +73,16 @@ export default function EmployeeAside(props: Props) {
 
   const dispatch = useDispatch()
   const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
+  const profileData = useSelector((state: any) => state.employee.singleEmployee.profileId?.profilePicture)
+  console.log("image", profileData)
+
+
   useEffect(() => {
-    dispatch(getLoggedInUserDataAsync())
+    dispatch(getLoggedInUserDataAsync()).then((data: any) => {
+      dispatch(getEmployeeImageAsync({ employeeId: data.payload.employee._id }));
+    })
   }, [])
+
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -144,7 +151,9 @@ export default function EmployeeAside(props: Props) {
           <div className="relative flex justify-center">
             <div className="flex justify-between border border-primary-border w-[208px] h-11 bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
               <div className="flex items-center gap-[10px] flex-1 pr-0">
-                <img src={img} alt="" className="w-[32px] h-[32px]" />
+                <Link to="/emp">
+                  <img src={profileData} alt="" className="w-[1.5rem] ms-2" />
+                </Link>
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">
                     {Employee ? Employee.name : "employee"}
@@ -161,26 +170,26 @@ export default function EmployeeAside(props: Props) {
                 <img src={dot} alt="" className="h-[21px] w-[21px]" />
               </button>
             </div>
-          {isDropdownOpen && (
-            <div className="absolute -top-32 w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
-              <Link to="/change-password"
-                onClick={handleChangePassword}
-                className="block w-full px-4 py-2 text-center text-sm underline"
-              >
-                Change Password
-              </Link>
-              <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
-                <img src={signin} alt="" className='h-[10px] w-[10px]' />
-                <input type='submit'
-                  value="Logout"
-                  className='cursor-pointer'
-                  onClick={() => {
-                    dispatch(logoutUserAsync());
-                  }}
-                />
-              </Link>
-            </div>
-          )}
+            {isDropdownOpen && (
+              <div className="absolute -top-32 w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
+                <Link to="/change-password"
+                  onClick={handleChangePassword}
+                  className="block w-full px-4 py-2 text-center text-sm underline"
+                >
+                  Change Password
+                </Link>
+                <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
+                  <img src={signin} alt="" className='h-[10px] w-[10px]' />
+                  <input type='submit'
+                    value="Logout"
+                    className='cursor-pointer'
+                    onClick={() => {
+                      dispatch(logoutUserAsync());
+                    }}
+                  />
+                </Link>
+              </div>
+            )}
           </div>
 
 
