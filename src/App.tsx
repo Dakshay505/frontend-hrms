@@ -56,6 +56,7 @@ import { useEffect } from "react"
 import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
+import SalaryDatabase from "./components/Salary/SalaryDatabase";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -360,6 +361,16 @@ const router = createBrowserRouter([
           <DepartmentInfo></DepartmentInfo>{" "}
         </Aside>
       // </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-database",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryDatabase></SalaryDatabase>
+        </Aside>
+      </ProductedRoute>
     ),
   },
 

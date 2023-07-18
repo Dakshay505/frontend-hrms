@@ -213,7 +213,7 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-      <div className='py-6 relative min-h-[70vh]'>
+      <div className='py-6 relative'>
         {/* TABLE STARTS HERE */}
         <table className="z-0">
           <tbody>
@@ -239,6 +239,8 @@ export const AttendenceDashboardList = () => {
           </tbody>
         </table>
         {/* TABLE ENDS HERE */}
+      </div>
+      <div>
         <div className="absolute bottom-0 right-0 left-0 flex justify-center">
           <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
             <button
@@ -259,7 +261,7 @@ export const AttendenceDashboardList = () => {
                 formatShortWeekday={(locale, date) => {
                   console.log(locale)
                   return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-              }}
+                }}
                 value={date} />
             </div>}
             <p
@@ -278,7 +280,6 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
