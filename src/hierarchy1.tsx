@@ -1,15 +1,15 @@
 import axios from "axios"
 import { apiPath } from "./APIRoutes"
 import { useEffect, useState } from "react";
-import DepartmentNode1 from "./components/Dashboard/DepartmentNode1";
+import GroupNode1 from "./components/Dashboard/GroupNode1";
 
 const Hierarchy1 = () => {
     // const [noParentJobProfileArray, setnoParentJobProfileArray] = useState<any>([]);
-    const [noParentDepartmentArray, setnoParentDepartmentArray] = useState<any>([]);
-    const getDepartmentWithNoParent = async () => {
+    const [noParentGroupArray, setnoParentGroupArray] = useState<any>([]);
+    const getGroupWithNoParent = async () => {
         try {
-          const { data } = await axios.get(`${apiPath}/api/v1/department/getdepartmentnoparent`)
-          setnoParentDepartmentArray(data)
+          const { data } = await axios.get(`${apiPath}/api/v1/group/getgroupnoparent`)
+          setnoParentGroupArray(data)
           return data;
         }
         catch (err) {
@@ -17,12 +17,12 @@ const Hierarchy1 = () => {
         }
       }
       useEffect(() => {
-        getDepartmentWithNoParent();
+        getGroupWithNoParent();
       }, []);
   return (
     <div className="mt-10 border border-solid border-[#DEDEDE] py-3 rounded bg-[#FAFAFA]">
-          {noParentDepartmentArray && noParentDepartmentArray.map((element: any, index: number) => {
-            return <DepartmentNode1 key={index} department={element} />
+          {noParentGroupArray && noParentGroupArray.map((element: any, index: number) => {
+            return <GroupNode1 key={index} group={element} />
           })}
         </div>
   )

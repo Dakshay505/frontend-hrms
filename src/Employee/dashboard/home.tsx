@@ -54,8 +54,8 @@ export const Employeehome = () => {
                     Welcome Back {Employee ? Employee.name : 'Employee'}
                 </div>
 
-                <div className="flex items-start bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[40px] py-[24px] gap-[40px] w-[404px]">
-                    <div className="flex flex-col items-start self-stretch pb-0 gap-[8px] text-[#2E2E2E] font-inter font-semibold text-[20px] leading-[28px]">
+                <div className="flex items-start bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[40px] py-[24px] gap-[40px] w-[404px] h-[188px]">
+                    <div className="flex flex-col items-start self-stretch pb-0 gap-[8px] text-[#2E2E2E] font-semibold text-xl">
                         Your Employee Barcode
                     </div>
                     <img src={Employee?.currentBarCode} alt="barcode" />
@@ -90,7 +90,7 @@ export const Employeehome = () => {
                             <h1 className="text-[28px] leading-9 font-bold text-[#2E2E2E]">Your Leaves</h1>
                         </div>
                         {/* CALANDER */}
-                        <div className="w-[350px]">
+                        <div className="w-[350px] employeeHomeCalender">
                             <Calendar
                                 tileClassName={tileClassName}
                                 calendarType="US"

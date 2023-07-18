@@ -3,7 +3,7 @@ import BluePlus from '../../assets/BluePlus.png'
 import FileArrowUp from '../../assets/FileArrowUp.png'
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import { addTrainingDocumentsAsync, addTrainingLinksAsync } from "../../redux/Slice/TrainingSlice";
 import X from '../../assets/X.svg'
@@ -12,13 +12,13 @@ import X from '../../assets/X.svg'
 const AddTraningResources = () => {
 
     const dispatch = useDispatch();
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
-    const [departmentName, setDepartmentName] = useState("All Departments");
+    const [groupName, setGroupName] = useState("All Groups");
     const [jobProfileName, setjobProfileName] = useState("All Job Profiles");
 
     useEffect(() => {
-        dispatch(getAllDepartmentsAsync());
+        dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
     }, [])
 
@@ -97,7 +97,7 @@ const AddTraningResources = () => {
                 onSubmit={handleSubmit((data) => {
                     if (showLinkFormValue) {
                         const sendData = {
-                            departmentName: departmentName,
+                            groupName: groupName,
                             jobProfileName: jobProfileName,
                             objArray: convertToObjectArray(data)
                         };
@@ -109,7 +109,7 @@ const AddTraningResources = () => {
                         const formData = new FormData();
                         formData.append('file', selectedFile);
                         formData.append('fileName', data.fileName);
-                        formData.append('departmentName', departmentName);
+                        formData.append('groupName', groupName);
                         formData.append('JobProfileName', jobProfileName);
                         for (const entry of formData.entries()) {
                             console.log(entry[0] + ": " + entry[1]);
@@ -128,11 +128,11 @@ const AddTraningResources = () => {
                         <p className="text-[#000000] text-[16px] leading-6 font-medium">For:</p>
                         <div>
                             <select
-                                onChange={(event) => setDepartmentName(event.target.value)}
+                                onChange={(event) => setGroupName(event.target.value)}
                                 className='flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
                                 <option>All Groups</option>
-                                {departmentList && departmentList.map((element: any, index: number) => {
-                                    return <option key={index}>{element.departmentName}</option>
+                                {groupList && groupList.map((element: any, index: number) => {
+                                    return <option key={index}>{element.groupName}</option>
                                 })}
                             </select>
                         </div>

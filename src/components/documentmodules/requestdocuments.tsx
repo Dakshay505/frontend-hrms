@@ -5,7 +5,7 @@ import React, {  useEffect, useState } from "react";
 
 import glass from "../../assets/MagnifyingGlass.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import axios from "axios";
 import { apiPath } from "../../APIRoutes";
@@ -23,11 +23,11 @@ export const Requestdocument = () => {
 //   const [notifications, setNotifications] = useState<Notification[]>([]);
 
     const dispatch = useDispatch();
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
     useEffect(() => {
-        dispatch(getAllDepartmentsAsync())
+        dispatch(getAllGroupsAsync())
         dispatch(getAllJobProfileAsync())
     }, [])
 
@@ -142,7 +142,7 @@ export const Requestdocument = () => {
                 onSubmit={handleSubmit((data) => {
                  
                     const sendData = {
-                        departmentName: data.departmentName,
+                        groupName: data.groupName,
                         jobProfileName: data.jobProfileName,
                         message: data.resourceName + ": " + data.format,
                         notificationType: "Document"
@@ -159,11 +159,11 @@ export const Requestdocument = () => {
                         <p className="text-[#000000] text-[16px] leading-6 font-bold">For:</p>
                         <div>
                             <select
-                                {...register('departmentName')}
+                                {...register('groupName')}
                                 defaultValue={""} className='flex border bg-[#fafafa] border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
                                 <option value="">All Groups</option>
-                                {departmentList.map((element: any, index: number) => {
-                                    return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.departmentName}</option>
+                                {groupList.map((element: any, index: number) => {
+                                    return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.groupName}</option>
                                 })}
                             </select>
                         </div>

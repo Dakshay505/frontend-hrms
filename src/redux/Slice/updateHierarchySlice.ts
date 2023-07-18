@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { updateHierarchyDepartment, updateHierarchyJobProfile } from '../API/updateHierarchy';
+import { updateHierarchyGroup, updateHierarchyJobProfile } from '../API/updateHierarchy';
 
 const initialState = {
     updatedHierarchy: [],
@@ -19,11 +19,11 @@ export const updateHierarchyJobProfileAsync: any = createAsyncThunk(
     }
 );
 // UPDATE
-export const updateHierarchyDepartmentAsync: any = createAsyncThunk(
-    'updateHierarchyDepartment',
+export const updateHierarchyGroupAsync: any = createAsyncThunk(
+    'updateHierarchyGroup',
     async (data) => {
         try {
-            const response: any = await updateHierarchyDepartment(data);
+            const response: any = await updateHierarchyGroup(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -45,10 +45,10 @@ export const updateHierarchySlice = createSlice({
                 state.status = 'idle';
                 // state.jobProfiles =  action.payload.docs;
             })
-            .addCase(updateHierarchyDepartmentAsync.pending, (state) => {
+            .addCase(updateHierarchyGroupAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateHierarchyDepartmentAsync.fulfilled, function (state: any) {
+            .addCase(updateHierarchyGroupAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
                 // state.jobProfiles =  action.payload.docs;
             })

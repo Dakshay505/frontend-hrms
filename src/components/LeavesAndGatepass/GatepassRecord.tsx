@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import glass from "../../assets/MagnifyingGlass.png";
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Filter from '../../assets/filter.png'
@@ -11,13 +11,13 @@ export const GatepassRecord = () => {
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-  const departmentList = useSelector((state: any) => state.department.departments);
+  const groupList = useSelector((state: any) => state.group.groups);
   const allApprovedGatePassList = useSelector((state: any) => state.leave.approvedGatePasses);
   console.log(allApprovedGatePassList)
   useEffect(() => {
     dispatch(getAllApprovedLeavesAsync());
     dispatch(getAllApprovedGatePassAsync());
-    dispatch(getAllDepartmentsAsync());
+    dispatch(getAllGroupsAsync());
   }, [])
   const {
     register,
@@ -54,11 +54,11 @@ export const GatepassRecord = () => {
             <div>
 
               <select
-                {...register('allDepartments', { required: "Phone No. required" })}
-                defaultValue={"All Departments"} className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5'>
-                <option value="All Departments">All Groups</option>
-                {departmentList && departmentList.map((element: any, index: number) => {
-                  return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.departmentName}</option>
+                {...register('allGroups', { required: "Phone No. required" })}
+                defaultValue={"All Groups"} className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5'>
+                <option value="All Groups">All Groups</option>
+                {groupList && groupList.map((element: any, index: number) => {
+                  return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.groupName}</option>
                 })}
               </select>
             </div>

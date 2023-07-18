@@ -4,32 +4,34 @@ import glass from "../../assets/MagnifyingGlass.png";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postAttandenceByDateAsync } from "../../redux/Slice/AttandenceSlice";
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
-
-
+import CaretLeft from "../../assets/CaretLeft.svg"
+import CaretRight from "../../assets/CaretRight1.svg"
+import 'react-datepicker/dist/react-datepicker.css';
+import Calendar from "react-calendar";
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
 
-
-
   const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
-  const departmentList = useSelector((state: any) => state.department.departments);
+  const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
+  const [date, setDate] = useState<any>(new Date());
+  const [showCalender, setShowCalender] = useState(false);
 
   useEffect(() => {
     dispatch(postAttandenceByDateAsync()).then((data: any) => {
       const employeeData = data.payload.employees;
       const arr = [];
       for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
+        arr.push(employeeData[i].employeeId.name)
       }
       setFetchedSuggestions(arr)
-  });
-  console.log(fetchedSuggestions);
-    dispatch(getAllDepartmentsAsync())
+    });
+    console.log(fetchedSuggestions);
+    dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
   }, [])
 
@@ -42,51 +44,68 @@ export const AttendenceDashboardList = () => {
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   const [filter, setFilter] = useState({
     name: "",
-    departmentName: "",
+    groupName: "",
     jobProfileName: "",
     date: ""
   })
 
+  useEffect(() => {
+    const currentDate = new Date(date);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    setFilter({
+      ...filter,
+      date: formattedDate
+      // date:date.toDateString()
+    })
+    console.log("hi")
+  }, [date])
 
   useEffect(() => {
     console.log(filter);
     dispatch(postAttandenceByDateAsync(filter))
   }, [filter])
 
-  
+
 
   const handleTableRowClick = (data: any) => {
     console.log(data._id)
   }
 
+  const formatDate = (date: any) => {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
-        setLabelVisible(false);
-        setSearch(event.target.value);
-        setFilter({
-            ...filter,
-            name: event.target.value
-        })
-        getSuggestions(event.target.value);
+      setLabelVisible(false);
+      setSearch(event.target.value);
+      setFilter({
+        ...filter,
+        name: event.target.value
+      })
+      getSuggestions(event.target.value);
     }
     else {
-        setLabelVisible(true);
-        setSearch(event.target.value);
-        setFilter({
-            ...filter,
-            name: event.target.value
-        })
-        setSuggestions([]);
+      setLabelVisible(true);
+      setSearch(event.target.value);
+      setFilter({
+        ...filter,
+        name: event.target.value
+      })
+      setSuggestions([]);
     }
-};
+  };
 
-const getSuggestions = (inputValue: any) => {
+  const getSuggestions = (inputValue: any) => {
     const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-        suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+      suggestion?.toLowerCase().includes(inputValue.toLowerCase())
     );
     setSuggestions(filteredSuggestions);
-};
+  };
 
 
   return (
@@ -108,28 +127,28 @@ const getSuggestions = (inputValue: any) => {
               <img src={FunnelSimple} className='w-4 h-4' alt="" />
               <p className='text-sm font-medium text-[#2E2E2E]'>Filter</p>
             </div>
-            {showFilter && <div className='absolute flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
+            {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
               <div className='flex gap-3 justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Department</p>
+                  <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
                 </div>
                 <div>
                   <select
                     onChange={(event) => {
                       setFilter({
                         ...filter,
-                        departmentName: event.target.value
+                        groupName: event.target.value
                       })
                     }}
-                    value={filter.departmentName}
+                    value={filter.groupName}
                     className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                     <option value=""></option>
-                    {departmentList && departmentList.map((element: any, index: number) => {
+                    {groupList && groupList.map((element: any, index: number) => {
                       return <option
                         key={index}
-                        value={element.departmentName}
+                        value={element.groupName}
                       >
-                        {element.departmentName}
+                        {element.groupName}
                       </option>
                     })}
                   </select>
@@ -137,7 +156,7 @@ const getSuggestions = (inputValue: any) => {
               </div>
               <div className='flex gap-3 justify-between'>
                 <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Job Profile</p>
+                  <p className='text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</p>
                 </div>
                 <div>
                   <select
@@ -154,24 +173,6 @@ const getSuggestions = (inputValue: any) => {
                       return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
                     })}
                   </select>
-                </div>
-              </div>
-              <div className='flex gap-3 justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Date</p>
-                </div>
-                <div>
-                  <input
-                  type="date"
-                    onChange={(event) => {
-                      setFilter({
-                        ...filter,
-                        date: event.target.value
-                      })
-                    }}
-                    value={filter.date}
-                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'                    
-                  />
                 </div>
               </div>
             </div>}
@@ -212,9 +213,9 @@ const getSuggestions = (inputValue: any) => {
           </div>
         </div>
       </div>
-      <div className='py-6'>
+      <div className='py-6 relative'>
         {/* TABLE STARTS HERE */}
-        <table>
+        <table className="z-0">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -239,7 +240,46 @@ const getSuggestions = (inputValue: any) => {
         </table>
         {/* TABLE ENDS HERE */}
       </div>
-
+      <div>
+        <div className="absolute bottom-0 right-0 left-0 flex justify-center">
+          <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+            <button
+              onClick={() => {
+                const nextDate = new Date(date);
+                nextDate.setDate(date.getDate() - 1);
+                setDate(nextDate);
+              }}>
+              <img src={CaretLeft} alt="" className="w-4 h-4" />
+            </button>
+            {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+              <Calendar
+                onChange={setDate}
+                onClickDay={() => {
+                  setShowCalender(false);
+                }}
+                className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                formatShortWeekday={(locale, date) => {
+                  console.log(locale)
+                  return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+                }}
+                value={date} />
+            </div>}
+            <p
+              onClick={() => {
+                setShowCalender(!showCalender);
+              }}
+              className="text-sm font-medium text-[#283093] cursor-pointer">{formatDate(date)}</p>
+            <button
+              onClick={() => {
+                const nextDate = new Date(date);
+                nextDate.setDate(date.getDate() + 1);
+                setDate(nextDate);
+              }}>
+              <img src={CaretRight} className="w-4 h-4" alt="" />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

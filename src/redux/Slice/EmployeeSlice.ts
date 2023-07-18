@@ -41,6 +41,7 @@ export const getAllEmployeeAsync: any = createAsyncThunk(
             console.log(error.message);
         }
   }
+
 );
 // READ SINFLE EMPLOYEE
 export const getSingleEmployeeAsync: any = createAsyncThunk(
@@ -182,8 +183,14 @@ export const EmployeeSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
-        }
-      );
+        })
+      .addCase(getPaginationAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getPaginationAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.employees =  action.payload.employees;
+      })
   },
 });
 

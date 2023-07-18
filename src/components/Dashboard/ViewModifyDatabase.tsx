@@ -3,25 +3,25 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
-import { getAllDepartmentsAsync, getSingleDepartmentAsync } from '../../redux/Slice/DepartmentSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync,getPaginationAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllGroupsAsync, getSingleGroupAsync } from '../../redux/Slice/GroupSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
-import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
+import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from '../../assets/MagnifyingGlass.png'
 
 const ViewModifyDatabase = () => {
     const [filter, setFilter] = useState({
         name: "",
-        departmentName: "",
+        groupName: "",
         jobProfileName: ""
     })
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter));
         console.log("hi")
     }, [filter])
-    
+
     // SEARCH
 
     const [isLabelVisible, setLabelVisible] = useState(true);
@@ -31,10 +31,10 @@ const ViewModifyDatabase = () => {
 
     const dispatch = useDispatch();
     const employeeDetailList = useSelector((state: any) => state.employee.employees);
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles)
-    const [path, setPath] = useState('')
-    const [databaseValue, setDatabaseValue] = useState("Employess");
+    const [path, setPath] = useState('/addemployee')
+    const [databaseValue, setDatabaseValue] = useState("Employees");
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [showFilter, setshowFilter] = useState(false);
     useEffect(() => {
@@ -46,7 +46,7 @@ const ViewModifyDatabase = () => {
             }
             setFetchedSuggestions(arr)
         });
-        dispatch(getAllDepartmentsAsync());
+        dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
     }, [])
 
@@ -57,10 +57,16 @@ const ViewModifyDatabase = () => {
         dispatch(getEmployeeImageAsync(employeeId));
         navigate(`/employee-profile`, { state: { data: data } });
     }
-    const handleDepartmentTableRowClick = (data: any) => {
-        const departmentId = { departmentId: data._id }
-        dispatch(getSingleDepartmentAsync(departmentId));
-        navigate(`/departments-info`, { state: { data: data } });
+    const handleGroupTableRowClick = (data: any) => {
+        const groupId = { groupId: data._id }
+        dispatch(getSingleGroupAsync(groupId));
+        navigate(`/groups-info`, { state: { data: data } });
+    }
+    const handleJobprofileTableRowClick = (data: any) => {
+        const jobProfileId = { jobProfileId: data._id }
+        console.log(jobProfileId)
+        dispatch(getSingleJobProfileAsync(jobProfileId));
+        navigate(`/jobprofile-info`, { state: { data: data } });
     }
 
 
@@ -92,6 +98,35 @@ const ViewModifyDatabase = () => {
         );
         setSuggestions(filteredSuggestions);
     };
+
+    // pagination 
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 4; // Number of items per page
+    const count = 9;
+
+    // Calculate the total number of pages
+    const employeePagination = Math.ceil((count || 0) / itemsPerPage);
+
+    const dispatchPagination = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+        dispatch(getPaginationAsync(pageNumber));
+    };
+
+    const handleNextPage = () => {
+        const nextPage = currentPage + 1;
+        if (nextPage <= employeePagination) {
+            dispatchPagination(nextPage);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        const previousPage = currentPage - 1;
+        if (previousPage >= 1) {
+            dispatchPagination(previousPage);
+        }
+    };
+    const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
+
     return (
 
         <div className='mx-10'>
@@ -105,38 +140,41 @@ const ViewModifyDatabase = () => {
                             onChange={(event: any) => {
                                 setDatabaseValue(event.target.value);
                                 const selectedValue = event.target.value;
-                                if (selectedValue !== "Employess") {
-                                    if (selectedValue === "Departments") {
-                                        setPath("/add-department")
+                                
+                                    if (selectedValue === "Employees") {
+                                        setPath("/addemployee")
+                                    }
+                                    if (selectedValue === "Groups") {
+                                        setPath("/add-group")
                                     }
                                     if (selectedValue === "Job Profiles") {
                                         setPath("/add-job-profile")
-                                    }
+                                
                                 }
                             }
                             }
                         >
                             <select
                                 className="bg-[#ECEDFE] rounded-lg py-3 px-5 text-[#283093] text-sm font-medium"
-                                defaultValue="Employess"
+                                defaultValue="Employees"
                             >
-                                <option>Employess</option>
-                                <option>Departments</option>
+                                <option>Employees</option>
+                                <option>Groups</option>
                                 <option>Job Profiles</option>
                             </select>
                         </form>
                     </div>
                 </div>
                 <div className='flex gap-6'>
-                    <Link to="/update-hierarchy">
+                    {databaseValue !== "Employees" && <Link to="/update-hierarchy">
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={Pencil} className='w-4' alt="" /><p className="px-2">Update Hierarchy</p></div>
-                    </Link>
+                    </Link>}
                     <Link to={path}>
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add</p></div>
                     </Link>
                 </div>
             </div>
-            {databaseValue === "Employess" && <div className='my-10 flex gap-5'>
+            {databaseValue === "Employees" && <div className='my-10 flex gap-5'>
                 <div className='relative'>
                     <div
                         onClick={() => {
@@ -150,25 +188,25 @@ const ViewModifyDatabase = () => {
                     {showFilter && <div className='absolute flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
                         <div className='flex gap-3 justify-between'>
                             <div>
-                                <p className='text-sm font-medium text-[#2E2E2E]'>Department</p>
+                                <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
                             </div>
                             <div>
                                 <select
                                 onChange={(event) => {
                                     setFilter({
                                         ...filter,
-                                        departmentName: event.target.value
+                                        groupName: event.target.value
                                     })
                                 }}
-                                value={filter.departmentName}
+                                value={filter.groupName}
                                 className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                     <option value=""></option>
-                                    {departmentList && departmentList.map((element: any, index: number) => {
+                                    {groupList && groupList.map((element: any, index: number) => {
                                         return <option
                                         key={index}
-                                        value={element.departmentName}
+                                        value={element.groupName}
                                         >
-                                            {element.departmentName}
+                                            {element.groupName}
                                         </option>
                                     })}
                                 </select>
@@ -180,14 +218,14 @@ const ViewModifyDatabase = () => {
                             </div>
                             <div>
                                 <select
-                                onChange={(event) => {
-                                    setFilter({
-                                        ...filter,
-                                        jobProfileName: event.target.value
-                                    })
-                                }}
-                                value={filter.jobProfileName}
-                                className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
+                                    onChange={(event) => {
+                                        setFilter({
+                                            ...filter,
+                                            jobProfileName: event.target.value
+                                        })
+                                    }}
+                                    value={filter.jobProfileName}
+                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                     <option value=""></option>
                                     {jobProfileList && jobProfileList.map((element: any, index: number) => {
                                         return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
@@ -206,7 +244,7 @@ const ViewModifyDatabase = () => {
                             </label>
                         </div>}
                         <input
-                        onClick={() => setshowFilter(false)}
+                            onClick={() => setshowFilter(false)}
                             type="search"
                             id="searchInput"
                             onChange={handleInputChange}
@@ -236,13 +274,13 @@ const ViewModifyDatabase = () => {
                 <div className='mt-10 overflow-auto'>
                     <div className='py-6'>
                         {/* TABLE FOR EMPLOYEE */}
-                        {databaseValue === "Employess" && <table>
+                        {databaseValue === "Employees" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</td>
-                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Department</td>
+                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Salary</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Employement Status</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leaves Taken</td>
@@ -253,7 +291,7 @@ const ViewModifyDatabase = () => {
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.name ? element.name : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobProfileId?.jobProfileName ? element.jobProfileId?.jobProfileName : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.departmentId?.departmentName ? element.departmentId?.departmentName : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.groupId?.groupName ? element.groupId?.groupName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.salary ? element.salary : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobProfileId?.employmentType ? element.jobProfileId?.employmentType : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.leaveTaken ? element.leaveTaken : 0}</td>
@@ -262,21 +300,58 @@ const ViewModifyDatabase = () => {
                                         </td>
                                     </tr>
                                 })}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                    <td>
+                                        <div className="flex gap-[10px] justify-center mt-4">
+                                            <button
+                                                className="px-3 py-2 mx-1"
+                                                onClick={handlePreviousPage}
+                                                disabled={currentPage === 1}
+                                            >
+                                                &laquo;
+
+                                            </button>
+
+                                            {pageNumbers.map((page) => (
+                                                <button
+                                                    key={page}
+                                                    className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
+                                                    onClick={() => dispatchPagination(page)}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+
+                                            <button
+                                                className="px-3 py-2 mx-1"
+                                                onClick={handleNextPage}
+                                                disabled={currentPage === employeePagination}
+                                            >
+                                                &raquo;
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                </tr>
                             </tbody>
                         </table>}
                         {/* TABLE FOR EMPLOYEE ENDS */}
                         {/* TABLE FOR DEPARTMENT */}
-                        {databaseValue === "Departments" && <table>
+                        {databaseValue === "Groups" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE]'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
-                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Department Name</td>
+                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group Name</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Description</td>
                                 </tr>
-                                {departmentList && departmentList.map((element: any, index: number) => {
-                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleDepartmentTableRowClick(element)}>
+                                {groupList && groupList.map((element: any, index: number) => {
+                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleGroupTableRowClick(element)}>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline'>{element.departmentName ? element.departmentName : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline'>{element.groupName ? element.groupName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.description ? element.description : "Not Avilable"}</td>
                                     </tr>
                                 })}
@@ -293,7 +368,7 @@ const ViewModifyDatabase = () => {
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Employement Type</td>
                                 </tr>
                                 {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleTableRowClick(element)}>
+                                    return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleJobprofileTableRowClick(element)}>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.jobProfileName ? element.jobProfileName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobDescription ? element.jobDescription : "Not Avilable"}</td>

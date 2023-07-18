@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
   },
   { id: "Documents", name: "Documents", icon: doc, Link: "/document" },
   { id: "Notification", name: "Notification", icon: bellIcon, Link: "/compose-notification" },
-  { id: "Salaries", name: "Salaries", icon: salary, Link: "" },
+  { id: "Salaries", name: "Salaries", icon: salary, Link: "/salary-database" },
   {
     id: "SalaTraining Contentries",
     name: "Training Content",
@@ -76,7 +76,7 @@ export default function aside(props: Props) {
         </Link>
 
         <div className="flex items-center  gap-[16px]">
-          <Link to='/'>
+          <Link to='/show-notifications'>
             <div>
               <img src={notification} alt="notification" className="w-[24px]" />
             </div>

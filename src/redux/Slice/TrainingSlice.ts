@@ -42,14 +42,14 @@ export const TrainingSlice = createSlice({
             })
             .addCase(addTrainingLinksAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                // state.departments =  action.payload.employees;
+                // state.groups =  action.payload.employees;
             })
             .addCase(addTrainingDocumentsAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(addTrainingDocumentsAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                // state.departments =  action.payload.employees;
+                // state.groups =  action.payload.employees;
             })
     },
 });

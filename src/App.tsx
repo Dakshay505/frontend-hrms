@@ -9,7 +9,7 @@ import AddNewFieldEmployee from './components/Dashboard/AddNewFieldEmployee';
 import TraningDashboard from './components/Traning/TraningDashboard';
 import AddTraningResources from './components/Traning/AddTraningResources';
 import ViewModifyDatabase from './components/Dashboard/ViewModifyDatabase';
-import AddDepartment from './components/Dashboard/AddDepartment';
+import AddGroup from './components/Dashboard/AddGroup';
 import AddJobProfile from './components/Dashboard/AddJobProfile';
 import UpdateHierarcy from './components/Dashboard/UpdateHierarcy';
 import { AttendenceDtabase } from './components/AttendanceDash/attendenceDatabase';
@@ -30,16 +30,16 @@ import { EmployeeProfile } from './components/Employeeprofile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
 import { JobProfileInfo } from './components/information/jobprofileinfo';
-import { DepartmentInfo } from './components/information/departmentinfo';
+import { GroupInfo } from './components/information/groupinfo';
 
 import { StaffCheckin } from './Employee/dashboard/staffcheckin';
 import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
 import { EmpViewdoc } from './Employee/documents/viewdoc';
 import { Yourdoc } from './Employee/documents/yourdoc';
-import  {ChangePassword}  from './Employee/changepassword';
+import { ChangePassword } from './Employee/changepassword';
 
 import AddNewFieldsForJobProfile from "./components/Dashboard/AddNewFieldsForJobProfile";
-import AddNewFieldsForDepartments from "./components/Dashboard/AddNewFieldsForDepartments";
+import AddNewFieldsForGroups from "./components/Dashboard/AddNewFieldsForGroups";
 
 import Employeeaside from "./Employee/EmployeeAside";
 import UploadPhotoPage from "./Employee/uploadphoto";
@@ -52,14 +52,16 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ProductedRouteEmployee } from "./ProtectedRoute/ProtectedRouteEmployee";
 import { useSelector } from "react-redux";
-import {useEffect} from "react"
+import { useEffect } from "react"
 import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
+import ShowNotication from "./components/Notification/showNotication";
+import SalaryDatabase from "./components/Salary/SalaryDatabase";
 const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-        <Login></Login>
+      <Login></Login>
     ),
   },
   {
@@ -76,9 +78,9 @@ const router = createBrowserRouter([
     path: "/addemployee",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddEmployee />
-      </Aside>
+        <Aside>
+          <AddEmployee />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -86,19 +88,19 @@ const router = createBrowserRouter([
     path: "/view-modify-database",
     element: (
       <ProductedRoute>
-      <Aside>
-        <ViewModifyDatabase />
-      </Aside>
+        <Aside>
+          <ViewModifyDatabase />
+        </Aside>
       </ProductedRoute>
     ),
   },
   {
-    path: "/add-department",
+    path: "/add-group",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddDepartment />
-      </Aside>
+        <Aside>
+          <AddGroup />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -106,9 +108,9 @@ const router = createBrowserRouter([
     path: "/update-hierarchy",
     element: (
       <ProductedRoute>
-      <Aside>
-        <UpdateHierarcy />
-      </Aside>
+        <Aside>
+          <UpdateHierarcy />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -116,9 +118,9 @@ const router = createBrowserRouter([
     path: "/add-job-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddJobProfile />
-      </Aside>
+        <Aside>
+          <AddJobProfile />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -126,9 +128,9 @@ const router = createBrowserRouter([
     path: "/addnewfieldsemployee",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldEmployee />
-      </Aside>
+        <Aside>
+          <AddNewFieldEmployee />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -136,19 +138,19 @@ const router = createBrowserRouter([
     path: "/add-new-fields-for-job-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldsForJobProfile />
-      </Aside>
+        <Aside>
+          <AddNewFieldsForJobProfile />
+        </Aside>
       </ProductedRoute>
     ),
   },
   {
-    path: "/add-new-fields-for-department",
+    path: "/add-new-fields-for-group",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddNewFieldsForDepartments />
-      </Aside>
+        <Aside>
+          <AddNewFieldsForGroups />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -156,9 +158,9 @@ const router = createBrowserRouter([
     path: "/traning-dashboard",
     element: (
       <ProductedRoute>
-      <Aside>
-        <TraningDashboard />
-      </Aside>
+        <Aside>
+          <TraningDashboard />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -166,9 +168,9 @@ const router = createBrowserRouter([
     path: "/add-traning-resources",
     element: (
       <ProductedRoute>
-      <Aside>
-        <AddTraningResources />
-      </Aside>
+        <Aside>
+          <AddTraningResources />
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -176,10 +178,10 @@ const router = createBrowserRouter([
     path: "/attendance",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <AttendenceDtabase></AttendenceDtabase>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <AttendenceDtabase></AttendenceDtabase>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -187,10 +189,10 @@ const router = createBrowserRouter([
     path: "/leaves",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <Leavereate></Leavereate>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <Leavereate></Leavereate>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -198,10 +200,10 @@ const router = createBrowserRouter([
     path: "/attendance-database",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <AttendenceDashboardList></AttendenceDashboardList>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <AttendenceDashboardList></AttendenceDashboardList>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -209,10 +211,10 @@ const router = createBrowserRouter([
     path: "/document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <DocumentDash></DocumentDash>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <DocumentDash></DocumentDash>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -224,10 +226,10 @@ const router = createBrowserRouter([
     path: "/request",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <Requestdocument></Requestdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <Requestdocument></Requestdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -235,10 +237,10 @@ const router = createBrowserRouter([
     path: "/viewdocuments",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <ViewDoc></ViewDoc>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <ViewDoc></ViewDoc>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -246,50 +248,41 @@ const router = createBrowserRouter([
     path: "/compose-notification",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <ComposeNotification />{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <ComposeNotification />{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
    {
-    path:"/emp",
-    element:<Employeeaside> <UploadPhotoPage></UploadPhotoPage> </Employeeaside>
-   },
-   {
-    path:"/emphome",
-    element:<Employeeaside> <Employeehome></Employeehome> </Employeeaside>
-   },
-   
-   {
     path:"/empcheckin",
-    element:<Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside>
+    element: <ProductedRoute><Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside></ProductedRoute>
    },
    {
     path:"/employee-attendence",
-    element:<Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside></ProductedRoute>
    },
    {
     path:"/empdocuments",
-    element:<Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside></ProductedRoute>
    },
    {
     path:"/your-documents",
-    element:<Employeeaside> <Yourdoc></Yourdoc> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
    },
    {
     path:"/change-password",
-    element:<Employeeaside> <ChangePassword></ChangePassword> </Employeeaside>
+    element:<ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
    },
   {
     path: "/pending-leaves",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <PendingLeaves></PendingLeaves>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <PendingLeaves></PendingLeaves>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -297,10 +290,10 @@ const router = createBrowserRouter([
     path: "/leave-records",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <LeaveRecords></LeaveRecords>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <LeaveRecords></LeaveRecords>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -308,10 +301,10 @@ const router = createBrowserRouter([
     path: "/gatepass-records",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <GatepassRecord></GatepassRecord>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <GatepassRecord></GatepassRecord>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -319,10 +312,10 @@ const router = createBrowserRouter([
     path: "/employee-profile",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeProfile></EmployeeProfile>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeProfile></EmployeeProfile>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -330,10 +323,10 @@ const router = createBrowserRouter([
     path: "/requesting-document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeRequestingdocument></EmployeeRequestingdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeRequestingdocument></EmployeeRequestingdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -341,10 +334,10 @@ const router = createBrowserRouter([
     path: "/uploading-document",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <EmployeeUploadingdocument></EmployeeUploadingdocument>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <EmployeeUploadingdocument></EmployeeUploadingdocument>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -352,21 +345,31 @@ const router = createBrowserRouter([
     path: "/jobprofile-info",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <JobProfileInfo></JobProfileInfo>{" "}
-      </Aside>
+        <Aside>
+          {" "}
+          <JobProfileInfo></JobProfileInfo>{" "}
+        </Aside>
       </ProductedRoute>
     ),
   },
   {
-    path: "/departments-info",
+    path: "/groups-info",
+    element: (
+      // <ProductedRoute>
+        <Aside>
+          {" "}
+          <GroupInfo></GroupInfo>{" "}
+        </Aside>
+      // </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-database",
     element: (
       <ProductedRoute>
-      <Aside>
-        {" "}
-        <DepartmentInfo></DepartmentInfo>{" "}
-      </Aside>
+        <Aside>
+          <SalaryDatabase></SalaryDatabase>
+        </Aside>
       </ProductedRoute>
     ),
   },
@@ -387,10 +390,10 @@ const router = createBrowserRouter([
     path: "/emp",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <UploadPhotoPage></UploadPhotoPage>{" "}
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <UploadPhotoPage></UploadPhotoPage>{" "}
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -398,9 +401,9 @@ const router = createBrowserRouter([
     path: "/employee-apply-for-leave",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        <ApplyForLeave />
-      </Employeeaside>
+        <Employeeaside>
+          <ApplyForLeave />
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -408,10 +411,10 @@ const router = createBrowserRouter([
     path: "/employee-view-leave-record",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <ViewLeavesRecord />
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <ViewLeavesRecord />
+        </Employeeaside>
       </ProductedRoute>
     ),
   },
@@ -419,17 +422,28 @@ const router = createBrowserRouter([
     path: "/emphome",
     element: (
       <ProductedRoute>
-      <Employeeaside>
-        {" "}
-        <Employeehome></Employeehome>{" "}
-      </Employeeaside>
+        <Employeeaside>
+          {" "}
+          <Employeehome></Employeehome>{" "}
+        </Employeeaside>
       </ProductedRoute>
+    ),
+  },
+  {
+    path: "/show-notifications",
+    element: (
+      // <ProductedRoute>
+      <Aside>
+        {" "}
+        <ShowNotication />{" "}
+      </Aside>
+      //  </ProductedRoute>
     ),
   },
   {
     path: "*",
     element: (
-        <NotFound></NotFound>
+      <NotFound></NotFound>
     ),
   },
 ]);
@@ -457,9 +471,9 @@ function App() {
     });
 
     socket.on("notification", (notification: any) => {
-      console.log("notification.... ",notification);
+      console.log("notification.... ", notification);
       const length = notification.notification.length;
-      toast(notification.notification[length-1].message,{
+      toast(notification.notification[length - 1].message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

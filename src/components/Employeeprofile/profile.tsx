@@ -80,9 +80,9 @@ export const EmployeeProfile = () => {
         },
         {
             id: 3,
-            title: "Department",
-            inputName: "department",
-            data: singleEmployee.employeeData?.departmentId?.departmentName,
+            title: "Group",
+            inputName: "group",
+            data: singleEmployee.employeeData?.groupId?.groupName,
         },
         {
             id: 4,
