@@ -90,7 +90,7 @@ export const Employeehome = () => {
                             <h1 className="text-[28px] leading-9 font-bold text-[#2E2E2E]">Your Leaves</h1>
                         </div>
                         {/* CALANDER */}
-                        <div className="w-[350px]">
+                        <div className="w-[350px] employeeHomeCalender">
                             <Calendar
                                 tileClassName={tileClassName}
                                 calendarType="US"

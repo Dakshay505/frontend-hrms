@@ -9,8 +9,7 @@ import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
-
-
+import Calendar from "react-calendar";
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
@@ -19,7 +18,8 @@ export const AttendenceDashboardList = () => {
   const departmentList = useSelector((state: any) => state.department.departments);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<any>(new Date());
+  const [showCalender, setShowCalender] = useState(false);
 
   useEffect(() => {
     dispatch(postAttandenceByDateAsync()).then((data: any) => {
@@ -50,9 +50,15 @@ export const AttendenceDashboardList = () => {
   })
 
   useEffect(() => {
+    const currentDate = new Date(date);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
     setFilter({
       ...filter,
-      date: (new Date(date)).toISOString().split('T')[0]
+      date: formattedDate
+      // date:date.toDateString()
     })
     console.log("hi")
   }, [date])
@@ -233,21 +239,44 @@ export const AttendenceDashboardList = () => {
           </tbody>
         </table>
         {/* TABLE ENDS HERE */}
-      <div className="absolute bottom-0 right-0 left-0 flex justify-center">
-        <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
-          <button onClick={() => {
-            const nextDate = new Date(date);
-            nextDate.setDate(date.getDate() - 1);
-            setDate(nextDate);
-          }}><img src={CaretLeft} alt="" className="w-4 h-4" /></button>
-          <p className="text-sm font-medium text-[#283093]">{formatDate(date)}</p>
-          <button onClick={() => {
-            const nextDate = new Date(date);
-            nextDate.setDate(date.getDate() + 1);
-            setDate(nextDate);
-          }}><img src={CaretRight} className="w-4 h-4" alt="" /></button>
+        <div className="absolute bottom-0 right-0 left-0 flex justify-center">
+          <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+            <button
+              onClick={() => {
+                const nextDate = new Date(date);
+                nextDate.setDate(date.getDate() - 1);
+                setDate(nextDate);
+              }}>
+              <img src={CaretLeft} alt="" className="w-4 h-4" />
+            </button>
+            {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+              <Calendar
+                onChange={setDate}
+                onClickDay={() => {
+                  setShowCalender(false);
+                }}
+                className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                formatShortWeekday={(locale, date) => {
+                  console.log(locale)
+                  return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+              }}
+                value={date} />
+            </div>}
+            <p
+              onClick={() => {
+                setShowCalender(!showCalender);
+              }}
+              className="text-sm font-medium text-[#283093] cursor-pointer">{formatDate(date)}</p>
+            <button
+              onClick={() => {
+                const nextDate = new Date(date);
+                nextDate.setDate(date.getDate() + 1);
+                setDate(nextDate);
+              }}>
+              <img src={CaretRight} className="w-4 h-4" alt="" />
+            </button>
+          </div>
         </div>
-      </div>
       </div>
 
     </div>
