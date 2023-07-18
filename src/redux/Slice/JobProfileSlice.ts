@@ -8,6 +8,7 @@ import {
 
 const initialState = {
   jobProfiles: [],
+  jobProfileData: {},
   status: "idle",
 };
 
@@ -72,7 +73,6 @@ export const JobProfileSlice = createSlice({
       })
       .addCase(createJobProfileAsync.fulfilled, function (state: any) {
         state.status = "idle";
-        // state.jobProfiles =  action.payload.docs;
       })
       .addCase(getAllJobProfileAsync.pending, (state) => {
         state.status = "loading";
@@ -87,11 +87,10 @@ export const JobProfileSlice = createSlice({
       .addCase(getSingleJobProfileAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        getSingleJobProfileAsync.fulfilled,
-        function (state: any, action: any) {
+      .addCase(getSingleJobProfileAsync.fulfilled, (state: any, action: any) => {
           state.status = "idle";
-          state.jobProfiles = action.payload;
+          console.log("get", action.payload.jobProfileData)
+          state.jobProfileData = action.payload.jobProfileData
         }
       )
       .addCase(updateJobProfileAsync.pending, (state) => {

@@ -4,7 +4,7 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateGroupAsync } from '../../redux/Slice/GroupSlice';
+import { getSingleGroupAsync, updateGroupAsync } from '../../redux/Slice/GroupSlice';
 
 
 interface Employee {
@@ -18,7 +18,7 @@ export const GroupInfo = () => {
 
     const groups = useSelector((state: any) => state.group.group)
     useEffect(() => {
-        setGroupId(groups.groupData?._id);
+        setGroupId(groups._id);
     }, [groups]);
     console.log("groupId", groupId)
     // console.log(groups)
@@ -39,13 +39,13 @@ export const GroupInfo = () => {
         {
             id: 1,
             title: "Group Name",
-            data: groups?.groupData?.groupName,
+            data: groups?.groupName,
             inputName: "groupName"
         },
         {
             id: 2,
             title: "Group Description",
-            data: groups?.groupData?.description,
+            data: groups?.description,
             inputName: "description"
         }
     ]
@@ -56,55 +56,50 @@ export const GroupInfo = () => {
 
     const handleEditClick = (employee: Employee) => {
         setSelectedEmployee(employee);
-        setEditMode(true);
+        setEditMode(!editMode);
     };
     const dispatch = useDispatch();
     return (
-        <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px] w-[770px]'>
-            <div className="mt-8">
+        <div className='px-[40px] pt-[32px]'>
+            <div>
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
             </div>
-            <div className="flex flex-start self-stretch gap-[24px]">
-                <div className="container mx-auto px-4">
-                    <form
-                        onSubmit={handleSubmit((data) => {
-                            console.log("groupId", groupId)
-                            const sendData = { groupId: groupId, data: data }
-                            console.log("sendData", sendData)
-                            dispatch(updateGroupAsync(sendData)).then(() => {
-                                // dispatch(getSingleGroupAsync(groupId));
-                            });
-                            setEditMode(false);
-                        })}>
-                        {group && group.map((element: any) => (
-                            <div key={element.id} className="mb-6">
-                                <div className={`flex flex-col bg-primary-bg border border-primary-border rounded-xl py-[16px] px-[10px] items-start gap-[10px] ${editMode && selectedEmployee && selectedEmployee.id === element.id ? 'bg-white' : ''}`}>
-                                    <div className="flex">
-                                        <h2 className="text-lg font-semibold">{element.title}</h2>
-                                        <div className="text-white font-bold py-2 px-4" onClick={() => handleEditClick(element)}>
-                                            <img src={edit} alt="" className="h-[16px] w-[16px]" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {editMode && selectedEmployee && selectedEmployee.id === element.id ? (
-                                            <div className="flex gap-[20px] p-[7px]  border border-primary-border rounded-xl">
-                                                <input
-                                                    {...register(element.inputName, { required: true })}
-                                                    type="text" className="w-full py-2 px-3 outline-none text-grey-darker" value={selectedEmployee.data} onChange={(e) => setSelectedEmployee({ ...selectedEmployee, data: e.target.value })} />
-                                                <button type='submit' className="bg-primary-blue text-white font-bold py-2 px-4 rounded">
-                                                    <img src={check} alt="" className="w-[18px] h-[18px]" />
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <h2 className="text-md font-normal">{element.data}</h2>
-                                        )}
+            <div className="py-10">
+                <form
+                    onSubmit={handleSubmit((data) => {
+                        const sendData = { groupId: groupId, data: data }
+                        dispatch(updateGroupAsync(sendData)).then(() => {
+                            dispatch(getSingleGroupAsync({ groupId: groupId }));
+                        });
+                        setEditMode(false);
+                    })}>
+                    {group && group.map((element: any) => (
+                        <div key={element.id} className="w-[472px] mb-5">
+                            <div className={`flex flex-col bg-[#FAFAFA] border border-primary-border rounded-[4px] py-[16px] px-[10px] items-start ${editMode && selectedEmployee && selectedEmployee.id === element.id ? 'bg-white' : ''}`}>
+                                <div className="flex justify-center items-center gap-3">
+                                    <h2 className="text-sm font-semibold text-[#2E2E2E]">{element.title}</h2>
+                                    <div className="text-white font-bold" onClick={() => handleEditClick(element)}>
+                                        <img src={edit} alt="" className="h-3 w-3" />
                                     </div>
                                 </div>
+                                <div>
+                                    {editMode && selectedEmployee && selectedEmployee.id === element.id ? (
+                                        <div className="flex gap-[20px] p-[7px]  border border-primary-border rounded-xl">
+                                            <input
+                                                {...register(element.inputName, { required: true })}
+                                                type="text" className="w-full py-2 px-3 outline-none text-[12px] leading-5 font-normal text-[#757575]" value={selectedEmployee.data} onChange={(e) => setSelectedEmployee({ ...selectedEmployee, data: e.target.value })} />
+                                            <button type='submit' className="bg-primary-blue text-white font-bold py-2 px-4 rounded">
+                                                <img src={check} alt="" className="w-[18px] h-[18px]" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <h2 className="text-[12px] leading-5 font-normal text-[#1C1C1C]">{element.data}</h2>
+                                    )}
+                                </div>
                             </div>
-                        ))}
-                    </form>
-                </div>
-
+                        </div>
+                    ))}
+                </form>
             </div>
         </div >
     )

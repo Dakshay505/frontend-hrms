@@ -1,7 +1,5 @@
-import React, { useEffect, useState, } from 'react';
+import { useEffect, useState, } from 'react';
 import edit from "../../assets/PencilSimple.png"
-import glass from "../../assets/MagnifyingGlass.png";
-// import img from "../../assets/img1.png"
 import del from "../../assets/TrashSimple.png"
 import check from "../../assets/Check.png"
 import "../../deletebtn.css"
@@ -19,23 +17,15 @@ interface Employee {
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
-    const [search, setSearch] = React.useState('');
 
     const { handleSubmit, register } = useForm();
     const [employeeId, setEmployeeId] = useState("")
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee)
     console.log("singleEmployee", singleEmployee)
-    const handleInputChange = (event: any) => {
-        setSearch(event.target.value);
-    };
     useEffect(() => {
         setEmployeeId(singleEmployee._id);
     }, [singleEmployee])
-
-    React.useEffect(() => {
-        // console.log(search);
-    }, [search]);
-
+    
     // delete section
 
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -119,23 +109,6 @@ export const EmployeeProfile = () => {
                 <div className=" flex items-start gap-6">
                     <div className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
                         Employee Information
-                    </div>
-
-                </div>
-                <div className="">
-                    <div className="container flex justify-center items-center px-4 sm:px-6 lg:px-8">
-                        <div className="relative">
-                            <div className="absolute pl-[10px] top-4 pt-[5px] left-3">
-
-                                <img src={glass} alt="" className="h-[16px] w-[16px]" />
-                            </div>
-                            <input
-                                type="text"
-                                name="search" onChange={handleInputChange}
-                                className="h-14 w-[250px] pl-[3rem] pr-5 rounded-full z-0 border border-solid border-primary-border focus:shadow focus:outline-none"
-                                placeholder="Search"
-                            />
-                        </div>
                     </div>
                 </div>
             </div>

@@ -20,9 +20,9 @@ export const JobProfileInfo = () => {
 
     const [jobProfileId, setJobProfileId] = useState("")
 
-    const JobProfile = useSelector((state: any) => state.jobProfile.jobProfiles.jobProfileData)
+    const JobProfile = useSelector((state: any) => state.jobProfile.jobProfileData)
     useEffect(() => {
-        setJobProfileId(JobProfile?._id);
+        setJobProfileId(JobProfile._id);
     }, [JobProfile]);
     console.log("JobProfileID:", jobProfileId)
 
@@ -70,8 +70,9 @@ export const JobProfileInfo = () => {
                 onSubmit={handleSubmit((data) => {
                     const sendData = { jobProfileId: jobProfileId, data: data }
                     dispatch(updateJobProfileAsync(sendData)).then(() => {
-                        // dispatch(getSingleDepartmentAsync(departmentId));
+                        dispatch(getSingleJobProfileAsync({jobProfileId: jobProfileId}));
                     });
+                    setEditMode(false);
                     console.log("sendData", sendData)
                 })}>
                 <div className="flex flex-start self-stretch gap-[24px]">

@@ -80,14 +80,13 @@ export const GroupSlice = createSlice({
             })
             .addCase(updateGroupAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
-                // state.groups =  action.payload;
             })
             .addCase(getSingleGroupAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getSingleGroupAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.group =  action.payload;
+                state.group =  action.payload.groupData;
             })
 
     },
