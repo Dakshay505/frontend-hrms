@@ -8,10 +8,10 @@ export const getJobProfileApiPath = `${apiPath}/api/v1/jobprofile`;
 
 // DEPARTMENT API
 
-export const createDepartmentApiPath = `${apiPath}/api/v1/department/add`;
-export const getDepartmentApiPath = `${apiPath}/api/v1/department`;
-export const updateDepartmentApiPath = `${apiPath}/api/v1/department`;
-export const getSingleDepartmentApiPath = `${apiPath}/api/v1/department/getSingleDepartment`;
+export const createGroupApiPath = `${apiPath}/api/v1/group/add`;
+export const getGroupApiPath = `${apiPath}/api/v1/group`;
+export const updateGroupApiPath = `${apiPath}/api/v1/group`;
+export const getSingleGroupApiPath = `${apiPath}/api/v1/group/getSingleGroup`;
 
 // EMPLOYEE API
 
@@ -23,7 +23,7 @@ export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfi
 
 // UPDATE Hierarchy
 export const updateHierarchyApiPath = `${apiPath}/api/v1/jobProfile/updateHierarchy`
-export const updateHierarchyDepartmentApiPath = `${apiPath}/api/v1/department/update/hr`
+export const updateHierarchyGroupApiPath = `${apiPath}/api/v1/group/update/hr`
 
 // UPLOAD DOCUMENT
 export const uploadImageApiPath = `${apiPath}/api/v1/employee/docs/uploadImage`;

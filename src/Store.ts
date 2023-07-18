@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import employeeReducer from './redux/Slice/EmployeeSlice'
-import departmentReducer from './redux/Slice/DepartmentSlice'
+import groupReducer from './redux/Slice/GroupSlice'
 import jobProfileReducer from './redux/Slice/JobProfileSlice'
 import loginReducer from './redux/Slice/loginSlice';
 import leaveReducer from './redux/Slice/LeaveAndGatepassSlice';
@@ -11,7 +11,7 @@ import TrainingReducer from './redux/Slice/TrainingSlice';
 export const store = configureStore({
   reducer: {
     employee: employeeReducer,
-    department: departmentReducer,
+    group: groupReducer,
     jobProfile: jobProfileReducer,
     login: loginReducer,
     leave: leaveReducer,

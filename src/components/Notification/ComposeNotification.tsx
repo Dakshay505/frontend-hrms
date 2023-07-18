@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import { useForm } from "react-hook-form";
 
@@ -14,8 +14,8 @@ import { apiPath } from "../../APIRoutes";
 
 const ComposeNotification = () => {
   const dispatch = useDispatch();
-  const departmentList = useSelector(
-    (state: any) => state.department.departments
+  const groupList = useSelector(
+    (state: any) => state.group.groups
   );
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
@@ -32,7 +32,7 @@ const ComposeNotification = () => {
   // const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => { 
-    dispatch(getAllDepartmentsAsync());
+    dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
     fetchNotifications();
   }, []);
@@ -118,22 +118,22 @@ const ComposeNotification = () => {
             </p>
             <div>
               <select
-                {...register("departmentName", {
+                {...register("groupName", {
                   required: true,
                 })}
-                defaultValue={"All Departments"}
+                defaultValue={"All Groups"}
                 className="flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5"
               >
-                <option value="All Departments">All Departments</option>
-                {departmentList &&
-                  departmentList.map((element: any, index: number) => {
+                <option value="All Groups">All Groups</option>
+                {groupList &&
+                  groupList.map((element: any, index: number) => {
                     return (
                       <option
-                        value={element.departmentName}
+                        value={element.groupName}
                         key={index}
                         className="border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2"
                       >
-                        {element.departmentName}
+                        {element.groupName}
                       </option>
                     );
                   })}

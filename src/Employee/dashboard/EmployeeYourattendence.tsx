@@ -7,7 +7,7 @@ import Calendar from "react-calendar";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 
 
@@ -15,7 +15,7 @@ import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
     const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     console.log("todayStaffAttandence", todayStaffAttandence)
     const myAttandence = useSelector((state: any) => state.attandence.myAttandence);
@@ -26,13 +26,13 @@ export const Employeeattendence = () => {
     const [showFilter, setshowFilter] = useState(false);
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [filter, setFilter] = useState({
-      name: "",
-      departmentName: "",
-      jobProfileName: "",
-      date: ""
+        name: "",
+        groupName: "",
+        jobProfileName: "",
+        date: ""
     })
 
-    
+
     const [attandenceValue, setAttandenceValue] = useState("Your Attandence");
     const [date, setDate] = useState<any>(new Date());
     const [showCalender, setShowCalender] = useState(false);
@@ -44,57 +44,57 @@ export const Employeeattendence = () => {
         const day = String(currentDate.getDate()).padStart(2, '0');
         const formattedDate = `${year}-${month}-${day}`;
         setFilter({
-          ...filter,
-          date: formattedDate
-          // date:date.toDateString()
+            ...filter,
+            date: formattedDate
+            // date:date.toDateString()
         })
         console.log("hi")
-      }, [date])
-      useEffect(() => {
+    }, [date])
+    useEffect(() => {
         console.log(filter);
         dispatch(postAttandenceByDateAsync(filter))
-      }, [filter])
-      const handleInputChange = (event: any) => {
+    }, [filter])
+    const handleInputChange = (event: any) => {
         if (event.target.value !== "") {
-          setLabelVisible(false);
-          setSearch(event.target.value);
-          setFilter({
-            ...filter,
-            name: event.target.value
-          })
-          getSuggestions(event.target.value);
+            setLabelVisible(false);
+            setSearch(event.target.value);
+            setFilter({
+                ...filter,
+                name: event.target.value
+            })
+            getSuggestions(event.target.value);
         }
         else {
-          setLabelVisible(true);
-          setSearch(event.target.value);
-          setFilter({
-            ...filter,
-            name: event.target.value
-          })
-          setSuggestions([]);
+            setLabelVisible(true);
+            setSearch(event.target.value);
+            setFilter({
+                ...filter,
+                name: event.target.value
+            })
+            setSuggestions([]);
         }
-      };
-      const getSuggestions = (inputValue: any) => {
+    };
+    const getSuggestions = (inputValue: any) => {
         const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-          suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+            suggestion?.toLowerCase().includes(inputValue.toLowerCase())
         );
         setSuggestions(filteredSuggestions);
-      };
-      useEffect(() => {
+    };
+    useEffect(() => {
         dispatch(postAttandenceByDateAsync()).then((data: any) => {
-          const employeeData = data.payload.employees;
-          const arr = [];
-          for (let i = 0; i < employeeData.length; i++) {
-            arr.push(employeeData[i].employeeId.name)
-          }
-          setFetchedSuggestions(arr)
+            const employeeData = data.payload.employees;
+            const arr = [];
+            for (let i = 0; i < employeeData.length; i++) {
+                arr.push(employeeData[i].employeeId.name)
+            }
+            setFetchedSuggestions(arr)
         });
         console.log(fetchedSuggestions);
-        dispatch(getAllDepartmentsAsync())
+        dispatch(getAllGroupsAsync())
         dispatch(getAllJobProfileAsync())
         dispatch(getMyAttandenceAsync());
-      }, [])
-    
+    }, [])
+
     const handleTableRowClick = (data: any) => {
         console.log(data._id)
     }
@@ -136,25 +136,25 @@ export const Employeeattendence = () => {
                             {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
                                 <div className='flex gap-3 justify-between'>
                                     <div>
-                                        <p className='text-sm font-medium text-[#2E2E2E]'>Department</p>
+                                        <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
                                     </div>
                                     <div>
                                         <select
                                             onChange={(event) => {
                                                 setFilter({
                                                     ...filter,
-                                                    departmentName: event.target.value
+                                                    groupName: event.target.value
                                                 })
                                             }}
-                                            value={filter.departmentName}
+                                            value={filter.groupName}
                                             className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                             <option value=""></option>
-                                            {departmentList && departmentList.map((element: any, index: number) => {
+                                            {groupList && groupList.map((element: any, index: number) => {
                                                 return <option
                                                     key={index}
-                                                    value={element.departmentName}
+                                                    value={element.groupName}
                                                 >
-                                                    {element.departmentName}
+                                                    {element.groupName}
                                                 </option>
                                             })}
                                         </select>
@@ -185,39 +185,39 @@ export const Employeeattendence = () => {
                         </div>
                     </div>
                     <div>
-            <div className="relative">
-              {isLabelVisible && <div className="absolute top-[10px] left-6">
-                <label htmlFor="searchInput" className="flex gap-2 items-center cursor-text">
-                  <img src={glass} alt="" className="h-4 w-4" />
-                  <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-                </label>
-              </div>}
-              <input
-                onClick={() => setshowFilter(false)}
-                type="search"
-                id="searchInput"
-                onChange={handleInputChange}
-                value={search}
-                className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
-              />
-              {suggestions.length > 0 && (
-                <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-                  {suggestions.map((suggestion: any, index: any) => (
-                    <input type="text" readOnly key={index}
-                      className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
-                      value={suggestion}
-                      onClick={(event) => {
-                        setFilter({
-                          ...filter,
-                          name: (event.target as HTMLInputElement).value
-                        })
-                        setSuggestions([]);
-                      }} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+                        <div className="relative">
+                            {isLabelVisible && <div className="absolute top-[10px] left-6">
+                                <label htmlFor="searchInput" className="flex gap-2 items-center cursor-text">
+                                    <img src={glass} alt="" className="h-4 w-4" />
+                                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                                </label>
+                            </div>}
+                            <input
+                                onClick={() => setshowFilter(false)}
+                                type="search"
+                                id="searchInput"
+                                onChange={handleInputChange}
+                                value={search}
+                                className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+                            />
+                            {suggestions.length > 0 && (
+                                <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
+                                    {suggestions.map((suggestion: any, index: any) => (
+                                        <input type="text" readOnly key={index}
+                                            className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
+                                            value={suggestion}
+                                            onClick={(event) => {
+                                                setFilter({
+                                                    ...filter,
+                                                    name: (event.target as HTMLInputElement).value
+                                                })
+                                                setSuggestions([]);
+                                            }} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <div className='w-[100%]'>
@@ -276,41 +276,43 @@ export const Employeeattendence = () => {
                             </table>
                             {/* TABLE ENDS HERE */}
                         </div> : ""}
-                        <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
-                            <button
-                                onClick={() => {
-                                    const nextDate = new Date(date);
-                                    nextDate.setDate(date.getDate() - 1);
-                                    setDate(nextDate);
-                                }}>
-                                <img src={CaretLeft} alt="" className="w-4 h-4" />
-                            </button>
-                            {showCalender && <div className="filterCalender absolute z-20 bottom-28">
-                                <Calendar
-                                    onChange={setDate}
-                                    onClickDay={() => {
-                                        setShowCalender(false);
+                        <div className="fixed bottom-0 left-0 right-0 flex justify-center">
+                            <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+                                <button
+                                    onClick={() => {
+                                        const nextDate = new Date(date);
+                                        nextDate.setDate(date.getDate() - 1);
+                                        setDate(nextDate);
+                                    }}>
+                                    <img src={CaretLeft} alt="" className="w-4 h-4" />
+                                </button>
+                                {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+                                    <Calendar
+                                        onChange={setDate}
+                                        onClickDay={() => {
+                                            setShowCalender(false);
+                                        }}
+                                        className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                                        formatShortWeekday={(locale, date) => {
+                                            console.log(locale)
+                                            return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+                                        }}
+                                        value={date} />
+                                </div>}
+                                <p
+                                    onClick={() => {
+                                        setShowCalender(!showCalender);
                                     }}
-                                    className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
-                                    formatShortWeekday={(locale, date) => {
-                                        console.log(locale)
-                                        return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-                                    }}
-                                    value={date} />
-                            </div>}
-                            <p
-                                onClick={() => {
-                                    setShowCalender(!showCalender);
-                                }}
-                                className="text-sm font-medium text-[#283093] cursor-pointer">{formatDate(date)}</p>
-                            <button
-                                onClick={() => {
-                                    const nextDate = new Date(date);
-                                    nextDate.setDate(date.getDate() + 1);
-                                    setDate(nextDate);
-                                }}>
-                                <img src={CaretRight} className="w-4 h-4" alt="" />
-                            </button>
+                                    className="text-sm font-medium text-[#283093] cursor-pointer">{formatDate(date)}</p>
+                                <button
+                                    onClick={() => {
+                                        const nextDate = new Date(date);
+                                        nextDate.setDate(date.getDate() + 1);
+                                        setDate(nextDate);
+                                    }}>
+                                    <img src={CaretRight} className="w-4 h-4" alt="" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

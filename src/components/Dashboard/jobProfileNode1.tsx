@@ -5,7 +5,7 @@ import CaretRight from '../../assets/CaretRight.svg'
 import { Link } from 'react-router-dom';
 
 
-const JobProfileNode1 = ({ jobProfile,department }: any) => {
+const JobProfileNode1 = ({ jobProfile,group }: any) => {
   const [childJobProfileArray, setChildJobProfileArray] = useState<any>([]);
   const [employee, setEmployee] = useState<any>([]);
   const getChildJobProfile = async (id: any) => {
@@ -14,8 +14,8 @@ const JobProfileNode1 = ({ jobProfile,department }: any) => {
     return data.childjobProfiles;
   }
   const getEmployee = async () => {
-    console.log(`${apiPath}/api/v1/employee/emp?departmentName=${department}&jobProfileName=${jobProfile.jobProfileName}`)
-    const { data } = await axios.get(`${apiPath}/api/v1/employee/emp?departmentName=${department}&jobProfileName=${jobProfile.jobProfileName}`)
+    console.log(`${apiPath}/api/v1/employee/emp?groupName=${group}&jobProfileName=${jobProfile.jobProfileName}`)
+    const { data } = await axios.get(`${apiPath}/api/v1/employee/emp?groupName=${group}&jobProfileName=${jobProfile.jobProfileName}`)
     setEmployee(data.employees)
     console.log(data)
     return data.employees;
@@ -36,7 +36,7 @@ const JobProfileNode1 = ({ jobProfile,department }: any) => {
         </div>
       )) :""}
       {childJobProfileArray && childJobProfileArray.map((childProfile: any, index: number) => (
-        <JobProfileNode1 key={index} jobProfile={childProfile} department={department} />
+        <JobProfileNode1 key={index} jobProfile={childProfile} group={group} />
       ))}
     </div>
   );

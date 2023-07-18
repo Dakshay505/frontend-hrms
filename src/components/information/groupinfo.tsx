@@ -4,7 +4,7 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateDepartmentAsync } from '../../redux/Slice/DepartmentSlice';
+import { updateGroupAsync } from '../../redux/Slice/GroupSlice';
 
 
 interface Employee {
@@ -13,15 +13,15 @@ interface Employee {
     data: string;
 }
 
-export const DepartmentInfo = () => {
-    const [departmentId, setDepartmentId] = useState("")
+export const GroupInfo = () => {
+    const [groupId, setGroupId] = useState("")
 
-    const departments = useSelector((state: any) => state.department.department)
+    const groups = useSelector((state: any) => state.group.group)
     useEffect(() => {
-        setDepartmentId(departments.departmentData?._id);
-    }, [departments]);
-    console.log("departmentId", departmentId)
-    // console.log(departments)
+        setGroupId(groups.groupData?._id);
+    }, [groups]);
+    console.log("groupId", groupId)
+    // console.log(groups)
 
     const [search, setSearch] = React.useState('');
 
@@ -35,17 +35,17 @@ export const DepartmentInfo = () => {
 
     // employee info
 
-    const department = [
+    const group = [
         {
             id: 1,
-            title: "Department Name",
-            data: departments?.departmentData?.departmentName,
-            inputName: "departmentName"
+            title: "Group Name",
+            data: groups?.groupData?.groupName,
+            inputName: "groupName"
         },
         {
             id: 2,
-            title: "Department Description",
-            data: departments?.departmentData?.description,
+            title: "Group Description",
+            data: groups?.groupData?.description,
             inputName: "description"
         }
     ]
@@ -62,21 +62,21 @@ export const DepartmentInfo = () => {
     return (
         <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px] w-[770px]'>
             <div className="mt-8">
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Department Information</h1>
+                <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
             </div>
             <div className="flex flex-start self-stretch gap-[24px]">
                 <div className="container mx-auto px-4">
                     <form
                         onSubmit={handleSubmit((data) => {
-                            console.log("departmentId", departmentId)
-                            const sendData = { departmentId: departmentId, data: data }
+                            console.log("groupId", groupId)
+                            const sendData = { groupId: groupId, data: data }
                             console.log("sendData", sendData)
-                            dispatch(updateDepartmentAsync(sendData)).then(() => {
-                                // dispatch(getSingleDepartmentAsync(departmentId));
+                            dispatch(updateGroupAsync(sendData)).then(() => {
+                                // dispatch(getSingleGroupAsync(groupId));
                             });
                             setEditMode(false);
                         })}>
-                        {department && department.map((element: any) => (
+                        {group && group.map((element: any) => (
                             <div key={element.id} className="mb-6">
                                 <div className={`flex flex-col bg-primary-bg border border-primary-border rounded-xl py-[16px] px-[10px] items-start gap-[10px] ${editMode && selectedEmployee && selectedEmployee.id === element.id ? 'bg-white' : ''}`}>
                                     <div className="flex">

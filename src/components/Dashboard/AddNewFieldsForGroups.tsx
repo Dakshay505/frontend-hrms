@@ -5,7 +5,7 @@ import GearSixWhite from '../../assets/GearSixWhite.svg'
 import PencilSimple from '../../assets/PencilSimple.svg'
 import TrashSimple from '../../assets/TrashSimple.svg'
 
-const AddNewFieldsForDepartments = () => {
+const AddNewFieldsForGroups = () => {
     const [showInputBox, setshowInputBox] = useState<any>([]);
     const [inputOnEditButton, setInputOnEditButton] = useState(false);
     const {
@@ -54,7 +54,7 @@ const AddNewFieldsForDepartments = () => {
     return (
         <div className="mx-10">
             <div className="pt-8">
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Add New Fields for Department</h1>
+                <h1 className="text-2xl font-bold text-[#2E2E2E]">Add New Fields for Group</h1>
             </div>
             <div className='mt-10'>
                 <div onClick={handleShowInputBox}>
@@ -90,7 +90,7 @@ const AddNewFieldsForDepartments = () => {
             {/* UPDATE EXISTING CUSTOM FIELDS START */}
             <div className='mt-12'>
                     <div>
-                        <h1 className='text-2xl text-[#2E2E2E] font-bold'>Update Existing Custom Fields for Departments</h1>
+                        <h1 className='text-2xl text-[#2E2E2E] font-bold'>Update Existing Custom Fields for Groups</h1>
                     </div>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
@@ -122,4 +122,4 @@ const AddNewFieldsForDepartments = () => {
     )
 }
 
-export default AddNewFieldsForDepartments
+export default AddNewFieldsForGroups

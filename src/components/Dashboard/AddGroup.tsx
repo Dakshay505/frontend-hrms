@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import Plus from "../../assets/Plus.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { createDepartmentAsync, getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { createGroupAsync, getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import {useEffect, useState} from "react"
 
-const AddDepartment = () => {
+const AddGroup = () => {
     const dispatch = useDispatch();
-    const departmentList = useSelector((state: any) => state.department.departments);
-    const [parentDepartmentValue, setParentDepartmentValue] = useState("All Departments");
+    const groupList = useSelector((state: any) => state.group.groups);
+    const [parentGroupValue, setParentGroupValue] = useState("All Groups");
     const {
         register,
         handleSubmit,
@@ -15,28 +15,28 @@ const AddDepartment = () => {
     } = useForm();
 
     useEffect(() => {
-        dispatch(getAllDepartmentsAsync());
+        dispatch(getAllGroupsAsync());
     }, [])
     return (
         <>
             <div className="mx-10">
                 <div className="pt-8">
-                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Department</h1>
+                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Group</h1>
                 </div>
                 <form onSubmit={handleSubmit((data) => {
-                    if(parentDepartmentValue === "All Departments"){
+                    if(parentGroupValue === "All Groups"){
                         data = {
-                            departmentName: data.departmentName,
+                            groupName: data.groupName,
                         }
                     } else{
                         data = {
-                            departmentName: data.departmentName,
-                            parentDepartmentName: data.parentDepartmentName
+                            groupName: data.groupName,
+                            parentGroupName: data.parentGroupName
                         }
                     }
-                    dispatch(createDepartmentAsync(data))
+                    dispatch(createGroupAsync(data))
                     .then(() => {
-                        dispatch(getAllDepartmentsAsync());
+                        dispatch(getAllGroupsAsync());
                     });
                     reset()
                 })}
@@ -45,27 +45,27 @@ const AddDepartment = () => {
                         <div className='flex gap-10'>
                             <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Department Name</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Group Name</p>
                                 </div>
                                 <div>
                                     <input
-                                        {...register('departmentName', { required: true })}
+                                        {...register('groupName', { required: true })}
                                         type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
                             <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Parent Department Name</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Parent Group Name</p>
                                 </div>
                                 <div>
                                 <select
-                                        {...register('parentDepartmentName', { required: true })}
-                                        onChange={(event) => setParentDepartmentValue(event.target.value)}
+                                        {...register('parentGroupName', { required: true })}
+                                        onChange={(event) => setParentGroupValue(event.target.value)}
                                         className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
-                                        <option>All Departments</option>
-                                        {departmentList && departmentList.map((element: any, index: number) => {
-                                            return <option key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.departmentName}</option>
+                                        <option>All Groups</option>
+                                        {groupList && groupList.map((element: any, index: number) => {
+                                            return <option key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
                                         })}
                                     </select>
                                 </div>
@@ -74,7 +74,7 @@ const AddDepartment = () => {
                         </div>
                         <div className="mt-10">
                             {/* <Link to="/update-hierarchy"> */}
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Department</p></button>
+                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Group</p></button>
                             {/* </Link> */}
                         </div>
                     </div>
@@ -84,4 +84,4 @@ const AddDepartment = () => {
     )
 }
 
-export default AddDepartment
+export default AddGroup
