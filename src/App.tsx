@@ -467,7 +467,7 @@ function App() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "colored",
         });
     });
 
@@ -496,7 +496,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="colored"
       />
     </React.StrictMode>
   );

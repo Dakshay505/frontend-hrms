@@ -10,8 +10,10 @@ export const uploadDocuments = async (formData: any) => {
         }, withCredentials:true});
         console.log("File uploaded")
         return data;
-    }
+    } 
     catch(err: any){
         console.log(err.response.data)
     }
 };
+
+

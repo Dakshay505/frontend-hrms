@@ -96,6 +96,7 @@ export const Employeehome = () => {
                                 calendarType="US"
                                 className='p-8 bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg'
                                 formatShortWeekday={(locale, date) => {
+                                    console.log(locale)
                                     return ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'][date.getDay()];
                                 }}
                             />

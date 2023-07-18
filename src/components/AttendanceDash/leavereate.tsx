@@ -76,7 +76,7 @@ export const Leavereate = () => {
                   aria-expanded="true"
                   onClick={() => setIsOpen(!isOpen)}
                 >
-                  All Departments
+                  All Groups
                   <img
                     src={down}
                     alt=""

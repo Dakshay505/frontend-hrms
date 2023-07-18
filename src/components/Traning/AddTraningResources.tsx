@@ -130,7 +130,7 @@ const AddTraningResources = () => {
                             <select
                                 onChange={(event) => setDepartmentName(event.target.value)}
                                 className='flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'>
-                                <option>All Departments</option>
+                                <option>All Groups</option>
                                 {departmentList && departmentList.map((element: any, index: number) => {
                                     return <option key={index}>{element.departmentName}</option>
                                 })}

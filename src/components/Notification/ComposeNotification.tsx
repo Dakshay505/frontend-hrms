@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
@@ -8,25 +8,11 @@ import FileArrowUp from "../../assets/FileArrowUp.png";
 import axios from "axios";
 import io from "socket.io-client";
 
-import { toast, ToastOptions } from "react-toastify";
+import { toast } from "react-toastify";
 import { apiPath } from "../../APIRoutes";
-type Notification = {
-  message: string;
-  notificationType: string;
-  // Add other notification properties here
-};
-const toastOptions :ToastOptions= {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "dark",
-};
+
+
 const ComposeNotification = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const dispatch = useDispatch();
   const departmentList = useSelector(
     (state: any) => state.department.departments
@@ -53,19 +39,29 @@ const ComposeNotification = () => {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("/api/v1/notifications");
-      setNotifications(res.data);
+       await axios.get(`${apiPath}/api/v1/notifications`);
+      toast("Notification sent successfully",{
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      })
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit ,reset } = useForm();
   const notificationTypeList = ["High alert", "Alert", "Info"];
 
   const onSubmit = async (data:any) => {
     try {
       await sendNotification(data);
+     reset();
     } catch (error) {
       console.error('Error sending notification:', error);
     }
@@ -91,10 +87,7 @@ const ComposeNotification = () => {
 
     newSocket.on('notification', (notification: string) => {
       const newNotification = JSON.parse(notification);
-      setNotifications((prevNotifications) => [
-        newNotification,
-        ...prevNotifications,
-      ]);
+      console.log(newNotification)
     });
 
     newSocket.on('disconnect', () => {
@@ -112,12 +105,6 @@ const ComposeNotification = () => {
 
   return (
     <div className="mx-10">
-       {notifications.map((notification, index) => (
-        <div key={index}>
-          <p>{notification.message}</p>
-          <p>{notification.notificationType}</p>
-        </div>
-      ))}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-3">
           <div className="mt-8">
@@ -137,7 +124,7 @@ const ComposeNotification = () => {
                 defaultValue={"All Departments"}
                 className="flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5"
               >
-                <option value="All Departments">All Departments</option>
+                <option value="All Departments">All Groups</option>
                 {departmentList &&
                   departmentList.map((element: any, index: number) => {
                     return (

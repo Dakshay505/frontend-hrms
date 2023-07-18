@@ -56,7 +56,7 @@ export const GatepassRecord = () => {
               <select
                 {...register('allDepartments', { required: "Phone No. required" })}
                 defaultValue={"All Departments"} className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5'>
-                <option value="All Departments">All Departments</option>
+                <option value="All Departments">All Groups</option>
                 {departmentList && departmentList.map((element: any, index: number) => {
                   return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.departmentName}</option>
                 })}
