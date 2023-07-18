@@ -191,13 +191,13 @@ export const AttendenceDashboardList = () => {
                 id="searchInput"
                 onChange={handleInputChange}
                 value={search}
-                className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+                className="h-10 w-[200px] py-3 px-5 rounded-full text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
               />
               {suggestions.length > 0 && (
                 <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
                   {suggestions.map((suggestion: any, index: any) => (
                     <input type="text" readOnly key={index}
-                      className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
+                      className="py-3 px-5 cursor-pointer focus:outline-none w-[200px] z-30"
                       value={suggestion}
                       onClick={(event) => {
                         setFilter({
@@ -215,7 +215,7 @@ export const AttendenceDashboardList = () => {
       </div>
       <div className='py-6 relative'>
         {/* TABLE STARTS HERE */}
-        <table className="z-0">
+        <table>
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -233,7 +233,7 @@ export const AttendenceDashboardList = () => {
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(11, 16) : "Not Avilable"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? (latestPunches.punchOut).slice(11, 16) : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.approvedBy ? latestAttandence.approvedBy : "Not Avilable"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.approvedBy?.name ? latestAttandence.approvedBy?.name : "Not Avilable"}</td>
               </tr>
             })}
           </tbody>

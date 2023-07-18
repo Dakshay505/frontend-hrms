@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync,getPaginationAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllGroupsAsync, getSingleGroupAsync } from '../../redux/Slice/GroupSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
@@ -109,7 +109,7 @@ const ViewModifyDatabase = () => {
 
     const dispatchPagination = (pageNumber: number) => {
         setCurrentPage(pageNumber);
-        dispatch(getPaginationAsync(pageNumber));
+        // dispatch(getPaginationAsync(pageNumber));
     };
 
     const handleNextPage = () => {
