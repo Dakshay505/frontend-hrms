@@ -151,7 +151,8 @@ export const EmployeeSlice = createSlice({
         getSingleEmployeeAsync.fulfilled,
         function (state: any, action: any) {
           state.status = "idle";
-          state.singleEmployee ={...state.singleEmployee,employeeData:action.payload.employeeData}
+          console.log("action", action.payload.employeeData)
+          state.singleEmployee = action.payload.employeeData
         }
       )
       .addCase(updateEmployeeAsync.pending, (state) => {
