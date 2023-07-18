@@ -1,5 +1,5 @@
 import axios from "axios";
-import { updateHierarchyApiPath, updateHierarchyDepartmentApiPath } from "../../APIRoutes";
+import { updateHierarchyApiPath, updateHierarchyGroupApiPath } from "../../APIRoutes";
 
 // update job profile
 export const updateHierarchyJobProfile = async (updateData: any) => {
@@ -18,10 +18,10 @@ export const updateHierarchyJobProfile = async (updateData: any) => {
     }
 };
 // update job profile
-export const updateHierarchyDepartment = async (updateData: any) => {
+export const updateHierarchyGroup = async (updateData: any) => {
     try {
         console.log(updateData);
-        const { data } = await axios.patch(`${updateHierarchyDepartmentApiPath}`, updateData, { withCredentials: true });
+        const { data } = await axios.patch(`${updateHierarchyGroupApiPath}`, updateData, { withCredentials: true });
         return data;
     } catch (error: any) {
         if (error.response && (error.response.status === 400 || error.response.status === 404)) {

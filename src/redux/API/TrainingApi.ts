@@ -5,11 +5,11 @@ import {
 } from "../../APIRoutes";
 
 // CREATE
-export const addTrainingLinks = async (addDepartmentData: any) => {
+export const addTrainingLinks = async (addGroupData: any) => {
   try {
     const { data } = await axios.post(
       `${addTrainingLinkApiPath}`,
-      addDepartmentData,
+      addGroupData,
       { withCredentials: true }
     );
     return data;
@@ -19,11 +19,11 @@ export const addTrainingLinks = async (addDepartmentData: any) => {
 };
 
 // CREATE
-export const addTrainingDocuments = async (addDepartmentData: any) => {
+export const addTrainingDocuments = async (addGroupData: any) => {
   try {
     const { data } = await axios.post(
       `${addTrainingDocumentApiPath}`,
-      addDepartmentData,
+      addGroupData,
       { withCredentials: true }
     );
     return data;

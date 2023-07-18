@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Plus from '../../assets/Plus.png'
 import BluePlus from '../../assets/BluePlus.png'
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllDepartmentsAsync } from '../../redux/Slice/DepartmentSlice';
+import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { createEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 
@@ -18,11 +18,11 @@ const AddEmployee = () => {
     } = useForm();
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles)
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const overTimeList = ["Yes", "No"];
     useEffect(() => {
         dispatch(getAllJobProfileAsync());
-        dispatch(getAllDepartmentsAsync());
+        dispatch(getAllGroupsAsync());
     }, [])
     const handleJobProfileChange = (event: any) => {
         const value = event.target.value;
@@ -105,15 +105,15 @@ const AddEmployee = () => {
                             </div>
                             <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Department</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Group</p>
                                 </div>
                                 <div>
                                     <select
-                                        {...register('departmentName', { required: "Department Name required" })}
+                                        {...register('groupName', { required: "Group Name required" })}
                                         className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
-                                        <option value="Department">Department</option>
-                                        {departmentList && departmentList.map((element: any, index: number) => {
-                                            return <option value={element.departmentName} key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.departmentName}</option>
+                                        <option value="Group">Group</option>
+                                        {groupList && groupList.map((element: any, index: number) => {
+                                            return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
                                         })}
                                     </select>
                                 </div>

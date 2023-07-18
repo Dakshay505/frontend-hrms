@@ -7,7 +7,7 @@ import Calendar from "react-calendar";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
-import { getAllDepartmentsAsync } from "../../redux/Slice/DepartmentSlice";
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 
 
@@ -15,7 +15,7 @@ import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
     const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
-    const departmentList = useSelector((state: any) => state.department.departments);
+    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     console.log("todayStaffAttandence", todayStaffAttandence)
     const myAttandence = useSelector((state: any) => state.attandence.myAttandence);
@@ -27,7 +27,7 @@ export const Employeeattendence = () => {
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [filter, setFilter] = useState({
         name: "",
-        departmentName: "",
+        groupName: "",
         jobProfileName: "",
         date: ""
     })
@@ -90,7 +90,7 @@ export const Employeeattendence = () => {
             setFetchedSuggestions(arr)
         });
         console.log(fetchedSuggestions);
-        dispatch(getAllDepartmentsAsync())
+        dispatch(getAllGroupsAsync())
         dispatch(getAllJobProfileAsync())
         dispatch(getMyAttandenceAsync());
     }, [])
@@ -136,25 +136,25 @@ export const Employeeattendence = () => {
                             {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
                                 <div className='flex gap-3 justify-between'>
                                     <div>
-                                        <p className='text-sm font-medium text-[#2E2E2E]'>Department</p>
+                                        <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
                                     </div>
                                     <div>
                                         <select
                                             onChange={(event) => {
                                                 setFilter({
                                                     ...filter,
-                                                    departmentName: event.target.value
+                                                    groupName: event.target.value
                                                 })
                                             }}
-                                            value={filter.departmentName}
+                                            value={filter.groupName}
                                             className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                             <option value=""></option>
-                                            {departmentList && departmentList.map((element: any, index: number) => {
+                                            {groupList && groupList.map((element: any, index: number) => {
                                                 return <option
                                                     key={index}
-                                                    value={element.departmentName}
+                                                    value={element.groupName}
                                                 >
-                                                    {element.departmentName}
+                                                    {element.groupName}
                                                 </option>
                                             })}
                                         </select>

@@ -9,7 +9,7 @@ import AddNewFieldEmployee from './components/Dashboard/AddNewFieldEmployee';
 import TraningDashboard from './components/Traning/TraningDashboard';
 import AddTraningResources from './components/Traning/AddTraningResources';
 import ViewModifyDatabase from './components/Dashboard/ViewModifyDatabase';
-import AddDepartment from './components/Dashboard/AddDepartment';
+import AddGroup from './components/Dashboard/AddGroup';
 import AddJobProfile from './components/Dashboard/AddJobProfile';
 import UpdateHierarcy from './components/Dashboard/UpdateHierarcy';
 import { AttendenceDtabase } from './components/AttendanceDash/attendenceDatabase';
@@ -30,7 +30,7 @@ import { EmployeeProfile } from './components/Employeeprofile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
 import { JobProfileInfo } from './components/information/jobprofileinfo';
-import { DepartmentInfo } from './components/information/departmentinfo';
+import { GroupInfo } from './components/information/groupinfo';
 
 import { StaffCheckin } from './Employee/dashboard/staffcheckin';
 import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
@@ -39,7 +39,7 @@ import { Yourdoc } from './Employee/documents/yourdoc';
 import { ChangePassword } from './Employee/changepassword';
 
 import AddNewFieldsForJobProfile from "./components/Dashboard/AddNewFieldsForJobProfile";
-import AddNewFieldsForDepartments from "./components/Dashboard/AddNewFieldsForDepartments";
+import AddNewFieldsForGroups from "./components/Dashboard/AddNewFieldsForGroups";
 
 import Employeeaside from "./Employee/EmployeeAside";
 import UploadPhotoPage from "./Employee/uploadphoto";
@@ -95,11 +95,11 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/add-department",
+    path: "/add-group",
     element: (
       <ProductedRoute>
         <Aside>
-          <AddDepartment />
+          <AddGroup />
         </Aside>
       </ProductedRoute>
     ),
@@ -145,11 +145,11 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/add-new-fields-for-department",
+    path: "/add-new-fields-for-group",
     element: (
       <ProductedRoute>
         <Aside>
-          <AddNewFieldsForDepartments />
+          <AddNewFieldsForGroups />
         </Aside>
       </ProductedRoute>
     ),
@@ -353,12 +353,12 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/departments-info",
+    path: "/groups-info",
     element: (
       // <ProductedRoute>
         <Aside>
           {" "}
-          <DepartmentInfo></DepartmentInfo>{" "}
+          <GroupInfo></GroupInfo>{" "}
         </Aside>
       // </ProductedRoute>
     ),

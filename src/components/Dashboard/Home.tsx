@@ -59,13 +59,13 @@ const Home = () => {
                                 </div>
                             </div>
                         </Link>
-                        <Link to="/add-new-fields-for-department">
+                        <Link to="/add-new-fields-for-group">
                             <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
                                 <div className=''>
                                     <img className='w-[32px] h-[32px]' src={usersThree} alt="gearimg" />
                                 </div>
                                 <div>
-                                    <p className='text-xl font-medium text-[#283093]'>Department</p>
+                                    <p className='text-xl font-medium text-[#283093]'>Group</p>
                                 </div>
                             </div>
                         </Link>

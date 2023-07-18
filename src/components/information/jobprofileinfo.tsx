@@ -9,7 +9,7 @@ interface Employee {
     id: number;
     name: string;
     jobTitle: string;
-    department: string;
+    group: string;
     location: string;
 }
 
@@ -31,14 +31,14 @@ export const JobProfileInfo = () => {
             id: 1,
             name: 'John Doe',
             jobTitle: 'Software Engineer',
-            department: 'Engineering',
+            group: 'Engineering',
             location: 'New York',
         },
         {
             id: 2,
             name: 'Jane Smith',
             jobTitle: 'Marketing Specialist',
-            department: 'Marketing',
+            group: 'Marketing',
             location: 'San Francisco',
         }
     ];
