@@ -8,6 +8,7 @@ import {
   getEmployeeImage,
   getSingleEmployee,
   updateEmployee,
+  pagination
 } from "../API/EmployeeAPI";
 
 const initialState = {
@@ -112,6 +113,23 @@ export const getEmployeeImageAsync: any = createAsyncThunk(
     }
   }
 );
+
+// pagination
+
+export const getPaginationAsync = createAsyncThunk(
+  'pagination',
+  async (page) => {
+    try {
+      const response = await pagination(page);
+      console.log("hello", response)
+      return response;
+    } catch (error:any) {
+      console.log(error.message);
+      throw error;
+    }
+  }
+);
+  
 
 export const EmployeeSlice = createSlice({
   name: "employee",

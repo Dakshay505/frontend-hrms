@@ -121,3 +121,17 @@ export const getEmployeeImage = async (employeeId: any) => {
     console.error(error);
   }
 };
+
+// pagination
+export const pagination = async (page:any) => {
+  try {
+    const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
+      withCredentials: true,
+    });
+    console.log(response,"hey")
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+}
