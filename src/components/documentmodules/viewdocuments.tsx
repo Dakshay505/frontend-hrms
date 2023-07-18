@@ -1,108 +1,92 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import upload from "../../assets/UploadSimple.png";
+import { uploadDocumentApiPath } from "../../APIRoutes";
+
+interface Document {
+  id: string;
+  name: string;
+  url: string;
+}
 
 const ViewDoc: React.FC = () => {
-  const [resumes, setResumes] = useState<string[]>([]);
-  let currentPage=1
-  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
-  const resumesPerPage = 9;
+  const [imageUrls, setImageUrls] = useState<Document[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const resumeData = e.target?.result as string;
-        setResumes((prevResumes) => [...prevResumes, resumeData]);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`${uploadDocumentApiPath}`, {
+          withCredentials: true,
+        });
+        // console.log("Fetching data",data)
+        if (data && data.doc && Array.isArray(data.doc) && data.doc.length > 0) {
+          const documents = data.doc[0].document;
+          const mappedImages = documents.map((document: any) => ({
+            id: document._id,
+            name: document.docsName,
+            url: document.docs,
+          }));
+          setImageUrls(mappedImages);
+        } else {
+          setError('Invalid data structure');
+        }
+      } catch (error) {
+        setError('Error fetching data: ' + (error as Error).message);
+      }
+    };
 
-  const handleImageClick = (image: string) => {
-    setFullscreenImage(image);
-   
-  };
+    fetchData();
+  }, []);
 
-  const closeFullscreenImage = () => {
-    setFullscreenImage(null);
-  };
 
-  const renderResumes = () => {
-    const startIndex = (currentPage - 1) * resumesPerPage;
-    const endIndex = startIndex + resumesPerPage;
-    const currentResumes = resumes.slice(startIndex, endIndex);
-
-    return currentResumes.map((resume, index) => (
-      <div
-        key={index}
-        className="flex items-center justify-center flex-col"
-        onClick={() => handleImageClick(resume)}
-      >
-        <img
-          src={resume}
-          alt={`Resume ${index + 1}`}
-          className="h-[300px] w-[250px] mx-2 cursor-pointer rounded-lg border-2 border-primary-blue"
-        />
-        {/* {selectedResumeIndex === index && ( */}
-          <button
-            className="mt-2 text-primary-blue border bg-primary-bg w-[95%] rounded-lg py-[13px] px-[6px] border-primary-border font-medium"
-            onClick={() => setFullscreenImage(resume)}
-          >
-            Resume.pdf
-          </button>
-        {/* // )} */}
-      </div>
-    ));
+  const openImageInNewTab = (url: string) => {
+    window.open(url, '_blank');
   };
 
   return (
-    <div className="flex pt-[32px] w-[770px] flex-col items-start">
+    <div className="flex pt-[32px] w-[770px] gap-[40px] flex-col items-start">
       <div className="flex px-[40px] w-[100%] py-[0] gap-[40px] flex-col items-start">
         <div className="flex justify-between w-[100%] gap-[50px] items-start">
           <div className="flex flex-col gap-[8px]">
-            <p className="text-2xl font-inter font-bold leading-8">
+            <p className="text-[#2E2E2E] text-2xl font-inter font-bold leading-8">
               Viewing Documents
             </p>
-            <p className="text-xl font-inter font-semibold leading-8">
+            <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
               For Madhav Sharma
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <label className="text-primary-blue border border-primary-blue rounded-md items-center gap-[5px] cursor-pointer flex px-[16px] py-[12px] bg-white font-semibold">
+          <div className="flex items-center gap-[20px]">
+            <label className="text-primary-blue border-2 border-primary-blue rounded-md items-center gap-[5px] cursor-pointer flex px-[16px] py-[12px] bg-white font-semibold">
               <img src={upload} alt="" className="h-[25px] w-[25px]" />
-              <span className="text-lg font-medium">Upload Resume</span>
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileUpload}
-              />
+              <span className="text-lg font-medium">Upload</span>
+              <input type="file" className="hidden" />
             </label>
-          </div>
-        </div>
-        <div>
-          <div className="flex mt-[50px] flex-wrap gap-[100px]">
-            {renderResumes()}
+            <label className="text-primary-blue border-2 border-primary-blue rounded-md items-center gap-[5px] cursor-pointer flex px-[16px] py-[12px] bg-white font-semibold">
+              <img src={upload} alt="" className="h-[25px] w-[25px]" />
+              <span className="text-lg font-medium">Request</span>
+              <input type="file" className="hidden" />
+            </label>
           </div>
         </div>
       </div>
 
-      {/* Fullscreen Image Overlay */}
-      {fullscreenImage && (
-        <div className="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-black bg-opacity-75">
-          <img
-            src={fullscreenImage}
-            alt="Fullscreen Resume"
-            className="max-h-full max-w-full"
-          />
-          <button
-            className="absolute top-4 right-4 p-2 text-white bg-gray-800 rounded-md"
-            onClick={closeFullscreenImage}
+      <div className="flex mx-[40px] gap-[20px] w-[648px] flex-wrap">
+        {imageUrls.map((document) => (
+          <div
+            key={document.id}
+            className="w-[200px] cursor-pointer h-[210px] border-2 border-primary-border rounded-[5px]"
+            onClick={() => openImageInNewTab(document.url)}
           >
-            Close
-          </button>
-        </div>
-      )}
+            <img
+              src={document.url}
+              alt={document.name}
+              className="relative overflow-hidden bg-cover bg-center opacity-60 z-[-111111] w-[200px] h-[207px]"
+            />
+            <h1 className="text-[#2E2E2E] text-center text-sm font-inter font-medium leading-8 bg-[#ECEDFE] border-2 border-[#9198F7] rounded-b-[5px] z-9999999999 relative">{document.name}</h1>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

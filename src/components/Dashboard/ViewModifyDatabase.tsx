@@ -300,8 +300,6 @@ const ViewModifyDatabase = () => {
                                         </td>
                                     </tr>
                                 })}
-
-
                                 <tr>
                                     <td></td>
                                     <td></td>

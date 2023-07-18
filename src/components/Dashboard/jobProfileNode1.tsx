@@ -4,7 +4,6 @@ import { apiPath } from '../../APIRoutes';
 import CaretRight from '../../assets/CaretRight.svg'
 import { Link } from 'react-router-dom';
 
-
 const JobProfileNode1 = ({ jobProfile,group }: any) => {
   const [childJobProfileArray, setChildJobProfileArray] = useState<any>([]);
   const [employee, setEmployee] = useState<any>([]);

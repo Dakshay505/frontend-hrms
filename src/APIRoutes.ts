@@ -71,6 +71,9 @@ export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
 
 
+
+// docs
+export const getEmployeeDocsRouterApiPath = `${apiPath}/api/v1/employee/docs/uploadEmpDocs`
 // notifications
 export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
 

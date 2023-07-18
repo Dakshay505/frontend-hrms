@@ -84,7 +84,7 @@ const UpdateHierarcy = () => {
               })
           }
         })}>
-        <div className="flex gap-7 pt-8">
+        <div className="flex gap-7 mt-8">
           <div>
             <h1 className="text-2xl font-bold text-[#2E2E2E]">Update Hierarchy</h1>
           </div>

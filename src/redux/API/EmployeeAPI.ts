@@ -17,7 +17,7 @@ export const createEmployee = async (employeeData: any) => {
       employeeData,
       { withCredentials: true }
     );
-    return data;
+    return data; 
   } catch (error: any) {
     console.log(error.response.data);
   }
@@ -61,24 +61,6 @@ export const getAllEmployee = async (sendData: any) => {
   }
 };
 
-
-// pagination
-export const pagination = async (page:any) => {
-  try {
-    const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
-      withCredentials: true,
-    });
-    console.log(response,"hey")
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-  }
-}
-
-
-
-
 // READ SINGLE EMPLOYEE
 export const getSingleEmployee = async (employeeId: any) => {
   try {
@@ -104,6 +86,7 @@ export const deleteEmployee = async (employeeData: any) => {
     console.log(error.response.data);
   }
 };
+
 export const addDocuments = async (document: any) => {
   try {
     const { data } = await axios.post(`${uploadDocumentApiPath}`, document, {
@@ -114,6 +97,7 @@ export const addDocuments = async (document: any) => {
     console.log(err.response.data);
   }
 };
+
 export const addImage = async (document: any) => {
   console.log(document);
   try {
