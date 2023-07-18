@@ -57,7 +57,6 @@ import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
 import SalaryDatabase from "./components/Salary/SalaryDatabase";
-import InfoPagedummy from "./components/information/innfoPagedummy";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -437,17 +436,6 @@ const router = createBrowserRouter([
       <Aside>
         {" "}
         <ShowNotication />{" "}
-      </Aside>
-      //  </ProductedRoute>
-    ),
-  },
-  {
-    path: "/dummy",
-    element: (
-      // <ProductedRoute>
-      <Aside>
-        {" "}
-        <InfoPagedummy />{" "}
       </Aside>
       //  </ProductedRoute>
     ),
