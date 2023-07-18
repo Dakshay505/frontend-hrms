@@ -5,7 +5,7 @@ import check from "../../assets/Check.png"
 import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { deleteEmployeeAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 
 interface Employee {
     id: number;
@@ -27,6 +27,7 @@ export const EmployeeProfile = () => {
     }, [singleEmployee])
     
     // delete section
+    console.log("ppp", employeeId);
 
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -39,6 +40,7 @@ export const EmployeeProfile = () => {
         // Perform the deletion logic here
         // ...
         setShowConfirmation(false);
+        console.log("ggg",{ employeeId: employeeId })
         dispatch(deleteEmployeeAsync({ employeeId: singleEmployee._id }));
     };
 
@@ -60,37 +62,37 @@ export const EmployeeProfile = () => {
             id: 1,
             title: "Name",
             inputName: "name",
-            data: singleEmployee.employeeData?.name,
+            data: singleEmployee.name,
         },
         {
             id: 2,
             title: "Job Profile",
             inputName: "jobProfile",
-            data: singleEmployee.employeeData?.jobProfileId?.jobProfileName,
+            data: singleEmployee.jobProfileId?.jobProfileName,
         },
         {
             id: 3,
             title: "Group",
             inputName: "group",
-            data: singleEmployee.employeeData?.groupId?.groupName,
+            data: singleEmployee.groupId?.groupName,
         },
         {
             id: 4,
             title: "Email",
             inputName: "email",
-            data: singleEmployee.employeeData?.email,
+            data: singleEmployee.email,
         },
         {
             id: 5,
             title: "Contact Number",
             inputName: "contactNumber",
-            data: singleEmployee.employeeData?.contactNumber,
+            data: singleEmployee.contactNumber,
         },
         {
             id: 6,
             title: "Gender",
             inputName: "gender",
-            data: singleEmployee.employeeData?.gender,
+            data: singleEmployee.gender,
         },
     ];
     const [editMode, setEditMode] = useState(false);
@@ -122,13 +124,13 @@ export const EmployeeProfile = () => {
                         </p>
                     </div>
                     <div>
-                        <button
+                        <div
                             className="delete-button"
                             onClick={handleDeleteClick}
                         >
                             <img src={del} alt="" className="delete-icon" />
                             Delete
-                        </button>
+                        </div>
 
                         {showConfirmation && (
                             <div className="confirmation-modal">
@@ -141,12 +143,12 @@ export const EmployeeProfile = () => {
                                     <p>Are your sure you want to delete this employee? This action can’t be undone.</p>
                                     <div className="button-container">
 
-                                        <button className="cancel-button" onClick={handleCancelDelete}>
+                                        <div className="cancel-button" onClick={handleCancelDelete}>
                                             Cancel
-                                        </button>
-                                        <button className="confirm-button" onClick={handleConfirmDelete}>
+                                        </div>
+                                        <div className="confirm-button" onClick={handleConfirmDelete}>
                                             Delete Employee
-                                        </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -160,13 +162,12 @@ export const EmployeeProfile = () => {
                             console.log(data);
                             const sendData = { employeeId: employeeId, data: data }
                             dispatch(updateEmployeeAsync(sendData)).then(() => {
-                                setEmployeeId(singleEmployee._id);
+                                dispatch(getSingleEmployeeAsync({employeeId: employeeId}));
                             });
                             setEditMode(false);
                         })}
                     >
                         {employees.map((employee) => {
-
                             return <div key={employee.id} className="mb-6">
                                 <div className={`flex flex-col bg-primary-bg border border-primary-border rounded-xl py-[16px] px-[10px] items-start gap-[10px] ${editMode && selectedEmployee && selectedEmployee.id === employee.id ? 'bg-white' : ''}`}>
                                     <div className="flex">
