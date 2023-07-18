@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
   const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
+  console.log(todayStaffAttandence);
   useEffect(() => {
     dispatch(postAttandenceByDateAsync())
   }, [])
@@ -55,7 +56,7 @@ export const AttendenceDtabase = () => {
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(11, 16) : "Not Avilable"}</td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? (latestPunches.punchOut).slice(11, 16) : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.approvedBy ? latestAttandence.approvedBy : "Not Avilable"}</td>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.approvedBy?.name ? latestAttandence.approvedBy?.name : "Not Avilable"}</td>
                 </tr>
               })}
             </tbody>

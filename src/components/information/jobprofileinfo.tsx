@@ -1,113 +1,116 @@
-import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
+import { useState, useEffect } from 'react';
 import edit from "../../assets/PencilSimple.png"
-
 import check from "../../assets/Check.png"
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { getSingleJobProfileAsync, updateJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 
-
-interface Employee {
-    id: number;
-    title: string;
-    data: string;
-}
-
-
 export const JobProfileInfo = () => {
-    const [search, setSearch] = React.useState('');
 
-    const [jobProfileId, setJobProfileId] = useState("")
+const dispatch = useDispatch();
+const JobProfile = useSelector((state: any) => state.jobProfile.jobProfileData)
 
-    const JobProfile = useSelector((state: any) => state.jobProfile.jobProfileData)
-    useEffect(() => {
-        setJobProfileId(JobProfile._id);
-    }, [JobProfile]);
-    console.log("JobProfileID:", jobProfileId)
+const [jobProfileId, setJobProfileId] = useState("")
+const [showInputBoxJobProfileName, setShowInputBoxJobProfileName] = useState(false);
+const [inputBoxJobProfileNameValue, setInputBoxJobProfileNameValue] = useState<any>("");
+const [showInputBoxJobProfileDescription, setShowInputBoxJobProfileDescription] = useState(false);
+const [inputBoxJobProfileDescriptionValue, setInputBoxJobProfileDescriptionValue] = useState<any>("");
 
-    React.useEffect(() => {
-        console.log(search);
-        setSearch('')
-    }, [search]);
+useEffect(() => {
+    setJobProfileId(JobProfile._id);
+    setInputBoxJobProfileNameValue(JobProfile.jobProfileName)
+    setInputBoxJobProfileDescriptionValue(JobProfile.jobDescription)
+}, [JobProfile]);
 
-
-    // employee info
-
-    const Job = [
-        {
-            id: 1,
-            title: "Job Profile Name",
-            data: JobProfile?.jobProfileName,
-            inputName: "jobProfileName"
-        },
-        {
-            id: 2,
-            title: "Job Profile Description",
-            data: JobProfile?.jobDescription,
-            inputName: "jobDescription"
-        }
-    ]
-
-
-    const [editMode, setEditMode] = useState(false);
-    const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-
-
-    const handleEditClick = (employee: Employee) => {
-        setSelectedEmployee(employee);
-        setEditMode(true);
-    };
-    const { handleSubmit, register } = useForm();
-    const dispatch = useDispatch();
-
-    return (
-        <div className='px-[40px] pt-[32px] flex flex-col flex-start gap-[40px] w-[770px]'>
-            <div className="mt-8">
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Job Profile Information</h1>
+const { register, handleSubmit } = useForm();
+return (
+    <div className="px-10 py-8">
+        <form
+            onSubmit={handleSubmit((data) => {
+                const sendData = { jobProfileId: jobProfileId, data: data }
+                dispatch(updateJobProfileAsync(sendData)).then(() => {
+                    dispatch(getSingleJobProfileAsync({jobProfileId: jobProfileId}));
+                });
+                setShowInputBoxJobProfileName(false);
+                setShowInputBoxJobProfileDescription(false);
+            })}
+        >
+            <div>
+                <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
             </div>
-            <form
-                onSubmit={handleSubmit((data) => {
-                    const sendData = { jobProfileId: jobProfileId, data: data }
-                    dispatch(updateJobProfileAsync(sendData)).then(() => {
-                        dispatch(getSingleJobProfileAsync({jobProfileId: jobProfileId}));
-                    });
-                    setEditMode(false);
-                    console.log("sendData", sendData)
-                })}>
-                <div className="flex flex-start self-stretch gap-[24px]">
-                    <div className="container mx-auto px-4">
-                        {Job.map((employee) => (
-                            <div key={employee.id} className="mb-6">
-                                <div className={`flex flex-col bg-primary-bg border border-primary-border rounded-xl py-[16px] px-[10px] items-start gap-[10px] ${editMode && selectedEmployee && selectedEmployee.id === employee.id ? 'bg-white' : ''}`}>
-                                    <div className="flex">
-                                        <h2 className="text-lg font-semibold">{employee.title}</h2>
-                                        <div className="text-white font-bold py-2 px-4" onClick={() => handleEditClick(employee)}>
-                                            <img src={edit} alt="" className="h-[16px] w-[16px]" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        {editMode && selectedEmployee && selectedEmployee.id === employee.id ? (
-                                            <div className="flex gap-[20px] p-[7px]  border border-primary-border rounded-xl">
-                                                <input
-                                                    {...register(employee.inputName, { required: true })}
-                                                    type="text" className="w-full py-2 px-3 outline-none text-grey-darker" value={selectedEmployee.data} onChange={(e) => setSelectedEmployee({ ...selectedEmployee, data: e.target.value })} />
-                                                <button type='submit' className="bg-primary-blue text-white font-bold py-2 px-4 rounded">
-                                                    <img src={check} alt="" className="w-[18px] h-[18px]" />
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <h2 className="text-md font-normal">{employee.data}</h2>
-                                        )}
-                                    </div>
-                                </div>
+            <div className="flex flex-col gap-3 mt-10">
+                {!showInputBoxJobProfileName &&
+                    <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                        <div className="flex items-center gap-3">
+                            <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Job Profile Name</p>
+                            <img src={edit} onClick={() => {
+                                setShowInputBoxJobProfileName(!showInputBoxJobProfileName);
+                            }} className="w-3 h-3" alt="" />
+                        </div>
+                        <div>
+                            <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{JobProfile.jobProfileName}</p>
+                        </div>
+                    </div >}
+                {showInputBoxJobProfileName &&
+                    <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                        <div className="flex flex-col">
+                            <div className="flex gap-3">
+                                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Job Profile Name</p>
                             </div>
-                        ))}
-                    </div>
-
-                </div>
-            </form>
-
-        </div >
-    )
+                            <div>
+                                <input
+                                    {...register('jobProfileName', { required: true })}
+                                    className="text-[12px] leading-5 font-normal focus:outline-none"
+                                    value={inputBoxJobProfileNameValue}
+                                    onChange={(event) => setInputBoxJobProfileNameValue(event.target.value)}
+                                    type="text" />
+                            </div>
+                        </div>
+                        <div className="flex justify-center items-center">
+                            <button
+                                className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                type="submit">
+                                <img src={check} className="w-4 h-4" alt="" />
+                            </button>
+                        </div>
+                    </div>}
+                {!showInputBoxJobProfileDescription &&
+                    <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                        <div className="flex items-center gap-3">
+                            <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Group Description</p>
+                            <img src={edit} onClick={() => {
+                                setShowInputBoxJobProfileDescription(!showInputBoxJobProfileDescription);
+                            }} className="w-3 h-3" alt="" />
+                        </div>
+                        <div>
+                            <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{JobProfile.jobDescription}</p>
+                        </div>
+                    </div >}
+                {showInputBoxJobProfileDescription &&
+                    <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                        <div className="flex flex-col">
+                            <div className="flex gap-3">
+                                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Group Description</p>
+                            </div>
+                            <div>
+                                <input
+                                    {...register('jobDescription', { required: true })}
+                                    className="text-[12px] leading-5 font-normal focus:outline-none"
+                                    value={inputBoxJobProfileDescriptionValue}
+                                    onChange={(event) => setInputBoxJobProfileDescriptionValue(event.target.value)}
+                                    type="text" />
+                            </div>
+                        </div>
+                        <div className="flex justify-center items-center">
+                            <button
+                                className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                type="submit">
+                                <img src={check} className="w-4 h-4" alt="" />
+                            </button>
+                        </div>
+                    </div>}
+            </div>
+        </form>
+    </div>
+)
 }

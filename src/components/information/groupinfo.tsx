@@ -1,106 +1,116 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import edit from "../../assets/PencilSimple.png"
-
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleGroupAsync, updateGroupAsync } from '../../redux/Slice/GroupSlice';
 
-
-interface Employee {
-    id: number;
-    title: string;
-    data: string;
-}
-
 export const GroupInfo = () => {
-    const [groupId, setGroupId] = useState("")
-
+    const dispatch = useDispatch();
     const groups = useSelector((state: any) => state.group.group)
+    
+    const [groupId, setGroupId] = useState("")
+    const [showInputBoxGroupName, setShowInputBoxGroupName] = useState(false);
+    const [inputBoxGroupNameValue, setInputBoxGroupNameValue] = useState<any>("");
+    const [showInputBoxGroupDescription, setShowInputBoxGroupDescription] = useState(false);
+    const [inputBoxGroupDescriptionValue, setInputBoxGroupDescriptionValue] = useState<any>("");
+
     useEffect(() => {
         setGroupId(groups._id);
+        setInputBoxGroupNameValue(groups.groupName)
+        setInputBoxGroupDescriptionValue(groups.description)
     }, [groups]);
-    console.log("groupId", groupId)
-    // console.log(groups)
 
-    const [search, setSearch] = React.useState('');
-
-
-    const { handleSubmit, register } = useForm();
-    React.useEffect(() => {
-        console.log(search);
-        setSearch("")
-    }, [search]);
-
-
-    // employee info
-
-    const group = [
-        {
-            id: 1,
-            title: "Group Name",
-            data: groups?.groupName,
-            inputName: "groupName"
-        },
-        {
-            id: 2,
-            title: "Group Description",
-            data: groups?.description,
-            inputName: "description"
-        }
-    ]
-
-    const [editMode, setEditMode] = useState(false);
-    const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-
-
-    const handleEditClick = (employee: Employee) => {
-        setSelectedEmployee(employee);
-        setEditMode(!editMode);
-    };
-    const dispatch = useDispatch();
+    const { register, handleSubmit } = useForm();
     return (
-        <div className='px-[40px] pt-[32px]'>
-            <div>
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
-            </div>
-            <div className="py-10">
-                <form
-                    onSubmit={handleSubmit((data) => {
-                        const sendData = { groupId: groupId, data: data }
+        <div className="px-10 py-8">
+            <form
+                onSubmit={handleSubmit((data) => {
+                    console.log(data);
+                    const sendData = { groupId: groupId, data: data }
                         dispatch(updateGroupAsync(sendData)).then(() => {
                             dispatch(getSingleGroupAsync({ groupId: groupId }));
                         });
-                        setEditMode(false);
-                    })}>
-                    {group && group.map((element: any) => (
-                        <div key={element.id} className="w-[472px] mb-5">
-                            <div className={`flex flex-col bg-[#FAFAFA] border border-primary-border rounded-[4px] py-[16px] px-[10px] items-start ${editMode && selectedEmployee && selectedEmployee.id === element.id ? 'bg-white' : ''}`}>
-                                <div className="flex justify-center items-center gap-3">
-                                    <h2 className="text-sm font-semibold text-[#2E2E2E]">{element.title}</h2>
-                                    <div className="text-white font-bold" onClick={() => handleEditClick(element)}>
-                                        <img src={edit} alt="" className="h-3 w-3" />
-                                    </div>
+                    setShowInputBoxGroupName(false);
+                    setShowInputBoxGroupDescription(false);
+                })}
+            >
+                <div>
+                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
+                </div>
+                <div className="flex flex-col gap-3 mt-10">
+                    {!showInputBoxGroupName &&
+                        <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Group Name</p>
+                                <img src={edit} onClick={() => {
+                                    setShowInputBoxGroupName(!showInputBoxGroupName);
+                                }} className="w-3 h-3" alt="" />
+                            </div>
+                            <div>
+                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{groups.groupName}</p>
+                            </div>
+                        </div >}
+                    {showInputBoxGroupName &&
+                        <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Group Name</p>
                                 </div>
                                 <div>
-                                    {editMode && selectedEmployee && selectedEmployee.id === element.id ? (
-                                        <div className="flex gap-[20px] p-[7px]  border border-primary-border rounded-xl">
-                                            <input
-                                                {...register(element.inputName, { required: true })}
-                                                type="text" className="w-full py-2 px-3 outline-none text-[12px] leading-5 font-normal text-[#757575]" value={selectedEmployee.data} onChange={(e) => setSelectedEmployee({ ...selectedEmployee, data: e.target.value })} />
-                                            <button type='submit' className="bg-primary-blue text-white font-bold py-2 px-4 rounded">
-                                                <img src={check} alt="" className="w-[18px] h-[18px]" />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <h2 className="text-[12px] leading-5 font-normal text-[#1C1C1C]">{element.data}</h2>
-                                    )}
+                                    <input
+                                        {...register('groupName', { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputBoxGroupNameValue}
+                                        onChange={(event) => setInputBoxGroupNameValue(event.target.value)}
+                                        type="text" />
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </form>
-            </div>
-        </div >
+                            <div className="flex justify-center items-center">
+                                <button
+                                    className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                    type="submit">
+                                    <img src={check} className="w-4 h-4" alt="" />
+                                </button>
+                            </div>
+                        </div>}
+                    {!showInputBoxGroupDescription &&
+                        <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Group Description</p>
+                                <img src={edit} onClick={() => {
+                                    setShowInputBoxGroupDescription(!showInputBoxGroupDescription);
+                                }} className="w-3 h-3" alt="" />
+                            </div>
+                            <div>
+                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{groups.description}</p>
+                            </div>
+                        </div >}
+                    {showInputBoxGroupDescription &&
+                        <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Group Description</p>
+                                </div>
+                                <div>
+                                    <input
+                                        {...register('description', { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputBoxGroupDescriptionValue}
+                                        onChange={(event) => setInputBoxGroupDescriptionValue(event.target.value)}
+                                        type="text" />
+                                </div>
+                            </div>
+                            <div className="flex justify-center items-center">
+                                <button
+                                    className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                    type="submit">
+                                    <img src={check} className="w-4 h-4" alt="" />
+                                </button>
+                            </div>
+                        </div>}
+                </div>
+            </form>
+        </div>
     )
 }
