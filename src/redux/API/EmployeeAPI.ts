@@ -126,7 +126,7 @@ export const getEmployeeImage = async (employeeId: any) => {
 export const pagination = async (page:any) => {
   try {
     const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
-      withCredentials: true,
+      withCredentials: true, 
     });
     console.log(response,"hey")
     return response.data;

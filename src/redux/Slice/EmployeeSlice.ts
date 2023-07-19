@@ -13,7 +13,7 @@ import {
 
 const initialState = {
   employees: [],
-  singleEmployee: {},
+  singleEmployee: {}, 
   status: "idle",
 };
 

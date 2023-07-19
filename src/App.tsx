@@ -57,6 +57,8 @@ import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
 import SalaryDatabase from "./components/Salary/SalaryDatabase";
+import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
+import { TraningStatus } from "./components/Traning/TraningStatus";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -170,6 +172,26 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <AddTraningResources />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/add-traning-quiz",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddTrainingQuiz></AddTrainingQuiz>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/traning-status",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <TraningStatus></TraningStatus>
         </Aside>
       </ProductedRoute>
     ),
