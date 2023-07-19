@@ -101,7 +101,7 @@ const ViewModifyDatabase = () => {
 
     // pagination 
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 4; // Number of items per page
+    const itemsPerPage = 10; // Number of items per page
     const count = 9;
 
     // Calculate the total number of pages

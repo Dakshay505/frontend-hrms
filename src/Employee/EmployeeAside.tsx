@@ -105,7 +105,7 @@ export default function EmployeeAside(props: Props) {
     <div className="flex flex-col">
       {/* nav */}
       <nav className="flex items-center fixed bg-[#FFFFFF] z-10 justify-between px-5 flex-row border w-full h-[74px]">
-        <Link to='/'>
+        <Link to=''>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
             <h1 className="text-red text-[20px] font-medium">Chawla Ispat</h1>
