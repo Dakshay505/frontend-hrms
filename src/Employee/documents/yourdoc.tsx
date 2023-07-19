@@ -1,35 +1,31 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { getEmployeeDocsRouterApiPath } from '../../APIRoutes';
+import { uploadImageApiPath } from '../../APIRoutes';
 
-export const Yourdoc = ({ id }: { id: string }) => {
-    const [imageUrls, setImageUrls] = useState<any>([]);
-
-    const viewdoc = async (id: string) => {
-        try {
-            const response = await axios.get(`${getEmployeeDocsRouterApiPath}/64b3b5a9772e74ea54bc98c9`);
-            const data = response.data;
-            console.log(data, response);
-            if (data.doc && data.doc.length > 0 && data.doc[0].document) {
-                const documents = data.doc[0].document;
-                const mappedImages = documents.map((document: any) => ({
-                    id: document._id,
-                    name: document.docsName,
-                    url: document.docs,
-                }));
-                console.log("hey", id)
-                setImageUrls(mappedImages);
-            } else {
-                setImageUrls([]);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+export const Yourdoc = () => {
+    const [imageUrls, setImageUrls] = useState<Document[]>([]);
 
     useEffect(() => {
-        viewdoc(id);
-    }, [id]);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${uploadImageApiPath}`);
+          const data = response.data;
+          console.log(data);
+          const documents = data.doc[0].document;
+          const mappedImages = documents.map((document: any) => ({
+            id: document._id,
+            name: document.docsName,
+            url: document.docs,
+          }));
+          console.log(mappedImages);
+          setImageUrls(mappedImages);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchData();
+    }, []);
 
     return (
         <div className='flex flex-col items-start self-stretch max-w-[768px] pt-[32px]  px-[40px] gap-[32px]'>

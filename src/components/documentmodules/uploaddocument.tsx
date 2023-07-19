@@ -48,7 +48,7 @@ export const Uploaddocument = () => {
         dispatch(addDocumentsAsync(formData))
     }
 
-
+ 
     const [selectedFile, setSelectedFile] = useState<any>(null);
 
     const handleFileChange = (event: any) => {
