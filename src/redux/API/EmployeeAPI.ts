@@ -17,7 +17,7 @@ export const createEmployee = async (employeeData: any) => {
       employeeData,
       { withCredentials: true }
     );
-    return data; 
+    return data;
   } catch (error: any) {
     console.log(error.response.data);
   }
@@ -38,11 +38,11 @@ export const updateEmployee = async (employeeData: any) => {
 };
 
 function convertToQueryString(data: any) {
-  let queryStr = '';
+  let queryStr = "";
   for (let key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
-      if (queryStr !== '') {
-        queryStr += '&';
+    if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
+      if (queryStr !== "") {
+        queryStr += "&";
       }
       queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
     }
@@ -51,10 +51,12 @@ function convertToQueryString(data: any) {
 }
 export const getAllEmployee = async (sendData: any) => {
   try {
-     const queryStr = convertToQueryString(sendData);
+    const queryStr = convertToQueryString(sendData);
+    console.log("API", `${getEmployeeApiPath}?${queryStr}`);
     const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
       withCredentials: true,
     });
+    console.log(data);
     return data;
   } catch (error: any) {
     console.log(error.response.data);
@@ -113,7 +115,8 @@ export const addImage = async (document: any) => {
 export const getEmployeeImage = async (employeeId: any) => {
   try {
     console.log("employeeId", employeeId);
-    const { data } = await axios.get(`${getEmployeeImageApiPath}/${employeeId.employeeId}`,
+    const { data } = await axios.get(
+      `${getEmployeeImageApiPath}/${employeeId.employeeId}`,
       { withCredentials: true }
     );
     return data;
@@ -123,15 +126,15 @@ export const getEmployeeImage = async (employeeId: any) => {
 };
 
 // pagination
-export const pagination = async (page:any) => {
+export const pagination = async (page: any) => {
   try {
     const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
       withCredentials: true,
     });
-    console.log(response,"hey")
+    console.log(response, "hey");
     return response.data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return null;
   }
-}
+};

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
@@ -12,14 +11,19 @@ import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from '../../assets/MagnifyingGlass.png'
 
 const ViewModifyDatabase = () => {
+    const itemsPerPage = 3; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [filter, setFilter] = useState({
         name: "",
         groupName: "",
-        jobProfileName: ""
+        jobProfileName: "",
+        limit: itemsPerPage,
+        page: currentPage
     })
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter));
-        console.log("hi")
+        console.log("filter", filter)
     }, [filter])
 
     // SEARCH
@@ -38,7 +42,7 @@ const ViewModifyDatabase = () => {
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [showFilter, setshowFilter] = useState(false);
     useEffect(() => {
-        dispatch(getAllEmployeeAsync()).then((data: any) => {
+        dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
             const employeeData = data.payload.employees;
             const arr = [];
             for (let i = 0; i < employeeData.length; i++) {
@@ -100,28 +104,31 @@ const ViewModifyDatabase = () => {
     };
 
     // pagination 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Number of items per page
     const count = 9;
 
     // Calculate the total number of pages
     const employeePagination = Math.ceil((count || 0) / itemsPerPage);
 
     const dispatchPagination = (pageNumber: number) => {
+        console.log("page no-", pageNumber);
         setCurrentPage(pageNumber);
-        // dispatch(getPaginationAsync(pageNumber));
+        setFilter({ ...filter, page: pageNumber });
+        dispatch(getAllEmployeeAsync(filter));
     };
-
     const handleNextPage = () => {
+        console.log('handleNextPage');
         const nextPage = currentPage + 1;
         if (nextPage <= employeePagination) {
+            console.log("nextPage: " + nextPage)
             dispatchPagination(nextPage);
         }
     };
 
     const handlePreviousPage = () => {
+        console.log('handlePreviousPage');
         const previousPage = currentPage - 1;
         if (previousPage >= 1) {
+            console.log("previous page", previousPage)
             dispatchPagination(previousPage);
         }
     };
@@ -140,16 +147,16 @@ const ViewModifyDatabase = () => {
                             onChange={(event: any) => {
                                 setDatabaseValue(event.target.value);
                                 const selectedValue = event.target.value;
-                                
-                                    if (selectedValue === "Employees") {
-                                        setPath("/addemployee")
-                                    }
-                                    if (selectedValue === "Groups") {
-                                        setPath("/add-group")
-                                    }
-                                    if (selectedValue === "Job Profiles") {
-                                        setPath("/add-job-profile")
-                                
+
+                                if (selectedValue === "Employees") {
+                                    setPath("/addemployee")
+                                }
+                                if (selectedValue === "Groups") {
+                                    setPath("/add-group")
+                                }
+                                if (selectedValue === "Job Profiles") {
+                                    setPath("/add-job-profile")
+
                                 }
                             }
                             }
@@ -192,19 +199,19 @@ const ViewModifyDatabase = () => {
                             </div>
                             <div>
                                 <select
-                                onChange={(event) => {
-                                    setFilter({
-                                        ...filter,
-                                        groupName: event.target.value
-                                    })
-                                }}
-                                value={filter.groupName}
-                                className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
+                                    onChange={(event) => {
+                                        setFilter({
+                                            ...filter,
+                                            groupName: event.target.value
+                                        })
+                                    }}
+                                    value={filter.groupName}
+                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
                                     <option value=""></option>
                                     {groupList && groupList.map((element: any, index: number) => {
                                         return <option
-                                        key={index}
-                                        value={element.groupName}
+                                            key={index}
+                                            value={element.groupName}
                                         >
                                             {element.groupName}
                                         </option>
