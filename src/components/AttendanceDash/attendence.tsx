@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from "react";
 import right from "../../assets/r-arrow.png";
 import up from "../../assets/arrow-up.png";
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import { getPresentNumberApiPath } from "../../APIRoutes";
 
-interface AttendanceData {
-  AbsentEmployess: string[];
-  Number_Present_Employee: number;
-  // Add any other properties as needed
-}
-
 export const Attendence: React.FC = () => {
-  const [data, setData] = useState<AttendanceData | null>(null);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: AxiosResponse<AttendanceData> = await axios.get(
+        const response = await axios.get(
           `${getPresentNumberApiPath}`,
           { withCredentials: true }
         );
@@ -72,7 +66,5 @@ export const Attendence: React.FC = () => {
         </div>
       </div>
     </div>
-
-
   );
 };
