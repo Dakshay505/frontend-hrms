@@ -11,7 +11,7 @@ import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from '../../assets/MagnifyingGlass.png'
 
 const ViewModifyDatabase = () => {
-    const itemsPerPage = 3; // Number of items per page
+    const itemsPerPage = 20; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
 
     const [filter, setFilter] = useState({

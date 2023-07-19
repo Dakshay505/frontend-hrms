@@ -35,7 +35,7 @@ import { GroupInfo } from './components/information/groupinfo';
 import { StaffCheckin } from './Employee/dashboard/staffcheckin';
 import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
 import { EmpViewdoc } from './Employee/documents/viewdoc';
-import { Yourdoc } from './Employee/documents/yourdoc';
+// import { Yourdoc } from './Employee/documents/yourdoc';
 import { ChangePassword } from './Employee/changepassword';
 
 import AddNewFieldsForJobProfile from "./components/Dashboard/AddNewFieldsForJobProfile";
@@ -355,12 +355,12 @@ const router = createBrowserRouter([
   {
     path: "/groups-info",
     element: (
-      // <ProductedRoute>
+      <ProductedRoute>
         <Aside>
           {" "}
           <GroupInfo></GroupInfo>{" "}
         </Aside>
-      // </ProductedRoute>
+      </ProductedRoute>
     ),
   },
   {

@@ -17,9 +17,6 @@ export const EmployeeProfile = () => {
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
-    console.log("singleEmployee", singleEmployee);
-    console.log("jobProfileList", jobProfileList);
-    console.log("groupList", groupList);
 
     const [showInputBoxName, setShowInputBoxName] = useState(false);
     const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");

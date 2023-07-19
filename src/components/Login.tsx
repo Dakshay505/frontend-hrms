@@ -35,61 +35,53 @@ export function Login() {
     }, [])
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
     return (
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
             {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/emphome' replace={true}></Navigate>}
-            <div className='flex justify-center items-center w-full mt-20'>
-                <div className='flex flex-col items-center justify-center gap-[32px]'>
-                    <div className="flex flex-start text-neutral-n-600 text-2xl font-inter font-bold leading-8">
-                        HR Admin Login
-                    </div>
-                    <form onSubmit={handleSubmit(onSubmit)} className="w-[100%]">
-                        <div className="max-w-lg">
-                            <div className="py-2 w-[320px]">
-                                <span className="px-1 py-[5px] text-sm text-gray-600">Email</span>
-                                <input
-                                    placeholder=""
-                                    type="Email"
-                                    {...register('email')}
-                                    className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-                                />
-                            </div>
-                            <div className="py-2 w-[320px]">
-                                <span className="px-1 py-[5px] text-sm text-gray-600">Password</span>
-                                <div className="relative">
+            <div className='flex flex-col justify-center items-center w-full mt-20'>
+                <div>
+                    <h1 className="text-[28px] leading-9 font-bold">HR Admin Login</h1>
+                </div>
+                <div className='mt-8'>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex flex-col gap-6">
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className="text-sm font-normal">Email</p>
+                                </div>
+                                <div className='relative w-[320px]'>
                                     <input
-                                        placeholder=""
-                                        {...register('password')}
-                                        type={showPassword ? 'text' : 'password'}
-                                        className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-                                    />
-                                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                                        <img
-                                            className="h-4 w-4 text-gray-700 cursor-pointer"
-                                            src={eye}
-                                            alt="Show Password"
-                                            onClick={handleShowPassword}
-                                        />
-                                        <img
-                                            className="h-6 text-gray-700 cursor-pointer hidden"
-                                            src={eye}
-                                            alt="Hide Password"
-                                        />
+                                        {...register("email", { required: true })}
+                                        className='border border-solid border-[#DEDEDE] py-4 ps-4 pe-9 w-[320px] focus:outline-none text-sm text-[#666666] font-normal h-10 rounded'
+                                        type="email" />
+                                </div>
+                            </div>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className="text-sm font-normal">Password</p>
+                                </div>
+                                <div className='relative w-[320px]'>
+                                    <input
+                                        {...register("password", { required: true })}
+                                        className='border border-solid border-[#DEDEDE] py-4 ps-4 pe-9 w-[320px] focus:outline-none text-sm text-[#666666] font-normal h-10 rounded'
+                                        type={showPassword ? "text" : "password"} />
+                                    <div onClick={() => setShowPassword(!showPassword)} className='absolute right-4 top-0 bottom-0 flex items-center cursor-pointer z-10'>
+                                        <img src={eye} className='w-4 h-4' alt="" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className=" flex gap-[5px] w-[130px] mt-5 rounded-sm items-center text-lg font-semibold bg-primary-blue text-white px-6 py-3 shadow-xl">
-                            <img src={signin} alt="" className='h-[20px] w-[20px]' />
-                            <input type='submit'
-                                value={"Login"}
-                                className='cursor-pointer'
-                            />
+                        <div className="mt-8">
+                            <button type='submit' className='flex justify-center items-center w-[125px] h-[52px] rounded-lg bg-[#283093] py-4 px-5'>
+                                <div>
+                                    <img src={signin} className='w-5 h-5' alt="" />
+                                </div>
+                                <div>
+                                    <p className='px-2 text-[16px] leading-6 font-medium text-[#FBFBFC]'>Login</p>
+                                </div>
+                            </button>
                         </div>
                     </form>
 
