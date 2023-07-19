@@ -11,7 +11,7 @@ interface Document {
 
 const ViewDoc: React.FC = () => {
   const [imageUrls, setImageUrls] = useState<Document[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,10 +29,10 @@ const ViewDoc: React.FC = () => {
           }));
           setImageUrls(mappedImages);
         } else {
-          setError('Invalid data structure');
+          // setError('Invalid data structure');
         }
       } catch (error) {
-        setError('Error fetching data: ' + (error as Error).message);
+        // setError('Error fetching data: ' + (error as Error).message);
       }
     };
 
