@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import right from "../../assets/r-arrow.png";
 import up from "../../assets/arrow-up.png";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { getPresentNumberApiPath } from "../../APIRoutes";
 
-export const Attendence: React.FC = () => {
+export const Attendence = () => {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {

@@ -80,7 +80,6 @@ export const PendingLeaves = () => {
                     month: '2-digit',
                     year: 'numeric',
                   });
-                  const options: any = { day: "numeric", month: "short" };
                   return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                     <div className='flex justify-between'>
                       <div className='flex flex-col gap-3'>
@@ -88,7 +87,7 @@ export const PendingLeaves = () => {
                         <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                       </div>
                       <div>
-                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(lastLeave.from)).toLocaleDateString("en-US", options)} - {(new Date(lastLeave.to)).toLocaleDateString("en-US", options)}</p>
+                        <p className='text-[16px] leading-6 font-medium'>Leave: {new Date(lastLeave.from).toLocaleString("en-US", {timeStyle: "short"})} - {new Date(lastLeave.to).toLocaleString("en-US", {timeStyle: "short"})}</p>
                       </div>
                     </div>
                     <div className='flex gap-8 justify-between mt-8'>
