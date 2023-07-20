@@ -11,12 +11,33 @@ const AddGroup = () => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        setValue,
+        formState: { errors },
     } = useForm();
 
     useEffect(() => {
         dispatch(getAllGroupsAsync());
     }, [])
+
+
+    const validategroupName = (value:any) => {
+        if (/^\d/.test(value)) {
+          return "Job Profile Name cannot start with a digit";
+        }
+        return true;
+      };
+    
+      // Event handler to handle changes in the Job Profile Name field
+      const handlegroupNameChange = (e:any) => {
+        const inputgroupName = e.target.value;
+        if (/^\d/.test(inputgroupName)) {
+          setValue("groupName", inputgroupName.replace(/^\d/, ""));
+        }
+      };
+      
+
+
     return (
         <>
             <div className="mx-10">
@@ -49,8 +70,10 @@ const AddGroup = () => {
                                 </div>
                                 <div>
                                     <input
-                                        {...register('groupName', { required: true })}
-                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
+                                        {...register('groupName', { required:  "Name is required",  validate: validategroupName })}
+                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                        onChange={handlegroupNameChange}/>
+                                         {errors.groupName && <p className="text-red-500">{errors.groupName.message}</p>}
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
