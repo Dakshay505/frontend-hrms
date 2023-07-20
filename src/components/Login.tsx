@@ -14,7 +14,8 @@ type Inputs = {
 
 
 export function Login() {
-    const { register, handleSubmit } = useForm<Inputs>();
+    const { register, handleSubmit, setValue,
+        formState: { errors }, } = useForm<Inputs>();
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const onSubmit = (data: Inputs) => {
@@ -52,9 +53,17 @@ export function Login() {
                                 </div>
                                 <div className='relative w-[320px]'>
                                     <input
-                                        {...register("email", { required: true })}
+                                        {...register("email", {
+                                            required: "Email is required.", // Adding the required validation message
+                                            pattern: {
+                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                                message: 'Invalid email address',
+                                            },
+                                        })}
                                         className='border border-solid border-[#DEDEDE] py-4 ps-4 pe-9 w-[320px] focus:outline-none text-sm text-[#666666] font-normal h-10 rounded'
-                                        type="email" />
+                                        type="email"
+                                    />
+                                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>

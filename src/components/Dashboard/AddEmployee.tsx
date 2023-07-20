@@ -18,7 +18,7 @@ const AddEmployee = () => {
         reset,
         setValue,
         formState: { errors },
-    } = useForm();
+    } = useForm()
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
@@ -72,6 +72,41 @@ const AddEmployee = () => {
         // Check if the input matches the regex pattern
         setIsValid(phoneRegex.test(inputPhoneNumber));
     };
+
+    // name validation
+    const validateEmployeeName = (value: any) => {
+        if (/^\d/.test(value)) {
+            return "Name cannot start with a digit";
+        }
+        return true;
+    };
+
+    // Event handler to handle changes in the Name field
+    const handleEmployeeNameChange = (e: any) => {
+        const inputEmployeeName = e.target.value;
+        if (/^\d/.test(inputEmployeeName)) {
+            setValue("name", inputEmployeeName.replace(/^\d/, ""));
+        }
+    };
+
+    const handleSalaryChange = (event: any) => {
+        const input = event.target;
+        let newValue = input.value;
+
+        // Check if the value starts with 0 or '-'
+        if (/^(-|0)/.test(newValue)) {
+            // Reset the value to remove the invalid characters
+            newValue = newValue.replace(/^(-|0)/, '');
+        }
+
+        // Limit the value to 8 digits
+        newValue = newValue.slice(0, 8);
+
+        // Update the input value
+        input.value = newValue;
+    };
+
+
     return (
         <div className="mx-8 py-[32px]">
             <div className='pt-[5px]'>
@@ -98,10 +133,11 @@ const AddEmployee = () => {
                                 </div>
                                 <div>
                                     <input
-                                        {...register('name', { required: 'Name is required' })}
+                                        {...register('name', { required: 'Name is required', validate: validateEmployeeName })}
                                         type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                        onChange={handleEmployeeNameChange} // Add the onChange event handler
                                     />
-                                     {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+                                    {errors.name && <p className="text-red-500">{errors.name.message}</p>}
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
@@ -118,8 +154,9 @@ const AddEmployee = () => {
                                             },
                                         })}
                                         type="email" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                        placeholder='abc@gmail.com'
                                     />
-                                   {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -165,6 +202,7 @@ const AddEmployee = () => {
                                     <input
                                         type="number"
                                         value={phoneNumber}
+                                        placeholder='eg. 123-4567-890'
                                         {...register('contactNumber', { required: "Phone No. required" })}
                                         pattern="^\d{10,11}$" // Regex pattern for a 10-digit phone number
                                         required // Make the input field required
@@ -178,18 +216,28 @@ const AddEmployee = () => {
                                     <p className='text-green-500'>Phone number is valid!</p>
                                 )}
                             </div>
-                            {employementTypeValue === "Fixed Salary Employee" && <div className='flex flex-col gap-3'>
-                                <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Salary</p>
+                            {employementTypeValue === "Fixed Salary Employee" &&
+                                <div className='flex flex-col gap-3'>
+                                    <div>
+                                        <p className='text-sm font-normal text-[#1C1C1C]'>Salary</p>
+                                    </div>
+                                    <div>
+                                        <input
+                                            {...register('salary', { required: "salary requires" })}
+                                            type="number"
+                                            className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                            name="salary"
+                                            placeholder='₹'
+                                            onChange={handleSalaryChange}
+                                            maxLength="8"  // Add the maxLength attribute to limit the input to 8 digits
+                                        />
+                                        {errors.salary && <p className="text-red-500">{errors.salary.message}</p>}
+                                    </div>
+
+
                                 </div>
-                                <div >
-                                    <input
-                                        {...register('salary', { required: true })}
-                                        type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                        name="salary"
-                                    />
-                                </div>
-                            </div>}
+
+                            }
                             {employementTypeValue === "Contract Employee" && <div className='flex flex-col gap-3'>
                                 <div>
                                     <p className='text-sm font-normal text-[#1C1C1C]'>Expected Salary</p>
@@ -216,12 +264,12 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select lunch time</option>
-                                                <option value="30 min">30 min</option>
-                                                <option value="45 min">45 min</option>
-                                                <option value="1 hour">1 hour</option>
-                                                <option value="1:30 hour">1:30 hour</option>
-                                                <option value="2 hour">2 hour</option>
-                                                <option value="2:30 hour">2:30 hour</option>
+                                                <option value="30">30 min</option>
+                                                <option value="45">45 min</option>
+                                                <option value="1">1 hour</option>
+                                                <option value="1.30">1:30 hour</option>
+                                                <option value="2">2 hour</option>
+                                                <option value="2.30">2:30 hour</option>
                                             </select>
                                         </div>
                                     </div>
@@ -237,13 +285,13 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select working days</option>
-                                                <option value="1 day">1 </option>
-                                                <option value="2 days">2 </option>
-                                                <option value="3 days">3 </option>
-                                                <option value="4 days">4 </option>
-                                                <option value="5 days">5 </option>
-                                                <option value="6 days">6 </option>
-                                                <option value="7 days">7 </option>
+                                                <option value="1">1 </option>
+                                                <option value="2">2 </option>
+                                                <option value="3">3 </option>
+                                                <option value="4">4 </option>
+                                                <option value="5">5 </option>
+                                                <option value="6">6 </option>
+                                                <option value="7">7 </option>
                                                 {/* Add more working day options as needed */}
                                             </select>
                                         </div>
@@ -261,15 +309,15 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] rounded py-2 px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select Working Hours</option>
-                                                <option value="4 hour">4 hour</option>
-                                                <option value="5 hour">5 hour</option>
-                                                <option value="6 hour">6 hour</option>
-                                                <option value="7 hour">7 hour</option>
-                                                <option value="8 hours">8 hours</option>
-                                                <option value="9 hours">9 hours</option>
-                                                <option value="10 hours">10 hours</option>
-                                                <option value="11 hours">11 hours</option>
-                                                <option value="12 hours">12 hours</option>
+                                                <option value="4 ">4 hour</option>
+                                                <option value="5">5 hour</option>
+                                                <option value="6">6 hour</option>
+                                                <option value="7">7 hour</option>
+                                                <option value="8">8 hours</option>
+                                                <option value="9">9 hours</option>
+                                                <option value="10">10 hours</option>
+                                                <option value="11">11 hours</option>
+                                                <option value="12">12 hours</option>
                                                 {/* Add more options as needed */}
                                             </select>
                                         </div>
