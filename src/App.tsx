@@ -196,6 +196,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+
   {
     path: "/attendance",
     element: (

@@ -24,6 +24,7 @@ const AddJobProfile = () => {
     handleSubmit,
     reset
   } = useForm();
+  
   return (
     <div className="mx-10 w-[688px]">
       <div className="pt-8">
