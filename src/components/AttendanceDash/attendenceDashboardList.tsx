@@ -1,39 +1,41 @@
 import { useState } from "react";
 import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from "../../assets/MagnifyingGlass.png";
+import GreenCheck from '../../assets/GreenCheck.svg';
+import RedX from '../../assets/RedX.svg';
+import SpinnerGap from '../../assets/SpinnerGap.svg'
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postAttandenceByDateAsync } from "../../redux/Slice/AttandenceSlice";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from "react-calendar";
+import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
 
-  const todayStaffAttandence = useSelector((state: any) => state.attandence.staffAttandence);
+  const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
-
   const [date, setDate] = useState<any>(new Date());
   const [showCalender, setShowCalender] = useState(false);
 
-  useEffect(() => {
-    dispatch(postAttandenceByDateAsync()).then((data: any) => {
-      const employeeData = data.payload.employees;
-      const arr = [];
-      for (let i = 0; i < employeeData.length; i++) {
-        arr.push(employeeData[i].employeeId.name)
-      }
-      setFetchedSuggestions(arr)
-    });
-    console.log(fetchedSuggestions);
-    dispatch(getAllGroupsAsync())
-    dispatch(getAllJobProfileAsync())
-  }, [])
+  const [showTableRow, setShowTableRow] = useState<any>([]);
+
+  const handleRowClick = (index: number) => {
+    const isExpanded = showTableRow.includes(index)
+    if (isExpanded) {
+      setShowTableRow(showTableRow.filter((belowRowIndex: any) => belowRowIndex !== index))
+    }
+    else {
+      setShowTableRow([...showTableRow, index])
+    }
+  }
+
+
 
 
 
@@ -47,25 +49,37 @@ export const AttendenceDashboardList = () => {
     groupName: "",
     jobProfileName: "",
     date: ""
-  })
+  });
+
+  useEffect(() => {
+    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      const employeeData = data.payload.employees;
+      const arr = [];
+      for (let i = 0; i < employeeData.length; i++) {
+        arr.push(employeeData[i].employeeId.name)
+      }
+      setFetchedSuggestions(arr)
+    });
+    console.log(fetchedSuggestions);
+    dispatch(getAllGroupsAsync())
+    dispatch(getAllJobProfileAsync())
+  }, [])
 
   useEffect(() => {
     const currentDate = new Date(date);
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
     setFilter({
       ...filter,
-      date: formattedDate
-      // date:date.toDateString()
+      date: `${year}-${month}-${day}`
     })
     console.log("hi")
   }, [date])
 
   useEffect(() => {
     console.log(filter);
-    dispatch(postAttandenceByDateAsync(filter))
+    dispatch(getAllAttandenceAsync(filter))
   }, [filter])
 
 
@@ -213,7 +227,7 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-      <div className='py-6 relative'>
+      <div className='py-6 relative overflow-auto'>
         {/* TABLE STARTS HERE */}
         <table>
           <tbody>
@@ -222,27 +236,74 @@ export const AttendenceDashboardList = () => {
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch In</td>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
-              <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
+              <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
+              <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
             </tr>
-            {todayStaffAttandence && todayStaffAttandence.map((element: any, index: number) => {
-              const latestAttandence = element.attendance[0];
-              const latestPunches = latestAttandence.punches[0]
-
-              return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.date ? (latestAttandence.date).slice(0, 10) : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", {timeStyle: "short"}) : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", {timeStyle: "short"}) : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestAttandence.approvedBy?.name ? latestAttandence.approvedBy?.name : "Not Avilable"}</td>
-              </tr>
+            {allAttandenceList && allAttandenceList.map((element: any, index: number) => {
+              const punchesList = [...(element.punches)];
+              console.log("normal", punchesList)
+              const sortedPunches = punchesList.sort((a: any, b: any) => {
+                return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
+              })
+              const latestPunches = sortedPunches[0];
+              return <>
+                <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                  <td className='py-4 px-5'>
+                    {latestPunches?.status === "approved" &&
+                      <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                        <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                        <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                      </span>}
+                    {latestPunches?.status === "rejected" &&
+                      <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                        <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                        <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                      </span>}
+                    {(latestPunches.status === "pending") &&
+                      <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                        <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                        <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                      </span>}
+                  </td>
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                </tr>
+                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
+                  return <tr key={index}>
+                    <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
+                    <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                    <td className='py-4 px-5'>
+                      {element.status === "approved" &&
+                        <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                          <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                          <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                        </span>}
+                      {element.status === "rejected" &&
+                        <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                          <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                          <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                        </span>}
+                      {(element.status === "pending") &&
+                        <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                          <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                          <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                        </span>}
+                    </td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                  </tr>
+                })}
+              </>
             })}
           </tbody>
         </table>
         {/* TABLE ENDS HERE */}
-      </div>
-      <div>
-        <div className="absolute bottom-0 right-0 left-0 flex justify-center">
-          <div className="flex gap-3 items-center justify-center w-[200px] h-12 my-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+        <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0 pr-[200px]">
+          <div className="flex gap-3 items-center justify-center w-[200px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
             <button
               onClick={() => {
                 const nextDate = new Date(date);
@@ -257,7 +318,7 @@ export const AttendenceDashboardList = () => {
                 onClickDay={() => {
                   setShowCalender(false);
                 }}
-                className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
                 formatShortWeekday={(locale, date) => {
                   console.log(locale)
                   return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];

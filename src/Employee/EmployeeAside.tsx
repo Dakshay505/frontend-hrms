@@ -176,16 +176,14 @@ export default function EmployeeAside(props: Props) {
                 >
                   Change Password
                 </Link>
-                <Link to="/login" className=" flex gap-[5px] w-[125px] h-[30px] rounded-sm  items-center text-[12px] font-medium bg-primary-blue  text-white  px-6 py-3  shadow-xl" onClick={handleLogout}>
-                  <img src={signin} alt="" className='h-[10px] w-[10px]' />
-                  <input type='submit'
-                    value="Logout"
-                    className='cursor-pointer'
-                    onClick={() => {
-                      dispatch(logoutUserAsync());
-                    }}
-                  />
-                </Link>
+                  <div onClick={() => dispatch(logoutUserAsync())} className="flex justify-center items-center bg-[#283093] h-[31px] w-[125px] py-[10px] px-4 rounded cursor-pointer">
+                    <div>
+                      <img src={signin} alt="" className='h-[11px] w-[11px]' />
+                    </div>
+                    <div>
+                      <p className="text-[12px] leading-[13px] font-medium text-[#FBFBFC] px-[5px]">Logout</p>
+                    </div>
+                  </div>
               </div>
             )}
           </div>

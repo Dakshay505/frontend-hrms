@@ -1,13 +1,26 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllTodayPunches, getMyAttandence, getPresentBelow, postAttandenceByDate, updateAllTodayPunches } from '../API/AttandenceApi';
+import { getAllAttandence, getAllTodayPunches, getMyAttandence, getPresentBelow, updateAllTodayPunches } from '../API/AttandenceApi';
 
 const initialState = {
+    allAttandence: [],
     todaysPunches: [],
-    staffAttandence: [],
     myAttandence: [],
     presentBelow: [],
     status: 'idle',
 };
+
+// READ GET ALL ATTANDENCE 
+export const getAllAttandenceAsync: any = createAsyncThunk(
+    'getAllAttandenceAsync',
+    async (data) => {
+        try {
+            const response: any = await getAllAttandence(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
 
 // READ
 export const getAllTodaysPunchesAsync: any = createAsyncThunk(
@@ -45,17 +58,6 @@ export const getPresentBelowAsync: any = createAsyncThunk(
         }
     }
 );
-export const postAttandenceByDateAsync: any = createAsyncThunk(
-    'postAttandenceByDate',
-    async (data) => {
-        try {
-            const response: any = await postAttandenceByDate(data);
-            return response;
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    }
-);
 // UPDATE
 export const updateAllTodaysPunchesAsync: any = createAsyncThunk(
     'updateallTodaysPunches',
@@ -76,26 +78,36 @@ export const AttandenceSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // NEW
+            .addCase(getAllAttandenceAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllAttandenceAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.allAttandence = action.payload
+            })
+            
+            // OLD
             .addCase(getAllTodaysPunchesAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllTodaysPunchesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.todaysPunches =  action.payload.employees;
+                state.todaysPunches = action.payload.employees;
             })
             .addCase(getMyAttandenceAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getMyAttandenceAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.myAttandence =  action.payload.attendanceRecords;
+                state.myAttandence = action.payload.attendanceRecords;
             })
             .addCase(getPresentBelowAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getPresentBelowAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.presentBelow =  action.payload;
+                state.presentBelow = action.payload;
             })
             .addCase(updateAllTodaysPunchesAsync.pending, (state) => {
                 state.status = 'loading';
@@ -103,15 +115,7 @@ export const AttandenceSlice = createSlice({
             .addCase(updateAllTodaysPunchesAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
             })
-            .addCase(postAttandenceByDateAsync.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(postAttandenceByDateAsync.fulfilled, function (state: any, action: any) {
-                state.status = 'idle';
-                state.staffAttandence = action.payload.employees
-            })
     },
 });
 
 export default AttandenceSlice.reducer;
-    
