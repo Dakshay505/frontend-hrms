@@ -11,6 +11,9 @@ import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
 import ArrowSqureOutBlack from '../../assets/ArrowSquareOutBlack.svg'
 import DocumentFrame from '../../assets/documentFrame.svg'
+import WarningCircle from '../../assets/WarningCircle.svg'
+import Receipt from '../../assets/Receipt.svg'
+
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -20,6 +23,8 @@ export const EmployeeProfile = () => {
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
+
+    const [showOtp, setShowOtp] = useState(false);
 
     const [showInputBoxName, setShowInputBoxName] = useState(false);
     const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");
@@ -205,8 +210,51 @@ export const EmployeeProfile = () => {
                         })}
                     >
                         <div className="flex flex-col gap-3">
+                            <div className='flex gap-[10px] items-center bg-[#FCECEC] rounded-lg p-4'> 
+                                <div>
+                                    <img src={WarningCircle} className='w-[20px] h-[20px]' alt="" />
+                                </div>
+                                <div>
+                                    <p className='text-sm leading-4 font-medium text-[#8A2626]'>Contact number is not verified! <span onClick={() => setShowOtp(!showOtp)} className='underline underline-offset-2 cursor-pointer'>Verify Now</span></p>
+                                </div>
+                            </div>
+                            {showOtp && <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='absolute flex justify-center items-center top-0 bottom-0 right-0 left-0'>
+                                <div className='bg-[#FFFFFF] p-10'>
+                                    <div className='flex gap-2 pb-4 w-[640px] border-b border-solid border-[#B0B0B0]'>
+                                        <div>
+                                            <img src={Receipt} className='w-6 h-6' alt="" />
+                                        </div>
+                                        <div>
+                                            <h3 className='text-[18px] leading-6 font-medium text-[#1C1C1C]'>OTP sent to +91 85385 57391</h3>
+                                        </div>
+                                    </div>
+                                    <div className='pt-6 flex flex-col gap-3'>
+                                        <div className='flex justify-between'>
+                                            <p className='text-sm font-normal text-[#1C1C1C]'>Enter OTP</p>
+                                            <p className='text-[12px] leading-5 font-normal text-[#283093] cursor-pointer underline'>Resend OTP</p>
+                                        </div>
+                                        <div>
+                                            <input
+                                                {...register("otp", { required: true })}
+                                                placeholder='XXX XXX'
+                                                className='border border-solid border-[#B0B0B0] rounded py-3 px-4 h-10 w-[640px] text-sm font-normal text-[#666666]'
+                                                type="number" />
+                                        </div>
+                                        <div className='pt-[21px]'>
+                                            <div className='flex gap-4 justify-end'>
+                                                <div onClick={() => setShowOtp(false)} className='flex justify-center items-center h-[34px] w-[96px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer'>
+                                                    <p className='text-sm font-medium text-[#3B3B3B]'>Cancel</p>
+                                                </div>
+                                                <div className='flex justify-center items-center h-[34px] w-[122px] bg-[#283093] rounded-lg cursor-pointer'>
+                                                    <p className='text-sm font-medium text-[#FBFBFC]'>Verify OTP</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>}
                             {!showInputBoxName &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Name</p>
                                         <img src={edit} onClick={() => {
@@ -218,7 +266,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxName &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Name</p>
@@ -241,7 +289,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
                             {!showInputBoxJobProfile &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Job Profile</p>
                                         <img src={edit} onClick={() => {
@@ -253,7 +301,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxJobProfile &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Job Profile</p>
@@ -280,7 +328,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
                             {!showInputBoxGroup &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Group</p>
                                         <img src={edit} onClick={() => {
@@ -292,7 +340,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxGroup &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Group</p>
@@ -319,7 +367,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
                             {!showInputBoxEmail &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Email</p>
                                         <img src={edit} onClick={() => {
@@ -331,7 +379,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxEmail &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Email</p>
@@ -354,7 +402,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
                             {!showInputBoxContactNumber &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Contact Number</p>
                                         <img src={edit} onClick={() => {
@@ -366,7 +414,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxContactNumber &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Contact Number</p>
@@ -389,7 +437,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
                             {!showInputBoxGender &&
-                                <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
                                         <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Gender</p>
                                         <img src={edit} onClick={() => {
@@ -401,7 +449,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div >}
                             {showInputBoxGender &&
-                                <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                                     <div className="flex flex-col">
                                         <div className="flex gap-3">
                                             <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Gender</p>

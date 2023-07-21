@@ -29,7 +29,7 @@ const GroupNode1 = ({ group }: any) => {
   }, []);
 
   return (
-    <div className="px-6">
+    <div className="px-10">
       <h3 className="flex text-[#666666]">
         <img src={CaretRight} />
         <span className="font-bold">Group Name: </span>{group.groupName}

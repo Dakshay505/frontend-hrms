@@ -1,0 +1,122 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
+
+
+const SingleGroupSalary = () => {
+    const dispatch = useDispatch();
+    const singleGroupsSalaryList = useSelector((state: any) => state.salary.singleGroupsSalary);
+    const allGroupsList = useSelector((state: any) => state.group.groups);
+
+    const [filter, setFilter] = useState({
+        groupName: "",
+        jobProfileName: ""
+    })
+
+    const [groupValue, setGroupValue] = useState<any>("");
+    const [jobProfileValue, setJobProfileValue] = useState<any>("");
+
+    useEffect(() => {
+        if(groupValue === "All Groups"){
+            console.log("if")
+            setFilter({
+                ...filter, 
+                groupName: ""
+            })
+        } else{
+            console.log("else", groupValue)
+            setFilter({
+                ...filter, 
+                groupName: groupValue
+            })
+        }
+        if(jobProfileValue === "All Job Profiles"){
+            setFilter({
+                ...filter, 
+                jobProfileName: ""
+            })
+        } else{
+            setFilter({
+                ...filter, 
+                jobProfileName: jobProfileValue
+            })
+        }
+    }, [groupValue, jobProfileValue])
+    console.log(filter)
+
+    useEffect(() => {
+        dispatch(getAllGroupsAsync());
+    }, [])
+
+    return (
+        <div className='px-10 pt-8'>
+            <div>
+                <h1 className='text-2xl font-bold text-[#2E2E2E]'>Salary Database</h1>
+            </div>
+            <div className="pt-6 flex justify-between">
+                <div className="flex gap-5">
+                    <select
+                    onChange={(event) => setGroupValue(event.target.value)}
+                        className="py-3 px-5 min-w-[160px] text-sm text-[#2E2E2E] font-medium bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg focus:outline-none"
+                        defaultValue="All Groups"
+                    >
+                        <option value="All Groups">All Groups</option>
+                        {allGroupsList && allGroupsList.map((element: any, index: number) => {
+                            return <option key={index} value={element.groupName}>{element.groupName}</option>
+                        })}
+                    </select>
+                    <select
+                    onChange={(event) => setJobProfileValue(event.target.value)}
+                        className="py-3 px-5 min-w-[160px] text-sm text-[#2E2E2E] font-medium bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg focus:outline-none"
+                    >
+                        <option value="All Job Profiles">All Job Profiles</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div>
+                    search
+                </div>
+            </div>
+            <div className="py-6 overflow-auto">
+                <table className="z-0">
+                    <tbody>
+                        <tr className='bg-[#ECEDFE] cursor-default'>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Day and Date</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Net Salary</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Basic Salary</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Productive Time</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Working Hours</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Pending Hours</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Rate per Hour</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Lunch Time</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Overtime</td>
+                            <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Absent Hours</td>
+                        </tr>
+                        {singleGroupsSalaryList && singleGroupsSalaryList.map((element: any, index: number) => {
+                            return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.date ? element.date : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.jobProfileId?.jobProfileName ? element.employeeId?.jobProfileId?.jobProfileName : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalEarning ? element.totalEarning : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.salary ? element.employeeId?.salary : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.workingHours ? element.workingHours : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.workingHours ? element.employeeId?.workingHours : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.pendingHours ? element.pendingHours : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.pendingHours ? element.pendingHours : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.lunchTime ? element.employeeId?.lunchTime : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{(element.workingHours > element.employeeId?.workingHours) && (element.workingHours - element.employeeId?.workingHours) ? (element.workingHours - element.employeeId?.workingHours) : "No Overtime"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{(element.workingHours > element.employeeId?.workingHours) && (element.workingHours - element.employeeId?.workingHours) ? (element.workingHours - element.employeeId?.workingHours) : "Absent"}</td>
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    )
+}
+
+export default SingleGroupSalary

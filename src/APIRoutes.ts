@@ -79,3 +79,10 @@ export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
 // jobprofile
 export const getSingleJobProfileApiPath = `${apiPath}/api/v1/jobprofile`
 export const updateJobProfileApiPath = `${apiPath}/api/v1/jobprofile/update`
+
+
+// SALARY
+export const getAllGroupSalaryApiPath = `${apiPath}/api/v1/attendance/groupSalary`
+export const getSingleGroupSalaryApiPath = `${apiPath}/api/v1/attendance`
+
+

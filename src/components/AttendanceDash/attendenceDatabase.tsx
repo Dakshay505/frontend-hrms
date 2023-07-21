@@ -119,7 +119,6 @@ export const AttendenceDtabase = () => {
               </tr>
               {allAttandenceList && allAttandenceList.map((element: any, index: number) => {
                 const punchesList = [...(element.punches)];
-                console.log("normal", punchesList)
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                   return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                 })
