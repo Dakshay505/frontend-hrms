@@ -60,6 +60,7 @@ import SalaryDatabase from "./components/Salary/SalaryDatabase";
 import DummyCalaender from "./components/AttendanceDash/dummyCalaender";
 import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
+import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
 
 const router = createBrowserRouter([
   {
@@ -394,6 +395,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <SalaryDatabase></SalaryDatabase>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/single-group-salary",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SingleGroupSalary></SingleGroupSalary>
         </Aside>
       </ProductedRoute>
     ),

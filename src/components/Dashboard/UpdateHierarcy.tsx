@@ -84,14 +84,14 @@ const UpdateHierarcy = () => {
               })
           }
         })}>
-        <div className="flex gap-7 mt-8">
+        <div className="flex gap-7 pt-8">
           <div>
             <h1 className="text-2xl font-bold text-[#2E2E2E]">Update Hierarchy</h1>
           </div>
           <div>
             <select
               onChange={(event: any) => setSelectedValue(event.target.value)}
-              className="py-3 px-5 bg-[#ECEDFE] h-10 rounded-lg text-sm font-medium text-[#283093]">
+              className="py-3 px-5 bg-[#ECEDFE] h-10 rounded-lg text-sm font-medium text-[#283093] focus:outline-none">
               <option>Groups</option>
               <option>Job Profile</option>
               <option>Employee</option>

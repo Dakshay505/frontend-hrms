@@ -7,6 +7,7 @@ import leaveReducer from './redux/Slice/LeaveAndGatepassSlice';
 import UpdateHierarchyReducer from './redux/Slice/updateHierarchySlice'
 import AttandenceReducer from './redux/Slice/AttandenceSlice';
 import TrainingReducer from './redux/Slice/TrainingSlice';
+import SalaryReducer from './redux/Slice/SalarySlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     updateHierarchy: UpdateHierarchyReducer,
     attandence: AttandenceReducer,
     training: TrainingReducer,
+    salary: SalaryReducer
   },
 })
 
