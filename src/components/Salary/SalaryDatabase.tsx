@@ -897,7 +897,7 @@ const SalaryDatabase = () => {
                 onClickDay={() => {
                   setShowCalender(false);
                 }}
-                className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
                 formatShortWeekday={(locale, date) => {
                   console.log(locale)
                   return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];

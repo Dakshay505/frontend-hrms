@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, postAttandenceByDateApiPath, updateAllTodayPunchesApiPath } from "../../APIRoutes";
+import { getAllAttandenceApiPath, getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, updateAllTodayPunchesApiPath } from "../../APIRoutes";
 
 
 // READ
@@ -48,11 +48,11 @@ function convertToQueryString(data: any) {
   }
   return queryStr;
 }
-export const postAttandenceByDate = async (sendData: any) => {
+export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    console.log(`${postAttandenceByDateApiPath}?${filterDatta}`)
-    const { data } = await axios.get(`${postAttandenceByDateApiPath}?${filterDatta}`, {
+    console.log(`${getAllAttandenceApiPath}?${filterDatta}`)
+    const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
       withCredentials: true,
     });
     return data;

@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteEmployeeAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
+import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import ArrowSqureOutBlack from '../../assets/ArrowSquareOutBlack.svg'
+import DocumentFrame from '../../assets/documentFrame.svg'
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -75,7 +78,7 @@ export const EmployeeProfile = () => {
 
     // employee info
     const Profile = singleEmployee.profileId
-    let image;
+    let image: any = '';
     if (Profile && Profile.profilePicture) {
         image = Profile.profilePicture;
     } else {
@@ -83,6 +86,60 @@ export const EmployeeProfile = () => {
     }
 
 
+    const qrData = [
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+        {
+            name: "Mahesh D.",
+            date: "08:04 am, 28/06/23"
+        },
+    ]
+    const documentList = [
+        {
+            documentName: "Resume.pdf"
+        },
+        {
+            documentName: "Resume.pdf"
+        },
+        {
+            documentName: "Resume.pdf"
+        },
+        {
+            documentName: "Resume.pdf"
+        },
+        {
+            documentName: "Resume.pdf"
+        },
+        {
+            documentName: "Resume.pdf"
+        },
+    ]
     return (
         <div className='px-[40px] pt-[32px]'>
             <div>
@@ -370,6 +427,70 @@ export const EmployeeProfile = () => {
                     </form>
                 </div>
             </div>
+
+            {/* QR Assigning Logs STARTS HERE */}
+            <div className='mt-10'>
+                <div>
+                    <h1 className='text-2xl font-bold text-[#2E2E2E]'>QR Assigning Logs</h1>
+                </div>
+                <div className='mt-6 pb-6 overflow-auto'>
+                    <div className='grid grid-cols-4 gap-5 w-[1260px]'>
+                        {qrData && qrData.map((element: any, index: number) => {
+                            return <div key={index} className='flex gap-6 justify-between py-4 px-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] w-[297px]'>
+                                <div className='flex items-center justify-center'>
+                                    <img src={image} className='w-16 h-16 rounded-full' alt="" />
+                                </div>
+                                <div className='flex flex-col gap-5'>
+                                    <div>
+                                        <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.name}</span></p>
+                                        <p className='text-[16px] leading-6 font-normal text-[#000000]'>{element.date}</p>
+                                    </div>
+                                    <div className='flex items-center gap-[6px] cursor-pointer'>
+                                        <div>
+                                            <p className='text-[12px] leading-4 font-medium text-[#283093] underline'>Open Photo</p>
+                                        </div>
+                                        <div>
+                                            <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            </div>
+            {/* QR Assigning Logs ENDS HERE */}
+
+
+            {/* DOCUMENT CODE STARTS HERE */}
+            <div className='my-10'>
+                <div className='flex gap-3 items-center'>
+                    <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Documents</h1>
+                    <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                </div>
+                <div className='mt-6 pb-6 overflow-auto'>
+                    <div className='grid grid-cols-4 gap-5 w-[872px]'>
+                        {documentList && documentList.map((element: any, index: any) => {
+                            return <div key={index} className='w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
+                                <img src={DocumentFrame} className='w-full' alt="" />
+                                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.documentName}</p>
+                            </div>
+                        })}
+                    </div>
+                </div>
+            </div>
+            {/* DOCUMENT CODE ENDS HERE */}
+
+
+            {/* Attendance Starts here */}
+            <div className='my-10'>
+                <div className='flex gap-3 items-center'>
+                    <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Attendance</h1>
+                    <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                </div>
+
+            </div>
+            {/* Attendance ENDS here */}
         </div >
     )
 }
