@@ -14,6 +14,8 @@ import calenderr from "../assets/attendence.svg";
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
 import { useDispatch } from "react-redux";
 
+import arrowside from "../assets/gray-left.png"
+import openn from "../assets/r-arrow.png"
 
 
 const getCurrentDate = () => {
@@ -63,6 +65,7 @@ type Props = {
 export default function aside(props: Props) {
   const dispatch = useDispatch();
   const [activeItem, setActiveItem] = useState<string>("home");
+  const [showSidebar, setShowSidebar] = useState(false);
   return (
     // main
     <div className="flex flex-col">
@@ -89,7 +92,20 @@ export default function aside(props: Props) {
       {/* aside */}
 
       <div className="">
-        <aside className="flex flex-col justify-between fixed mt-[32px] bg-white top-[62px] border-r w-[270px] h-[80%]">
+      {showSidebar ? (
+          <button
+            className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
+            onClick={() => setShowSidebar(!showSidebar)}
+          >
+            <img src={openn} alt="" className="h-[24px] w-[24px] p-[5px] shadow-lg border rounded-full border-border-primary " />
+          </button>
+        ) : (
+          <img src={arrowside} alt="" onClick={() => setShowSidebar(!showSidebar)}
+            className="fixed h-[24px] w-[24px] p-[5px] border rounded-full border-border-primary shadow-lg  z-30 flex items-center cursor-pointer left-[258px] top-[14%]" />
+
+        )}
+        <aside className={`flex flex-col justify-between fixed mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
+          } transition-all ease-in-out duration-500`}>
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
               <Link

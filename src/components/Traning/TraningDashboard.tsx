@@ -31,25 +31,29 @@ const TraningDashboard = () => {
                                 </div>
                             </div>
                         </Link>
-                        <div className='flex flex-col items-center justify-center w-[158px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
-                            <div className=''>
-                                <img className='w-[32px] h-[32px]' src={SealCheck} alt="gearimg" />
+                        <Link to="/add-traning-quiz">
+                            <div className='flex flex-col items-center justify-center w-[158px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                <div className=''>
+                                    <img className='w-[32px] h-[32px]' src={SealCheck} alt="gearimg" />
+                                </div>
+                                <div>
+                                    <p className='text-xl font-medium text-[#283093]'>Quiz</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className='text-xl font-medium text-[#283093]'>Quiz</p>
-                            </div>
-                        </div>
+                        </Link>
 
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-3 w-[193px] h-[152px] bg-[#ECEDFE] rounded-lg p-6">
-                    <div className=''>
-                        <img className='w-[32px] h-[32px]' src={PresentationChart} alt="gearimg" />
+                <Link to="/traning-status">
+                    <div className="flex flex-col items-center justify-center gap-3 w-[193px] h-[152px] bg-[#ECEDFE] rounded-lg p-6">
+                        <div className=''>
+                            <img className='w-[32px] h-[32px]' src={PresentationChart} alt="gearimg" />
+                        </div>
+                        <div>
+                            <p className='text-xl font-medium text-[#283093]'>Training Status</p>
+                        </div>
                     </div>
-                    <div>
-                        <p className='text-xl font-medium text-[#283093]'>Training Status</p>
-                    </div>
-                </div>
+                </Link>
             </div>
         </div>
     )

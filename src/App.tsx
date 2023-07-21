@@ -58,6 +58,8 @@ import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
 import SalaryDatabase from "./components/Salary/SalaryDatabase";
 import DummyCalaender from "./components/AttendanceDash/dummyCalaender";
+import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
+import { TraningStatus } from "./components/Traning/TraningStatus";
 
 const router = createBrowserRouter([
   {
@@ -176,6 +178,27 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+  {
+    path: "/add-traning-quiz",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddTrainingQuiz></AddTrainingQuiz>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/traning-status",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <TraningStatus></TraningStatus>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+
   {
     path: "/attendance",
     element: (

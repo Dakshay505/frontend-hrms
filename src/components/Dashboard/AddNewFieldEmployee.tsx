@@ -12,7 +12,9 @@ const AddNewFieldEmployee = () => {
     const {
         register,
         handleSubmit,
-        reset
+        reset,
+        setValue,
+        formState: { errors },
     } = useForm();
     const handleShowInputBox = () => {
         setshowInputBox([...showInputBox, 1]);
@@ -40,18 +42,25 @@ const AddNewFieldEmployee = () => {
     }
 
     // FORM SUBMIT
-    
+
     const onSubmit = (data: any) => {
         console.log('Form submitted:', data);
         setInputOnEditButton(!inputOnEditButton);
-      };
-    
-      const handleKeyDown = (event: any) => {
+    };
+
+    const handleKeyDown = (event: any) => {
         if (event.key === 'Enter') {
-          event.preventDefault();
-          handleSubmit(onSubmit)();
+            event.preventDefault();
+            handleSubmit(onSubmit)();
         }
-      };
+    };
+    const handleFieldNameChange = (e: any, index: number) => {
+        const inputFieldName = e.target.value;
+        if (/^\d/.test(inputFieldName)) {
+            setValue(`fieldName${index + 1}`, inputFieldName.replace(/^\d/, ""));
+        }
+    };
+
     return (
         <div className="mx-10">
             <div className="pt-8">
@@ -68,15 +77,18 @@ const AddNewFieldEmployee = () => {
                     {showInputBox.length > 0 &&
                         showInputBox.map((element: any, index: number) => {
                             return <div key={index} className='border border-solid border-[#B0B0B0] rounded-lg p-6 mt-6'>
-                                <div key={element+1} className='flex gap-10 mx-6'>
+                                <div key={element + 1} className='flex gap-10 mx-6'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Field Name</p>
                                         </div>
                                         <div>
                                             <input
-                                                {...register(`fieldName${index + 1}`, { required: true })}
-                                                type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[640px]' />
+                                                {...register(`fieldName${index + 1}`, { required: "Field name required"})}
+                                                type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[640px]'
+                                                onChange={(e) => handleFieldNameChange(e, index)}
+                                            />
+                                            {errors[`fieldName${index + 1}`] && <p className="text-red-500">{errors[`fieldName${index + 1}`].message}</p>}
                                         </div>
                                     </div>
                                 </div>
@@ -90,33 +102,33 @@ const AddNewFieldEmployee = () => {
             </div>
             {/* UPDATE EXISTING CUSTOM FIELDS START */}
             <div className='mt-12'>
-                    <div>
-                        <h1 className='text-2xl text-[#2E2E2E] font-bold'>Update Existing Custom Fields for Employees</h1>
-                    </div>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                    >
-                        <div className='grid grid-cols-2 gap-6 mt-8'>
-                            <div className='flex justify-between items-center p-4 border border-solid [#DEDEDE] rounded-lg bg-[#FAFAFA] w-[332px]'>
-                                <div>
-                                    <p className='text-[16px] leading-6 text-[#283093] font-medium'>Name</p>
-                                    {inputOnEditButton && <div>
-                                        <input
-                                        {...register("inputValue", {required: true})}
+                <div>
+                    <h1 className='text-2xl text-[#2E2E2E] font-bold'>Update Existing Custom Fields for Employees</h1>
+                </div>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    <div className='grid grid-cols-2 gap-6 mt-8'>
+                        <div className='flex justify-between items-center p-4 border border-solid [#DEDEDE] rounded-lg bg-[#FAFAFA] w-[332px]'>
+                            <div>
+                                <p className='text-[16px] leading-6 text-[#283093] font-medium'>Name</p>
+                                {inputOnEditButton && <div>
+                                    <input
+                                        {...register("inputValue", { required: true })}
                                         className='bg-[#FAFAFA] text-sm text-[#4A4A4A] font-normal placeholder:text-[#4A4A4A] focus:outline-none'
                                         onKeyDown={handleKeyDown}
                                         placeholder='Type Here'
                                         type="text"
-                                         />
-                                    </div>}
-                                </div>
-                                <div className='flex gap-2'>
-                                    <img onClick={handlePencilEditClick} src={PencilSimple} alt="Pencil" />
-                                    <img src={TrashSimple} alt="Trash" />
-                                </div>
+                                    />
+                                </div>}
+                            </div>
+                            <div className='flex gap-2'>
+                                <img onClick={handlePencilEditClick} src={PencilSimple} alt="Pencil" />
+                                <img src={TrashSimple} alt="Trash" />
                             </div>
                         </div>
-                    </form>
+                    </div>
+                </form>
             </div>
             {/* UPDATE EXISTING CUSTOM FIELDS END */}
         </div>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import upload from "../../assets/UploadSimple.png";
 import { uploadDocumentApiPath } from "../../APIRoutes";
 
+// import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
 interface Document {
   id: string;
   name: string;
@@ -10,6 +11,24 @@ interface Document {
 }
 
 const ViewDoc: React.FC = () => {
+
+
+//   const handleFormSubmit = (data: any) => {
+//     const formData = new FormData();
+//     formData.append('file', selectedFile);
+//     formData.append('fileName', data.resourceDocsName);
+//     formData.append('groupName', data.groupName);
+//     formData.append('JobProfileName', data.JobProfileName);
+//     for (const entry of formData.entries()) {
+//         console.log(entry[0] + ": " + entry[1]);
+//     }
+//     dispatch(addDocumentsAsync(formData))
+// }
+
+// const [selectedFile, setSelectedFile] = useState<any>(null);
+
+
+
   const [imageUrls, setImageUrls] = useState<Document[]>([]);
   // const [error, setError] = useState<string | null>(null);
 
