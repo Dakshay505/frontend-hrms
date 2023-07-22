@@ -25,8 +25,7 @@ const SalaryDatabase = () => {
   }, [])
 
   const handleTableRowClick = (data: any) => {
-    console.log(data);
-    dispatch(getSingleGroupSalaryAsync({groupName: data}))
+    dispatch(getSingleGroupSalaryAsync({groupName: data, date: "2023-07-21"}))
     navigate('/single-group-salary')
   }
 

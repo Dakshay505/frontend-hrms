@@ -124,7 +124,7 @@ export const AttendenceDtabase = () => {
                 })
                 const latestPunches = sortedPunches[0];
                 return <>
-                  <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => {handleRowClick(index)}}>
+                  <tr key={element._id} className='hover:bg-[#FAFAFA]' onClick={() => {handleRowClick(index)}}>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
