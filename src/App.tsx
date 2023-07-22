@@ -28,8 +28,8 @@ import { Login } from './components/Login';
 import { EmployeeProfile } from './components/Employeeprofile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
-import { JobProfileInfo } from './components/information/jobprofileinfo';
-import { GroupInfo } from './components/information/groupinfo';
+import { JobProfileInfo } from './components/Employeeprofile/jobprofileinfo';
+import { GroupInfo } from './components/Employeeprofile/groupinfo';
 
 import { StaffCheckin } from './Employee/dashboard/staffcheckin';
 import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
