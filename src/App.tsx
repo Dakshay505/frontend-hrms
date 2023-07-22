@@ -13,7 +13,6 @@ import AddGroup from './components/Dashboard/AddGroup';
 import AddJobProfile from './components/Dashboard/AddJobProfile';
 import UpdateHierarcy from './components/Dashboard/UpdateHierarcy';
 import { AttendenceDtabase } from './components/AttendanceDash/attendenceDatabase';
-import { Leavereate } from './components/AttendanceDash/leavereate';
 import { AttendenceDashboardList } from './components/AttendanceDash/attendenceDashboardList';
 import { DocumentDash } from './components/documentmodules/documentDash';
 import { Uploaddocument } from './components/documentmodules/uploaddocument';
@@ -207,17 +206,6 @@ const router = createBrowserRouter([
         <Aside>
           {" "}
           <AttendenceDtabase></AttendenceDtabase>{" "}
-        </Aside>
-      </ProductedRoute>
-    ),
-  },
-  {
-    path: "/leaves",
-    element: (
-      <ProductedRoute>
-        <Aside>
-          {" "}
-          <Leavereate></Leavereate>{" "}
         </Aside>
       </ProductedRoute>
     ),

@@ -15,7 +15,7 @@ export const Employeehome = () => {
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
     const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
     const myLeaveList = useSelector((state: any) => state.leave.myLeaves);
-    console.log(myLeaveList)
+    
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync())
         dispatch(getPresentBelowAsync())

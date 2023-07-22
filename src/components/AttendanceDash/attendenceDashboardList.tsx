@@ -55,11 +55,13 @@ export const AttendenceDashboardList = () => {
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.employees;
       const arr = [];
-      for (let i = 0; i < employeeData.length; i++) {
-        arr.push(employeeData[i].employeeId.name)
+      if(employeeData){
+        for (let i = 0; i < employeeData.length; i++) {
+          arr.push(employeeData[i].employeeId.name)
+        }
+        setFetchedSuggestions(arr)
       }
-      setFetchedSuggestions(arr)
-    });
+      });
     console.log(fetchedSuggestions);
     dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
@@ -82,11 +84,6 @@ export const AttendenceDashboardList = () => {
     dispatch(getAllAttandenceAsync(filter))
   }, [filter])
 
-
-
-  const handleTableRowClick = (data: any) => {
-    console.log(data._id)
-  }
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
