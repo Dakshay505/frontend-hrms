@@ -74,11 +74,13 @@ export function Login() {
                                     <input
                                         {...register("password", { required: true })}
                                         className='border border-solid border-[#DEDEDE] py-4 ps-4 pe-9 w-[320px] focus:outline-none text-sm text-[#666666] font-normal h-10 rounded'
-                                        type={showPassword ? "text" : "password"} />
+                                        type={showPassword ? "text" : "password"}
+                                    />
                                     <div onClick={() => setShowPassword(!showPassword)} className='absolute right-4 top-0 bottom-0 flex items-center cursor-pointer z-10'>
                                         <img src={eye} className='w-4 h-4' alt="" />
                                     </div>
                                 </div>
+                                {errors.password && <p className="text-red-500 text-sm">Password is required.</p>}
                             </div>
                         </div>
 
