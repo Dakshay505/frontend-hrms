@@ -62,7 +62,8 @@ export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 export const getPresentNumberApiPath = `${apiPath}/api/v1/attendance/getPresentNumber`
 export const getAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/getallpunches`
 export const updateAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/approveAttendance`
-export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
+// export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
+export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
 export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance`
 export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
 
@@ -79,3 +80,10 @@ export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
 // jobprofile
 export const getSingleJobProfileApiPath = `${apiPath}/api/v1/jobprofile`
 export const updateJobProfileApiPath = `${apiPath}/api/v1/jobprofile/update`
+
+
+// SALARY
+export const getAllGroupSalaryApiPath = `${apiPath}/api/v1/attendance/groupSalary`
+export const getSingleGroupSalaryApiPath = `${apiPath}/api/v1/attendance`
+
+

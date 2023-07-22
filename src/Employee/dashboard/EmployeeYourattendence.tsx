@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import glass from "../../assets/MagnifyingGlass.png";
 import FunnelSimple from '../../assets/FunnelSimple.svg'
 import { useDispatch, useSelector } from "react-redux";
-import { getMyAttandenceAsync, postAttandenceByDateAsync } from "../../redux/Slice/AttandenceSlice";
+import { getMyAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import Calendar from "react-calendar";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
-
 
 
 export const Employeeattendence = () => {
@@ -292,7 +291,7 @@ export const Employeeattendence = () => {
                                         onClickDay={() => {
                                             setShowCalender(false);
                                         }}
-                                        className="border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[168px] h-[189px] text-[9px]"
+                                        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
                                         formatShortWeekday={(locale, date) => {
                                             console.log(locale)
                                             return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
