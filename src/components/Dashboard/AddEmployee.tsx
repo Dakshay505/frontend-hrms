@@ -12,13 +12,14 @@ const AddEmployee = () => {
     const dispatch = useDispatch();
     const [employementTypeValue, setEmployementTypeValue] = useState('');
     const [overTimeValue, setOverTimeValue] = useState(false);
+    const [overtimerate, setOvertimerate] = useState(0);
     const [showOtp, setShowOtp] = useState(false);
-
     const {
         register,
         handleSubmit,
         reset,
         setValue,
+        getValues,
         formState: { errors },
     } = useForm()
 
@@ -44,16 +45,31 @@ const AddEmployee = () => {
         }
     };
 
-    const handleOverTimeChange = (event: any) => {
-        const value = event.target.value;
+
+    // overtimerate calculation
+
+    const handleOverTimeChange = () => {
+        const value = getValues('overTime');
         setOverTimeValue(value === 'Yes');
 
-        // If "Yes" is selected, set a default overtime rate (you can change this value as needed)
         if (value === 'Yes') {
-            const defaultOvertimeRate = 10; // Replace this with your desired default overtime rate
-            setValue('overTimeRate', defaultOvertimeRate);
+            const salary = parseFloat(getValues('salary'));
+            const workingDays = parseFloat(getValues('workingDays'));
+            const workingHours = parseFloat(getValues('workingHours'));
+
+            if (!isNaN(salary) && !isNaN(workingDays) && !isNaN(workingHours)) {
+                const totalWorkingDays = salary / (workingDays * 4.3 * workingHours);
+                const overtimeRate = totalWorkingDays.toFixed(2);
+
+                setOvertimerate(totalWorkingDays);
+                setValue('overTimeRate', overtimeRate);
+                console.log(overtimeRate);
+            } else {
+                console.error('Invalid input for salary, workingDays, or workingHours');
+                setOvertimerate(0);
+                setValue('overTimeRate', '');
+            }
         } else {
-            // If "No" is selected, clear the overtime rate
             setValue('overTimeRate', '');
         }
     };
@@ -67,13 +83,11 @@ const AddEmployee = () => {
         if (inputPhoneNumber.length <= 10) {
             setPhoneNumber(inputPhoneNumber);
         }
-
-        // Regex pattern for a 10-digit phone number
         const phoneRegex = /^\d{10,11}$/;
 
-        // Check if the input matches the regex pattern
         setIsValid(phoneRegex.test(inputPhoneNumber));
     };
+
 
     // name validation
     const validateEmployeeName = (value: any) => {
@@ -83,28 +97,30 @@ const AddEmployee = () => {
         return true;
     };
 
-    // Event handler to handle changes in the Name field
+    //    validation for 30 words name
     const handleEmployeeNameChange = (e: any) => {
         const inputEmployeeName = e.target.value;
-        if (/^\d/.test(inputEmployeeName)) {
-            setValue("name", inputEmployeeName.replace(/^\d/, ""));
+
+
+        if (inputEmployeeName.length > 30) {
+            setValue("name", inputEmployeeName.slice(0, 30));
+        } else {
+            setValue("name", inputEmployeeName);
         }
     };
 
+
+    // salary validation    
     const handleSalaryChange = (event: any) => {
         const input = event.target;
         let newValue = input.value;
 
-        // Check if the value starts with 0 or '-'
         if (/^(-|0)/.test(newValue)) {
-            // Reset the value to remove the invalid characters
             newValue = newValue.replace(/^(-|0)/, '');
         }
 
-        // Limit the value to 8 digits
         newValue = newValue.slice(0, 8);
 
-        // Update the input value
         input.value = newValue;
     };
 
@@ -125,8 +141,7 @@ const AddEmployee = () => {
                         console.log(data);
                         dispatch(createEmployeeAsync(data));
                         reset();
-                    })}
-                >
+                    })}>
                     <div className='flex flex-col gap-5'>
                         <div className='flex gap-10'>
                             <div className='flex flex-col gap-3'>
@@ -139,7 +154,7 @@ const AddEmployee = () => {
                                         type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
                                         onChange={handleEmployeeNameChange} // Add the onChange event handler
                                     />
-                                    {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+                                    {errors.name && <p className="text-red-500">{String(errors.name.message)}</p>}
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
@@ -158,7 +173,9 @@ const AddEmployee = () => {
                                         type="email" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
                                         placeholder='abc@gmail.com'
                                     />
-                                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                                    {errors.email && <p className="text-red-500">{String(errors.email.message)}</p>}
+
+
                                 </div>
                             </div>
                         </div>
@@ -206,9 +223,9 @@ const AddEmployee = () => {
                                         type="number"
                                         value={phoneNumber}
                                         placeholder='eg. 123-4567-890'
-                                        {...register('contactNumber', { required: true })}
-                                        pattern="^\d{10,11}$" // Regex pattern for a 10-digit phone number
-                                        required // Make the input field required
+                                        {...register('contactNumber', { required: "Phone No. required" })}
+                                        pattern={'^\d{10,11}$'}
+                                        required
                                         className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
                                     />
                                 </div>
@@ -267,9 +284,8 @@ const AddEmployee = () => {
                                             name="salary"
                                             placeholder='₹'
                                             onChange={handleSalaryChange}
-                                            maxLength={8}  // Add the maxLength attribute to limit the input to 8 digits
                                         />
-                                        {errors.salary && <p className="text-red-500">{errors.salary.message}</p>}
+                                        {errors.salary && <p className="text-red-500">{String(errors.salary.message)}</p>}
                                     </div>
 
 
@@ -282,9 +298,13 @@ const AddEmployee = () => {
                                 </div>
                                 <div>
                                     <input
-                                        {...register('expactedSalary', { required: true })}
+                                        {...register('expactedSalary', { required: "expected salary requires" })}
+                                        name="salary"
+                                        placeholder='₹'
+                                        onChange={handleSalaryChange}
                                         type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
                                 </div>
+                                {errors.expactedSalary && <p className="text-red-500">{String(errors.expactedSalary.message)}</p>}
                             </div>}
                         </div>
 
@@ -302,8 +322,8 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select lunch time</option>
-                                                <option value="30">30 min</option>
-                                                <option value="45">45 min</option>
+                                                <option value="0.5">30 min</option>
+                                                <option value="0.75">45 min</option>
                                                 <option value="1">1 hour</option>
                                                 <option value="1.30">1:30 hour</option>
                                                 <option value="2">2 hour</option>
@@ -323,14 +343,13 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select working days</option>
-                                                <option value="1">1 </option>
-                                                <option value="2">2 </option>
-                                                <option value="3">3 </option>
-                                                <option value="4">4 </option>
-                                                <option value="5">5 </option>
-                                                <option value="6">6 </option>
-                                                <option value="7">7 </option>
-                                                {/* Add more working day options as needed */}
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
                                             </select>
                                         </div>
                                     </div>
@@ -356,7 +375,6 @@ const AddEmployee = () => {
                                                 <option value="10">10 hours</option>
                                                 <option value="11">11 hours</option>
                                                 <option value="12">12 hours</option>
-                                                {/* Add more options as needed */}
                                             </select>
                                         </div>
                                     </div>
@@ -367,9 +385,11 @@ const AddEmployee = () => {
                                         </div>
                                         <div>
                                             <select
-                                                {...register('overTime', { required: "Phone No. required" })}
-                                                defaultValue={"Overtime"} className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
-                                                onChange={handleOverTimeChange}>
+                                                {...register('overTime', { required: true })}
+                                                defaultValue={"Overtime"}
+                                                className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
+                                                onChange={handleOverTimeChange} // Add the onChange event handler for overtime select element
+                                            >
                                                 <option value="Overtime">Overtime</option>
                                                 {overTimeList.map((element) => {
                                                     return <option value={element} key={element} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element}</option>
@@ -384,11 +404,24 @@ const AddEmployee = () => {
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Overtime Rate</p>
                                         </div>
                                         <div>
-                                            <input
-                                                {...register('overTimeRate', { required: overTimeValue })}
-                                                type='number' readOnly disabled={!overTimeValue} className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-
-                                            />
+                                            {/* Conditionally show the calculated overtime rate when overTimeValue is true */}
+                                            {overTimeValue ? (
+                                                <input
+                                                    {...register('overTimeRate', { required: overTimeValue })}
+                                                    type='number'
+                                                    disabled={!overTimeValue}
+                                                    className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                                    value={overtimerate.toFixed(2)}
+                                                />
+                                            ) : (
+                                                <input
+                                                    {...register('overTimeRate', { required: overTimeValue })}
+                                                    type='number'
+                                                    disabled={!overTimeValue}
+                                                    className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                                    value="0" // Show a blank value when overTimeValue is false (No selected)
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 </div>

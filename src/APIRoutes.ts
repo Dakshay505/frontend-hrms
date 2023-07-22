@@ -70,6 +70,7 @@ export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbe
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
+export const addTrainingQuizApiPath = `${apiPath}/api/v1//api/v1/quiz`
 
 
 

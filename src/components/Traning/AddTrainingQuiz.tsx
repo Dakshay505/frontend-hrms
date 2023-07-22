@@ -31,7 +31,7 @@ export const AddTrainingQuiz = () => {
     }
     // LINK FORM CODE ENDS
 
-    const [selectedFile, setSelectedFile] = useState<any>(null);
+    // const [selectedFile, setSelectedFile] = useState<any>(null);
 
     // DOCUMENT FORM CODE STARTS
     const [showDocumentsForm, setShowDocumentsForm] = useState(false);
@@ -40,14 +40,14 @@ export const AddTrainingQuiz = () => {
         setshowQuestionsList(false);
         setshowQuestions([]);
     }
-    console.log("hlo", selectedFile, setSelectedFile, showDocumentsForm, handleDocumentClick)
+    // console.log("hlo", selectedFile, setSelectedFile, showDocumentsForm, handleDocumentClick)
 
     // DOCUMENT FORM CODE ENDS
     const handleFormSubmit = () => {
         setshowQuestions([]);
         setShowDocumentsForm(false);
     }
-    console.log(handleFormSubmit,)
+    // console.log(handleFormSubmit,)
 
 
     const {
@@ -63,7 +63,7 @@ export const AddTrainingQuiz = () => {
 
 
     return (
-        <div className='mx-10 pb-32px'>
+        <div className='mx-10 pb-[32px]'>
             <form
                 onSubmit={handleSubmit((data) => {
                     data = {
@@ -107,16 +107,7 @@ export const AddTrainingQuiz = () => {
                         </div>
                     </div>
                     <div className='flex gap-10'>
-                        <div className='flex flex-col gap-3'>
-                            <div>
-                                <p className='text-sm font-normal text-[#1C1C1C]'>Name of Quiz</p>
-                            </div>
-                            <div>
-                                <input
-                                    {...register('Name of Quiz', { required: true })}
-                                    type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
-                            </div>
-                        </div>
+                        
                         <div className='flex flex-col gap-3'>
                             <div>
                                 <p className='text-sm font-normal text-[#1C1C1C]'>Passing Marks</p>
@@ -125,6 +116,16 @@ export const AddTrainingQuiz = () => {
                                 <input
                                     {...register('Passing Marks', { required: true })}
                                     type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-3'>
+                            <div>
+                                <p className='text-sm font-normal text-[#1C1C1C]'>Total Points</p>
+                            </div>
+                            <div>
+                                <input
+                                    {...register('Totalpoints', { required: true })}
+                                    type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
                             </div>
                         </div>
                     </div>
