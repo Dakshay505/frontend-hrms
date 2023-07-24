@@ -1,13 +1,13 @@
 import { useEffect, useState, } from 'react';
 import eye from "../assets/Eye.png"
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateEmployeeAsync } from '../redux/Slice/EmployeeSlice';
+import { useSelector } from 'react-redux';
+// import { updateEmployeeAsync } from '../redux/Slice/EmployeeSlice';
 import Asterisk from '../assets/Asterisk.svg'
 
 
 export function ChangePassword() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [employeeId, setEmployeeId] = useState("")
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);

@@ -56,7 +56,6 @@ import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
 import SalaryDatabase from "./components/Salary/SalaryDatabase";
-import DummyCalaender from "./components/Attendance/dummyCalaender";
 import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
 import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
@@ -468,12 +467,6 @@ const router = createBrowserRouter([
     path: "*",
     element: (
       <NotFound></NotFound>
-    ),
-  },
-  {
-    path: "/dummy",
-    element: (
-      <DummyCalaender></DummyCalaender>
     ),
   },
 ]);

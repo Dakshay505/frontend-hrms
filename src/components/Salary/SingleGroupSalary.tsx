@@ -65,7 +65,7 @@ const SingleGroupSalary = () => {
         })
     }, [date])
     useEffect(() => {
-        if(nextDate){
+        if (nextDate) {
             const currentDate = new Date(nextDate);
             const year = currentDate.getFullYear();
             const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -77,10 +77,24 @@ const SingleGroupSalary = () => {
         }
     }, [nextDate])
 
-
+    const [dateRange, setDateRange] = useState<any>([])
     useEffect(() => {
+        function getDateRange(startDate: any, endDate: any) {
+            if (nextDate) {
+                const result = [];
+                const currentDate = new Date(startDate);
+                const finalDate = new Date(endDate);
+                while (currentDate <= finalDate) {
+                    result.push(currentDate.toISOString().slice(0, 10));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                setDateRange([...result])
+            }
+        }
+        getDateRange(filter.date, filter.nextDate)
         dispatch(getSingleGroupSalaryAsync(filter))
     }, [filter])
+    console.log("DATE RANGE", dateRange)
 
     console.log(filter)
 
@@ -92,6 +106,16 @@ const SingleGroupSalary = () => {
     const formatDate = (date: any) => {
         return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
     };
+
+    const tileClassName = ({ date }: any) => {
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        const formattedDate = localDate.toISOString().split('T')[0];
+        if (dateRange.includes(formattedDate)) {
+            return 'bg-[#ECEDFE] text-[#FFFFFF]';
+        }
+        return '';
+    };
+
 
     return (
         <div className='px-10 pt-8'>
@@ -172,6 +196,7 @@ const SingleGroupSalary = () => {
                     </button>
                     {showCalender && <div className="filterCalender absolute z-20 bottom-28">
                         <Calendar
+                            tileClassName={tileClassName}
                             onChange={(event) => {
                                 calenderDayClicked.length === 0 ? setDate(event) : "";
                                 calenderDayClicked.length === 1 ? setnextDate(event) : "";
@@ -188,9 +213,9 @@ const SingleGroupSalary = () => {
                             }}
                             className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
                             formatShortWeekday={(locale, date) => {
+                                console.log(locale)
                                 return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-                            }}
-                            value={date} />
+                            }} />
                     </div>}
                     <p
                         onClick={() => {

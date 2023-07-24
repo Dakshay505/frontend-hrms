@@ -182,65 +182,58 @@ const ViewModifyDatabase = () => {
                 </div>
             </div>
             {databaseValue === "Employees" && <div className='my-10 flex gap-5'>
-                <div className='relative'>
-                    <div
-                        onClick={() => {
-                            setshowFilter(!showFilter)
-                            setSuggestions([]);
-                        }}
-                        className='flex gap-2 justify-center items-center py-3 px-5 w-[100px] h-10 bg-[#FAFAFA] rounded-[53px] border border-solid border-[#DEDEDE]'>
-                        <img src={FunnelSimple} className='w-4 h-4' alt="" />
-                        <p className='text-sm font-medium text-[#2E2E2E]'>Filter</p>
+                <div className='flex gap-4'>
+                    <div>
+                        <select
+                            onChange={(event) => {
+                                if (event.target.value === "All Groups") {
+                                    setFilter({
+                                        ...filter,
+                                        groupName: ""
+                                    })
+                                } else {
+                                    setFilter({
+                                        ...filter,
+                                        groupName: event.target.value
+                                    })
+                                }
+                            }}
+                            value={filter.groupName}
+                            className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                            <option value="All Groups">All Groups</option>
+                            {groupList && groupList.map((element: any, index: number) => {
+                                return <option
+                                    key={index}
+                                    value={element.groupName}
+                                >
+                                    {element.groupName}
+                                </option>
+                            })}
+                        </select>
                     </div>
-                    {showFilter && <div className='absolute flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
-                        <div className='flex gap-3 justify-between'>
-                            <div>
-                                <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
-                            </div>
-                            <div>
-                                <select
-                                    onChange={(event) => {
-                                        setFilter({
-                                            ...filter,
-                                            groupName: event.target.value
-                                        })
-                                    }}
-                                    value={filter.groupName}
-                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                                    <option value=""></option>
-                                    {groupList && groupList.map((element: any, index: number) => {
-                                        return <option
-                                            key={index}
-                                            value={element.groupName}
-                                        >
-                                            {element.groupName}
-                                        </option>
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-                        <div className='flex gap-3 justify-between'>
-                            <div>
-                                <p className='text-sm font-medium text-[#2E2E2E]'>Job Profile</p>
-                            </div>
-                            <div>
-                                <select
-                                    onChange={(event) => {
-                                        setFilter({
-                                            ...filter,
-                                            jobProfileName: event.target.value
-                                        })
-                                    }}
-                                    value={filter.jobProfileName}
-                                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                                    <option value=""></option>
-                                    {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                                        return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-                    </div>}
+                    <div>
+                        <select
+                            onChange={(event) => {
+                                if (event.target.value === "All Job Profiles") {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: ""
+                                    })
+                                } else {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: event.target.value
+                                    })
+                                }
+                            }}
+                            value={filter.jobProfileName}
+                            className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                            <option value="All Job Profiles">All Job Profiles</option>
+                            {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                                return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
+                            })}
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <div className="relative">
