@@ -35,10 +35,6 @@ export const AttendenceDashboardList = () => {
     }
   }
 
-
-
-
-
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<any>([]);
