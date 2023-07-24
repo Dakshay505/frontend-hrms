@@ -24,7 +24,6 @@ export const Employeeattendence = () => {
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
     const [suggestions, setSuggestions] = useState<any>([]);
-    const [showFilter, setshowFilter] = useState(false);
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     const [nextDate, setnextDate] = useState<any>();
     const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
@@ -192,7 +191,6 @@ export const Employeeattendence = () => {
                                 </label>
                             </div>}
                             <input
-                                onClick={() => setshowFilter(false)}
                                 type="search"
                                 id="searchInput"
                                 onChange={handleInputChange}
@@ -263,7 +261,6 @@ export const Employeeattendence = () => {
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
                                             return <tr key={index}>
-                                                <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                                 <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
