@@ -19,8 +19,6 @@ export const Employeeattendence = () => {
     const dispatch = useDispatch();
     const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
     const myAttandenceList = useSelector((state: any) => state.attandence.myAttandence);
-    console.log("myAttandenceList", myAttandenceList)
-    const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
     const [isLabelVisible, setLabelVisible] = useState(true);
@@ -32,7 +30,6 @@ export const Employeeattendence = () => {
     const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
     const [filter, setFilter] = useState({
         name: "",
-        groupName: "",
         jobProfileName: "",
         date: "",
         nextDate: ""
@@ -56,7 +53,7 @@ export const Employeeattendence = () => {
         })
     }, [date])
     useEffect(() => {
-        if(nextDate){
+        if (nextDate) {
             const currentDate = new Date(nextDate);
             const year = currentDate.getFullYear();
             const month = String(currentDate.getMonth() + 1).padStart(2, '0');
@@ -155,72 +152,36 @@ export const Employeeattendence = () => {
                     <div className="flex gap-4 items-center">
                         <div>
                             <select
-                                className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5 focus:outline-none'
+                                className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium h-10 px-5 focus:outline-none'
                                 onChange={(event) => setAttandenceValue(event.target.value)}>
                                 <option>Your Attandence</option>
                                 <option>Staff Attandence</option>
                             </select>
                         </div>
-                        {attandenceValue !== "Your Attandence" && <div className='relative'>
-                            <div
-                                onClick={() => {
-                                    setshowFilter(!showFilter)
-                                    setSuggestions([]);
-                                }}
-                                className='flex gap-2 justify-center items-center py-3 px-5 w-[100px] h-10 bg-[#FAFAFA] rounded-[53px] border border-solid border-[#DEDEDE]'>
-                                <img src={FunnelSimple} className='w-4 h-4' alt="" />
-                                <p className='text-sm font-medium text-[#2E2E2E]'>Filter</p>
-                            </div>
-                            {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
-                                <div className='flex gap-3 justify-between'>
-                                    <div>
-                                        <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
-                                    </div>
-                                    <div>
-                                        <select
-                                            onChange={(event) => {
-                                                setFilter({
-                                                    ...filter,
-                                                    groupName: event.target.value
-                                                })
-                                            }}
-                                            value={filter.groupName}
-                                            className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                                            <option value=""></option>
-                                            {groupList && groupList.map((element: any, index: number) => {
-                                                return <option
-                                                    key={index}
-                                                    value={element.groupName}
-                                                >
-                                                    {element.groupName}
-                                                </option>
-                                            })}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className='flex gap-3 justify-between'>
-                                    <div>
-                                        <p className='text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</p>
-                                    </div>
-                                    <div>
-                                        <select
-                                            onChange={(event) => {
-                                                setFilter({
-                                                    ...filter,
-                                                    jobProfileName: event.target.value
-                                                })
-                                            }}
-                                            value={filter.jobProfileName}
-                                            className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                                            <option value=""></option>
-                                            {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                                                return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
-                                            })}
-                                        </select>
-                                    </div>
-                                </div>
+                        {attandenceValue !== "Your Attandence" &&
+                            <div>
+                                <select
+                                    onChange={(event) => {
+                                        if (event.target.value === "All Job Profiles") {
+                                            setFilter({
+                                                ...filter,
+                                                jobProfileName: ""
+                                            })
+                                        } else {
+                                            setFilter({
+                                                ...filter,
+                                                jobProfileName: event.target.value
+                                            })
+                                        }
+                                    }}
+                                    value={filter.jobProfileName}
+                                    className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium h-10 px-5 focus:outline-none'>
+                                    <option value="All Job Profiles">All Job Profiles</option>
+                                    {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                                        return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
+                                    })}
+                                </select>
                             </div>}
-                        </div>}
                     </div>
                     {attandenceValue !== "Your Attandence" && <div>
                         <div className="relative">
@@ -370,7 +331,7 @@ export const Employeeattendence = () => {
                                                             </div>
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-6 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => {dispatch(getAllAttandenceAsync(filter)) , setShowStatusDropdown([])})
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
                                                             </div>}
                                                         </span>}
@@ -385,10 +346,10 @@ export const Employeeattendence = () => {
                                                             </div>
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-6 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl border border-solid border-[#DEDEDE]">
                                                                 <p
-                                                                onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => {dispatch(getAllAttandenceAsync(filter)) , setShowStatusDropdown([])})
-                                                                }}
-                                                                className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
+                                                                    onClick={() => {
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    }}
+                                                                    className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                             </div>}
                                                         </span>}
                                                     {(latestPunches.status === "pending") &&
@@ -402,12 +363,12 @@ export const Employeeattendence = () => {
                                                             </div>
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => {dispatch(getAllAttandenceAsync(filter)) , setShowStatusDropdown([])})
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => {dispatch(getAllAttandenceAsync(filter)) , setShowStatusDropdown([])})
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }}
-                                                                 className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
+                                                                    className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
                                                             </div>}
                                                         </span>}
                                                 </td>
