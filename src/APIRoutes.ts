@@ -65,10 +65,10 @@ export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 // attendance 
 export const getPresentNumberApiPath = `${apiPath}/api/v1/attendance/getPresentNumber`
 export const getAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/getallpunches`
-export const updateAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/approveAttendance`
+export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAttendance`
 // export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
-export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance`
+export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`
 export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
 
 // TRAINING

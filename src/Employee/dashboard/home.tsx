@@ -13,7 +13,7 @@ export const Employeehome = () => {
     const [leaves, setLeaves] = useState<any>([])
     const dispatch = useDispatch()
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
-    const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
+    // const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
     const myLeaveList = useSelector((state: any) => state.leave.myLeaves);
     
     useEffect(() => {
@@ -22,19 +22,19 @@ export const Employeehome = () => {
         dispatch(getMyLeavesAndGatePassAsync());
     }, [])
 
-    const newLeaves = myLeaveList.flatMap(({ from, to }: any) => {
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
-        const newDates = [];
+    // const newLeaves = myLeaveList.flatMap(({ from, to }: any) => {
+    //     const fromDate = new Date(from);
+    //     const toDate = new Date(to);
+    //     const newDates = [];
 
-        for (let date = fromDate; date <= toDate; date.setDate(date.getDate() + 1)) {
-            newDates.push(date.toISOString().slice(0, 10));
-        }
+    //     for (let date = fromDate; date <= toDate; date.setDate(date.getDate() + 1)) {
+    //         newDates.push(date.toISOString().slice(0, 10));
+    //     }
 
-        return newDates;
-    });
+    //     return newDates;
+    // });
     useEffect(() => {
-        setLeaves(newLeaves);
+        // setLeaves(newLeaves);
     }, [myLeaveList])
     console.log(leaves);
 
@@ -67,7 +67,7 @@ export const Employeehome = () => {
                     </div>
 
                     <div className="flex items-start gap-[20px] self-stretch overflow-auto">
-                        {persentBelowList && persentBelowList.map((element: any, index: number) => {
+                        {/* {persentBelowList && persentBelowList.map((element: any, index: number) => {
                             return <div key={index} className="flex flex-col justify-center  bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[20px] py-[16px]  items-start p-[4px] gap-[2px] min-w-[216px]">
                                 <div className='flex items-center gap-[12px]'>
                                     <img src={round} alt="" className='w-[24px] h-[24px]' />
@@ -78,7 +78,7 @@ export const Employeehome = () => {
                                 </div>
                                 <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>{element.jobProfile ? element.jobProfile : "Not Avilable"}</p>
                             </div>
-                        })}
+                        })} */}
                     </div>
                 </div>
                 {/* YOUR LEAVES SECTION */}
