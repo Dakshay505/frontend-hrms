@@ -14,7 +14,7 @@ type Inputs = {
 
 
 export function Login() {
-    const { register, handleSubmit, setValue,
+    const { register, handleSubmit,
         formState: { errors }, } = useForm<Inputs>();
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)

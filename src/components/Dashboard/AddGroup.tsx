@@ -14,7 +14,7 @@ const AddGroup = () => {
         reset,
         setValue,
         formState: { errors },
-    } = useForm();
+    }: any = useForm();
 
     useEffect(() => {
         dispatch(getAllGroupsAsync());
@@ -44,7 +44,7 @@ const AddGroup = () => {
                 <div className="pt-8">
                     <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Group</h1>
                 </div>
-                <form onSubmit={handleSubmit((data) => {
+                <form onSubmit={handleSubmit((data: any) => {
                     if(parentGroupValue === "All Groups"){
                         data = {
                             groupName: data.groupName,

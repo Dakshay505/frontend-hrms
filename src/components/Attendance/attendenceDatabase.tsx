@@ -8,12 +8,11 @@ import "../../attndence.css"
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react'
-import axios from "axios";
-import { getPresentNumberApiPath } from "../../APIRoutes";
 
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
   const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
+  const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -34,24 +33,6 @@ export const AttendenceDtabase = () => {
     const day = String(date.getDate()).padStart(2, '0');
     dispatch(getAllAttandenceAsync({ date: `${year}-${month}-${day}` }));
   }, [])
-  const [data, setData] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${getPresentNumberApiPath}`,
-          { withCredentials: true }
-        );
-        setData(response.data);
-      } catch (error) {
-        // Handle any errors
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="px-10 pt-8">
@@ -60,7 +41,7 @@ export const AttendenceDtabase = () => {
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Overview
           </div>
-          <Link to="/leaves" className="flex cursor-pointer gap-[6px] justify-center items-center">
+          <Link to="" className="flex cursor-pointer gap-[6px] justify-center items-center">
             <p className="text-[#666666] text-[16px] font-medium leading-6">See All </p>
             <img src={right} alt="" className="h-[16px] w-[16px]" />
           </Link>
@@ -69,7 +50,7 @@ export const AttendenceDtabase = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {data && data.Number_Present_Employee}
+                {allAttandenceList && allAttandenceList.length}
               </span>
               <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
             </div>
@@ -80,12 +61,22 @@ export const AttendenceDtabase = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {data && data.AbsentEmployess}
+                {allAbsentEmployees && allAbsentEmployees.length}
               </span>
               <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
               Absent
+            </p>
+          </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {allAbsentEmployees && allAttandenceList && (allAbsentEmployees.length + allAttandenceList.length)}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+              Total
             </p>
           </div>
         </div>

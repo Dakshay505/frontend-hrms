@@ -15,6 +15,8 @@ import WarningCircle from '../../assets/WarningCircle.svg'
 import Receipt from '../../assets/Receipt.svg'
 import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
+import XCircle from '../../assets/XCircle.svg'
+import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
 
 
 export const EmployeeProfile = () => {
@@ -283,10 +285,15 @@ export const EmployeeProfile = () => {
                                                     placeholder='XXX XXX'
                                                     className='border border-solid border-[#B0B0B0] rounded py-3 px-4 h-10 w-[640px] text-sm font-normal text-[#666666]'
                                                     type="number" />
-                                                {otpSent === "OTP Sent" && <p>OTP Send successfully</p>}
-                                                {otpSent === "Resend otp Successfully" && <p>Resend OTP successfully</p>}
-                                                {otpSent === "OTP not Sent" && <p>OTP Not Send Check Phone Number Again</p>}
-                                                {otpVerified === "Not Verified" && <p>Otp Not Matched</p>}
+                                                {otpSent === "Resend otp Successfully" &&
+                                                    <div className='flex gap-[6px] items-center pt-2'>
+                                                        <img src={PaperPlaneTilt} className='w-[14px] h-[14px]' alt="plane" />
+                                                        <p className='text-xs font-normal text-[#414EF1]'>OTP resent successfully!</p>
+                                                    </div>}
+                                                {otpVerified === "Not Verified" && <div className='flex gap-[6px] items-center pt-2'>
+                                                    <img src={XCircle} className='w-[14px] h-[14px]' alt="plane" />
+                                                    <p className='text-xs font-normal text-[#E23F3F]'>OTP incorrect! Please try again.</p>
+                                                </div>}
                                             </div>
                                             <div className='pt-[21px]'>
                                                 <div className='flex gap-4 justify-end'>

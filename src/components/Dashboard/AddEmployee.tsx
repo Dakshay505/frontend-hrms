@@ -8,6 +8,7 @@ import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { createEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import Receipt from '../../assets/Receipt.svg'
+import XCircle from '../../assets/XCircle.svg'
 import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 
@@ -478,12 +479,14 @@ const AddEmployee = () => {
                                     className='border border-solid border-[#B0B0B0] rounded py-3 px-4 h-10 w-[640px] text-sm font-normal text-[#666666]'
                                     type="number" />
                                 {otpSent === "Resend otp Successfully" &&
-                                    <div>
+                                    <div className='flex gap-[6px] items-center pt-2'>
                                         <img src={PaperPlaneTilt} className='w-[14px] h-[14px]' alt="plane" />
-                                        <p>Resend OTP successfully</p>
+                                        <p className='text-xs font-normal text-[#414EF1]'>OTP resent successfully!</p>
                                     </div>}
-                                {otpSent === "OTP not Sent" && <p>OTP Not Send Check Phone Number Again</p>}
-                                {otpVerified === "Not Verified" && <p>Otp Not Matched</p>}
+                                {otpVerified === "Not Verified" && <div className='flex gap-[6px] items-center pt-2'>
+                                        <img src={XCircle} className='w-[14px] h-[14px]' alt="plane" />
+                                        <p className='text-xs font-normal text-[#E23F3F]'>OTP incorrect! Please try again.</p>
+                                    </div>}
                             </div>
                             <div className='pt-[21px]'>
                                 <div className='flex gap-4 justify-end'>

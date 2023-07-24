@@ -10,9 +10,9 @@ const initialState = {
 // READ
 export const getAllGroupSalaryAsync: any = createAsyncThunk(
     'getAllGroupSalaryAsync',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllGroupSalary();
+            const response: any = await getAllGroupSalary(data);
             return response;
         } catch (error: any) {
             console.log(error.message);

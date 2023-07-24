@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "/traning-dashboard",
+    Link: "",
   },
 ];
 
@@ -83,10 +83,6 @@ export default function EmployeeAside(props: Props) {
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleLogout = () => {
-    // Perform logout logic here
   };
 
   const handleChangePassword = () => {

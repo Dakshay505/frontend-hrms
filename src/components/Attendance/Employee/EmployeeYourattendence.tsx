@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import glass from "../../../assets/MagnifyingGlass.png";
-import FunnelSimple from '../../../assets/FunnelSimple.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAttandenceAsync, getMyAttandenceAsync, updateAttendanceAsync } from "../../../redux/Slice/AttandenceSlice";
 import Calendar from "react-calendar";
@@ -459,6 +458,7 @@ export const Employeeattendence = () => {
                             }}
                             className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
                             formatShortWeekday={(locale, date) => {
+                                console.log(locale)
                                 return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
                             }}
                             value={date} />

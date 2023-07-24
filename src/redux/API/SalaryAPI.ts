@@ -1,17 +1,6 @@
 import axios from "axios";
 import { getAllGroupSalaryApiPath, getSingleGroupSalaryApiPath } from "../../APIRoutes";
 
-// READ GROUP SALARY
-export const getAllGroupSalary = async () => {
-    try {
-        const { data } = await axios.get(`${getAllGroupSalaryApiPath}`, { withCredentials: true });
-        return data;
-    } catch (error: any) {
-        console.log(error);
-    }
-};
-
-// READ GROUP SALARY
 function convertToQueryString(data: any) {
     let queryStr = '';
     for (let key in data) {
@@ -24,6 +13,18 @@ function convertToQueryString(data: any) {
     }
     return queryStr;
   }
+// READ GROUP SALARY
+export const getAllGroupSalary = async (sendData: any) => {
+  const filterDatta = convertToQueryString(sendData);
+    try {
+        const { data } = await axios.get(`${getAllGroupSalaryApiPath}?${filterDatta}`, { withCredentials: true });
+        return data;
+    } catch (error: any) {
+        console.log(error);
+    }
+};
+
+// READ GROUP SALARY
 export const getSingleGroupSalary = async (sendData: any) => {
     const filterDatta = convertToQueryString(sendData);
     try {

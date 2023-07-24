@@ -1,16 +1,16 @@
 import { useDispatch, useSelector } from "react-redux"
-import round from "../../assets/Group 1.png"
+// import round from "../../assets/Group 1.png"
 import { useEffect } from "react"
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice"
 import { getPresentBelowAsync } from "../../redux/Slice/AttandenceSlice"
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
 import Calendar from 'react-calendar';
 import { getMyLeavesAndGatePassAsync } from "../../redux/Slice/LeaveAndGatepassSlice"
-import { useState } from 'react'
+// import { useState } from 'react'
 
 export const Employeehome = () => {
 
-    const [leaves, setLeaves] = useState<any>([])
+    // const [leaves, setLeaves] = useState<any>([])
     const dispatch = useDispatch()
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
     // const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
@@ -36,22 +36,22 @@ export const Employeehome = () => {
     useEffect(() => {
         // setLeaves(newLeaves);
     }, [myLeaveList])
-    console.log(leaves);
+    // console.log(leaves);
 
-    const tileClassName = ({ date }: any) => {
-        const formattedDate = date.toISOString().slice(0, 10);
-        if (leaves.includes(formattedDate)) {
-            return 'flex justify-center items-center w-[24px] h-[24px] bg-[#8A2626] text-sm leading-[18px] font-normal text-[#FAFAFA] rounded-full my-1 p-5'; // Tailwind classes for highlighted dates
-        }
-        return 'flex justify-center items-center w-[24px] h-[24px] text-sm leading-[18px] font-normal my-1 text-[#666666] p-5'; // Tailwind classes for all other dates
-    };
+    // const tileClassName = ({ date }: any) => {
+    //     const formattedDate = date.toISOString().slice(0, 10);
+    //     if (leaves.includes(formattedDate)) {
+    //         return 'flex justify-center items-center w-[24px] h-[24px] bg-[#8A2626] text-sm leading-[18px] font-normal text-[#FAFAFA] rounded-full my-1 p-5'; // Tailwind classes for highlighted dates
+    //     }
+    //     return 'flex justify-center items-center w-[24px] h-[24px] text-sm leading-[18px] font-normal my-1 text-[#666666] p-5'; // Tailwind classes for all other dates
+    // };
 
 
     return (
         <div className="flex flex-col items-start self-stretch pt-[32px] px-[40px] gap-[32px]">
             <div className="flex flex-col items-start self-stretch gap-[32px]">
                 <div className="flex items-start self-stretch gap-[291px] text-[#2E2E2E] font-inter font-bold text-[28px] leading-[36px]">
-                    Welcome Back {Employee ? Employee.name : 'Employee'}
+                    Welcome Backhii {Employee ? Employee.name : 'Employee'}
                 </div>
 
                 <div className="flex items-start bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[40px] py-[24px] gap-[40px] w-[404px] h-[188px]">
@@ -92,7 +92,7 @@ export const Employeehome = () => {
                         {/* CALANDER */}
                         <div className="w-[350px] employeeHomeCalender">
                             <Calendar
-                                tileClassName={tileClassName}
+                                // tileClassName={tileClassName}
                                 calendarType="US"
                                 className='p-8 bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg'
                                 formatShortWeekday={(locale, date) => {

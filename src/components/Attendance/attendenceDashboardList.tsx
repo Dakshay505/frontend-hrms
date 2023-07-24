@@ -49,13 +49,13 @@ export const AttendenceDashboardList = () => {
 
   useEffect(() => {
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      const employeeData = data.payload.employees;
-      const arr = [];
+      const employeeData = data.payload.attendanceRecords;
+      const arr:any = [];
       if(employeeData){
         for (let i = 0; i < employeeData.length; i++) {
           arr.push(employeeData[i].employeeId.name)
         }
-        setFetchedSuggestions(arr)
+        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
       }
       });
     console.log(fetchedSuggestions);
