@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 // import round from "../../assets/Group 1.png"
 import { useEffect } from "react"
-import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice"
-import { getPresentBelowAsync } from "../../redux/Slice/AttandenceSlice"
-import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import { getLoggedInUserDataAsync } from "../../../redux/Slice/loginSlice"
+import { getPresentBelowAsync } from "../../../redux/Slice/AttandenceSlice"
+import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
 import Calendar from 'react-calendar';
-import { getMyLeavesAndGatePassAsync } from "../../redux/Slice/LeaveAndGatepassSlice"
+import { getMyLeavesAndGatePassAsync } from "../../../redux/Slice/LeaveAndGatepassSlice"
 import { useState } from 'react'
 
 export const Employeehome = () => {

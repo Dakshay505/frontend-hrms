@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Filter from '../../../assets/filter.png'
+
 import glass from '../../../assets/MagnifyingGlass.png'
 import GreenCheck from '../../../assets/GreenCheck.svg';
 import RedX from '../../../assets/RedX.svg';
@@ -14,12 +14,33 @@ export const ViewLeavesRecord = () => {
     const [yourAndStaffLeaveValue, setYourAndStaffLeaveValue] = useState("");
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState({
+        name: "",
+        groupName: "",
+        jobProfileName: "",
+        date: "",
+        nextDate: ""
+      });
 
-    const myLeavesList = useSelector((state: any) => state.leave.myLeaves)
-    const myGatePassList = useSelector((state: any) => state.leave.myGatePass)
-    const upperLevelEmployee = useSelector((state: any) => state.leave.upperLevelEmployee);
-    const allLeavesAndGatePassList = useSelector((state: any) => state.leave.allLeavesAndGatePass);
-    console.log(allLeavesAndGatePassList);
+      const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
+      const [myLeaves, setMyLeaves] = useState<any>([])
+      const [myGatePass, setMyGatepass] = useState<any>([])
+
+      useEffect(() => {
+        if (myLeaveAndGatepassList) {
+            console.log("myLeaveAndGatepassList", myLeaveAndGatepassList)
+            setMyLeaves(myLeaveAndGatepassList.filter((element: any) => {
+                return element.from
+            }))
+            setMyGatepass(myLeaveAndGatepassList.filter((element: any) => {
+                return element.gatePassDate
+            }))
+        }
+    }, [myLeaveAndGatepassList])
+
+      
+      const upperLevelEmployee = useSelector((state: any) => state.leave.upperLevelEmployee);
+      const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
@@ -70,19 +91,36 @@ export const ViewLeavesRecord = () => {
                     <div>
                         <select
                             onChange={handleYourAndStaffLeavesChange}
-                            className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5'>
+                            className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5 focus:outline-none'>
                             {leaveAndGatepassValue === "Leaves" && <option value="Your Leaves">Your Leaves</option>}
                             {leaveAndGatepassValue === "Leaves" && <option value="Staff Leaves" >Staff Leaves</option>}
                             {leaveAndGatepassValue === "Gatepass" && <option value="Your Gatepass" >Your Gatepass</option>}
                             {leaveAndGatepassValue === "Gatepass" && <option value="Staff Gatepass" >Staff Gatepass</option>}
                         </select>
                     </div>
-                    <div className="flex items-center border border-solid [#DEDEDE] bg-[#FAFAFA] py-3 px-5 rounded-[53px] w-[100px] h-10">
-                        <div className="flex gap-2 items-center">
-                            <img src={Filter} className="h-4 w-4" alt="" />
-                            <p className="text-sm font-medium text-[#2E2E2E]">Filter</p>
-                        </div>
-                    </div>
+                    <div>
+                  <select
+                    onChange={(event) => {
+                      if (event.target.value === "All Job Profiles") {
+                        setFilter({
+                          ...filter,
+                          jobProfileName: ""
+                        })
+                      } else {
+                        setFilter({
+                          ...filter,
+                          jobProfileName: event.target.value
+                        })
+                      }
+                    }}
+                    value={filter.jobProfileName}
+                    className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                    <option value="All Job Profiles">All Job Profiles</option>
+                    {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                      return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
+                    })}
+                  </select>
+              </div>
                     <div>
                         <div className="container flex justify-center items-center">
                             <div className="relative">
@@ -114,7 +152,7 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
                         {/* USEMAPHERE */}
-                        {myLeavesList && myLeavesList.map((element: any, index: number) => {
+                        {myLeaves && myLeaves.map((element: any, index: number) => {
                             return <tr key={index}>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.from).slice(0, 10)} - {(element.to).slice(0, 10)}</td>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
@@ -150,10 +188,10 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
                         {/* USEMAPHERE */}
-                        {myGatePassList && myGatePassList.map((element: any, index: number) => {
+                        {myGatePass && myGatePass.map((element: any, index: number) => {
                             return <tr key={index}>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.date).slice(0, 10)}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.time}</td>
+                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.gatePassDate).slice(0, 10)}</td>
+                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.gatePassTime}</td>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
                             <td className='py-4 px-6'>
                                 {element.status === "approved" &&
@@ -187,7 +225,7 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
                         {/* USEMAPHERE */}
-                        {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
+                        {/* {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
                             const latestLeave = element.fromTo[(element.fromTo).length - 1];
                             
                             return <tr key={index}>
@@ -212,7 +250,7 @@ export const ViewLeavesRecord = () => {
                                 </span>}
                             </td>
                         </tr>
-                        })}
+                        })} */}
                     </tbody>
                 </table>
             </div>}
@@ -226,7 +264,7 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
                         {/* USEMAPHERE */}
-                        {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
+                        {/* {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
                             const latestGatepass = element.gatePass[(element.gatePass).length - 1];
                             
                             return <tr key={index}>
@@ -251,7 +289,7 @@ export const ViewLeavesRecord = () => {
                                 </span>}
                             </td>
                         </tr>
-                        })}
+                        })} */}
                     </tbody>
                 </table>
             </div>}

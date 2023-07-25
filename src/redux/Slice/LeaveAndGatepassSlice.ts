@@ -22,6 +22,20 @@ const initialState = {
 };
 
 // LEAVES
+
+// READ MY LEAVES AND GATEPASS
+export const getMyLeavesAndGatePassAsync: any = createAsyncThunk(
+    'getMyLeavesAndGatepass',
+    async () => {
+        try {
+            const response: any = await getMyLeavesAndGatePass();
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+
 // READ APPROVED LEAVES
 export const getAllPendingLeavesAsync: any = createAsyncThunk(
     'getallPendingLeaves',
@@ -64,18 +78,6 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
-            return response;
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    }
-);
-// READ MY LEAVES AND GATEPASS
-export const getMyLeavesAndGatePassAsync: any = createAsyncThunk(
-    'getMyLeavesAndGatepass',
-    async () => {
-        try {
-            const response: any = await getMyLeavesAndGatePass();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -213,48 +215,49 @@ export const LeaveSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        // LEAVES
-            .addCase(getAllPendingLeavesAsync.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(getAllPendingLeavesAsync.fulfilled, function (state: any, action: any) {
-                state.status = 'idle';
-                state.pendingLeaves =  action.payload.pendingLeaveWithFilteredPeriods;
-            })
-            .addCase(getAllLeavesAndGatePassAsync.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(getAllLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
-                state.status = 'idle';
-                state.allLeavesAndGatePass =  action.payload.allLeaves;
-            })
-            .addCase(getAllApprovedLeavesAsync.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(getAllApprovedLeavesAsync.fulfilled, function (state: any, action: any) {
-                state.status = 'idle';
-                state.approvedLeaves =  action.payload.allApprovedLeave;
-            })
-            .addCase(getAllAcceptedLeavesAsync.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(getAllAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
-                state.status = 'idle';
-                state.acceptedLeaves =  action.payload.acceptedLeaveWithFilteredPeriods;
-            })
+            // LEAVES
             .addCase(getMyLeavesAndGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getMyLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
                 state.myLeavesAndGatePass = action.payload.leaves
+                state.upperLevelEmployee = action.payload.upperLevelEmployee
+            })
+            .addCase(getAllPendingLeavesAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllPendingLeavesAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.pendingLeaves = action.payload.pendingLeaveWithFilteredPeriods;
+            })
+            .addCase(getAllLeavesAndGatePassAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.allLeavesAndGatePass = action.payload.allLeaves;
+            })
+            .addCase(getAllApprovedLeavesAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllApprovedLeavesAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.approvedLeaves = action.payload.allApprovedLeave;
+            })
+            .addCase(getAllAcceptedLeavesAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.acceptedLeaves = action.payload.acceptedLeaveWithFilteredPeriods;
             })
             .addCase(getAllRejectedLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllRejectedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedLeaves =  action.payload.rejectedLeaveWithFilteredPeriods;
+                state.rejectedLeaves = action.payload.rejectedLeaveWithFilteredPeriods;
             })
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
@@ -274,28 +277,28 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllPendingGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.pendingGatePasses =  action.payload.pendingGatePassWithFilteredPeriods;
+                state.pendingGatePasses = action.payload.pendingGatePassWithFilteredPeriods;
             })
             .addCase(getAllApprovedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllApprovedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.approvedGatePasses =  action.payload.approvedGatePassWithFilteredPeriods;
+                state.approvedGatePasses = action.payload.approvedGatePassWithFilteredPeriods;
             })
             .addCase(getAllAcceptedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllAcceptedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.acceptedGatePasses =  action.payload.acceptedGatePassWithFilteredPeriods;
+                state.acceptedGatePasses = action.payload.acceptedGatePassWithFilteredPeriods;
             })
             .addCase(getAllRejectedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllRejectedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedGatePasses =  action.payload.rejectedGatePassWithFilteredPeriods;
+                state.rejectedGatePasses = action.payload.rejectedGatePassWithFilteredPeriods;
             })
             .addCase(updatePendingGatePassAsync.pending, (state) => {
                 state.status = 'loading';

@@ -42,7 +42,7 @@ import AddNewFieldsForGroups from "./components/Dashboard/AddNewFieldsForGroups"
 
 import Employeeaside from "./Employee/EmployeeAside";
 import UploadPhotoPage from "./Employee/uploadphoto";
-import { Employeehome } from "./Employee/dashboard/home";
+import { Employeehome } from "./components/Dashboard/Employee/home";
 import { EmployeeLeaveHome } from "./components/LeavesAndGatepass/employee/EmployeeLeaveHome";
 import { ApplyForLeave } from "./components/LeavesAndGatepass/employee/ApplyForLeave";
 import { ViewLeavesRecord } from "./components/LeavesAndGatepass/employee/ViewLeavesRecord";
@@ -269,20 +269,20 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
-   {
-    path:"/empcheckin",
+  {
+    path: "/empcheckin",
     element: <ProductedRoute><Employeeaside> <StaffCheckin></StaffCheckin> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/employee-attendence",
-    element:<ProductedRoute><Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/empdocuments",
-    element:<ProductedRoute><Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/your-documents",
+  },
+  {
+    path: "/employee-attendence",
+    element: <ProductedRoute><Employeeaside> <Employeeattendence></Employeeattendence> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/empdocuments",
+    element: <ProductedRoute><Employeeaside> <EmpViewdoc></EmpViewdoc> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/your-documents",
     // element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
    },
    {
@@ -510,7 +510,7 @@ function App() {
         draggable: true,
         progress: undefined,
         theme: "colored",
-        });
+      });
     });
 
     socket.on("disconnect", () => {
