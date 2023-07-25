@@ -59,6 +59,7 @@ import SalaryDatabase from "./components/Salary/SalaryDatabase";
 import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
 import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
+import NotificationList from "./Employee/notifications/notification";
 
 const router = createBrowserRouter([
   {
@@ -283,11 +284,15 @@ const router = createBrowserRouter([
   {
     path: "/your-documents",
     // element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
-  },
-  {
-    path: "/change-password",
-    element: <ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
-  },
+   },
+   {
+    path:"/change-password",
+    element:<ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/employee-notifications",
+    element:<ProductedRoute><Employeeaside> <NotificationList></NotificationList> </Employeeaside></ProductedRoute>
+   },
   {
     path: "/pending-leaves",
     element: (

@@ -8,7 +8,6 @@ import CaretRight from "../../assets/CaretRight1.svg"
 import Calendar from "react-calendar";
 import glass from '../../assets/MagnifyingGlass.png'
 
-
 const SingleGroupSalary = () => {
     const dispatch = useDispatch();
     const singleGroupsSalaryList = useSelector((state: any) => state.salary.singleGroupsSalary);
@@ -157,7 +156,6 @@ const SingleGroupSalary = () => {
         }
         return '';
     };
-
 
     return (
         <div className='px-10 pt-8'>

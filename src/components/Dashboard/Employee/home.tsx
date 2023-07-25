@@ -74,8 +74,10 @@ export const Employeehome = () => {
                         Staff Attendance
                     </div>
 
+
                     <div className="flex items-start gap-[20px] self-stretch overflow-auto">
                         {/* {persentBelowList && persentBelowList.map((element: any, index: number) => {
+
                             return <div key={index} className="flex flex-col justify-center  bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[20px] py-[16px]  items-start p-[4px] gap-[2px] min-w-[216px]">
                                 <div className='flex items-center gap-[12px]'>
                                     <img src={round} alt="" className='w-[24px] h-[24px]' />
@@ -86,8 +88,10 @@ export const Employeehome = () => {
                                 </div>
                                 <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>{element.jobProfile ? element.jobProfile : "Not Avilable"}</p>
                             </div>
+
                         })} */}
                     </div>
+
                 </div>
                 {/* YOUR LEAVES SECTION */}
                 <div className="py-8 flex justify-between w-full relative min-h-[250px]">

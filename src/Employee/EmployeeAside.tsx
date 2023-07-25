@@ -46,7 +46,7 @@ const navItems: NavItem[] = [
     Link: "/employee-leaves-home",
   },
   { id: "Documents", name: "Documents", icon: doc, Link: "/empdocuments" },
-  { id: "Notification", name: "Notification", icon: bellIcon, Link: "#" },
+  { id: "Notification", name: "Notification", icon: bellIcon, Link: "/employee-notifications" },
   { id: "Salaries", name: "Salaries", icon: salary, Link: "" },
   {
     id: "SalaTraining Contentries",
