@@ -7,7 +7,6 @@ import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import Calendar from "react-calendar";
 
-
 const SingleGroupSalary = () => {
     const dispatch = useDispatch();
     const singleGroupsSalaryList = useSelector((state: any) => state.salary.singleGroupsSalary);
@@ -115,7 +114,6 @@ const SingleGroupSalary = () => {
         }
         return '';
     };
-
 
     return (
         <div className='px-10 pt-8'>

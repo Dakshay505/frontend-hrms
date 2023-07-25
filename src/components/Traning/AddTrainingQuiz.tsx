@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { addTrainingQuizAsync } from '../../redux/Slice/TrainingSlice';
 import FileArrowUp from '../../assets/FileArrowUp.png';
 import BluePlus from '../../assets/BluePlus.png';
 
@@ -17,6 +17,7 @@ export const AddTrainingQuiz = () => {
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
+        dispatch(addTrainingQuizAsync());
     }, []);
 
 
@@ -28,105 +29,56 @@ export const AddTrainingQuiz = () => {
         setshowQuestions([...showQuestions, 1]);
     }
     const [showQuizForm, setShowQuizForm] = useState(false);
-    
-console.log (showQuizForm )
-    // const [CorrectAnswer, setCorrectAnswer] = useState('');
-    // const [isChecked, setIsChecked] = useState(false);
-
-    // const handleInputChange = (event: any) => {
-    //     setCorrectAnswer(event.target.value);
-    // };
-
-    // const handleRadioChange = () => {
-    //     setIsChecked(!isChecked);
-    // };
-
-    const [selectedAnswers, setSelectedAnswers] = useState<string>('');
-    const [options, setOptions] = useState([
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-    ]);
-
-
-
-
-    const handleInputChange = (index: any, event: any) => {
-        console.log("index", index, "event", event)
-        const newOptions = [...options];
-        newOptions[index].answer = event.target.value;
-        setOptions(newOptions);
+    console.log(showQuizForm)
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [inputValues, setInputValues] = useState(["", "", "", ""]);
+    const handleInputChange = (e: any, index: any) => {
+        const newInputValues = [...inputValues];
+        newInputValues[index] = e.target.value;
+        setInputValues(newInputValues);
     };
 
 
-
-    const handleRadioChange = (index: number) => {
-        const newOptions = [...options];
-        newOptions.forEach((option, i) => {
-            newOptions[i].isCorrect = i === index;
-            console.log(option)
-        });
-        setOptions(newOptions);
-
-        // Get the selected answer and update the selectedAnswers as a string
-        const selectedAnswer = newOptions[index].answer;
-        setSelectedAnswers(selectedAnswer);
-
+    const handleRadioChange = (index: any) => {
+        setSelectedOption(index);
     };
 
-
-
-    const handleFormSubmit = async () => {
-        try {
-            const response = await axios.post('http://localhost:5050/api/v1/api/quiz/addQuestion', {
-                groupName: groupName,
-                jobProfileName: jobProfileName,
-            });
-
-
-            if (response.status === 200) {
-                // Quiz successfully uploaded
-                console.log('Quiz uploaded successfully');
-            } else {
-                // Handle error
-                console.error('Failed to upload quiz');
-            }
-        } catch (error) {
-            console.error('An error occurred', error);
+    useEffect(() => {
+        if (selectedOption !== null) {
+            const selectedInputValue = inputValues[selectedOption];
+            console.log(`Selected input value: ${selectedInputValue}`);
         }
-    };
+    }, [selectedOption, inputValues]);
+
+    // const handleFormSubmit = async () => {
+    //     try {
+    //             groupName: groupName,
+    //             jobProfileName: jobProfileName,
+    //         };  
+    //     } catch (error) {
+    //         console.error('An error occurred', error);
+    //     }
+    // };
 
     const {
         register,
         handleSubmit,
     } = useForm();
-
-    // const [Question, setQuestion] = useState('');
-
-
     return (
         <div className='mx-10 pb-[32px]'>
             <form
                 onSubmit={handleSubmit((data) => {
                     let Data = data
-                    const answerArray = [];
-                    for (const key in Data.options) {
-                      if (Data.options.hasOwnProperty(key)) {
-                        answerArray.push(Data.options[key].answer);
-                      }
-                    }                    
+
                     Data = {
-                        // Question,
-                        options: options,
-                        answerArray:answerArray,
                         groupName: groupName,
-                        answers: selectedAnswers,
                         jobProfileName: jobProfileName,
+                        selectedInputValue: selectedOption !== null ? inputValues[selectedOption] : null,
+                        inputValues,
                         ...data,
                     }
                     console.log("data", Data)
-                    handleFormSubmit();
+                    // handleFormSubmit();
                 })}
             >
                 <div className='flex flex-col self-stretch  gap-[40px]'>
@@ -186,12 +138,15 @@ console.log (showQuizForm )
                     </div>
 
                     {(showQuestionsList && showQuestions) && showQuestions.map((element: any, index: any) => {
+                        const radioGroupName = `options_${index}`;
                         return <div key={index} className='border border-solid border-[#B0B0B0] w-[688px] rounded-lg p-6 mt-6'>
                             <div key={element} className='flex flex-col  w-[640px] gap-[20px] '>
                                 <div className='flex  gap-[20px]'>
                                     <div>
                                         <textarea
-                                             {...register(`Question${index + 1}`, { required: true })}
+
+                                            {...register(`Question${index + 1}`, { required: true })}
+
                                             placeholder='Enter A Question'
                                             className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-[81px] w-[536px]'
                                         />
@@ -205,90 +160,73 @@ console.log (showQuizForm )
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap  gap-[20px]'>
-                                    {/* <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
-                                        <input
-                                            type="text"
-                                            value={CorrectAnswer}
-                                            onChange={handleInputChange}
-                                            className='py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            checked={isChecked}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div> */}
-                                    {/* <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
-                                        <input
-                                            type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
-                                            className='py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div>
+
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
+                                            // value={''}
+                                            onChange={(e) => handleInputChange(e, 0)}
+
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
+                                            name={radioGroupName} 
+                                            id={`Questions_${index}_0`}
+                                            // checked={""}
+                                            onChange={() => handleRadioChange(0)}
                                         />
                                     </div>
+
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
+                                            onChange={(e) => handleInputChange(e, 1)}
+
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
+                                            name={radioGroupName} 
+                                            id={`Questions_${index}_0`}
+                                            onChange={() => handleRadioChange(1)}
                                         />
-                                    </div> */}
+                                    </div>
 
-                                    {options.map((option, index) => (
-                                        <div key={index} className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px] mb-3'>
-                                            <input
-                                            
-                                                // {...register(`answers${index + 1}`, { required: true })}
-                                                type="text"
-                                                // value={option.answer}
-                                                onChange={(event) => handleInputChange(index, event)}
-                                                className='py-4 px-3 h-[20px] outline-none'
-                                            />
-                                            <input
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={''}
+                                            onChange={(e) => handleInputChange(e, 2)}
 
-                                                type="radio"
-                                                name="options"
-                                                id={`option${index+1}`}
-                                                checked={option.isCorrect}
-                                                onChange={() => handleRadioChange(index)}
-                                            />
-                                        </div>
-                                    ))}
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+                                            name={radioGroupName} // Use the unique name for this set of radio buttons
+                                            id={`Questions_${index}_0`}
+                                            // checked={options[2].isCorrect}
+                                            onChange={() => handleRadioChange(2)}
+                                        />
+                                    </div>
 
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={''}
+                                            onChange={(e) => handleInputChange(e, 3)}
+
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+                                            name={radioGroupName} // Use the unique name for this set of radio buttons
+                                            id={`Questions_${index}_0`}
+                                            // checked={options[3].isCorrect}
+                                            onChange={() => handleRadioChange(3)}
+                                        />
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     })}
