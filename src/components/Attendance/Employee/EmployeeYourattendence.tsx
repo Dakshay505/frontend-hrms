@@ -62,7 +62,23 @@ export const Employeeattendence = () => {
             })
         }
     }, [nextDate])
+
+    const [dateRange, setDateRange] = useState<any>([])
+
     useEffect(() => {
+        function getDateRange(startDate: any, endDate: any) {
+            if (nextDate) {
+                const result = [];
+                const currentDate = new Date(startDate);
+                const finalDate = new Date(endDate);
+                while (currentDate <= finalDate) {
+                    result.push(currentDate.toISOString().slice(0, 10));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                setDateRange([...result])
+            }
+        }
+        getDateRange(filter.date, filter.nextDate)
         dispatch(getAllAttandenceAsync(filter))
         dispatch(getMyAttandenceAsync(filter))
     }, [filter])
@@ -136,6 +152,16 @@ export const Employeeattendence = () => {
             setShowStatusDropdown([data]);
         }
     }
+    
+
+    const tileClassName = ({ date }: any) => {
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        const formattedDate = localDate.toISOString().split('T')[0];
+        if (dateRange.includes(formattedDate)) {
+            return 'bg-[#ECEDFE] text-[#FFFFFF]';
+        }
+        return '';
+    };
 
 
     return (
@@ -378,7 +404,7 @@ export const Employeeattendence = () => {
                                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                     <td className='py-4 px-5'>
                                                         {element.status === "approved" &&
-                                                            <span className='flex gap-3 items-center bg-[#E9F7EF] h-[26px] rounded-[46px] py-2 px-4'>
+                                                            <span className='relative flex gap-3 items-center bg-[#E9F7EF] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
@@ -386,12 +412,15 @@ export const Employeeattendence = () => {
                                                                 <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
-                                                                    <p className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
+                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                    <p onClick={() => {
+dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    }}
+                                                                    className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
                                                                 </div>}
                                                             </span>}
                                                         {element.status === "rejected" &&
-                                                            <span className='flex gap-3 items-center bg-[#FCECEC] h-[26px] rounded-[46px] py-2 px-4'>
+                                                            <span className='relative flex gap-3 items-center bg-[#FCECEC] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
@@ -399,8 +428,10 @@ export const Employeeattendence = () => {
                                                                 <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
-                                                                    <p className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
+                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                    <p onClick={() => {
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                                 </div>}
                                                             </span>}
                                                         {(element.status === "pending") &&
@@ -413,8 +444,12 @@ export const Employeeattendence = () => {
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
                                                                 {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
-                                                                    <p className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
-                                                                    <p className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
+                                                                    <p onClick={() => {
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
+                                                                    <p onClick={() => {
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejeected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
                                                                 </div>}
                                                             </span>}
                                                     </td>
@@ -427,10 +462,7 @@ export const Employeeattendence = () => {
                             </table>
                             {/* TABLE ENDS HERE */}
                         </div> : ""}
-                </div>
-            </div>
-
-            <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+                        <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
                 <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
                     <button
                         onClick={() => {
@@ -442,6 +474,7 @@ export const Employeeattendence = () => {
                     </button>
                     {showCalender && <div className="filterCalender absolute z-20 bottom-28">
                         <Calendar
+                            tileClassName={tileClassName}
                             onChange={(event) => {
                                 calenderDayClicked.length === 0 ? setDate(event) : "";
                                 calenderDayClicked.length === 1 ? setnextDate(event) : "";
@@ -460,8 +493,7 @@ export const Employeeattendence = () => {
                             formatShortWeekday={(locale, date) => {
                                 console.log(locale)
                                 return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-                            }}
-                            value={date} />
+                            }} />
                     </div>}
                     <p
                         onClick={() => {
@@ -476,6 +508,8 @@ export const Employeeattendence = () => {
                         }}>
                         <img src={CaretRight} className="w-4 h-4" alt="" />
                     </button>
+                </div>
+            </div>
                 </div>
             </div>
 
