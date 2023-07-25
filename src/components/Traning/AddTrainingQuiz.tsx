@@ -28,8 +28,9 @@ export const AddTrainingQuiz = () => {
         setshowQuestions([...showQuestions, 1]);
     }
     const [showQuizForm, setShowQuizForm] = useState(false);
-    
-console.log (showQuizForm )
+
+
+    console.log(showQuizForm)
     // const [CorrectAnswer, setCorrectAnswer] = useState('');
     // const [isChecked, setIsChecked] = useState(false);
 
@@ -41,7 +42,8 @@ console.log (showQuizForm )
     //     setIsChecked(!isChecked);
     // };
 
-    const [selectedAnswers, setSelectedAnswers] = useState<string>('');
+
+    const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [options, setOptions] = useState([
         { answer: '', isCorrect: false },
         { answer: '', isCorrect: false },
@@ -50,15 +52,44 @@ console.log (showQuizForm )
     ]);
 
 
-
-
-    const handleInputChange = (index: any, event: any) => {
-        console.log("index", index, "event", event)
-        const newOptions = [...options];
-        newOptions[index].answer = event.target.value;
-        setOptions(newOptions);
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: any) => {
+        const updatedAnswers = [...selectedAnswers];
+        updatedAnswers[index] = event.target.value;
+        setSelectedAnswers(updatedAnswers);
     };
 
+
+    const handleRadioChange = (index: any) => {
+        const updatedOptions = options.map((option, i) => {
+            return {
+                ...option,
+                isCorrect: i === index,
+            };
+        });
+        setOptions(updatedOptions);
+    };
+
+
+
+    const handleFormSubmit = async () => {
+        try {
+            const response = await axios.post('http://localhost:5050/api/v1/api/quiz/addQuestion', {
+                groupName: groupName,
+                jobProfileName: jobProfileName,
+            });
+
+
+            if (response.status === 200) {
+                // Quiz successfully uploaded
+                console.log('Quiz uploaded successfully');
+            } else {
+                // Handle error
+                console.error('Failed to upload quiz');
+            }
+        } catch (error) {
+            console.error('An error occurred', error);
+        }
+    };
 
 
     const handleRadioChange = (index: number) => {
@@ -110,16 +141,9 @@ console.log (showQuizForm )
             <form
                 onSubmit={handleSubmit((data) => {
                     let Data = data
-                    const answerArray = [];
-                    for (const key in Data.options) {
-                      if (Data.options.hasOwnProperty(key)) {
-                        answerArray.push(Data.options[key].answer);
-                      }
-                    }                    
+
                     Data = {
-                        // Question,
-                        options: options,
-                        answerArray:answerArray,
+
                         groupName: groupName,
                         answers: selectedAnswers,
                         jobProfileName: jobProfileName,
@@ -191,7 +215,9 @@ console.log (showQuizForm )
                                 <div className='flex  gap-[20px]'>
                                     <div>
                                         <textarea
-                                             {...register(`Question${index + 1}`, { required: true })}
+
+                                            {...register(`Question${index + 1}`, { required: true })}
+
                                             placeholder='Enter A Question'
                                             className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-[81px] w-[536px]'
                                         />
@@ -205,89 +231,84 @@ console.log (showQuizForm )
                                     </div>
                                 </div>
                                 <div className='flex flex-wrap  gap-[20px]'>
-                                    {/* <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
-                                        <input
-                                            type="text"
-                                            value={CorrectAnswer}
-                                            onChange={handleInputChange}
-                                            className='py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            checked={isChecked}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div> */}
-                                    {/* <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
-                                        <input
-                                            type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
-                                            className='py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div>
+
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
+                                            // value={selectedAnswers[0] || ''}
+                                            onChange={(e) => handleInputChange(e, 0)}
+
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
+
+                                            name="options_0"
+                                            id="Questions_0"
+                                            checked={options[0].isCorrect}
+                                            onChange={() => handleRadioChange(0)}
                                         />
                                     </div>
+
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={CorrectAnswer}
-                                            onChange={handleInputChange}
+                                            // value={selectedAnswers[1] || ''}
+                                            onChange={(e) => handleInputChange(e, 1)}
+
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-                                            name="options"
-                                            id="Questions"
-                                            // checked={isChecked}
-                                            onChange={handleRadioChange}
+
+                                            name="options_1"
+                                            id="Questions_1"
+                                            checked={options[1].isCorrect}
+                                            onChange={() => handleRadioChange(1)}
                                         />
-                                    </div> */}
+                                    </div>
 
-                                    {options.map((option, index) => (
-                                        <div key={index} className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px] mb-3'>
-                                            <input
-                                            
-                                                // {...register(`answers${index + 1}`, { required: true })}
-                                                type="text"
-                                                // value={option.answer}
-                                                onChange={(event) => handleInputChange(index, event)}
-                                                className='py-4 px-3 h-[20px] outline-none'
-                                            />
-                                            <input
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={selectedAnswers[2] || ''}
+                                            onChange={(e) => handleInputChange(e, 2)}
 
-                                                type="radio"
-                                                name="options"
-                                                id={`option${index+1}`}
-                                                checked={option.isCorrect}
-                                                onChange={() => handleRadioChange(index)}
-                                            />
-                                        </div>
-                                    ))}
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+
+                                            name="options_2"
+                                            id="Questions_2"
+                                            checked={options[2].isCorrect}
+                                            onChange={() => handleRadioChange(2)}
+                                        />
+                                    </div>
+
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={selectedAnswers[3] || ''}
+                                            onChange={(e) => handleInputChange(e, 3)}
+
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+
+                                            name="options_3"
+                                            id="Questions_3"
+                                            checked={options[3].isCorrect}
+                                            onChange={() => handleRadioChange(3)}
+                                        />
+                                    </div>
+
+
+                            
 
                                 </div>
+
 
                             </div>
                         </div>
