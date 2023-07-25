@@ -9,13 +9,12 @@ const initialState = {
     approvedLeaves: [],
     acceptedLeaves: [],
     rejectedLeaves: [],
-    myLeaves: [],
+    myLeavesAndGatePass: [],
     // GATEPASS
     pendingGatePasses: [],
     approvedGatePasses: [],
     acceptedGatePasses: [],
     rejectedGatePasses: [],
-    myGatePass: [],
 
     // UPPERLEVEL
     upperLevelEmployee: {},
@@ -248,9 +247,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getMyLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.myLeaves =  action.payload.leaves.fromTo;
-                state.myGatePass =  action.payload.leaves.gatePass;
-                state.upperLevelEmployee = action.payload.upperLevelEmployee
+                state.myLeavesAndGatePass = action.payload.leaves
             })
             .addCase(getAllRejectedLeavesAsync.pending, (state) => {
                 state.status = 'loading';

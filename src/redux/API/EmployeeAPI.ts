@@ -114,7 +114,6 @@ export const addImage = async (document: any) => {
 
 export const getEmployeeImage = async (employeeId: any) => {
   try {
-    console.log("employeeId", employeeId);
     const { data } = await axios.get(
       `${getEmployeeImageApiPath}/${employeeId.employeeId}`,
       { withCredentials: true }
@@ -131,7 +130,6 @@ export const pagination = async (page: any) => {
     const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
       withCredentials: true, 
     });
-    console.log(response, "hey");
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
