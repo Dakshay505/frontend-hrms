@@ -51,7 +51,7 @@ export const Employeehome = () => {
         <div className="flex flex-col items-start self-stretch pt-[32px] px-[40px] gap-[32px]">
             <div className="flex flex-col items-start self-stretch gap-[32px]">
                 <div className="flex items-start self-stretch gap-[291px] text-[#2E2E2E] font-inter font-bold text-[28px] leading-[36px]">
-                    Welcome Backhii {Employee ? Employee.name : 'Employee'}
+                    Welcome Back {Employee ? Employee.name : 'Employee'}
                 </div>
 
                 <div className="flex items-start bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[40px] py-[24px] gap-[40px] w-[404px] h-[188px]">

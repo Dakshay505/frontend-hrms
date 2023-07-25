@@ -1,5 +1,4 @@
 import { useState } from "react";
-import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from "../../assets/MagnifyingGlass.png";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
@@ -21,7 +20,9 @@ export const AttendenceDashboardList = () => {
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
   const [date, setDate] = useState<any>(new Date());
+  const [nextDate, setnextDate] = useState<any>();
   const [showCalender, setShowCalender] = useState(false);
+  const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -38,26 +39,26 @@ export const AttendenceDashboardList = () => {
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<any>([]);
-  const [showFilter, setshowFilter] = useState(false);
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   const [filter, setFilter] = useState({
     name: "",
     groupName: "",
     jobProfileName: "",
-    date: ""
+    date: "",
+    nextDate: ""
   });
 
   useEffect(() => {
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
-      const arr:any = [];
-      if(employeeData){
+      const arr: any = [];
+      if (employeeData) {
         for (let i = 0; i < employeeData.length; i++) {
           arr.push(employeeData[i].employeeId.name)
         }
         setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
       }
-      });
+    });
     console.log(fetchedSuggestions);
     dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
@@ -72,10 +73,36 @@ export const AttendenceDashboardList = () => {
       ...filter,
       date: `${year}-${month}-${day}`
     })
-    console.log("hi")
   }, [date])
 
   useEffect(() => {
+    if (nextDate) {
+        const currentDate = new Date(nextDate);
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        setFilter({
+            ...filter,
+            nextDate: `${year}-${month}-${day}`
+        })
+    }
+}, [nextDate])
+
+const [dateRange, setDateRange] = useState<any>([])
+  useEffect(() => {
+        function getDateRange(startDate: any, endDate: any) {
+            if (nextDate) {
+                const result = [];
+                const currentDate = new Date(startDate);
+                const finalDate = new Date(endDate);
+                while (currentDate <= finalDate) {
+                    result.push(currentDate.toISOString().slice(0, 10));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                setDateRange([...result])
+            }
+        }
+        getDateRange(filter.date, filter.nextDate)
     console.log(filter);
     dispatch(getAllAttandenceAsync(filter))
   }, [filter])
@@ -114,6 +141,15 @@ export const AttendenceDashboardList = () => {
     setSuggestions(filteredSuggestions);
   };
 
+  const tileClassName = ({ date }: any) => {
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const formattedDate = localDate.toISOString().split('T')[0];
+    if (dateRange.includes(formattedDate)) {
+        return 'bg-[#ECEDFE] text-[#FFFFFF]';
+    }
+    return '';
+};
+
 
   return (
     <div className="px-[40px] pt-[32px]">
@@ -124,32 +160,25 @@ export const AttendenceDashboardList = () => {
       </div>
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className='flex gap-5'>
-          <div className='relative'>
-            <div
-              onClick={() => {
-                setshowFilter(!showFilter)
-                setSuggestions([]);
-              }}
-              className='flex gap-2 justify-center items-center py-3 px-5 w-[100px] h-10 bg-[#FAFAFA] rounded-[53px] border border-solid border-[#DEDEDE]'>
-              <img src={FunnelSimple} className='w-4 h-4' alt="" />
-              <p className='text-sm font-medium text-[#2E2E2E]'>Filter</p>
-            </div>
-            {showFilter && <div className='absolute z-10 flex flex-col gap-3 rounded-lg top-10 left-0 min-w-[240px] bg-[#FAFAFA] py-6 px-4'>
-              <div className='flex gap-3 justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-[#2E2E2E]'>Group</p>
-                </div>
-                <div>
+            <div className="flex gap-4">
+              <div>
                   <select
                     onChange={(event) => {
-                      setFilter({
-                        ...filter,
-                        groupName: event.target.value
-                      })
+                      if (event.target.value === "All Groups") {
+                        setFilter({
+                          ...filter,
+                          groupName: ""
+                        })
+                      } else {
+                        setFilter({
+                          ...filter,
+                          groupName: event.target.value
+                        })
+                      }
                     }}
                     value={filter.groupName}
-                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                    <option value=""></option>
+                    className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                    <option value="All Groups">All Groups</option>
                     {groupList && groupList.map((element: any, index: number) => {
                       return <option
                         key={index}
@@ -159,31 +188,31 @@ export const AttendenceDashboardList = () => {
                       </option>
                     })}
                   </select>
-                </div>
               </div>
-              <div className='flex gap-3 justify-between'>
-                <div>
-                  <p className='text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</p>
-                </div>
-                <div>
+              <div>
                   <select
                     onChange={(event) => {
-                      setFilter({
-                        ...filter,
-                        jobProfileName: event.target.value
-                      })
+                      if (event.target.value === "All Job Profiles") {
+                        setFilter({
+                          ...filter,
+                          jobProfileName: ""
+                        })
+                      } else {
+                        setFilter({
+                          ...filter,
+                          jobProfileName: event.target.value
+                        })
+                      }
                     }}
                     value={filter.jobProfileName}
-                    className='border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded-md focus:outline-none'>
-                    <option value=""></option>
+                    className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                    <option value="All Job Profiles">All Job Profiles</option>
                     {jobProfileList && jobProfileList.map((element: any, index: number) => {
                       return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
                     })}
                   </select>
-                </div>
               </div>
-            </div>}
-          </div>
+            </div>
           <div>
             <div className="relative">
               {isLabelVisible && <div className="absolute top-[10px] left-6">
@@ -193,7 +222,6 @@ export const AttendenceDashboardList = () => {
                 </label>
               </div>}
               <input
-                onClick={() => setshowFilter(false)}
                 type="search"
                 id="searchInput"
                 onChange={handleInputChange}
@@ -234,7 +262,6 @@ export const AttendenceDashboardList = () => {
             </tr>
             {allAttandenceList && allAttandenceList.map((element: any, index: number) => {
               const punchesList = [...(element.punches)];
-              console.log("normal", punchesList)
               const sortedPunches = punchesList.sort((a: any, b: any) => {
                 return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
               })
@@ -295,45 +322,55 @@ export const AttendenceDashboardList = () => {
           </tbody>
         </table>
         {/* TABLE ENDS HERE */}
-        <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0 pr-[200px]">
-          <div className="flex gap-3 items-center justify-center w-[200px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
-            <button
-              onClick={() => {
-                const nextDate = new Date(date);
-                nextDate.setDate(date.getDate() - 1);
-                setDate(nextDate);
-              }}>
-              <img src={CaretLeft} alt="" className="w-4 h-4" />
-            </button>
-            {showCalender && <div className="filterCalender absolute z-20 bottom-28">
-              <Calendar
-                onChange={setDate}
-                onClickDay={() => {
-                  setShowCalender(false);
-                }}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
-                formatShortWeekday={(locale, date) => {
-                  console.log(locale)
-                  return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-                }}
-                value={date} />
-            </div>}
-            <p
-              onClick={() => {
-                setShowCalender(!showCalender);
-              }}
-              className="text-sm font-medium text-[#283093] cursor-pointer">{formatDate(date)}</p>
-            <button
-              onClick={() => {
-                const nextDate = new Date(date);
-                nextDate.setDate(date.getDate() + 1);
-                setDate(nextDate);
-              }}>
-              <img src={CaretRight} className="w-4 h-4" alt="" />
-            </button>
-          </div>
-        </div>
       </div>
+      <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+                <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+                    <button
+                        onClick={() => {
+                            const nextDate = new Date(date);
+                            nextDate.setDate(date.getDate() - 1);
+                            setDate(nextDate);
+                        }}>
+                        <img src={CaretLeft} alt="" className="w-4 h-4" />
+                    </button>
+                    {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+                        <Calendar
+                            tileClassName={tileClassName}
+                            onChange={(event) => {
+                                calenderDayClicked.length === 0 ? setDate(event) : "";
+                                calenderDayClicked.length === 1 ? setnextDate(event) : "";
+                                if (calenderDayClicked.length < 1) {
+                                    setcalenderDayClicked([...calenderDayClicked, 1]);
+                                }
+                            }}
+                            onClickDay={() => {
+                                if (calenderDayClicked.length > 0) {
+                                    console.log("hlo")
+                                    setShowCalender(false);
+                                    setcalenderDayClicked([]);
+                                }
+                            }}
+                            className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
+                            formatShortWeekday={(locale, date) => {
+                                console.log(locale)
+                                return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+                            }} />
+                    </div>}
+                    <p
+                        onClick={() => {
+                            setShowCalender(!showCalender);
+                        }}
+                        className="text-sm font-medium text-[#283093] cursor-pointer">{`${formatDate(date)} - ${nextDate ? formatDate(nextDate) : formatDate(date)}`}</p>
+                    <button
+                        onClick={() => {
+                            const nextDate = new Date(date);
+                            nextDate.setDate(date.getDate() + 1);
+                            setDate(nextDate);
+                        }}>
+                        <img src={CaretRight} className="w-4 h-4" alt="" />
+                    </button>
+                </div>
+            </div>
     </div>
   );
 };
