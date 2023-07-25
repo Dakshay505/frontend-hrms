@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { addTrainingQuizAsync } from '../../redux/Slice/TrainingSlice';
 import FileArrowUp from '../../assets/FileArrowUp.png';
 import BluePlus from '../../assets/BluePlus.png';
 
@@ -17,6 +17,7 @@ export const AddTrainingQuiz = () => {
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
+        dispatch(addTrainingQuizAsync());
     }, []);
 
 
@@ -28,83 +29,41 @@ export const AddTrainingQuiz = () => {
         setshowQuestions([...showQuestions, 1]);
     }
     const [showQuizForm, setShowQuizForm] = useState(false);
-
-
     console.log(showQuizForm)
-    // const [CorrectAnswer, setCorrectAnswer] = useState('');
-    // const [isChecked, setIsChecked] = useState(false);
-
-    // const handleInputChange = (event: any) => {
-    //     setCorrectAnswer(event.target.value);
-    // };
-
-    // const handleRadioChange = () => {
-    //     setIsChecked(!isChecked);
-    // };
-
-
-    const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
-    const [options, setOptions] = useState([
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-        { answer: '', isCorrect: false },
-    ]);
-
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: any) => {
-        const updatedAnswers = [...selectedAnswers];
-        updatedAnswers[index] = event.target.value;
-        setSelectedAnswers(updatedAnswers);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [inputValues, setInputValues] = useState(["", "", "", ""]);
+    const handleInputChange = (e: any, index: any) => {
+        const newInputValues = [...inputValues];
+        newInputValues[index] = e.target.value;
+        setInputValues(newInputValues);
     };
 
 
     const handleRadioChange = (index: any) => {
-        const updatedOptions = options.map((option, i) => {
-            return {
-                ...option,
-                isCorrect: i === index,
-            };
-        });
-        setOptions(updatedOptions);
+        setSelectedOption(index);
     };
 
-
-
-    const handleFormSubmit = async () => {
-        try {
-            const response = await axios.post('http://localhost:5050/api/v1/api/quiz/addQuestion', {
-                groupName: groupName,
-                jobProfileName: jobProfileName,
-            });
-
-
-            if (response.status === 200) {
-                // Quiz successfully uploaded
-                console.log('Quiz uploaded successfully');
-            } else {
-                // Handle error
-                console.error('Failed to upload quiz');
-            }
-        } catch (error) {
-            console.error('An error occurred', error);
+    useEffect(() => {
+        if (selectedOption !== null) {
+            const selectedInputValue = inputValues[selectedOption];
+            console.log(`Selected input value: ${selectedInputValue}`);
         }
-    };
+    }, [selectedOption, inputValues]);
 
-
-
-
-
- 
+    // const handleFormSubmit = async () => {
+    //     try {
+    //             groupName: groupName,
+    //             jobProfileName: jobProfileName,
+    //         };  
+    //     } catch (error) {
+    //         console.error('An error occurred', error);
+    //     }
+    // };
 
     const {
         register,
         handleSubmit,
     } = useForm();
-
-    // const [Question, setQuestion] = useState('');
-
-
     return (
         <div className='mx-10 pb-[32px]'>
             <form
@@ -112,14 +71,14 @@ export const AddTrainingQuiz = () => {
                     let Data = data
 
                     Data = {
-
                         groupName: groupName,
-                        answers: selectedAnswers,
                         jobProfileName: jobProfileName,
+                        selectedInputValue: selectedOption !== null ? inputValues[selectedOption] : null,
+                        inputValues,
                         ...data,
                     }
                     console.log("data", Data)
-                    handleFormSubmit();
+                    // handleFormSubmit();
                 })}
             >
                 <div className='flex flex-col self-stretch  gap-[40px]'>
@@ -179,6 +138,7 @@ export const AddTrainingQuiz = () => {
                     </div>
 
                     {(showQuestionsList && showQuestions) && showQuestions.map((element: any, index: any) => {
+                        const radioGroupName = `options_${index}`;
                         return <div key={index} className='border border-solid border-[#B0B0B0] w-[688px] rounded-lg p-6 mt-6'>
                             <div key={element} className='flex flex-col  w-[640px] gap-[20px] '>
                                 <div className='flex  gap-[20px]'>
@@ -204,17 +164,16 @@ export const AddTrainingQuiz = () => {
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={selectedAnswers[0] || ''}
+                                            // value={''}
                                             onChange={(e) => handleInputChange(e, 0)}
 
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-
-                                            name="options_0"
-                                            id="Questions_0"
-                                            checked={options[0].isCorrect}
+                                            name={radioGroupName} 
+                                            id={`Questions_${index}_0`}
+                                            // checked={""}
                                             onChange={() => handleRadioChange(0)}
                                         />
                                     </div>
@@ -222,17 +181,14 @@ export const AddTrainingQuiz = () => {
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={selectedAnswers[1] || ''}
                                             onChange={(e) => handleInputChange(e, 1)}
 
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-
-                                            name="options_1"
-                                            id="Questions_1"
-                                            checked={options[1].isCorrect}
+                                            name={radioGroupName} 
+                                            id={`Questions_${index}_0`}
                                             onChange={() => handleRadioChange(1)}
                                         />
                                     </div>
@@ -240,17 +196,16 @@ export const AddTrainingQuiz = () => {
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={selectedAnswers[2] || ''}
+                                            // value={''}
                                             onChange={(e) => handleInputChange(e, 2)}
 
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-
-                                            name="options_2"
-                                            id="Questions_2"
-                                            checked={options[2].isCorrect}
+                                            name={radioGroupName} // Use the unique name for this set of radio buttons
+                                            id={`Questions_${index}_0`}
+                                            // checked={options[2].isCorrect}
                                             onChange={() => handleRadioChange(2)}
                                         />
                                     </div>
@@ -258,27 +213,20 @@ export const AddTrainingQuiz = () => {
                                     <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
                                             type="text"
-                                            // value={selectedAnswers[3] || ''}
+                                            // value={''}
                                             onChange={(e) => handleInputChange(e, 3)}
 
                                             className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
                                             type="radio"
-
-                                            name="options_3"
-                                            id="Questions_3"
-                                            checked={options[3].isCorrect}
+                                            name={radioGroupName} // Use the unique name for this set of radio buttons
+                                            id={`Questions_${index}_0`}
+                                            // checked={options[3].isCorrect}
                                             onChange={() => handleRadioChange(3)}
                                         />
                                     </div>
-
-
-                            
-
                                 </div>
-
-
                             </div>
                         </div>
                     })}
