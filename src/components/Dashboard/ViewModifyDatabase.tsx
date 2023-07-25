@@ -162,7 +162,7 @@ const ViewModifyDatabase = () => {
                             }
                         >
                             <select
-                                className="bg-[#ECEDFE] rounded-lg py-3 px-5 text-[#283093] text-sm font-medium"
+                                className="bg-[#ECEDFE] rounded-lg py-3 px-5 text-[#283093] text-sm font-medium focus:outline-none"
                                 defaultValue="Employees"
                             >
                                 <option>Employees</option>
