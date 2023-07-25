@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
-
-
-import FileArrowUp from '../../assets/FileArrowUp.png'
-import BluePlus from '../../assets/BluePlus.png'
 import { useForm } from 'react-hook-form';
-
+import axios from 'axios';
+import FileArrowUp from '../../assets/FileArrowUp.png';
+import BluePlus from '../../assets/BluePlus.png';
 
 export const AddTrainingQuiz = () => {
     const dispatch = useDispatch();
@@ -19,61 +17,98 @@ export const AddTrainingQuiz = () => {
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
-    }, [])
+    }, []);
 
-    // LINK FORM CODE STARTS
+
     const [showQuestions, setshowQuestions] = useState<any>([]);
     const [showQuestionsList, setshowQuestionsList] = useState<any>(false);
-    const handleLinkClick = () => {
-        setShowDocumentsForm(false);
+    const handleQuizOpen = () => {
+        setShowQuizForm(true);
         setshowQuestionsList(true);
         setshowQuestions([...showQuestions, 1]);
     }
-    // LINK FORM CODE ENDS
+    const [showQuizForm, setShowQuizForm] = useState(false);
 
-    // const [selectedFile, setSelectedFile] = useState<any>(null);
+    console.log(showQuizForm)
+    // const [CorrectAnswer, setCorrectAnswer] = useState('');
+    // const [isChecked, setIsChecked] = useState(false);
 
-    // DOCUMENT FORM CODE STARTS
-    const [showDocumentsForm, setShowDocumentsForm] = useState(false);
-    const handleDocumentClick = () => {
-        setShowDocumentsForm(true);
-        setshowQuestionsList(false);
-        setshowQuestions([]);
-    }
-    // console.log("hlo", selectedFile, setSelectedFile, showDocumentsForm, handleDocumentClick)
+    // const handleInputChange = (event: any) => {
+    //     setCorrectAnswer(event.target.value);
+    // };
 
-    // DOCUMENT FORM CODE ENDS
-    const handleFormSubmit = () => {
-        setshowQuestions([]);
-        setShowDocumentsForm(false);
-    }
-    // console.log(handleFormSubmit,)
+    // const handleRadioChange = () => {
+    //     setIsChecked(!isChecked);
+    // };
 
+    const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+    const [options, setOptions] = useState([
+        { answer: '', isCorrect: false },
+        { answer: '', isCorrect: false },
+        { answer: '', isCorrect: false },
+        { answer: '', isCorrect: false },
+    ]);
+
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: any) => {
+        const updatedAnswers = [...selectedAnswers];
+        updatedAnswers[index] = event.target.value;
+        setSelectedAnswers(updatedAnswers);
+    };
+
+
+    const handleRadioChange = (index: any) => {
+        const updatedOptions = options.map((option, i) => {
+            return {
+                ...option,
+                isCorrect: i === index,
+            };
+        });
+        setOptions(updatedOptions);
+    };
+
+
+
+    const handleFormSubmit = async () => {
+        try {
+            const response = await axios.post('http://localhost:5050/api/v1/api/quiz/addQuestion', {
+                groupName: groupName,
+                jobProfileName: jobProfileName,
+            });
+
+
+            if (response.status === 200) {
+                // Quiz successfully uploaded
+                console.log('Quiz uploaded successfully');
+            } else {
+                // Handle error
+                console.error('Failed to upload quiz');
+            }
+        } catch (error) {
+            console.error('An error occurred', error);
+        }
+    };
 
     const {
         register,
-        handleSubmit
+        handleSubmit,
     } = useForm();
 
-    const [selectedOption, setSelectedOption] = useState('');
-
-    const handleRadioChange = (event: any) => {
-        setSelectedOption(event.target.value);
-    };
+    // const [Question, setQuestion] = useState('');
 
 
     return (
         <div className='mx-10 pb-[32px]'>
             <form
                 onSubmit={handleSubmit((data) => {
-                    data = {
+                    let Data = data
+                    Data = {
                         groupName: groupName,
+                        answers: selectedAnswers,
                         jobProfileName: jobProfileName,
                         ...data,
-                        selectedOption,
                     }
-                    console.log(data)
-                    // dispatch(createEmployeeAsync(data)); 
+                    console.log("data", Data)
                     handleFormSubmit();
                 })}
             >
@@ -107,7 +142,7 @@ export const AddTrainingQuiz = () => {
                         </div>
                     </div>
                     <div className='flex gap-10'>
-                        
+
                         <div className='flex flex-col gap-3'>
                             <div>
                                 <p className='text-sm font-normal text-[#1C1C1C]'>Passing Marks</p>
@@ -125,98 +160,110 @@ export const AddTrainingQuiz = () => {
                             <div>
                                 <input
                                     {...register('Totalpoints', { required: true })}
-                                    type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
+                                    type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
                             </div>
                         </div>
                     </div>
                     <div className="mt-10 flex gap-4">
-                        <div onClick={handleLinkClick} className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add a Question</p></div>
+                        <div onClick={handleQuizOpen} className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add a Question</p></div>
                     </div>
 
                     {(showQuestionsList && showQuestions) && showQuestions.map((element: any, index: any) => {
                         return <div key={index} className='border border-solid border-[#B0B0B0] w-[688px] rounded-lg p-6 mt-6'>
-
                             <div key={element} className='flex flex-col  w-[640px] gap-[20px] '>
                                 <div className='flex  gap-[20px]'>
                                     <div>
                                         <textarea
-
                                             {...register(`Question${index + 1}`, { required: true })}
                                             placeholder='Enter A Question'
-
-                                            className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-[81px] w-[536px]' />
+                                            className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-[81px] w-[536px]'
+                                        />
                                     </div>
+
                                     <div>
                                         <input
                                             {...register(`Points${index + 1}`, { required: true })}
                                             placeholder='Points'
-                                            type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[80px]' />
+                                            type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[80px]' />
                                     </div>
                                 </div>
+                                <div className='flex flex-wrap  gap-[20px]'>
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={selectedAnswers[0] || ''}
+                                            onChange={(e) => handleInputChange(e, 0)}
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+                                            name="options_0"
+                                            id="Questions_0"
+                                            checked={options[0].isCorrect}
+                                            onChange={() => handleRadioChange(0)}
+                                        />
+                                    </div>
 
-                                <div className='flex  gap-[20px]'>
-                                    <div className='border justify-between items-center flex  border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[536px]' >
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
-                                            {...register('Option1')}
-                                            type="text" placeholder='Option1' className=' py-4 px-3 h-[20px] outline-none'
+                                            type="text"
+                                            // value={selectedAnswers[1] || ''}
+                                            onChange={(e) => handleInputChange(e, 1)}
+                                            className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
-                                            type="radio" name="options" id="Questions"
-                                            value="Option1"
-                                            checked={selectedOption === "Option1"}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div>
-                                    <div className='border justify-between items-center flex  border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[536px]' >
-                                        <input
-                                            {...register('Option2')}
-                                            type="text" placeholder='Option2' className=' py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio" name="options" id="Questions"
-                                            value="Option2"
-                                            checked={selectedOption === "Option2"}
-                                            onChange={handleRadioChange}
+                                            type="radio"
+                                            name="options_1"
+                                            id="Questions_1"
+                                            checked={options[1].isCorrect}
+                                            onChange={() => handleRadioChange(1)}
                                         />
                                     </div>
-                                </div>
-                                <div className='flex  gap-[20px]'>
-                                    <div className='border justify-between items-center flex  border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[536px]' >
+
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
                                         <input
-                                            {...register('Option3')}
-                                            type="text" placeholder='Option3' className=' py-4 px-3 h-[20px] outline-none'
+                                            type="text"
+                                            // value={selectedAnswers[2] || ''}
+                                            onChange={(e) => handleInputChange(e, 2)}
+                                            className='py-4 px-3 h-[20px] outline-none'
                                         />
                                         <input
-                                            type="radio" name="options" id="Questions"
-                                            value="Option3"
-                                            checked={selectedOption === "Option3"}
-                                            onChange={handleRadioChange}
-                                        />
-                                    </div>
-                                    <div className='border justify-between items-center flex  border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[536px]' >
-                                        <input
-                                            {...register('Option4')}
-                                            type="text" placeholder='Option4' className=' py-4 px-3 h-[20px] outline-none'
-                                        />
-                                        <input
-                                            type="radio" name="options" id="Questions"
-                                            value="Option4"
-                                            checked={selectedOption === "Option4"}
-                                            onChange={handleRadioChange}
+                                            type="radio"
+                                            name="options_2"
+                                            id="Questions_2"
+                                            checked={options[2].isCorrect}
+                                            onChange={() => handleRadioChange(2)}
                                         />
                                     </div>
-                                </div>
-                                {/* <p>Selected Radio Button: {selectedOption}</p> */}
+
+                                    <div className='border justify-between items-center flex border-solid border-[#DEDEDE] rounded py-4 px-3 h-[40px] w-[300px]'>
+                                        <input
+                                            type="text"
+                                            // value={selectedAnswers[3] || ''}
+                                            onChange={(e) => handleInputChange(e, 3)}
+                                            className='py-4 px-3 h-[20px] outline-none'
+                                        />
+                                        <input
+                                            type="radio"
+                                            name="options_3"
+                                            id="Questions_3"
+                                            checked={options[3].isCorrect}
+                                            onChange={() => handleRadioChange(3)}
+                                        />
+                                    </div>
+
+
                             
 
+                                </div>
 
-                        </div>
+                            </div>
                         </div>
                     })}
-                <div className='flex gap-6 mt-10'>
-                    <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={FileArrowUp} className='w-4' alt="" /><p className="px-2">Upload Quiz</p></button>
+                    <div className='flex gap-6 mt-10'>
+                        <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={FileArrowUp} className='w-4' alt="" /><p className="px-2">Upload Quiz</p></button>
+                    </div>
                 </div>
-        </div>
             </form >
 
         </div >

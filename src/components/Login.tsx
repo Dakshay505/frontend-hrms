@@ -10,27 +10,30 @@ import 'react-toastify/dist/ReactToastify.css';
 type Inputs = {
     email: string;
     password: string;
+    emailOrPhoneNumber: string; // Add this field for the email or phone number input
 };
 
-
 export function Login() {
-    const { register, handleSubmit, setValue,
+    const { register, handleSubmit,
         formState: { errors }, } = useForm<Inputs>();
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const onSubmit = (data: Inputs) => {
-        if (data.email === "" && data.password === "") {
-            toast.error("Please enter a correct username and password.");
-        } else if (data.email === "") {
-            toast.error("Please enter a correct email.");
-        } else if (data.password === "") {
-            toast.error("Please enter a correct password.");
+        console.log(data)
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email);
+        const isPhoneNumber = /^\d{10,}$/.test(data.email);
+    
+        if (data.emailOrPhoneNumber === "") {
+            toast.error("Please enter a correct email or phone number.");
+        } else if (!isEmail && !isPhoneNumber) {
+            toast.error("Invalid email address or phone number.");
         } else {
             dispatch(getAdminLoginAsync(data)).then(() => {
                 dispatch(getLoggedInUserDataAsync());
             });
         }
     };
+    
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
     }, [])
@@ -54,10 +57,10 @@ export function Login() {
                                 <div className='relative w-[320px]'>
                                     <input
                                         {...register("email", {
-                                            required: "Email is required.", // Adding the required validation message
+                                            required: "Email or Phone Number is required.",
                                             pattern: {
-                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message: 'Invalid email address',
+                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // This pattern will accept either an email or a phone number with at least 10 digits
+                                                message: 'Invalid email address ',
                                             },
                                         })}
                                         className='border border-solid border-[#DEDEDE] py-4 ps-4 pe-9 w-[320px] focus:outline-none text-sm text-[#666666] font-normal h-10 rounded'
