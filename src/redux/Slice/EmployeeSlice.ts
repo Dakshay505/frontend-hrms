@@ -8,12 +8,14 @@ import {
   getEmployeeImage,
   getSingleEmployee,
   updateEmployee,
-  pagination
+  pagination,
+  getQrAssign
 } from "../API/EmployeeAPI";
 
 const initialState = {
   employees: [],
   singleEmployee: {}, 
+  qrAssign: {},
   status: "idle",
 };
 
@@ -129,6 +131,19 @@ export const getPaginationAsync = createAsyncThunk(
     }
   }
 );
+
+// QRASSIGN
+export const getQrAssignAsync: any = createAsyncThunk(
+  'getQrAssignAsync',
+  async (data) => {
+    try {
+      const response = await getQrAssign(data);
+      return response;
+    } catch (error:any) {
+      console.log(error.message);
+    }
+  }
+);
   
 
 export const EmployeeSlice = createSlice({
@@ -209,6 +224,13 @@ export const EmployeeSlice = createSlice({
       .addCase(getPaginationAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.employees =  action.payload.employees;
+      })
+      .addCase(getQrAssignAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getQrAssignAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.qrAssign =  action.payload.data;
       })
   },
 });
