@@ -83,9 +83,20 @@
 .employeeHomeCalender .react-calendar__month-view__weekdays__weekday {
   padding: 20px 5px;
   color: #b0b0b0;
-  font-size: 13px;
+  font-size: 10px;
   line-height: 12px;
   letter-spacing: 1.5px;
+}
+.employeeHomeCalender .react-calendar__month-view__days__day{
+  padding: 8px;
+  border-radius: 444444px;
+}
+.employeeHomeCalender .react-calendar__month-view__days__day abbr{
+  font-size: 14px;
+  width: 30px;
+  height: 30px;
+  line-height: 18px;
+  font-weight: 400;
 }
 .employeeHomeCalender .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
