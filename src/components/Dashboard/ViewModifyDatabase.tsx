@@ -7,7 +7,6 @@ import { getAllGroupsAsync, getSingleGroupAsync } from '../../redux/Slice/GroupS
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
 import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
-import FunnelSimple from '../../assets/FunnelSimple.svg'
 import glass from '../../assets/MagnifyingGlass.png'
 
 const ViewModifyDatabase = () => {
@@ -40,7 +39,6 @@ const ViewModifyDatabase = () => {
     const [path, setPath] = useState('/addemployee')
     const [databaseValue, setDatabaseValue] = useState("Employees");
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
-    const [showFilter, setshowFilter] = useState(false);
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
             const employeeData = data.payload.employees;
@@ -244,7 +242,6 @@ const ViewModifyDatabase = () => {
                             </label>
                         </div>}
                         <input
-                            onClick={() => setshowFilter(false)}
                             type="search"
                             id="searchInput"
                             onChange={handleInputChange}
