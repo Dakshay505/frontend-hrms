@@ -92,41 +92,10 @@ export const AddTrainingQuiz = () => {
     };
 
 
-    const handleRadioChange = (index: number) => {
-        const newOptions = [...options];
-        newOptions.forEach((option, i) => {
-            newOptions[i].isCorrect = i === index;
-            console.log(option)
-        });
-        setOptions(newOptions);
-
-        // Get the selected answer and update the selectedAnswers as a string
-        const selectedAnswer = newOptions[index].answer;
-        setSelectedAnswers(selectedAnswer);
-
-    };
 
 
 
-    const handleFormSubmit = async () => {
-        try {
-            const response = await axios.post('http://localhost:5050/api/v1/api/quiz/addQuestion', {
-                groupName: groupName,
-                jobProfileName: jobProfileName,
-            });
-
-
-            if (response.status === 200) {
-                // Quiz successfully uploaded
-                console.log('Quiz uploaded successfully');
-            } else {
-                // Handle error
-                console.error('Failed to upload quiz');
-            }
-        } catch (error) {
-            console.error('An error occurred', error);
-        }
-    };
+ 
 
     const {
         register,
