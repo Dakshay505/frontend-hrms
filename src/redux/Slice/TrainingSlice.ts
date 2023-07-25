@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addTrainingDocuments, addTrainingLinks } from '../API/TrainingApi';
+import { addTrainingDocuments, addTrainingLinks,addTrainingQuizApi } from '../API/TrainingApi';
 
 const initialState = {
     status: "idle"
@@ -30,6 +30,24 @@ export const addTrainingDocumentsAsync: any = createAsyncThunk(
     }
 );
 
+
+
+
+export const addTrainingQuizAsync: any = createAsyncThunk(
+    'addTrainingQuiz',
+    async (data: any) => { // Add the 'data' parameter and specify its type
+        try {
+            const response: any = await addTrainingQuizApi(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+
+
+
+
 export const TrainingSlice = createSlice({
     name: 'training',
     initialState,
@@ -48,6 +66,13 @@ export const TrainingSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(addTrainingDocumentsAsync.fulfilled, function (state: any) {
+                state.status = 'idle';
+                // state.groups =  action.payload.employees;
+            })
+            .addCase(addTrainingQuizAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addTrainingQuizAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
                 // state.groups =  action.payload.employees;
             })
