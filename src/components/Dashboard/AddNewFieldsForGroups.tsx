@@ -15,7 +15,7 @@ const AddNewFieldsForGroups = () => {
         setValue,
         formState: { errors },
 
-    } = useForm();
+    }: any = useForm();
     const handleShowInputBox = () => {
         setshowInputBox([...showInputBox, 1]);
     }
@@ -81,7 +81,7 @@ const AddNewFieldsForGroups = () => {
                 <div onClick={handleShowInputBox}>
                     <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className='px-2'>Add New Data Field</p></button>
                 </div>
-                <form onSubmit={handleSubmit((data) => {
+                <form onSubmit={handleSubmit((data: any) => {
                     handleFormSubmit(data);
                 })}
                 >

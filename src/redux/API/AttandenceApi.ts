@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllAttandenceApiPath, getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, updateAllTodayPunchesApiPath } from "../../APIRoutes";
+import { getAllAttandenceApiPath, getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, updateAttendanceApiPath } from "../../APIRoutes";
 
 
 // READ
@@ -13,17 +13,7 @@ export const getAllTodayPunches = async () => {
     console.log(err.response.data);
   }
 };
-// READ
-export const getMyAttandence = async () => {
-  try {
-    const { data } = await axios.get(`${getMyAttandenceApiPath}`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (err: any) {
-    console.log(err.response.data);
-  }
-};
+
 // READ
 export const getPresentBelow = async () => {
   try {
@@ -60,11 +50,24 @@ export const getAllAttandence = async (sendData: any) => {
     console.log(err.response.data);
   }
 };
-
-// UPDATE
-export const updateAllTodayPunches = async (updateData: any) => {
+// READ
+export const getMyAttandence = async (sendData: any) => {
   try {
-    const { data } = await axios.patch(`${updateAllTodayPunchesApiPath}`, updateData, {
+    const filterDatta = convertToQueryString(sendData);
+    const { data } = await axios.get(`${getMyAttandenceApiPath}?${filterDatta}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
+// UPDATE Attendance
+export const updateAttendance = async (updateData: any) => {
+  try {
+    console.log("updateData", updateData)
+    const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
       withCredentials: true,
     });
     return data;

@@ -41,10 +41,7 @@
 }
 
 .filterCalender .react-calendar__tile--active {
-  /* Add your custom styles for selected days here */
-  background-color: #283093;
-  color: #ffffff;
-  border-radius: 100px;
+  background-color: #ECEDFE;
 }
 
 /* WEEKS */

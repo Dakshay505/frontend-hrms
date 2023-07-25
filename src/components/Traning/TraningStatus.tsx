@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
@@ -10,6 +10,7 @@ export const TraningStatus = () => {
   const [groupName, setGroupName] = useState('All Groups');
   const groupList = useSelector((state: any) => state.group.groups);
   const [jobProfileName, setjobProfileName] = useState('All Job Profiles');
+  console.log(groupName, jobProfileName)
 
   useEffect(() => {
     dispatch(getAllGroupsAsync());

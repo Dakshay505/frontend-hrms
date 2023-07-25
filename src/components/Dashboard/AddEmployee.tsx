@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Plus from '../../assets/Plus.png';
 import BluePlus from '../../assets/BluePlus.png';
+import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { createEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import Receipt from '../../assets/Receipt.svg'
+import XCircle from '../../assets/XCircle.svg'
+import axios from 'axios';
+import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 
 const AddEmployee = () => {
     const dispatch = useDispatch();
@@ -14,6 +18,10 @@ const AddEmployee = () => {
     const [overTimeValue, setOverTimeValue] = useState(false);
     const [overtimerate, setOvertimerate] = useState(0);
     const [showOtp, setShowOtp] = useState(false);
+    const [otpCheck, setOtpCheck] = useState<any>(false);
+    const [otpSent, setOtpSent] = useState<any>("");
+    const [otpVerified, setOtpVerified] = useState<any>("");
+
     const {
         register,
         handleSubmit,
@@ -21,7 +29,7 @@ const AddEmployee = () => {
         setValue,
         getValues,
         formState: { errors },
-    } = useForm()
+    }: any = useForm()
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
@@ -76,6 +84,7 @@ const AddEmployee = () => {
 
     // phone number validation
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [otp, setOtp] = useState<any>()
     const [isValid, setIsValid] = useState(false);
 
     const handlePhoneNumberChange = (e: any) => {
@@ -125,6 +134,33 @@ const AddEmployee = () => {
     };
 
 
+
+    // OTP VERIFICATION
+
+    const getOtpAsync = async (sendData: any) => {
+        try {
+            const { data } = await axios.get(`${getOtpApiPath}?phoneNumber=${sendData.phoneNumber}`, { withCredentials: true });
+            return data;
+        }
+        catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+
+    const verifyOtpAsync = async (sendData: any) => {
+        try {
+            const { data } = await axios.get(`${verifyApiPath}?phoneNumber=${sendData.phoneNumber}&otp=${sendData.otp}`, { withCredentials: true });
+            console.log(data);
+            return data
+        }
+        catch (error) {
+            console.log(error);
+            return error
+        }
+    }
+
+
     return (
         <div className="mx-8 py-[32px]">
             <div className='pt-[5px]'>
@@ -133,13 +169,23 @@ const AddEmployee = () => {
             {/* FORM */}
             <div className='mt-10'>
                 <form
-                    onSubmit={handleSubmit((data) => {
+                    onSubmit={handleSubmit((data: any) => {
                         data = {
                             ...data,
                             overTime: overTimeValue,
                         };
                         console.log(data);
-                        dispatch(createEmployeeAsync(data));
+                        setShowOtp(true);
+                        dispatch(createEmployeeAsync(data)).then(() => {
+                            getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
+                                if (res.data.Status === "Success") {
+                                    setOtpSent("OTP Sent");
+                                }
+                                else {
+                                    setOtpSent("OTP not Sent");
+                                }
+                            })
+                        })
                         reset();
                     })}>
                     <div className='flex flex-col gap-5'>
@@ -174,8 +220,6 @@ const AddEmployee = () => {
                                         placeholder='abc@gmail.com'
                                     />
                                     {errors.email && <p className="text-red-500">{String(errors.email.message)}</p>}
-
-
                                 </div>
                             </div>
                         </div>
@@ -214,9 +258,8 @@ const AddEmployee = () => {
                         </div>
                         <div className='flex gap-10'>
                             <div className='flex flex-col gap-3'>
-                                <div className='flex justify-between'>
+                                <div>
                                     <p className='text-sm font-normal text-[#1C1C1C]'>Phone Number</p>
-                                    <p onClick={() => setShowOtp(!showOtp)} className='text-[12px] leading-5 text-[#283093] font-normal cursor-pointer underline'>Verify with OTP</p>
                                 </div>
                                 <div onChange={handlePhoneNumberChange}>
                                     <input
@@ -236,41 +279,6 @@ const AddEmployee = () => {
                                     <p className='text-green-500'>Phone number is valid!</p>
                                 )}
                             </div>
-                            {showOtp && <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='absolute flex justify-center items-center top-0 bottom-0 right-0 left-0'>
-                                <div className='bg-[#FFFFFF] p-10'>
-                                    <div className='flex gap-2 pb-4 w-[640px] border-b border-solid border-[#B0B0B0]'>
-                                        <div>
-                                            <img src={Receipt} className='w-6 h-6' alt="" />
-                                        </div>
-                                        <div>
-                                            <h3 className='text-[18px] leading-6 font-medium text-[#1C1C1C]'>OTP sent to +91 85385 57391</h3>
-                                        </div>
-                                    </div>
-                                    <div className='pt-6 flex flex-col gap-3'>
-                                        <div className='flex justify-between'>
-                                            <p className='text-sm font-normal text-[#1C1C1C]'>Enter OTP</p>
-                                            <p className='text-[12px] leading-5 font-normal text-[#283093] cursor-pointer underline'>Resend OTP</p>
-                                        </div>
-                                        <div>
-                                            <input
-                                                {...register("otp", { required: true })}
-                                                placeholder='XXX XXX'
-                                                className='border border-solid border-[#B0B0B0] rounded py-3 px-4 h-10 w-[640px] text-sm font-normal text-[#666666]'
-                                                type="number" />
-                                        </div>
-                                        <div className='pt-[21px]'>
-                                            <div className='flex gap-4 justify-end'>
-                                                <div onClick={() => setShowOtp(false)} className='flex justify-center items-center h-[34px] w-[96px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer'>
-                                                    <p className='text-sm font-medium text-[#3B3B3B]'>Cancel</p>
-                                                </div>
-                                                <div className='flex justify-center items-center h-[34px] w-[122px] bg-[#283093] rounded-lg cursor-pointer'>
-                                                    <p className='text-sm font-medium text-[#FBFBFC]'>Verify OTP</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>}
                             {employementTypeValue === "Fixed Salary Employee" &&
                                 <div className='flex flex-col gap-3'>
                                     <div>
@@ -287,10 +295,7 @@ const AddEmployee = () => {
                                         />
                                         {errors.salary && <p className="text-red-500">{String(errors.salary.message)}</p>}
                                     </div>
-
-
                                 </div>
-
                             }
                             {employementTypeValue === "Contract Employee" && <div className='flex flex-col gap-3'>
                                 <div>
@@ -430,12 +435,81 @@ const AddEmployee = () => {
                         }
                         {/* FIXED SALARY EMPLOYEE END */}
                     </div>
-                    <div className='flex gap-6 mt-10'>
-                        <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
-                        <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
+                    <div className='flex flex-col gap-4 mt-10'>
+                        <div className='flex gap-[9px] ps-2'>
+                            <input
+                                onChange={(event) => setOtpCheck(event.target.checked)}
+                                checked={otpCheck}
+                                type="checkbox" id='otpCheck' />
+                            <label htmlFor='otpCheck' className='text-sm font-normal text-[#1C1C1C] tracking-[0.25px]'>Verify OTP Later</label>
+                        </div>
+                        <div className='flex gap-6'>
+                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
+                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
+                        </div>
                     </div>
                 </form>
             </div>
+            {showOtp && !otpCheck &&
+                <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='fixed flex justify-center items-center top-0 bottom-0 right-0 left-0'>
+                    <div className='bg-[#FFFFFF] p-10'>
+                        <div className='flex gap-2 pb-4 w-[640px] border-b border-solid border-[#B0B0B0]'>
+                            <div>
+                                <img src={Receipt} className='w-6 h-6' alt="" />
+                            </div>
+                            <div>
+                                <h3 className='text-[18px] leading-6 font-medium text-[#1C1C1C]'>OTP sent to {phoneNumber}</h3>
+                            </div>
+                        </div>
+                        <div className='pt-6 flex flex-col gap-3'>
+                            <div className='flex justify-between'>
+                                <p className='text-sm font-normal text-[#1C1C1C]'>Enter OTP</p>
+                                <p onClick={() => {
+                                    getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
+                                        if (res.data.Status === "Success") {
+                                            setOtpSent("Resend otp Successfully")
+                                        }
+                                    })
+                                }} className='text-[12px] leading-5 font-normal text-[#283093] cursor-pointer underline'>Resend OTP</p>
+                            </div>
+                            <div>
+                                <input
+                                    onChange={(event) => setOtp(event.target.value)}
+                                    placeholder='XXX XXX'
+                                    className='border border-solid border-[#B0B0B0] rounded py-3 px-4 h-10 w-[640px] text-sm font-normal text-[#666666]'
+                                    type="number" />
+                                {otpSent === "Resend otp Successfully" &&
+                                    <div className='flex gap-[6px] items-center pt-2'>
+                                        <img src={PaperPlaneTilt} className='w-[14px] h-[14px]' alt="plane" />
+                                        <p className='text-xs font-normal text-[#414EF1]'>OTP resent successfully!</p>
+                                    </div>}
+                                {otpVerified === "Not Verified" && <div className='flex gap-[6px] items-center pt-2'>
+                                        <img src={XCircle} className='w-[14px] h-[14px]' alt="plane" />
+                                        <p className='text-xs font-normal text-[#E23F3F]'>OTP incorrect! Please try again.</p>
+                                    </div>}
+                            </div>
+                            <div className='pt-[21px]'>
+                                <div className='flex gap-4 justify-end'>
+                                    <div onClick={() => setShowOtp(false)} className='flex justify-center items-center h-[34px] w-[96px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer'>
+                                        <p className='text-sm font-medium text-[#3B3B3B]'>Cancel</p>
+                                    </div>
+                                    <div onClick={() => {
+                                        verifyOtpAsync({ phoneNumber: phoneNumber, otp: otp }).then((res) => {
+                                            if (res.data.Status === "Success") {
+                                                setOtpVerified("Verified");
+                                                setShowOtp(false);
+                                            } else {
+                                                setOtpVerified("Not Verified");
+                                            }
+                                        });
+                                    }} className='flex justify-center items-center h-[34px] w-[122px] bg-[#283093] rounded-lg cursor-pointer'>
+                                        <p className='text-sm font-medium text-[#FBFBFC]'>Verify OTP</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
         </div>
     )
 }

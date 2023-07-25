@@ -24,7 +24,7 @@ const AddJobProfile = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm();
+  }: any = useForm();
 
   const validateJobProfileName = (value:any) => {
     if (/^\d/.test(value)) {
@@ -47,7 +47,7 @@ const AddJobProfile = () => {
         <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Job Profile</h1>
       </div>
       <div className="mt-10">
-        <form onSubmit={handleSubmit((data) => {
+        <form onSubmit={handleSubmit((data: any) => {
           dispatch(createJobProfileAsync(data)).then(() => {
             dispatch(getAllJobProfileAsync());
           })
@@ -119,8 +119,45 @@ const AddJobProfile = () => {
 
           {employementTypeValue === "Contract Employee" &&
             <div className="flex justify-center mt-6 py-8 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA]">
-              {/* ... (existing code) ... */}
+            <div className="flex flex-col gap-3">
+              <div className="flex">
+                <p className="text-sm font-normal text-[#1C1C1C]">Define Production Slip Format</p>
+              </div>
+              <div className="flex gap-3">
+                <div>
+                  <input
+                    onChange={(event) => {
+                      setNewFieldValue(event.target.value);
+                    }}
+                    className="py-3 px-4 w-[320px] h-10 border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded focus:outline-none"
+                    placeholder="Column Name"
+                    value={newFieldValue}
+                    type="text" />
+                </div>
+                <div>
+                  <div onClick={() => {
+                    if (newFieldValue !== "") {
+                      setNewFields([...newFields, newFieldValue])
+                      setNewFieldValue("");
+                    }
+
+                  }}
+                    className='flex items-center justify-center rounded-lg w-[149px] h-10 text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4 cursor-pointer'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Column</p></div>
+                </div>
+              </div>
+              {(newFields.length > 0) && <div className="flex flex-wrap mt-6">
+                <div className="flex justify-center items-center bg-[#ECEDFE] w-12 h-[42px]">
+                  <img src={BlackPlus} className="w-6 h-6" alt="" />
+                </div>
+                {newFields && newFields.map((element: any, index: number) => {
+                  return <p
+                    key={index}
+                    className="py-4 px-6 h-[42px] flex items-center text-sm font-medium text-[#2E2E2E] bg-[#ECEDFE] border-l border-solid border-[#DEDEDE]"
+                  >{element}</p>
+                })}
+              </div>}
             </div>
+          </div>
           }
 
           <div className="mt-10">

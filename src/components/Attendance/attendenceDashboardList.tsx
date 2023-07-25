@@ -35,10 +35,6 @@ export const AttendenceDashboardList = () => {
     }
   }
 
-
-
-
-
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<any>([]);
@@ -53,13 +49,15 @@ export const AttendenceDashboardList = () => {
 
   useEffect(() => {
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      const employeeData = data.payload.employees;
-      const arr = [];
-      for (let i = 0; i < employeeData.length; i++) {
-        arr.push(employeeData[i].employeeId.name)
+      const employeeData = data.payload.attendanceRecords;
+      const arr:any = [];
+      if(employeeData){
+        for (let i = 0; i < employeeData.length; i++) {
+          arr.push(employeeData[i].employeeId.name)
+        }
+        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
       }
-      setFetchedSuggestions(arr)
-    });
+      });
     console.log(fetchedSuggestions);
     dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
@@ -82,11 +80,6 @@ export const AttendenceDashboardList = () => {
     dispatch(getAllAttandenceAsync(filter))
   }, [filter])
 
-
-
-  const handleTableRowClick = (data: any) => {
-    console.log(data._id)
-  }
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });

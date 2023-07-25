@@ -12,9 +12,8 @@ import ViewModifyDatabase from './components/Dashboard/ViewModifyDatabase';
 import AddGroup from './components/Dashboard/AddGroup';
 import AddJobProfile from './components/Dashboard/AddJobProfile';
 import UpdateHierarcy from './components/Dashboard/UpdateHierarcy';
-import { AttendenceDtabase } from './components/AttendanceDash/attendenceDatabase';
-import { Leavereate } from './components/AttendanceDash/leavereate';
-import { AttendenceDashboardList } from './components/AttendanceDash/attendenceDashboardList';
+import { AttendenceDtabase } from './components/Attendance/attendenceDatabase';
+import { AttendenceDashboardList } from './components/Attendance/attendenceDashboardList';
 import { DocumentDash } from './components/documentmodules/documentDash';
 import { Uploaddocument } from './components/documentmodules/uploaddocument';
 import NotFound from "./components/NotFound";
@@ -29,11 +28,11 @@ import { Login } from './components/Login';
 import { EmployeeProfile } from './components/Employeeprofile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
-import { JobProfileInfo } from './components/information/jobprofileinfo';
-import { GroupInfo } from './components/information/groupinfo';
+import { JobProfileInfo } from './components/Employeeprofile/jobprofileinfo';
+import { GroupInfo } from './components/Employeeprofile/groupinfo';
 
-import { StaffCheckin } from './Employee/dashboard/staffcheckin';
-import { Employeeattendence } from './Employee/dashboard/EmployeeYourattendence';
+import { StaffCheckin } from './components/Attendance/Employee/staffcheckin';
+import { Employeeattendence } from './components/Attendance/Employee/EmployeeYourattendence';
 import { EmpViewdoc } from './Employee/documents/viewdoc';
 // import { Yourdoc } from './Employee/documents/yourdoc';
 import { ChangePassword } from './Employee/changepassword';
@@ -57,7 +56,6 @@ import { io } from "socket.io-client";
 import { apiPath } from "./APIRoutes";
 import ShowNotication from "./components/Notification/showNotication";
 import SalaryDatabase from "./components/Salary/SalaryDatabase";
-import DummyCalaender from "./components/AttendanceDash/dummyCalaender";
 import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
 import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
@@ -207,17 +205,6 @@ const router = createBrowserRouter([
         <Aside>
           {" "}
           <AttendenceDtabase></AttendenceDtabase>{" "}
-        </Aside>
-      </ProductedRoute>
-    ),
-  },
-  {
-    path: "/leaves",
-    element: (
-      <ProductedRoute>
-        <Aside>
-          {" "}
-          <Leavereate></Leavereate>{" "}
         </Aside>
       </ProductedRoute>
     ),
@@ -480,12 +467,6 @@ const router = createBrowserRouter([
     path: "*",
     element: (
       <NotFound></NotFound>
-    ),
-  },
-  {
-    path: "/dummy",
-    element: (
-      <DummyCalaender></DummyCalaender>
     ),
   },
 ]);

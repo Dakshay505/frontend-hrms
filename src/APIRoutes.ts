@@ -21,6 +21,10 @@ export const getSingleEmployeeApiPath = `${apiPath}/api/v1/employee/getSingle`;
 export const updateEmployeeApiPath = `${apiPath}/api/v1/employee`
 export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfile`
 
+// OTP VERIFICATION
+export const getOtpApiPath = `${apiPath}/api/v1/otpVerify/getotp`
+export const verifyApiPath = `${apiPath}/api/v1/otpVerify/verifyotp`
+
 // UPDATE Hierarchy
 export const updateHierarchyApiPath = `${apiPath}/api/v1/jobProfile/updateHierarchy`
 export const updateHierarchyGroupApiPath = `${apiPath}/api/v1/group/update/hr`
@@ -61,10 +65,10 @@ export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 // attendance 
 export const getPresentNumberApiPath = `${apiPath}/api/v1/attendance/getPresentNumber`
 export const getAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/getallpunches`
-export const updateAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/approveAttendance`
+export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAttendance`
 // export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
-export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myattendance`
+export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`
 export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
 
 // TRAINING
