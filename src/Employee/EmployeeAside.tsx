@@ -72,7 +72,6 @@ export default function EmployeeAside(props: Props) {
   const dispatch = useDispatch()
   const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
   const profileData = useSelector((state: any) => state.employee.singleEmployee.profileId?.profilePicture)
-  console.log("image", profileData)
 
 
   useEffect(() => {

@@ -20,18 +20,18 @@ const ComposeNotification = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  const user = useSelector((state:any)=>state.login.loggedInUserData)
-  let id:string = "";
-  if(user && user.admin){
-     id = user.admin._id
-  }else if(user && user.employee){
-     id = user.employee._id
-  }else{
+  const user = useSelector((state: any) => state.login.loggedInUserData)
+  let id: string = "";
+  if (user && user.admin) {
+    id = user.admin._id
+  } else if (user && user.employee) {
+    id = user.employee._id
+  } else {
     id = ""
   }
   // const [socket, setSocket] = useState<any>(null);
 
-  useEffect(() => { 
+  useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
     fetchNotifications();
@@ -39,8 +39,30 @@ const ComposeNotification = () => {
 
   const fetchNotifications = async () => {
     try {
-       await axios.get(`${apiPath}/api/v1/notifications`);
-      toast("Notification sent successfully",{
+      await axios.get(`${apiPath}/api/v1/notifications`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const { register, handleSubmit, reset } = useForm();
+  const notificationTypeList = ["High alert", "Alert", "Info"];
+
+  const onSubmit = async (data: any) => {
+    try {
+      await sendNotification(data);
+      reset();
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
+  const sendNotification = async (data: any) => {
+    try {
+      console.log(data)
+      await axios.post(`${apiPath}/api/v1/notifications`, data);
+      console.log('Notification sent successfully');
+      toast("Notification sent successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -51,28 +73,6 @@ const ComposeNotification = () => {
         theme: "colored",
       })
     } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const { register, handleSubmit ,reset } = useForm();
-  const notificationTypeList = ["High alert", "Alert", "Info"];
-
-  const onSubmit = async (data:any) => {
-    try {
-      await sendNotification(data);
-     reset();
-    } catch (error) {
-      console.error('Error sending notification:', error);
-    }
-  };
-
-  const sendNotification = async (data:any) => {
-    try {
-      console.log(data)
-      await axios.post(`${apiPath}/api/v1/notifications`, data);
-      console.log('Notification sent successfully');
-    } catch (error) {
       console.error('Error sending notification:', error);
     }
   };
@@ -80,7 +80,7 @@ const ComposeNotification = () => {
   useEffect(() => {
     const newSocket = io(`${apiPath}?employeeId=${id}`);
     // setSocket(newSocket);
-    
+
     newSocket.on('connect', () => {
       console.log("Connected to websocket");
     });

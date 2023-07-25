@@ -6,6 +6,7 @@ import { getSingleGroupSalaryAsync } from "../../redux/Slice/SalarySlice";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import Calendar from "react-calendar";
+import glass from '../../assets/MagnifyingGlass.png'
 
 
 const SingleGroupSalary = () => {
@@ -18,11 +19,15 @@ const SingleGroupSalary = () => {
         groupName: "",
         jobProfileName: "",
         date: "",
-        nextDate: ""
+        nextDate: "",
+        name: ""
     })
 
     const [groupValue, setGroupValue] = useState<any>("");
     const [jobProfileValue, setJobProfileValue] = useState<any>("");
+    const [isLabelVisible, setLabelVisible] = useState(true);
+    const [search, setSearch] = useState('');
+    const [suggestions, setSuggestions] = useState<any>([]);
     const [date, setDate] = useState<any>(new Date());
     const [nextDate, setnextDate] = useState<any>();
     const [showCalender, setShowCalender] = useState(false);
@@ -77,23 +82,60 @@ const SingleGroupSalary = () => {
         }
     }, [nextDate])
 
-    const [dateRange, setDateRange] = useState<any>([])
-    useEffect(() => {
-        function getDateRange(startDate: any, endDate: any) {
-            if (nextDate) {
-                const result = [];
-                const currentDate = new Date(startDate);
-                const finalDate = new Date(endDate);
-                while (currentDate <= finalDate) {
-                    result.push(currentDate.toISOString().slice(0, 10));
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-                setDateRange([...result])
-            }
+    const handleInputChange = (event: any) => {
+        if (event.target.value !== "") {
+            setLabelVisible(false);
+            setSearch(event.target.value);
+            setFilter({
+                ...filter,
+                name: event.target.value
+            })
+            getSuggestions(event.target.value);
         }
-        getDateRange(filter.date, filter.nextDate)
-        dispatch(getSingleGroupSalaryAsync(filter))
-    }, [filter])
+        else {
+            setLabelVisible(true);
+            setSearch(event.target.value);
+            setFilter({
+                ...filter,
+                name: event.target.value
+            })
+            setSuggestions([]);
+        }
+    };
+    
+        const [dateRange, setDateRange] = useState<any>([])
+        const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+        useEffect(() => {
+            function getDateRange(startDate: any, endDate: any) {
+                if (nextDate) {
+                    const result = [];
+                    const currentDate = new Date(startDate);
+                    const finalDate = new Date(endDate);
+                    while (currentDate <= finalDate) {
+                        result.push(currentDate.toISOString().slice(0, 10));
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    setDateRange([...result])
+                }
+            }
+            getDateRange(filter.date, filter.nextDate)
+            dispatch(getSingleGroupSalaryAsync(filter)).then((data: any) => {
+                const employeeData = data.payload.attendanceRecords;
+                const arr: any = [];
+                for (let i = 0; i < employeeData.length; i++) {
+                    arr.push(employeeData[i].employeeId.name)
+                }
+                setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
+            });
+        }, [filter])
+    const getSuggestions = (inputValue: any) => {
+
+        const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
+            suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        setSuggestions(filteredSuggestions);
+    };
+
     console.log("DATE RANGE", dateRange)
 
     console.log(filter)
@@ -145,7 +187,37 @@ const SingleGroupSalary = () => {
                     </select>
                 </div>
                 <div>
-                    search
+                    <div className="relative">
+                        {isLabelVisible && <div className="absolute top-[10px] left-6">
+                            <label htmlFor="searchInput" className="flex gap-2 items-center cursor-text">
+                                <img src={glass} alt="" className="h-4 w-4" />
+                                <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                            </label>
+                        </div>}
+                        <input
+                            type="search"
+                            id="searchInput"
+                            onChange={handleInputChange}
+                            value={search}
+                            className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+                        />
+                        {suggestions.length > 0 && (
+                            <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
+                                {suggestions.map((suggestion: any, index: any) => (
+                                    <input type="text" readOnly key={index}
+                                        className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
+                                        value={suggestion}
+                                        onClick={(event) => {
+                                            setFilter({
+                                                ...filter,
+                                                name: (event.target as HTMLInputElement).value
+                                            })
+                                            setSuggestions([]);
+                                        }} />
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="py-6 overflow-auto">

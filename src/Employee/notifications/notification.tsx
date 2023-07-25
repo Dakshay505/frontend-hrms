@@ -69,7 +69,7 @@ const NotificationList = () => {
     socket.on("disconnect", () => {
       console.log("Disconnected from websocket");
     });
-     
+
     socket.on("error", (error: any) => {
       console.log(error.message);
     });

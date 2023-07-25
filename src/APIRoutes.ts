@@ -71,7 +71,7 @@ export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAtten
 // export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
 export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`
-export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
+export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/staffAttendance`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
