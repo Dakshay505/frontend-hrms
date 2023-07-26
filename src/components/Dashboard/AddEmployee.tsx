@@ -15,25 +15,28 @@ import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 const AddEmployee = () => {
     const dispatch = useDispatch();
     const [employementTypeValue, setEmployementTypeValue] = useState('');
-    const [overTimeValue, setOverTimeValue] = useState(false);
-    const [overtimerate, setOvertimerate] = useState(0);
+    const [overTimeValue, setOverTimeValue] = useState("No");
+    const [overtimerate, setOvertimerate] = useState<any>("");
     const [showOtp, setShowOtp] = useState(false);
     const [otpCheck, setOtpCheck] = useState<any>(false);
     const [otpSent, setOtpSent] = useState<any>("");
     const [otpVerified, setOtpVerified] = useState<any>("");
-
+    const [overTimeReqValues, setOverTimeReqValues] = useState<any>({
+        salary: "",
+        workingDay: "",
+        workingHours: ""
+    });
+    
     const {
         register,
         handleSubmit,
         reset,
         setValue,
-        getValues,
         formState: { errors },
     }: any = useForm()
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
-    const overTimeList = ['Yes', 'No'];
 
     useEffect(() => {
         dispatch(getAllJobProfileAsync());
@@ -56,31 +59,28 @@ const AddEmployee = () => {
 
     // overtimerate calculation
 
-    const handleOverTimeChange = () => {
-        const value = getValues('overTime');
-        setOverTimeValue(value === 'Yes');
-
-        if (value === 'Yes') {
-            const salary = parseFloat(getValues('salary'));
-            const workingDays = parseFloat(getValues('workingDays'));
-            const workingHours = parseFloat(getValues('workingHours'));
-
-            if (!isNaN(salary) && !isNaN(workingDays) && !isNaN(workingHours)) {
-                const totalWorkingDays = salary / (workingDays * 4.3 * workingHours);
-                const overtimeRate = totalWorkingDays.toFixed(2);
-
-                setOvertimerate(totalWorkingDays);
-                setValue('overTimeRate', overtimeRate);
-                console.log(overtimeRate);
-            } else {
-                console.error('Invalid input for salary, workingDays, or workingHours');
-                setOvertimerate(0);
-                setValue('overTimeRate', '');
-            }
+    const handleOverTimeChange = (event: any) => {
+        if (event.target.value === "Yes") {
+            setOverTimeValue("Yes");
         } else {
-            setValue('overTimeRate', '');
+            setOverTimeValue("No");
         }
     };
+    useEffect(() => {
+        if (overTimeReqValues.salary !== ""  && overTimeReqValues.workingDay !== "" && overTimeReqValues.workingHours !== "") {
+            const salary = Number(overTimeReqValues.salary);
+            const workingDay = Number(overTimeReqValues.workingDay);
+            const workingHours = Number(overTimeReqValues.workingHours);
+            const totalWorkingDays = salary / (workingDay * 4.3 * workingHours);
+            const overtimeRate = totalWorkingDays.toFixed(2);
+            if(overTimeValue === "Yes"){
+                setOvertimerate(totalWorkingDays);
+            } else{
+                setOvertimerate("");
+            }
+            console.log(overtimeRate);
+        }
+    }, [overTimeReqValues, overTimeValue])
 
     // phone number validation
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -123,6 +123,10 @@ const AddEmployee = () => {
     const handleSalaryChange = (event: any) => {
         const input = event.target;
         let newValue = input.value;
+        setOverTimeReqValues({
+            ...overTimeReqValues,
+            salary: event.target.value
+        })
 
         if (/^(-|0)/.test(newValue)) {
             newValue = newValue.replace(/^(-|0)/, '');
@@ -132,6 +136,7 @@ const AddEmployee = () => {
 
         input.value = newValue;
     };
+    console.log("lvnldfn", overTimeReqValues)
 
 
 
@@ -345,6 +350,7 @@ const AddEmployee = () => {
                                         >
                                             <select
                                                 {...register('workingDays', { required: true })}
+                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingDay: event.target.value})}
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select working days</option>
@@ -368,10 +374,11 @@ const AddEmployee = () => {
                                         <div>
                                             <select
                                                 {...register('workingHours', { required: true })}
+                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingHours: event.target.value})}
                                                 className='border border-solid border-[#DEDEDE] rounded py-2 px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select Working Hours</option>
-                                                <option value="4 ">4 hour</option>
+                                                <option value="4">4 hour</option>
                                                 <option value="5">5 hour</option>
                                                 <option value="6">6 hour</option>
                                                 <option value="7">7 hour</option>
@@ -391,14 +398,13 @@ const AddEmployee = () => {
                                         <div>
                                             <select
                                                 {...register('overTime', { required: true })}
-                                                defaultValue={"Overtime"}
+                                                defaultValue="No"
                                                 className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
-                                                onChange={handleOverTimeChange} // Add the onChange event handler for overtime select element
+                                                onChange={handleOverTimeChange}
                                             >
-                                                <option value="Overtime">Overtime</option>
-                                                {overTimeList.map((element) => {
-                                                    return <option value={element} key={element} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element}</option>
-                                                })}
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                            
                                             </select>
                                         </div>
                                     </div>
@@ -410,23 +416,14 @@ const AddEmployee = () => {
                                         </div>
                                         <div>
                                             {/* Conditionally show the calculated overtime rate when overTimeValue is true */}
-                                            {overTimeValue ? (
-                                                <input
-                                                    {...register('overTimeRate', { required: overTimeValue })}
-                                                    type='number'
-                                                    disabled={!overTimeValue}
-                                                    className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                                    value={overtimerate.toFixed(2)}
-                                                />
-                                            ) : (
-                                                <input
-                                                    {...register('overTimeRate', { required: overTimeValue })}
-                                                    type='number'
-                                                    disabled={!overTimeValue}
-                                                    className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                                    value="0" // Show a blank value when overTimeValue is false (No selected)
-                                                />
-                                            )}
+                                            <input
+                                                {...register('overTimeRate', { required: overTimeValue })}
+                                                type='number'
+                                                disabled={overTimeValue === "No"}
+                                                onChange={(event) => setOvertimerate(event.target.value)}
+                                                value={overtimerate}
+                                                className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -484,9 +481,9 @@ const AddEmployee = () => {
                                         <p className='text-xs font-normal text-[#414EF1]'>OTP resent successfully!</p>
                                     </div>}
                                 {otpVerified === "Not Verified" && <div className='flex gap-[6px] items-center pt-2'>
-                                        <img src={XCircle} className='w-[14px] h-[14px]' alt="plane" />
-                                        <p className='text-xs font-normal text-[#E23F3F]'>OTP incorrect! Please try again.</p>
-                                    </div>}
+                                    <img src={XCircle} className='w-[14px] h-[14px]' alt="plane" />
+                                    <p className='text-xs font-normal text-[#E23F3F]'>OTP incorrect! Please try again.</p>
+                                </div>}
                             </div>
                             <div className='pt-[21px]'>
                                 <div className='flex gap-4 justify-end'>
