@@ -1,6 +1,6 @@
 export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
-
+// export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 // JOB PROFILE API
 
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;
@@ -65,13 +65,11 @@ export const updateAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/approvegat
 export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 
 // attendance 
-export const getPresentNumberApiPath = `${apiPath}/api/v1/attendance/getPresentNumber`
-export const getAllTodayPunchesApiPath = `${apiPath}/api/v1/attendance/getallpunches`
 export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAttendance`
-// export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
 export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`
-export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/staffAttendance`
+export const getStaffAttendanceApiPath = `${apiPath}/api/v1/attendance/staffAttendance`
+export const getGroupAttendanceApiPath = `${apiPath}/api/v1/attendance/groupPresent`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`

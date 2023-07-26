@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import glass from "../../assets/MagnifyingGlass.png";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import Filter from '../../assets/filter.png'
 import { getAllApprovedLeavesAsync } from "../../redux/Slice/LeaveAndGatepassSlice";
+import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 
 
 export const LeaveRecords = () => {
@@ -13,15 +12,13 @@ export const LeaveRecords = () => {
   const [suggestions, setSuggestions] = useState<any>([]);
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
+  const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
   const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
   useEffect(() => {
     dispatch(getAllApprovedLeavesAsync());
     dispatch(getAllGroupsAsync());
+    dispatch(getAllJobProfileAsync());
   }, [])
-  const {
-    register,
-
-  } = useForm();
 
   const handleTableRowClick = (data: any) => {
     console.log(data._id)
@@ -65,21 +62,22 @@ export const LeaveRecords = () => {
           <div className="flex gap-4 items-center">
             <p className="text-[#000000] text-[16px] leading-6 font-medium">For:</p>
             <div>
-
               <select
-                {...register('allGroups', { required: "Phone No. required" })}
-                defaultValue={"All Groups"} className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5'>
+                defaultValue={"All Groups"} className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5 focus:outline-none'>
                 <option value="All Groups">All Groups</option>
                 {groupList && groupList.map((element: any, index: number) => {
                   return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] text-sm w-[324px] h-10 px-2'>{element.groupName}</option>
                 })}
               </select>
             </div>
-            <div className="flex items-center border border-solid [#DEDEDE] bg-[#FAFAFA] py-3 px-5 rounded-[53px] w-[100px] h-10">
-              <div className="flex gap-2 items-center">
-                <img src={Filter} className="h-4 w-4" alt="" />
-                <p className="text-sm font-medium text-[#2E2E2E]">Filter</p>
-              </div>
+            <div>
+              <select
+                defaultValue="All Job Profiles" className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg text-sm text-[#2E2E2E] font-medium w-[176px] h-10 px-5 focus:outline-none'>
+                <option value="All Job Profiles">All Job Profiles</option>
+                {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                  return <option value={element.jobProfileName} key={index}>{element.jobProfileName}</option>
+                })}
+              </select>
             </div>
             <div>
               <div className="container flex justify-center items-center">

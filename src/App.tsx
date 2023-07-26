@@ -60,6 +60,8 @@ import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
 import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
 import NotificationList from "./Employee/notifications/notification";
+import AttendanceOverview from "./components/Attendance/AttendanceOverview";
+import SingleGroupAttendance from "./components/Attendance/SingleGroupAttendance";
 
 const router = createBrowserRouter([
   {
@@ -217,6 +219,26 @@ const router = createBrowserRouter([
         <Aside>
           {" "}
           <AttendenceDashboardList></AttendenceDashboardList>{" "}
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/attendance-overview",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AttendanceOverview></AttendanceOverview>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/single-group-attendance",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SingleGroupAttendance></SingleGroupAttendance>
         </Aside>
       </ProductedRoute>
     ),

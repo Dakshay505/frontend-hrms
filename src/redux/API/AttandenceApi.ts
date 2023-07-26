@@ -1,23 +1,10 @@
 import axios from "axios";
-import { getAllAttandenceApiPath, getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, updateAttendanceApiPath } from "../../APIRoutes";
-
-
-// READ
-export const getAllTodayPunches = async () => {
-  try {
-    const { data } = await axios.get(`${getAllTodayPunchesApiPath}`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (err: any) {
-    console.log(err.response.data);
-  }
-};
+import { getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
 
 // READ
-export const getPresentBelow = async () => {
+export const getStaffAttendance = async () => {
   try {
-    const { data } = await axios.get(`${getPresentBelowApiPath}`, {
+    const { data } = await axios.get(`${getStaffAttendanceApiPath}`, {
       withCredentials: true,
     });
     return data;
@@ -63,10 +50,21 @@ export const getMyAttandence = async (sendData: any) => {
   }
 };
 
+// READ
+export const getGroupAttendance = async () => {
+  try {
+    const { data } = await axios.get(`${getGroupAttendanceApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
 // UPDATE Attendance
 export const updateAttendance = async (updateData: any) => {
   try {
-    console.log("updateData", updateData)
     const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
       withCredentials: true,
     });

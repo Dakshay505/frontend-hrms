@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllAttandence, getAllTodayPunches, getMyAttandence, getPresentBelow, updateAttendance } from '../API/AttandenceApi';
+import { getAllAttandence, getGroupAttendance, getMyAttandence, getStaffAttendance, updateAttendance } from '../API/AttandenceApi';
 
 const initialState = {
     allAttandence: [],
-    todaysPunches: [],
     myAttandence: [],
-    presentBelow: [],
+    staffAttendance: [],
+    groupAttendance:[],
     status: 'idle',
 };
 
@@ -36,11 +36,11 @@ export const getMyAttandenceAsync: any = createAsyncThunk(
 );
 
 // READ
-export const getAllTodaysPunchesAsync: any = createAsyncThunk(
-    'getallTodaysPunches',
+export const getGroupAttendanceAsync: any = createAsyncThunk(
+    'getGroupAttendanceAsync',
     async () => {
         try {
-            const response: any = await getAllTodayPunches();
+            const response: any = await getGroupAttendance();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -48,11 +48,11 @@ export const getAllTodaysPunchesAsync: any = createAsyncThunk(
     }
 );
 // READ
-export const getPresentBelowAsync: any = createAsyncThunk(
-    'getPresentBelowAsync',
+export const getStaffAttendanceAsync: any = createAsyncThunk(
+    'getStaffAttendanceAsync',
     async () => {
         try {
-            const response: any = await getPresentBelow();
+            const response: any = await getStaffAttendance();
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -100,21 +100,19 @@ export const AttandenceSlice = createSlice({
             .addCase(updateAttendanceAsync.fulfilled, function (state: any) {
                 state.status = 'idle';
             })
-
-            // OLD
-            .addCase(getAllTodaysPunchesAsync.pending, (state) => {
+            .addCase(getStaffAttendanceAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(getAllTodaysPunchesAsync.fulfilled, function (state: any, action: any) {
+            .addCase(getStaffAttendanceAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.todaysPunches = action.payload.employees;
+                state.staffAttendance = action.payload.data;
             })
-            .addCase(getPresentBelowAsync.pending, (state) => {
+            .addCase(getGroupAttendanceAsync.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(getPresentBelowAsync.fulfilled, function (state: any, action: any) {
+            .addCase(getGroupAttendanceAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.presentBelow = action.payload;
+                state.groupAttendance = action.payload.groupPresent;
             })
     },
 });

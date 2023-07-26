@@ -41,7 +41,7 @@ export const AttendenceDtabase = () => {
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Overview
           </div>
-          <Link to="" className="flex cursor-pointer gap-[6px] justify-center items-center">
+          <Link to="/attendance-overview" className="flex cursor-pointer gap-[6px] justify-center items-center">
             <p className="text-[#666666] text-[16px] font-medium leading-6">See All </p>
             <img src={right} alt="" className="h-[16px] w-[16px]" />
           </Link>
