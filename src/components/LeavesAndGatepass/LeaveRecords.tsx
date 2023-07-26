@@ -38,8 +38,6 @@ export const LeaveRecords = () => {
   console.log(search);
 
   const getSuggestions = (inputValue: any) => {
-    // Implement your logic to fetch suggestions from an API or any data source
-    // For simplicity, let's assume suggestions are stored in an array
     const fetchedSuggestions: any = [];
     allApprovedLeaveList.map((element: any) => {
       console.log(element.employeeId?.name)

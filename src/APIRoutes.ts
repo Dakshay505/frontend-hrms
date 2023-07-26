@@ -1,6 +1,6 @@
-export const apiPath = `http://localhost:5050`;
+// export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
-// export const apiPath = `https://hrms-backend-04fw.onrender.com`;
+export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 // JOB PROFILE API
 
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;

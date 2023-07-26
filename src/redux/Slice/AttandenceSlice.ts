@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllAttandence, getGroupAttendance, getMyAttandence, getStaffAttendance, updateAttendance } from '../API/AttandenceApi';
+import { getAllAttandence, getGroupAttendance, getMyAttandence, getSingleGroupAttendance, getStaffAttendance, updateAttendance } from '../API/AttandenceApi';
 
 const initialState = {
     allAttandence: [],
     myAttandence: [],
     staffAttendance: [],
     groupAttendance:[],
+    singleGroupAttendance: [],
     status: 'idle',
 };
 
@@ -15,6 +16,18 @@ export const getAllAttandenceAsync: any = createAsyncThunk(
     async (data) => {
         try {
             const response: any = await getAllAttandence(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
+// READ SINGLE GROUP SALARY 
+export const getSingleGroupAttendanceAsync: any = createAsyncThunk(
+    'getSingleGroupAttendanceAsync',
+    async (data) => {
+        try {
+            const response: any = await getSingleGroupAttendance(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -113,6 +126,13 @@ export const AttandenceSlice = createSlice({
             .addCase(getGroupAttendanceAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
                 state.groupAttendance = action.payload.groupPresent;
+            })
+            .addCase(getSingleGroupAttendanceAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getSingleGroupAttendanceAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.singleGroupAttendance = action.payload.attendanceRecords;
             })
     },
 });

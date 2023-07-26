@@ -2,33 +2,93 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import glass from '../../assets/MagnifyingGlass.png'
-import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
+import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
+import CaretLeft from "../../assets/CaretLeft.svg"
+import CaretRight from "../../assets/CaretRight1.svg"
+import 'react-datepicker/dist/react-datepicker.css';
+import Calendar from "react-calendar";
+import { useLocation } from "react-router-dom";
 
 const SingleGroupAttendance = () => {
+    const location = useLocation();
+    const additionalData = location.state?.additionalData;
     const dispatch = useDispatch();
     const groupList = useSelector((state: any) => state.group.groups);
-    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords)
+    const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+    const allAttandenceList = useSelector((state: any) => state.attandence.singleGroupAttendance)
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
+    const [date, setDate] = useState<any>(new Date());
+    const [nextDate, setnextDate] = useState<any>();
+    const [showCalender, setShowCalender] = useState(false);
+    const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
     const [suggestions, setSuggestions] = useState<any>([]);
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
 
     const [filter, setFilter] = useState({
         name: "",
-        groupName: ""
+        groupName: "",
+        jobProfileName: "",
+        date: "",
+        nextDate: ""
     });
     useEffect(() => {
         dispatch(getAllGroupsAsync())
+        dispatch(getAllJobProfileAsync())
     }, [])
     useEffect(() => {
-        dispatch(getAllAttandenceAsync(filter))
+        const currentDate = new Date(date);
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        setFilter({
+            ...filter,
+            date: `${year}-${month}-${day}`
+        })
+    }, [date])
+
+    useEffect(() => {
+        if (nextDate) {
+            const currentDate = new Date(nextDate);
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            setFilter({
+                ...filter,
+                nextDate: `${year}-${month}-${day}`
+            })
+        }
+    }, [nextDate])
+    useEffect(() => {
+        setFilter({
+            ...filter,
+            groupName: additionalData
+        })
+    }, [additionalData])
+    const [dateRange, setDateRange] = useState<any>([])
+    useEffect(() => {
+        function getDateRange(startDate: any, endDate: any) {
+            if (nextDate) {
+                const result = [];
+                const currentDate = new Date(startDate);
+                const finalDate = new Date(endDate);
+                while (currentDate <= finalDate) {
+                    result.push(currentDate.toISOString().slice(0, 10));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                setDateRange([...result])
+            }
+        }
+        getDateRange(filter.date, filter.nextDate)
+        console.log("filter", filter);
+        dispatch(getGroupAttendanceAsync(filter))
     }, [filter])
     useEffect(() => {
         const arr: any = [];
-        console.log("AllAttendanceList", allAttandenceList)
         for (let i = 0; i < allAttandenceList.length; i++) {
             arr.push(allAttandenceList[i].employeeId.name)
         }
@@ -63,7 +123,6 @@ const SingleGroupAttendance = () => {
     };
 
     const [showTableRow, setShowTableRow] = useState<any>([]);
-
     const handleRowClick = (index: number) => {
         const isExpanded = showTableRow.includes(index)
         if (isExpanded) {
@@ -73,41 +132,80 @@ const SingleGroupAttendance = () => {
             setShowTableRow([...showTableRow, index])
         }
     }
-    
+    const formatDate = (date: any) => {
+        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+      };
+    const tileClassName = ({ date }: any) => {
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        const formattedDate = localDate.toISOString().split('T')[0];
+        if (dateRange.includes(formattedDate)) {
+          return 'bg-[#ECEDFE] text-[#FFFFFF]';
+        }
+        return '';
+      };
+
     return (
         <div className="pt-8 px-10">
             <div>
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Attendance Database</h1>
             </div>
             <div className="mt-8 flex justify-between">
-                <div>
-
-                    <select
-                        onChange={(event) => {
-                            if (event.target.value === "All Groups") {
-                                setFilter({
-                                    ...filter,
-                                    groupName: ""
-                                })
-                            } else {
-                                setFilter({
-                                    ...filter,
-                                    groupName: event.target.value
-                                })
-                            }
-                        }}
-                        value={filter.groupName}
-                        className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
-                        <option value="All Groups">All Groups</option>
-                        {groupList && groupList.map((element: any, index: number) => {
-                            return <option
-                                key={index}
-                                value={element.groupName}
-                            >
-                                {element.groupName}
-                            </option>
-                        })}
-                    </select>
+                <div className="flex gap-6">
+                    <div>
+                        <select
+                            onChange={(event) => {
+                                if (event.target.value === "All Groups") {
+                                    setFilter({
+                                        ...filter,
+                                        groupName: ""
+                                    })
+                                } else {
+                                    setFilter({
+                                        ...filter,
+                                        groupName: event.target.value
+                                    })
+                                }
+                            }}
+                            defaultValue={additionalData}
+                            className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                            <option value="All Groups">All Groups</option>
+                            {groupList && groupList.map((element: any, index: number) => {
+                                return <option
+                                    key={index}
+                                    value={element.groupName}
+                                >
+                                    {element.groupName}
+                                </option>
+                            })}
+                        </select>
+                    </div>
+                    <div>
+                        <select
+                            onChange={(event) => {
+                                if (event.target.value === "All Job Profiles") {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: ""
+                                    })
+                                } else {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: event.target.value
+                                    })
+                                }
+                            }}
+                            className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                            <option value="All Job Profiles">All Job Profiles</option>
+                            {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                                return <option
+                                    key={index}
+                                    value={element.jobProfileName}
+                                >
+                                    {element.jobProfileName}
+                                </option>
+                            })}
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <div className="relative">
@@ -215,6 +313,53 @@ const SingleGroupAttendance = () => {
                         })}
                     </tbody>
                 </table>
+            </div>
+            <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+                <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+                    <button
+                        onClick={() => {
+                            const nextDate = new Date(date);
+                            nextDate.setDate(date.getDate() - 1);
+                            setDate(nextDate);
+                        }}>
+                        <img src={CaretLeft} alt="" className="w-4 h-4" />
+                    </button>
+                    {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+                        <Calendar
+                            tileClassName={tileClassName}
+                            onChange={(event) => {
+                                calenderDayClicked.length === 0 ? setDate(event) : "";
+                                calenderDayClicked.length === 1 ? setnextDate(event) : "";
+                                if (calenderDayClicked.length < 1) {
+                                    setcalenderDayClicked([...calenderDayClicked, 1]);
+                                }
+                            }}
+                            onClickDay={() => {
+                                if (calenderDayClicked.length > 0) {
+                                    setShowCalender(false);
+                                    setcalenderDayClicked([]);
+                                }
+                            }}
+                            className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
+                            formatShortWeekday={(locale, date) => {
+                                console.log(locale)
+                                return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+                            }} />
+                    </div>}
+                    <p
+                        onClick={() => {
+                            setShowCalender(!showCalender);
+                        }}
+                        className="text-sm font-medium text-[#283093] cursor-pointer">{`${formatDate(date)} - ${nextDate ? formatDate(nextDate) : formatDate(date)}`}</p>
+                    <button
+                        onClick={() => {
+                            const nextDate = new Date(date);
+                            nextDate.setDate(date.getDate() + 1);
+                            setDate(nextDate);
+                        }}>
+                        <img src={CaretRight} className="w-4 h-4" alt="" />
+                    </button>
+                </div>
             </div>
         </div>
     )

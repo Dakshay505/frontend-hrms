@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAttandenceAsync, getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getGroupAttendanceAsync, getSingleGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,8 +13,8 @@ const AttendanceOverview = () => {
     }, [])
 
     const handleRowClick = (data: any) => {
-        dispatch(getAllAttandenceAsync({groupName: data.groupName}))
-        navigate('/single-group-attendance')
+        dispatch(getSingleGroupAttendanceAsync({groupName: data.groupName}))
+        navigate('/single-group-attendance',{ state: { additionalData: data.groupName } })
     }
     return (
         <div className="pt-8 px-10">
