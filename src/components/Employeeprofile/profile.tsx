@@ -5,7 +5,7 @@ import check from "../../assets/Check.png"
 import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployeeAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { deleteEmployeeAsync, getQrAssignAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
@@ -17,6 +17,7 @@ import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 import XCircle from '../../assets/XCircle.svg'
 import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
+import { Link } from 'react-router-dom';
 
 
 export const EmployeeProfile = () => {
@@ -27,6 +28,8 @@ export const EmployeeProfile = () => {
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
+    const qrAssign = useSelector((state: any) => state.employee.qrAssign);
+    console.log("qrAssign", qrAssign)
 
 
     const [showInputBoxName, setShowInputBoxName] = useState(false);
@@ -56,6 +59,7 @@ export const EmployeeProfile = () => {
         setInputBoxEmailValue(singleEmployee.email);
         setInputBoxContactNumberValue(singleEmployee.contactNumber);
         setInputBoxGenderValue(singleEmployee.gender);
+        dispatch(getQrAssignAsync(singleEmployee._id));
     }, [singleEmployee])
     useEffect(() => {
         dispatch(getAllJobProfileAsync());
@@ -89,40 +93,7 @@ export const EmployeeProfile = () => {
     }
 
 
-    const qrData = [
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-        {
-            name: "Mahesh D.",
-            date: "08:04 am, 28/06/23"
-        },
-    ]
+   
     const documentList = [
         {
             documentName: "Resume.pdf"
@@ -542,36 +513,37 @@ export const EmployeeProfile = () => {
             </div>
 
             {/* QR Assigning Logs STARTS HERE */}
-            <div className='mt-10'>
+            {qrAssign && qrAssign.length > 0 && <div className='mt-10'>
                 <div>
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>QR Assigning Logs</h1>
                 </div>
                 <div className='mt-6 pb-6 overflow-auto'>
                     <div className='grid grid-cols-4 gap-5 w-[1260px]'>
-                        {qrData && qrData.map((element: any, index: number) => {
+                        {qrAssign && qrAssign.map((element: any, index: number) => {
                             return <div key={index} className='flex gap-6 justify-between py-4 px-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] w-[297px]'>
                                 <div className='flex items-center justify-center'>
                                     <img src={image} className='w-16 h-16 rounded-full' alt="" />
                                 </div>
+                                {/* <img src={element.proofPicture} className='w-full h-full' alt="" /> */}
                                 <div className='flex flex-col gap-5'>
                                     <div>
-                                        <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.name}</span></p>
-                                        <p className='text-[16px] leading-6 font-normal text-[#000000]'>{element.date}</p>
+                                        <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.assignedBy?.name ? element.assignedBy?.name : "Not Avi."}</span></p>
+                                        <p className='text-sm font-normal text-[#000000]'>{element.createdAt ? new Date(element.createdAt).toLocaleString("en-US", {timeStyle: "short"}) : "Not Avi."}, {element.createdAt ? (element.createdAt).slice(0,10) : "Not Avi."}</p>
                                     </div>
-                                    <div className='flex items-center gap-[6px] cursor-pointer'>
+                                    <Link to={element.proofPicture} className='flex items-center gap-[6px] cursor-pointer'>
                                         <div>
                                             <p className='text-[12px] leading-4 font-medium text-[#283093] underline'>Open Photo</p>
                                         </div>
                                         <div>
                                             <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
                                         </div>
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
                         })}
                     </div>
                 </div>
-            </div>
+            </div>}
             {/* QR Assigning Logs ENDS HERE */}
 
 

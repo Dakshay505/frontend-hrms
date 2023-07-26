@@ -27,6 +27,8 @@ const AddEmployee = () => {
         workingHours: ""
     });
 
+    
+
     const {
         register,
         handleSubmit,
@@ -64,24 +66,24 @@ const AddEmployee = () => {
             setOverTimeValue("Yes");
         } else {
             setOverTimeValue("No");
+
         }
     };
     useEffect(() => {
-        if (overTimeReqValues.salary !== "" && overTimeReqValues.workingDay !== "" && overTimeReqValues.workingHours !== "") {
+        if (overTimeReqValues.salary !== ""  && overTimeReqValues.workingDay !== "" && overTimeReqValues.workingHours !== "") {
             const salary = Number(overTimeReqValues.salary);
             const workingDay = Number(overTimeReqValues.workingDay);
             const workingHours = Number(overTimeReqValues.workingHours);
             const totalWorkingDays = salary / (workingDay * 4.3 * workingHours);
             const overtimeRate = totalWorkingDays.toFixed(2);
-            if (overTimeValue === "Yes") {
+            if(overTimeValue === "Yes"){
                 setOvertimerate(totalWorkingDays);
-            } else {
+            } else{
                 setOvertimerate("");
             }
             console.log(overtimeRate);
         }
     }, [overTimeReqValues, overTimeValue])
-
 
 
     // phone number validation
@@ -354,7 +356,9 @@ const AddEmployee = () => {
                                         >
                                             <select
                                                 {...register('workingDays', { required: true })}
-                                                onChange={(event) => setOverTimeReqValues({ ...overTimeReqValues, workingDay: event.target.value })}
+
+                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingDay: event.target.value})}
+
                                                 className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select working days</option>
@@ -378,7 +382,9 @@ const AddEmployee = () => {
                                         <div>
                                             <select
                                                 {...register('workingHours', { required: true })}
-                                                onChange={(event) => setOverTimeReqValues({ ...overTimeReqValues, workingHours: event.target.value })}
+
+                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingHours: event.target.value})}
+
                                                 className='border border-solid border-[#DEDEDE] rounded py-2 px-3 h-10 w-[324px]'
                                             >
                                                 <option value="">Select Working Hours</option>
@@ -406,9 +412,9 @@ const AddEmployee = () => {
                                                 className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
                                                 onChange={handleOverTimeChange}
                                             >
-                                                <option value="Yes">Yes</option>
-                                                <option value="No">No</option>
 
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
                                             </select>
                                         </div>
                                     </div>

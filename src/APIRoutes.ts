@@ -21,6 +21,8 @@ export const getSingleEmployeeApiPath = `${apiPath}/api/v1/employee/getSingle`;
 export const updateEmployeeApiPath = `${apiPath}/api/v1/employee`
 export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfile`
 
+export const getQrAssignApiPath = `${apiPath}/api/v1/employee/docs/getProofPicture`
+
 // OTP VERIFICATION
 export const getOtpApiPath = `${apiPath}/api/v1/otpVerify/getotp`
 export const verifyApiPath = `${apiPath}/api/v1/otpVerify/verifyotp`
@@ -69,7 +71,7 @@ export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAtten
 // export const postAttandenceByDateApiPath = `${apiPath}/api/v1/attendance/getattendancebydate`
 export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`
 export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`
-export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/getpresentbelow`
+export const getPresentBelowApiPath = `${apiPath}/api/v1/attendance/staffAttendance`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`

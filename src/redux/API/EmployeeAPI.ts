@@ -3,6 +3,7 @@ import {
   createEmployeeApiPath,
   getEmployeeApiPath,
   getEmployeeImageApiPath,
+  getQrAssignApiPath,
   getSingleEmployeeApiPath,
   updateEmployeeApiPath,
   uploadDocumentApiPath,
@@ -113,7 +114,6 @@ export const addImage = async (document: any) => {
 
 export const getEmployeeImage = async (employeeId: any) => {
   try {
-    console.log("employeeId", employeeId);
     const { data } = await axios.get(
       `${getEmployeeImageApiPath}/${employeeId.employeeId}`,
       { withCredentials: true }
@@ -130,10 +130,25 @@ export const pagination = async (page: any) => {
     const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
       withCredentials: true, 
     });
-    console.log(response, "hey");
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;
   }
 };
+
+
+
+// QR ASSIGN
+
+export const getQrAssign = async (id: any) => {
+  try {
+    const {data} = await axios.get(`${getQrAssignApiPath}/${id}`, {
+      withCredentials: true, 
+    });
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}

@@ -1,52 +1,58 @@
 import { useDispatch, useSelector } from "react-redux"
 // import round from "../../assets/Group 1.png"
 import { useEffect } from "react"
-import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice"
-import { getPresentBelowAsync } from "../../redux/Slice/AttandenceSlice"
-import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import { getLoggedInUserDataAsync } from "../../../redux/Slice/loginSlice"
+import { getPresentBelowAsync } from "../../../redux/Slice/AttandenceSlice"
+import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
 import Calendar from 'react-calendar';
-import { getMyLeavesAndGatePassAsync } from "../../redux/Slice/LeaveAndGatepassSlice"
-// import { useState } from 'react'
+import { getMyLeavesAndGatePassAsync } from "../../../redux/Slice/LeaveAndGatepassSlice"
+import { useState } from 'react'
 
 export const Employeehome = () => {
 
-    // const [leaves, setLeaves] = useState<any>([])
     const dispatch = useDispatch()
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
     // const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
-    const myLeaveList = useSelector((state: any) => state.leave.myLeaves);
-    
+    const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
+    const [myLeaves, setMyLeaves] = useState<any>([])
+    const [leaves, setLeaves] = useState<any>([])
+    useEffect(() => {
+        if (myLeaveAndGatepassList) {
+            console.log("myLeaveAndGatepassList", myLeaveAndGatepassList)
+            setMyLeaves(myLeaveAndGatepassList.filter((element: any) => {
+                return element.from
+            }))
+        }
+    }, [myLeaveAndGatepassList])
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync())
         dispatch(getPresentBelowAsync())
         dispatch(getMyLeavesAndGatePassAsync());
     }, [])
 
-    // const newLeaves = myLeaveList.flatMap(({ from, to }: any) => {
-    //     const fromDate = new Date(from);
-    //     const toDate = new Date(to);
-    //     const newDates = [];
+    const newLeaves = myLeaves.flatMap(({ from, to }: any) => {
+        const fromDate = new Date(from);
+        const toDate = new Date(to);
+        const newDates = [];
 
-    //     for (let date = fromDate; date <= toDate; date.setDate(date.getDate() + 1)) {
-    //         newDates.push(date.toISOString().slice(0, 10));
-    //     }
+        for (let date = fromDate; date <= toDate; date.setDate(date.getDate() + 1)) {
+            newDates.push(date.toISOString().slice(0, 10));
+        }
 
-    //     return newDates;
-    // });
-
+        return newDates;
+    });
     useEffect(() => {
-        // setLeaves(newLeaves);
-    }, [myLeaveList])
+        setLeaves(newLeaves);
+    }, [myLeaves])
 
-    // console.log(leaves);
-
-    // const tileClassName = ({ date }: any) => {
-    //     const formattedDate = date.toISOString().slice(0, 10);
-    //     if (leaves.includes(formattedDate)) {
-    //         return 'flex justify-center items-center w-[24px] h-[24px] bg-[#8A2626] text-sm leading-[18px] font-normal text-[#FAFAFA] rounded-full my-1 p-5'; // Tailwind classes for highlighted dates
-    //     }
-    //     return 'flex justify-center items-center w-[24px] h-[24px] text-sm leading-[18px] font-normal my-1 text-[#666666] p-5'; // Tailwind classes for all other dates
-    // };
+    const tileClassName = ({ date }: any) => {
+        const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        const formattedDate = localDate.toISOString().split('T')[0];
+        if (leaves.includes(formattedDate)) {
+            return 'bg-[#8A2626] text-[#FAFAFA]';
+        }
+        return 'text-[#666666]';
+    };
 
 
     return (
@@ -98,7 +104,7 @@ export const Employeehome = () => {
                         {/* CALANDER */}
                         <div className="w-[350px] employeeHomeCalender">
                             <Calendar
-                                // tileClassName={tileClassName}
+                                tileClassName={tileClassName}
                                 calendarType="US"
                                 className='p-8 bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg'
                                 formatShortWeekday={(locale, date) => {
