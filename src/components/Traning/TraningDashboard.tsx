@@ -6,7 +6,7 @@ import SealCheck from "../../assets/SealCheck.png"
 
 const TraningDashboard = () => {
     return (
-        <div className="mx-10">
+        <div className="mx-10 pt-2">
             <div className="mt-8">
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Training Dashboard</h1>
             </div>
