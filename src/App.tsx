@@ -34,7 +34,7 @@ import { GroupInfo } from './components/Employeeprofile/groupinfo';
 import { StaffCheckin } from './components/Attendance/Employee/staffcheckin';
 import { Employeeattendence } from './components/Attendance/Employee/EmployeeYourattendence';
 import { EmpViewdoc } from './Employee/documents/viewdoc';
-// import { Yourdoc } from './Employee/documents/yourdoc';
+import { Yourdoc } from './Employee/documents/yourdoc';
 import { ChangePassword } from './Employee/changepassword';
 
 import AddNewFieldsForJobProfile from "./components/Dashboard/AddNewFieldsForJobProfile";
@@ -60,6 +60,8 @@ import { AddTrainingQuiz } from "./components/Traning/AddTrainingQuiz";
 import { TraningStatus } from "./components/Traning/TraningStatus";
 import SingleGroupSalary from "./components/Salary/SingleGroupSalary";
 import NotificationList from "./Employee/notifications/notification";
+import { TrainingResource } from "./Employee/training/TrainingResource";
+import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
 
 const router = createBrowserRouter([
   {
@@ -283,7 +285,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/your-documents",
-    // element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
+    element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
    },
    {
     path:"/change-password",
@@ -292,6 +294,14 @@ const router = createBrowserRouter([
    {
     path:"/employee-notifications",
     element:<ProductedRoute><Employeeaside> <NotificationList></NotificationList> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/employee-TrainingResource",
+    element:<ProductedRoute><Employeeaside> <TrainingResource></TrainingResource> </Employeeaside></ProductedRoute>
+   },
+   {
+    path:"/employee-EmployeeAssesmentQuiz",
+    element:<ProductedRoute><Employeeaside> <EmployeeAssessmentQuiz></EmployeeAssessmentQuiz> </Employeeaside></ProductedRoute>
    },
   {
     path: "/pending-leaves",
