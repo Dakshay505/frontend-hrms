@@ -8,6 +8,8 @@ import "../../attndence.css"
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react'
+import CaretDown from "../../assets/CaretDown11.svg"
+import CaretUp from "../../assets/CaretUp.svg"
 
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
@@ -115,9 +117,9 @@ export const AttendenceDtabase = () => {
                 })
                 const latestPunches = sortedPunches[0];
                 return <>
-                  <tr key={element._id} className='hover:bg-[#FAFAFA]' onClick={() => {handleRowClick(index)}}>
+                  <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => {handleRowClick(index)}}>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                    <td className='flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} alt="" />: ""}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                     <td className='py-4 px-5'>
@@ -139,8 +141,8 @@ export const AttendenceDtabase = () => {
                     </td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                   </tr>
-                  {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                    return <tr key={index}>
+                  {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                    return <tr key={element._id + element.punchIn}>
                       <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                       <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                       <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>

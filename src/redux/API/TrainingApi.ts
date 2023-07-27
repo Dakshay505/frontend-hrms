@@ -33,10 +33,10 @@ export const addTrainingDocuments = async (addGroupData: any) => {
   }
 };
 // CREATE
-export const addTrainingQuizApi = async () => {
+export const addTrainingQuizApi = async (Data: any) => {
   try {
     const { data } = await axios.post(
-      `${addTrainingQuizApiPath}`,
+      `${addTrainingQuizApiPath}`, Data,
       { withCredentials: true }
     );
     return data;

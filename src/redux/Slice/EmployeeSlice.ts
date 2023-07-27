@@ -9,7 +9,8 @@ import {
   getSingleEmployee,
   updateEmployee,
   pagination,
-  getQrAssign
+  getQrAssign,
+  updatePassword
 } from "../API/EmployeeAPI";
 
 const initialState = {
@@ -74,7 +75,6 @@ export const updateEmployeeAsync: any = createAsyncThunk(
 export const deleteEmployeeAsync: any = createAsyncThunk(
   "deleteemployee",
   async (data) => {
-    console.log("111", data);
     try {
       const response: any = await deleteEmployee(data);
       return response;
@@ -96,7 +96,6 @@ export const addDocumentsAsync: any = createAsyncThunk(
   }
 );
 export const addImageAsync: any = createAsyncThunk("addImage", async (data) => {
-  console.log("sl", data);
   try {
     const response: any = await addImage(data);
     return response;
@@ -123,7 +122,6 @@ export const getPaginationAsync = createAsyncThunk(
   async (page) => {
     try {
       const response = await pagination(page);
-      console.log("hello", response)
       return response;
     } catch (error:any) {
       console.log(error.message);
@@ -140,6 +138,19 @@ export const getQrAssignAsync: any = createAsyncThunk(
       const response = await getQrAssign(data);
       return response;
     } catch (error:any) {
+      console.log(error.message);
+    }
+  }
+);
+
+// change password
+export const updatePasswordAsync: any = createAsyncThunk(
+  'updatePasswordAsync',
+  async (data) => {
+    try {
+      const response = await updatePassword(data);
+      return response;
+    } catch (error: any) {
       console.log(error.message);
     }
   }
@@ -166,7 +177,6 @@ export const EmployeeSlice = createSlice({
         getSingleEmployeeAsync.fulfilled,
         function (state: any, action: any) {
           state.status = "idle";
-          console.log("action", action.payload.employeeData)
           state.singleEmployee = action.payload.employeeData
         }
       )
@@ -231,6 +241,11 @@ export const EmployeeSlice = createSlice({
       .addCase(getQrAssignAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.qrAssign =  action.payload.data;
+      }).addCase(updatePasswordAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updatePasswordAsync.fulfilled, (state) => {
+        state.status = 'idle';
       })
   },
 });

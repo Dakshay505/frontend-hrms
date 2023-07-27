@@ -12,30 +12,33 @@ export const AddTrainingQuiz = () => {
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const [groupName, setGroupName] = useState("All Groups");
+    console.log(groupName)
     const [jobProfileName, setjobProfileName] = useState("All Job Profiles");
 
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
-        dispatch(addTrainingQuizAsync());
+
     }, []);
 
 
     const [showQuestions, setshowQuestions] = useState<any>([]);
     const [showQuestionsList, setshowQuestionsList] = useState<any>(false);
     const handleQuizOpen = () => {
-        setShowQuizForm(true);
-        setshowQuestionsList(true);
-        setshowQuestions([...showQuestions, 1]);
-    }
+        if (!showQuestionsList) {
+            setShowQuizForm(true);
+            setshowQuestionsList(true);
+            setshowQuestions([...showQuestions, 1]);
+        }
+    };
     const [showQuizForm, setShowQuizForm] = useState(false);
     console.log(showQuizForm)
     const [selectedOption, setSelectedOption] = useState(null);
-    const [inputValues, setInputValues] = useState(["", "", "", ""]);
+    const [options, setoptions] = useState(["", "", "", ""]);
     const handleInputChange = (e: any, index: any) => {
-        const newInputValues = [...inputValues];
-        newInputValues[index] = e.target.value;
-        setInputValues(newInputValues);
+        const newoptions = [...options];
+        newoptions[index] = e.target.value;
+        setoptions(newoptions);
     };
 
 
@@ -45,20 +48,10 @@ export const AddTrainingQuiz = () => {
 
     useEffect(() => {
         if (selectedOption !== null) {
-            const selectedInputValue = inputValues[selectedOption];
-            console.log(`Selected input value: ${selectedInputValue}`);
+            const correctAnswer = options[selectedOption];
+            console.log(`Selected input value: ${correctAnswer}`);
         }
-    }, [selectedOption, inputValues]);
-
-    // const handleFormSubmit = async () => {
-    //     try {
-    //             groupName: groupName,
-    //             jobProfileName: jobProfileName,
-    //         };  
-    //     } catch (error) {
-    //         console.error('An error occurred', error);
-    //     }
-    // };
+    }, [selectedOption, options]);
 
     const {
         register,
@@ -69,15 +62,17 @@ export const AddTrainingQuiz = () => {
             <form
                 onSubmit={handleSubmit((data) => {
                     let Data = data
-
                     Data = {
-                        groupName: groupName,
-                        jobProfileName: jobProfileName,
-                        selectedInputValue: selectedOption !== null ? inputValues[selectedOption] : null,
-                        inputValues,
-                        ...data,
+                        jobProfile: jobProfileName,
+                        // groupName: groupName,
+                        correctAnswer: selectedOption !== null ? options[selectedOption] : null,
+                        options,
+                        points: data['points'],
+                        question: data['question']
                     }
+
                     console.log("data", Data)
+                    dispatch(addTrainingQuizAsync());
                     // handleFormSubmit();
                 })}
             >
@@ -144,9 +139,7 @@ export const AddTrainingQuiz = () => {
                                 <div className='flex  gap-[20px]'>
                                     <div>
                                         <textarea
-
-                                            {...register(`Question${index + 1}`, { required: true })}
-
+                                            {...register(`question`, { required: true })}
                                             placeholder='Enter A Question'
                                             className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-[81px] w-[536px]'
                                         />
@@ -154,7 +147,7 @@ export const AddTrainingQuiz = () => {
 
                                     <div>
                                         <input
-                                            {...register(`Points${index + 1}`, { required: true })}
+                                            {...register(`points`, { required: true })}
                                             placeholder='Points'
                                             type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[80px]' />
                                     </div>
@@ -171,7 +164,7 @@ export const AddTrainingQuiz = () => {
                                         />
                                         <input
                                             type="radio"
-                                            name={radioGroupName} 
+                                            name={radioGroupName}
                                             id={`Questions_${index}_0`}
                                             // checked={""}
                                             onChange={() => handleRadioChange(0)}
@@ -187,7 +180,7 @@ export const AddTrainingQuiz = () => {
                                         />
                                         <input
                                             type="radio"
-                                            name={radioGroupName} 
+                                            name={radioGroupName}
                                             id={`Questions_${index}_0`}
                                             onChange={() => handleRadioChange(1)}
                                         />

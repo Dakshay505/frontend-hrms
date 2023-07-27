@@ -7,8 +7,11 @@ import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import Calendar from "react-calendar";
 import glass from '../../assets/MagnifyingGlass.png'
+import { useLocation } from "react-router-dom";
 
 const SingleGroupSalary = () => {
+    const location = useLocation();
+    const [additionalData, setAdditionalData] = useState(location.state?.additionalData);
     const dispatch = useDispatch();
     const singleGroupsSalaryList = useSelector((state: any) => state.salary.singleGroupsSalary);
     const allGroupsList = useSelector((state: any) => state.group.groups);
@@ -101,23 +104,24 @@ const SingleGroupSalary = () => {
             setSuggestions([]);
         }
     };
-    
-        const [dateRange, setDateRange] = useState<any>([])
-        const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
-        useEffect(() => {
-            function getDateRange(startDate: any, endDate: any) {
-                if (nextDate) {
-                    const result = [];
-                    const currentDate = new Date(startDate);
-                    const finalDate = new Date(endDate);
-                    while (currentDate <= finalDate) {
-                        result.push(currentDate.toISOString().slice(0, 10));
-                        currentDate.setDate(currentDate.getDate() + 1);
-                    }
-                    setDateRange([...result])
+
+    const [dateRange, setDateRange] = useState<any>([])
+    const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+    useEffect(() => {
+        function getDateRange(startDate: any, endDate: any) {
+            if (nextDate) {
+                const result = [];
+                const currentDate = new Date(startDate);
+                const finalDate = new Date(endDate);
+                while (currentDate <= finalDate) {
+                    result.push(currentDate.toISOString().slice(0, 10));
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
+                setDateRange([...result])
             }
-            getDateRange(filter.date, filter.nextDate)
+        }
+        getDateRange(filter.date, filter.nextDate)
+        if (additionalData === "") {
             dispatch(getSingleGroupSalaryAsync(filter)).then((data: any) => {
                 const employeeData = data.payload.attendanceRecords;
                 const arr: any = [];
@@ -126,7 +130,8 @@ const SingleGroupSalary = () => {
                 }
                 setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
             });
-        }, [filter])
+        }
+    }, [filter])
     const getSuggestions = (inputValue: any) => {
 
         const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
@@ -135,13 +140,16 @@ const SingleGroupSalary = () => {
         setSuggestions(filteredSuggestions);
     };
 
-    console.log("DATE RANGE", dateRange)
-
-    console.log(filter)
-
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
+        if (additionalData !== "") {
+            setFilter({
+                ...filter,
+                groupName: additionalData
+            })
+            setAdditionalData("");
+        }
     }, [])
 
     const formatDate = (date: any) => {
@@ -167,7 +175,7 @@ const SingleGroupSalary = () => {
                     <select
                         onChange={(event) => setGroupValue(event.target.value)}
                         className="py-3 px-5 min-w-[160px] text-sm text-[#2E2E2E] font-medium bg-[#FAFAFA] border border-solid border-[#DEDEDE] rounded-lg focus:outline-none"
-                        defaultValue="All Groups"
+                        defaultValue={additionalData}
                     >
                         <option value="All Groups">All Groups</option>
                         {allGroupsList && allGroupsList.map((element: any, index: number) => {
@@ -218,7 +226,7 @@ const SingleGroupSalary = () => {
                     </div>
                 </div>
             </div>
-            <div className="py-6 overflow-auto">
+            <div className="py-6 mb-28 overflow-auto">
                 <table className="z-0">
                     <tbody>
                         <tr className='bg-[#ECEDFE] cursor-default'>
@@ -236,19 +244,28 @@ const SingleGroupSalary = () => {
                             <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Absent Hours</td>
                         </tr>
                         {singleGroupsSalaryList && singleGroupsSalaryList.map((element: any, index: number) => {
+                            function formatDateToCustomString(date:any) {
+                                const options = { weekday: 'short', year: '2-digit', month: '2-digit', day: '2-digit' };
+                                return date.toLocaleDateString('en-US', options).replace(/\//g, ', ');
+                              }
+                            const inputDate = new Date(element.date);
+                            const formattedDate = formatDateToCustomString(inputDate);
+                            const parts = formattedDate.split(',');
+                            const desiredFormat = `${parts[0]},${parts[2]}/${parts[1]}/${parts[3]}`;
+
                             return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.date ? element.date : "Not Avilable"}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.jobProfileId?.jobProfileName ? element.employeeId?.jobProfileId?.jobProfileName : "Not Avilable"}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalEarning ? element.totalEarning : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.salary ? element.employeeId?.salary : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.workingHours ? element.workingHours : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.workingHours ? element.employeeId?.workingHours : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.pendingHours ? element.pendingHours : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.pendingHours ? element.pendingHours : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeId?.lunchTime ? element.employeeId?.lunchTime : 0}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{(element.workingHours > element.employeeId?.workingHours) && (element.workingHours - element.employeeId?.workingHours) ? (element.workingHours - element.employeeId?.workingHours) : "No Overtime"}</td>
-                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{(element.workingHours > element.employeeId?.workingHours) && (element.workingHours - element.employeeId?.workingHours) ? (element.workingHours - element.employeeId?.workingHours) : "Absent"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.date ? desiredFormat : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.jobProfileId?.jobProfileName ? element.employeeId?.jobProfileId?.jobProfileName : "Not Avilable"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalEarning ? (element.totalEarning).toFixed(1) : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.salary ? element.employeeId?.salary : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.workingHours ? `${(element.workingHours).toFixed(1)} Hours` : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{(element.pendingHours + element.workingHours) ? `${(element.pendingHours + element.workingHours).toFixed(1)} Hours` : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pendingHours ? `${(element.pendingHours).toFixed(1)} Hours` : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{(element.totalEarning / element.workingHours) ? `${(element.totalEarning / element.workingHours).toFixed(1)} Hours` : 0}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.lunchTime ? element.employeeId?.lunchTime : 0} Hours</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{(element.workingHours - element.employeeId?.workingHours) > 0 ? `${(element.workingHours - element.employeeId?.workingHours).toFixed(1)} Hours` : "No Overtime"}</td>
+                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{(element.employeeId?.workingHours - element.workingHours) > 0 ? `${(element.employeeId?.workingHours - element.workingHours).toFixed(1)} Hours` : "No Absent Hours"}</td>
                             </tr>
                         })}
                     </tbody>
@@ -276,7 +293,6 @@ const SingleGroupSalary = () => {
                             }}
                             onClickDay={() => {
                                 if (calenderDayClicked.length > 0) {
-                                    console.log("hlo")
                                     setShowCalender(false);
                                     setcalenderDayClicked([]);
                                 }

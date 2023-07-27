@@ -12,6 +12,8 @@ import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from "react-calendar";
 import { useLocation } from "react-router-dom";
+import CaretDown from "../../assets/CaretDown11.svg"
+import CaretUp from "../../assets/CaretUp.svg"
 
 const SingleGroupAttendance = () => {
     const location = useLocation();
@@ -84,7 +86,6 @@ const SingleGroupAttendance = () => {
             }
         }
         getDateRange(filter.date, filter.nextDate)
-        console.log("filter", filter);
         dispatch(getGroupAttendanceAsync(filter))
     }, [filter])
     useEffect(() => {
@@ -261,7 +262,7 @@ const SingleGroupAttendance = () => {
                             return <>
                                 <tr key={index} className='hover:bg-[#FAFAFA]'>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
-                                    <td onClick={() => { handleRowClick(index) }} className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                                    <td onClick={() => { handleRowClick(index) }} className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                     <td className='py-4 px-5'>

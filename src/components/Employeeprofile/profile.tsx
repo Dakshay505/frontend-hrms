@@ -1,6 +1,7 @@
 import { useEffect, useState, } from 'react';
 import edit from "../../assets/PencilSimple.png"
-import del from "../../assets/TrashSimple.png"
+import del from "../../assets/TrashSimple11.svg"
+import del1 from "../../assets/TrashSimple.svg"
 import check from "../../assets/Check.png"
 import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
@@ -17,20 +18,24 @@ import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 import XCircle from '../../assets/XCircle.svg'
 import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import GreenCheck from '../../assets/GreenCheck.svg';
+import RedX from '../../assets/RedX.svg';
+import SpinnerGap from '../../assets/SpinnerGap.svg'
+import { getAllAttandenceAsync } from '../../redux/Slice/AttandenceSlice';
+import CaretDown from "../../assets/CaretDown11.svg"
+import CaretUp from "../../assets/CaretUp.svg"
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const { handleSubmit, register } = useForm();
     const [employeeId, setEmployeeId] = useState("")
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+    const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);
-    console.log("qrAssign", qrAssign)
-
 
     const [showInputBoxName, setShowInputBoxName] = useState(false);
     const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");
@@ -50,6 +55,12 @@ export const EmployeeProfile = () => {
     const [showInputBoxGender, setShowInputBoxGender] = useState(false);
     const [inputBoxGenderValue, setInputBoxGenderValue] = useState<any>("");
 
+    function formatDate(date: any) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     useEffect(() => {
         setEmployeeId(singleEmployee._id);
@@ -59,8 +70,21 @@ export const EmployeeProfile = () => {
         setInputBoxEmailValue(singleEmployee.email);
         setInputBoxContactNumberValue(singleEmployee.contactNumber);
         setInputBoxGenderValue(singleEmployee.gender);
-        dispatch(getQrAssignAsync(singleEmployee._id));
+        if (singleEmployee._id) {
+            dispatch(getQrAssignAsync(singleEmployee._id));
+        }
     }, [singleEmployee])
+
+    useEffect(() => {
+        const nextDate = new Date();
+        const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const data = { name: inputBoxNameValue, date: formatDate(date), nextDate: formatDate(nextDate) }
+        if (inputBoxNameValue === singleEmployee.name) {
+            dispatch(getAllAttandenceAsync(data)).then((res: any) => {
+                setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
+            })
+        }
+    }, [inputBoxNameValue])
     useEffect(() => {
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
@@ -71,12 +95,13 @@ export const EmployeeProfile = () => {
 
     const handleDeleteClick = () => {
         setShowConfirmation(true);
-
     };
 
     const handleConfirmDelete = () => {
         setShowConfirmation(false);
-        dispatch(deleteEmployeeAsync({ employeeId: singleEmployee._id }));
+        dispatch(deleteEmployeeAsync({ employeeId: singleEmployee._id })).then(() => {
+            navigate("/view-modify-database")
+        })
     };
 
     const handleCancelDelete = () => {
@@ -93,7 +118,7 @@ export const EmployeeProfile = () => {
     }
 
 
-   
+
     const documentList = [
         {
             documentName: "Resume.pdf"
@@ -137,7 +162,6 @@ export const EmployeeProfile = () => {
     const verifyOtpAsync = async (sendData: any) => {
         try {
             const { data } = await axios.get(`${verifyApiPath}?phoneNumber=${sendData.phoneNumber}&otp=${sendData.otp}`, { withCredentials: true });
-            console.log(data);
             return data
         }
         catch (error) {
@@ -145,6 +169,20 @@ export const EmployeeProfile = () => {
             return error
         }
     }
+
+    const [showTableRow, setShowTableRow] = useState<any>([]);
+
+    const handleRowClick = (index: number) => {
+        const isExpanded = showTableRow.includes(index)
+        if (isExpanded) {
+            setShowTableRow(showTableRow.filter((belowRowIndex: any) => belowRowIndex !== index))
+        }
+        else {
+            setShowTableRow([...showTableRow, index])
+        }
+    }
+
+
     return (
         <div className='px-[40px] pt-[32px]'>
             <div>
@@ -170,21 +208,21 @@ export const EmployeeProfile = () => {
                         </div>
 
                         {showConfirmation && (
-                            <div className="confirmation-modal">
-                                <div className="confirmation-modal-content">
-                                    <div className="flex gap-[5px] items-center">
-                                        <img src={del} alt="" className="w-[20px] h-[20px]" />
-                                        <h2 className="text-left mb-0">Confirmation</h2>
+                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center">
+                                <div className='bg-[#FFFFFF] p-10'>
+                                    <div className="flex gap-2 items-center pt-2 pb-4 border-b border-solid border-[#B0B0B0]">
+                                        <img src={del1} alt="" className="w-6 h-6" />
+                                        <h2 className="text-[18px] leading-6 font-medium text-[#8A2626]">Delete employee?</h2>
                                     </div>
-                                    <hr />
-                                    <p>Are your sure you want to delete this employee? This action can’t be undone.</p>
-                                    <div className="button-container">
-
-                                        <div className="cancel-button" onClick={handleCancelDelete}>
-                                            Cancel
+                                    <div className='pt-6'>
+                                        <p className='text-sm font-normal text-[#3B3B3B]'>Are your sure you want to delete this employee? This action can’t be undone.</p>
+                                    </div>
+                                    <div className="pt-[33px] flex gap-4 justify-end">
+                                        <div className="flex justify-center items-center w-[96px] h-[34px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer" onClick={handleCancelDelete}>
+                                            <p className='text-sm font-medium text-[#3B3B3B] tracking-[0.25px]'>Cancel</p>
                                         </div>
-                                        <div className="confirm-button" onClick={handleConfirmDelete}>
-                                            Delete Employee
+                                        <div className="flex justify-center items-center w-[164px] h-[34px] bg-[#283093] rounded-lg cursor-pointer" onClick={handleConfirmDelete}>
+                                            <p className='text-sm font-medium text-[#FBFBFC] tracking-[0.25px]'>Delete Employee</p>
                                         </div>
                                     </div>
                                 </div>
@@ -197,7 +235,6 @@ export const EmployeeProfile = () => {
                     <form
                         onSubmit={handleSubmit((data) => {
                             const sendData = { employeeId: employeeId, data: data }
-                            console.log("sendData", sendData);
                             dispatch(updateEmployeeAsync(sendData)).then(() => {
                                 dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
                             });
@@ -528,7 +565,7 @@ export const EmployeeProfile = () => {
                                 <div className='flex flex-col gap-5'>
                                     <div>
                                         <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.assignedBy?.name ? element.assignedBy?.name : "Not Avi."}</span></p>
-                                        <p className='text-sm font-normal text-[#000000]'>{element.createdAt ? new Date(element.createdAt).toLocaleString("en-US", {timeStyle: "short"}) : "Not Avi."}, {element.createdAt ? (element.createdAt).slice(0,10) : "Not Avi."}</p>
+                                        <p className='text-sm font-normal text-[#000000]'>{element.createdAt ? new Date(element.createdAt).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avi."}, {element.createdAt ? (element.createdAt).slice(0, 10) : "Not Avi."}</p>
                                     </div>
                                     <Link to={element.proofPicture} className='flex items-center gap-[6px] cursor-pointer'>
                                         <div>
@@ -568,12 +605,84 @@ export const EmployeeProfile = () => {
 
 
             {/* Attendance Starts here */}
-            <div className='my-10'>
+            <div className='py-8'>
                 <div className='flex gap-3 items-center'>
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Attendance</h1>
                     <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                 </div>
-
+                <div className='py-8 overflow-auto'>
+                    <table>
+                        <tbody>
+                            <tr className='bg-[#ECEDFE] cursor-default'>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch In</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
+                            </tr>
+                            {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
+                                const punchesList = [...(element.punches)];
+                                const sortedPunches = punchesList.sort((a: any, b: any) => {
+                                    return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
+                                })
+                                const latestPunches = sortedPunches[0];
+                                return <>
+                                    <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
+                                        <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                        <td className='py-4 px-5'>
+                                            {latestPunches?.status === "approved" &&
+                                                <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                    <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                                                    <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                                                </span>}
+                                            {latestPunches?.status === "rejected" &&
+                                                <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                    <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                                                    <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                                                </span>}
+                                            {(latestPunches.status === "pending") &&
+                                                <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                    <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                                                    <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                                                </span>}
+                                        </td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                    </tr>
+                                    {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                                        return <tr key={element._id + element.punchIn}>
+                                            <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
+                                            <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5'>
+                                                {element.status === "approved" &&
+                                                    <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                        <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                                                        <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                                                    </span>}
+                                                {element.status === "rejected" &&
+                                                    <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                        <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                                                        <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                                                    </span>}
+                                                {(element.status === "pending") &&
+                                                    <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                                                        <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                                                        <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                                                    </span>}
+                                            </td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                        </tr>
+                                    })}
+                                </>
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             {/* Attendance ENDS here */}
         </div >

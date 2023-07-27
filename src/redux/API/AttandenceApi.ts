@@ -28,7 +28,6 @@ function convertToQueryString(data: any) {
 export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    console.log("APIAPI", `${getAllAttandenceApiPath}?${filterDatta}`)
     const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
       withCredentials: true,
     });
@@ -75,9 +74,11 @@ export const getGroupAttendance = async () => {
   }
 };
 
+
 // UPDATE Attendance
 export const updateAttendance = async (updateData: any) => {
   try {
+    console.log(updateData)
     const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
       withCredentials: true,
     });

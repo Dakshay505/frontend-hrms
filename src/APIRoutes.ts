@@ -1,6 +1,7 @@
 // export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 export const apiPath = `https://hrms-backend-04fw.onrender.com`;
+
 // JOB PROFILE API
 
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;
@@ -20,8 +21,8 @@ export const getEmployeeApiPath = `${apiPath}/api/v1/employee`;
 export const getSingleEmployeeApiPath = `${apiPath}/api/v1/employee/getSingle`;
 export const updateEmployeeApiPath = `${apiPath}/api/v1/employee`
 export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfile`
-
 export const getQrAssignApiPath = `${apiPath}/api/v1/employee/docs/getProofPicture`
+export const updatePasswordApiPath = `${apiPath}/api/v1/employee/changePassword`
 
 // OTP VERIFICATION
 export const getOtpApiPath = `${apiPath}/api/v1/otpVerify/getotp`
