@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
     id: "SalaTraining Contentries",
     name: "Training Content",
     icon: training,
-    Link: "",
+    Link: "/employee-TrainingResource",
   },
 ];
 

@@ -27,7 +27,7 @@ export const AddTrainingQuiz = () => {
     const handleQuizOpen = () => {
         if (!showQuestionsList) {
             setShowQuizForm(true);
-            setshowQuestionsList(true);
+             setshowQuestionsList(true);
             setshowQuestions([...showQuestions, 1]);
         }
     };
@@ -52,11 +52,7 @@ export const AddTrainingQuiz = () => {
             console.log(`Selected input value: ${correctAnswer}`);
         }
     }, [selectedOption, options]);
-
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     return (
         <div className='mx-10 pb-[32px]'>
             <form
@@ -70,9 +66,8 @@ export const AddTrainingQuiz = () => {
                         points: data['points'],
                         question: data['question']
                     }
-
-                    console.log("data", Data)
-                    dispatch(addTrainingQuizAsync());
+                    dispatch(addTrainingQuizAsync(Data));
+                    reset();
                     // handleFormSubmit();
                 })}
             >

@@ -64,6 +64,7 @@ const AddEmployee = () => {
             setOverTimeValue("Yes");
         } else {
             setOverTimeValue("No");
+
         }
     };
     useEffect(() => {
@@ -81,6 +82,7 @@ const AddEmployee = () => {
             console.log(overtimeRate);
         }
     }, [overTimeReqValues, overTimeValue])
+
 
     // phone number validation
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -109,8 +111,6 @@ const AddEmployee = () => {
     //    validation for 30 words name
     const handleEmployeeNameChange = (e: any) => {
         const inputEmployeeName = e.target.value;
-
-
         if (inputEmployeeName.length > 30) {
             setValue("name", inputEmployeeName.slice(0, 30));
         } else {
@@ -164,7 +164,10 @@ const AddEmployee = () => {
         }
     }
 
-
+    const resetFields = () => {
+        setPhoneNumber('');
+        setOvertimerate('');
+    };
     return (
         <div className="mx-8 py-[32px]">
             <div className='pt-[5px]'>
@@ -198,6 +201,7 @@ const AddEmployee = () => {
                             })
                         })
                         reset();
+                        resetFields();
                     })}>
                     <div className='flex flex-col gap-5'>
                         <div className='flex gap-10'>
@@ -404,7 +408,6 @@ const AddEmployee = () => {
                                             >
                                                 <option value="Yes">Yes</option>
                                                 <option value="No">No</option>
-
                                             </select>
                                         </div>
                                     </div>

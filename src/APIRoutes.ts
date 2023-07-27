@@ -76,6 +76,7 @@ export const getGroupAttendanceApiPath = `${apiPath}/api/v1/attendance/groupPres
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
 export const addTrainingQuizApiPath = `${apiPath}/api/v1/quiz/addQuestion`
+export const addAssesmentQuizApiPath = `${apiPath}/api/v1/quiz/getQuiz`
 
 
 
