@@ -151,7 +151,7 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Supervisor</td>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
-                        {/* USEMAPHERE */}
+                        {/* USEM1APHERE */}
                         {myLeaves && myLeaves.map((element: any, index: number) => {
                             return <tr key={index}>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.from).slice(0, 10)} - {(element.to).slice(0, 10)}</td>
