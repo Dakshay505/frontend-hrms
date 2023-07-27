@@ -21,7 +21,7 @@ export const createJobProfileAsync: any = createAsyncThunk(
       return response;
     } catch (error: any) {
       console.log(error.message);
-    }
+    } 
   }
 );
 export const getSingleJobProfileAsync: any = createAsyncThunk(
