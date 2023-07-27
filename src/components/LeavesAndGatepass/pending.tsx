@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import plane from "../../assets/AirplaneTilt.svg";
@@ -72,8 +71,7 @@ export const PendingLeaves = () => {
                 {/*  usemap on this */}
                 {/* LEAVE */}
                 {allAcceptedLeaveList && allAcceptedLeaveList.map((element: any, index: number) => {
-                  const leaveList = element.fromTo;
-                  const lastLeave = leaveList[leaveList.length - 1];
+
                   const currentDate = new Date();
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -87,19 +85,19 @@ export const PendingLeaves = () => {
                         <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                       </div>
                       <div>
-                        <p className='text-[16px] leading-6 font-medium'>Leave: {new Date(lastLeave.from).toLocaleString("en-US", {timeStyle: "short"})} - {new Date(lastLeave.to).toLocaleString("en-US", {timeStyle: "short"})}</p>
+                        <p className='text-[16px] leading-6 font-medium'>Leave: {new Date(element.from).toLocaleString("en-US", { timeStyle: "short" })} - {new Date(element.to).toLocaleString("en-US", { timeStyle: "short" })}</p>
                       </div>
                     </div>
                     <div className='flex gap-8 justify-between mt-8'>
                       <div>
-                        <p className='text-sm font-normal text-[#2E2E2E]'>{lastLeave.message}</p>
+                        <p className='text-sm font-normal text-[#2E2E2E]'>{element.message}</p>
                       </div>
                       <div className='flex gap-4'>
                         <button onClick={() => dispatch(updateAcceptedLeavesAsync({
                           employeeId: element.employeeId?._id,
                           status: "approved",
-                          from: (lastLeave.from).slice(0, 10),
-                          to: (lastLeave.to).slice(0, 10)
+                          from: (element.from).slice(0, 10),
+                          to: (element.to).slice(0, 10)
                         })).then(() => {
                           dispatch(getAllApprovedLeavesAsync());
                           dispatch(getAllAcceptedLeavesAsync());
@@ -110,8 +108,8 @@ export const PendingLeaves = () => {
                           onClick={() => dispatch(updateAcceptedLeavesAsync({
                             employeeId: element.employeeId?._id,
                             status: "rejected",
-                            from: (lastLeave.from).slice(0, 10),
-                            to: (lastLeave.to).slice(0, 10)
+                            from: (element.from).slice(0, 10),
+                            to: (element.to).slice(0, 10)
                           })).then(() => {
                             dispatch(getAllApprovedLeavesAsync());
                             dispatch(getAllAcceptedLeavesAsync());
@@ -184,8 +182,6 @@ export const PendingLeaves = () => {
                 {/* usemap on this */}
                 {/* LEAVE */}
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
-                  const leaveList = element.fromTo;
-                  const lastLeave = leaveList[leaveList.length - 1];
                   const currentDate = new Date();
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -200,11 +196,11 @@ export const PendingLeaves = () => {
                         <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                       </div>
                       <div>
-                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(lastLeave.from)).toLocaleDateString("en-US", options)} - {(new Date(lastLeave.to)).toLocaleDateString("en-US", options)}</p>
+                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(element.from)).toLocaleDateString("en-US", options)} - {(new Date(element.to)).toLocaleDateString("en-US", options)}</p>
                       </div>
                     </div>
                     <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastLeave.message}</p>
+                      <p className='text-sm font-normal text-[#2E2E2E]'>{element.message}</p>
                     </div>
                   </div>
                 })}
@@ -241,8 +237,6 @@ export const PendingLeaves = () => {
                 {/* usemap on this */}
                 {/* LEAVE */}
                 {allRejectedLeaveList && allRejectedLeaveList.map((element: any, index: number) => {
-                  const leaveList = element.fromTo;
-                  const lastLeave = leaveList[leaveList.length - 1];
                   const currentDate = new Date();
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -257,11 +251,11 @@ export const PendingLeaves = () => {
                         <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                       </div>
                       <div>
-                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(lastLeave.from)).toLocaleDateString("en-US", options)} - {(new Date(lastLeave.to)).toLocaleDateString("en-US", options)}</p>
+                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(element.from)).toLocaleDateString("en-US", options)} - {(new Date(element.to)).toLocaleDateString("en-US", options)}</p>
                       </div>
                     </div>
                     <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastLeave.rejectedReason ? lastLeave.rejectedReason : "Not Avilable"}</p>
+                      <p className='text-sm font-normal text-[#2E2E2E]'>{element.rejectedReason ? element.rejectedReason : "Not Avilable"}</p>
                     </div>
                   </div>
                 })}

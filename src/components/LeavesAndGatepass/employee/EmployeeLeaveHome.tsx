@@ -99,7 +99,8 @@ export const EmployeeLeaveHome = () => {
                     const year = dateObject.getFullYear().toString();
                     gatePassDate = `${day}/${month}/${year}`;
                   }
-                  let appliedDate;
+                  let appliedDate: any = "";
+                  console.log(appliedDate)
                   const dateString = element.appliedDate;
                   const dateObject = new Date(dateString);
                   const day = dateObject.getDate().toString().padStart(2, "0");
