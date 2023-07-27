@@ -6,6 +6,7 @@ import {
   getQrAssignApiPath,
   getSingleEmployeeApiPath,
   updateEmployeeApiPath,
+  updatePasswordApiPath,
   uploadDocumentApiPath,
   uploadImageApiPath,
 } from "../../APIRoutes";
@@ -26,7 +27,6 @@ export const createEmployee = async (employeeData: any) => {
 // UPDATE
 export const updateEmployee = async (employeeData: any) => {
   try {
-    console.log("API DATA", employeeData);
     const { data } = await axios.patch(
       `${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData.data,
       { withCredentials: true }
@@ -52,11 +52,9 @@ function convertToQueryString(data: any) {
 export const getAllEmployee = async (sendData: any) => {
   try {
     const queryStr = convertToQueryString(sendData);
-    console.log("API", `${getEmployeeApiPath}?${queryStr}`);
     const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
       withCredentials: true,
     });
-    console.log(data);
     return data;
   } catch (error: any) {
     console.log(error.response.data);
@@ -101,7 +99,6 @@ export const addDocuments = async (document: any) => {
 };
 
 export const addImage = async (document: any) => {
-  console.log(document);
   try {
     const { data } = await axios.post(`${uploadImageApiPath}`, document, {
       withCredentials: true,
@@ -152,3 +149,14 @@ export const getQrAssign = async (id: any) => {
     return null;
   }
 }
+
+export const updatePassword = async (document: any) => {
+  try {
+    const { data } = await axios.put(`${updatePasswordApiPath}`, document.data, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
