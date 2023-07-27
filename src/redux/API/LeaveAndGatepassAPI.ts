@@ -73,10 +73,9 @@ export const getAllLeavesAndGatePass = async () => {
 }
 // UPDATE PENDING LEAVES
 export const updatePendingLeaves = async (updatedData: any) => {
-  console.log(updatedData)
   try {
-    const { data } = await axios.patch(`${updatePendingLeavesApiPath}`, updatedData,{ withCredentials: true });
-    console.log("Leave data", data)
+    console.log("Leave data", updatedData)
+    const { data } = await axios.patch(`${updatePendingLeavesApiPath}`, updatedData, { withCredentials: true });
     return data;
   }
   catch (error: any) {
@@ -85,10 +84,10 @@ export const updatePendingLeaves = async (updatedData: any) => {
 }
 // UPDATE REJECTED LEAVES
 export const updateAcceptedLeaves = async (updatedData: any) => {
- 
+
   try {
-    const { data } = await axios.patch(`${updateAcceptedLeavesApiPath}`, updatedData,{ withCredentials: true });
-     console.log(data)
+    const { data } = await axios.patch(`${updateAcceptedLeavesApiPath}`, updatedData, { withCredentials: true });
+    console.log(data)
     return data;
   }
   catch (error: any) {
@@ -141,7 +140,7 @@ export const getAllRejectedGatePass = async () => {
 // READ PENDING LEAVES
 export const updatePendingGatePass = async (updatedData: any) => {
   try {
-    const { data } = await axios.patch(`${updatePendingGatePassApiPath}`, updatedData,{ withCredentials: true });
+    const { data } = await axios.patch(`${updatePendingGatePassApiPath}`, updatedData, { withCredentials: true });
     console.log("this is data", data)
     return data;
   }
@@ -152,7 +151,7 @@ export const updatePendingGatePass = async (updatedData: any) => {
 // READ REJECTED LEAVES
 export const updateAcceptedGatePass = async (updatedData: any) => {
   try {
-    const { data } = await axios.patch(`${updateAcceptedGatePassApiPath}`, updatedData,{ withCredentials: true });
+    const { data } = await axios.patch(`${updateAcceptedGatePassApiPath}`, updatedData, { withCredentials: true });
     return data;
   }
   catch (error: any) {

@@ -42,6 +42,7 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllPendingLeaves();
+            console.log("1", response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -78,6 +79,7 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
+            console.log("rejected", response)
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -113,7 +115,9 @@ export const updatePendingLeavesAsync: any = createAsyncThunk(
     'updatePendingLeaves',
     async (data) => {
         try {
+            console.log("Async data", data)
             const response: any = await updatePendingLeaves(data);
+            console.log(response, "response")
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -187,6 +191,7 @@ export const updatePendingGatePassAsync: any = createAsyncThunk(
     'updatePendingGatePass',
     async (data) => {
         try {
+            console.log("data gatepass", data);
             const response: any = await updatePendingGatePass(data);
             return response;
         } catch (error: any) {
@@ -229,7 +234,8 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllPendingLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.pendingLeaves = action.payload.pendingLeaveWithFilteredPeriods;
+                // state.pendingLeaves = action.payload.pendingLeaveWithFilteredPeriods;
+                state.pendingLeaves = action.payload.allPendingRequest;
             })
             .addCase(getAllLeavesAndGatePassAsync.pending, (state) => {
                 state.status = 'loading';
@@ -250,14 +256,15 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.acceptedLeaves = action.payload.acceptedLeaveWithFilteredPeriods;
+                // state.acceptedLeaves = action.payload.acceptedLeaveWithFilteredPeriods;
+                state.acceptedLeaves = action.payload.allAcceptedRequest;
             })
             .addCase(getAllRejectedLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllRejectedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedLeaves = action.payload.rejectedLeaveWithFilteredPeriods;
+                state.rejectedLeaves = action.payload.allRejectedLeave;
             })
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';

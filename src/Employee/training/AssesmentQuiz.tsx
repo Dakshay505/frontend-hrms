@@ -16,7 +16,7 @@ interface QuizData {
 
 export const EmployeeAssessmentQuiz = () => {
     const dispatch = useDispatch();
-    const { questions, loading, error } = useSelector((state: RootState) => state.training);
+    const { questions } = useSelector((state: RootState) => state.training);
 
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export const EmployeeAssessmentQuiz = () => {
     const [isPassed, setIsPassed] = useState(false);
     const passingMark = 2;
     
-    const score = Object.values(userAnswers).filter((answer, index) => answer === questions[index]?.correctAnswer).length;
+    const score = Object.values(userAnswers).filter((answer, index) => answer === questions[index]).length;
     const totalQuestions = questions.length;
 
     const handleGoBack = () => {
@@ -85,7 +85,7 @@ export const EmployeeAssessmentQuiz = () => {
                     {questionData.options.map((option, optionIndex) => {
                         const inputId = `question_${questionIndex}_option_${optionIndex}`;
                         const isChecked = userAnswers[questionIndex] === option;
-                        const isCorrectAnswer = submitted && option === questions[questionIndex].correctAnswer;
+                        const isCorrectAnswer = submitted && option === questions[questionIndex];
 
                         return (
                             <div key={optionIndex} className='gap-[10px] flex'>

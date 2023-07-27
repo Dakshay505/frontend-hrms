@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import glass from '../../../assets/MagnifyingGlass.png'
 import GreenCheck from '../../../assets/GreenCheck.svg';
 import RedX from '../../../assets/RedX.svg';
@@ -20,13 +19,14 @@ export const ViewLeavesRecord = () => {
         jobProfileName: "",
         date: "",
         nextDate: ""
-      });
+    });
 
-      const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
-      const [myLeaves, setMyLeaves] = useState<any>([])
-      const [myGatePass, setMyGatepass] = useState<any>([])
+    const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
+    console.log("myLeaveAndGatepassList", myLeaveAndGatepassList);
+    const [myLeaves, setMyLeaves] = useState<any>([])
+    const [myGatePass, setMyGatepass] = useState<any>([])
 
-      useEffect(() => {
+    useEffect(() => {
         if (myLeaveAndGatepassList) {
             console.log("myLeaveAndGatepassList", myLeaveAndGatepassList)
             setMyLeaves(myLeaveAndGatepassList.filter((element: any) => {
@@ -38,9 +38,10 @@ export const ViewLeavesRecord = () => {
         }
     }, [myLeaveAndGatepassList])
 
-      
-      const upperLevelEmployee = useSelector((state: any) => state.leave.upperLevelEmployee);
-      const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+
+    const upperLevelEmployee = useSelector((state: any) => state.leave.upperLevelEmployee);
+    console.log("upperLevelEmployee", upperLevelEmployee)
+    const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
@@ -99,28 +100,28 @@ export const ViewLeavesRecord = () => {
                         </select>
                     </div>
                     <div>
-                  <select
-                    onChange={(event) => {
-                      if (event.target.value === "All Job Profiles") {
-                        setFilter({
-                          ...filter,
-                          jobProfileName: ""
-                        })
-                      } else {
-                        setFilter({
-                          ...filter,
-                          jobProfileName: event.target.value
-                        })
-                      }
-                    }}
-                    value={filter.jobProfileName}
-                    className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
-                    <option value="All Job Profiles">All Job Profiles</option>
-                    {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                      return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
-                    })}
-                  </select>
-              </div>
+                        <select
+                            onChange={(event) => {
+                                if (event.target.value === "All Job Profiles") {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: ""
+                                    })
+                                } else {
+                                    setFilter({
+                                        ...filter,
+                                        jobProfileName: event.target.value
+                                    })
+                                }
+                            }}
+                            value={filter.jobProfileName}
+                            className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                            <option value="All Job Profiles">All Job Profiles</option>
+                            {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                                return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
+                            })}
+                        </select>
+                    </div>
                     <div>
                         <div className="container flex justify-center items-center">
                             <div className="relative">
@@ -154,26 +155,31 @@ export const ViewLeavesRecord = () => {
                         {/* USEMAPHERE */}
                         {myLeaves && myLeaves.map((element: any, index: number) => {
                             return <tr key={index}>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.from).slice(0, 10)} - {(element.to).slice(0, 10)}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
-                            <td className='py-4 px-6'>
-                                {element.status === "approved" &&
-                                <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                </span>}
-                                {element.status === "rejected" &&
-                                <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                </span>}
-                                {element.status === "pending" &&
-                                <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                </span>}
-                            </td>
-                        </tr>
+                                <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.from).slice(0, 10)} - {(element.to).slice(0, 10)}</td>
+                                <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
+                                <td className='py-4 px-6'>
+                                    {element.status === "approved" &&
+                                        <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                                        </span>}
+                                    {element.status === "accepted" &&
+                                        <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#186A3B]'>Accepted</span>
+                                        </span>}
+                                    {element.status === "rejected" &&
+                                        <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                                        </span>}
+                                    {element.status === "pending" &&
+                                        <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                                        </span>}
+                                </td>
+                            </tr>
                         })}
                     </tbody>
                 </table>
@@ -190,27 +196,27 @@ export const ViewLeavesRecord = () => {
                         {/* USEMAPHERE */}
                         {myGatePass && myGatePass.map((element: any, index: number) => {
                             return <tr key={index}>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.gatePassDate).slice(0, 10)}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.gatePassTime}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
-                            <td className='py-4 px-6'>
-                                {element.status === "approved" &&
-                                <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                </span>}
-                                {element.status === "rejected" &&
-                                <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                </span>}
-                                {(element.status === "pending" || element.status === "accepted") &&
-                                <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                </span>}
-                            </td>
-                        </tr>
+                                <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(element.gatePassDate).slice(0, 10)}</td>
+                                <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.gatePassTime}</td>
+                                <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{upperLevelEmployee?.name}</td>
+                                <td className='py-4 px-6'>
+                                    {element.status === "approved" &&
+                                        <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                                        </span>}
+                                    {element.status === "rejected" &&
+                                        <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                                        </span>}
+                                    {(element.status === "pending" || element.status === "accepted") &&
+                                        <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
+                                            <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
+                                            <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                                        </span>}
+                                </td>
+                            </tr>
                         })}
                     </tbody>
                 </table>
