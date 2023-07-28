@@ -230,33 +230,6 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Supervisor</td>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
-                        {/* USEMAPHERE */}
-                        {/* {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
-                            const latestLeave = element.fromTo[(element.fromTo).length - 1];
-                            
-                            return <tr key={index}>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(latestLeave.from).slice(0, 10)} - {(latestLeave.to).slice(0, 10)}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Not  Avilable</td>
-                            <td className='py-4 px-6'>
-                                {latestLeave.status === "approved" &&
-                                <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                </span>}
-                                {latestLeave.status === "rejected" &&
-                                <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                </span>}
-                                {latestLeave.status === "pending" &&
-                                <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                </span>}
-                            </td>
-                        </tr>
-                        })} */}
                     </tbody>
                 </table>
             </div>}
@@ -269,33 +242,6 @@ export const ViewLeavesRecord = () => {
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Supervisor</td>
                             <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Status</td>
                         </tr>
-                        {/* USEMAPHERE */}
-                        {/* {allLeavesAndGatePassList && allLeavesAndGatePassList.map((element: any, index: number) => {
-                            const latestGatepass = element.gatePass[(element.gatePass).length - 1];
-                            
-                            return <tr key={index}>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>{(latestGatepass?.time) ? (latestGatepass?.time) : "Not Avilable"}</td>
-                            <td className='text-sm font-medium text-[#2E2E2E] py-4 px-6 text-start'>Not  Avilable</td>
-                            <td className='py-4 px-6'>
-                                {latestGatepass?.status === "approved" &&
-                                <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                </span>}
-                                {latestGatepass?.status === "rejected" &&
-                                <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                </span>}
-                                {(latestGatepass?.status === "accepted" || latestGatepass?.status === "pending") &&
-                                <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
-                                    <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
-                                    <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                </span>}
-                            </td>
-                        </tr>
-                        })} */}
                     </tbody>
                 </table>
             </div>}

@@ -79,6 +79,7 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
+            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -260,7 +261,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllRejectedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedLeaves = action.payload.rejectedLeaveWithFilteredPeriods;
+                state.rejectedLeaves = action.payload.allRejectedLeave;
             })
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
