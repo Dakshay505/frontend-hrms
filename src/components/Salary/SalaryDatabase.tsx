@@ -4,7 +4,7 @@ import Calendar from "react-calendar";
 import CaretLeft from "../../assets/CaretLeft.svg"
 import CaretRight from "../../assets/CaretRight1.svg"
 import 'react-datepicker/dist/react-datepicker.css';
-import { getAllGroupSalaryAsync, getSingleGroupSalaryAsync } from "../../redux/Slice/SalarySlice";
+import { getAllGroupSalaryAsync } from "../../redux/Slice/SalarySlice";
 import { useNavigate } from "react-router-dom";
 
 const SalaryDatabase = () => {
@@ -30,8 +30,7 @@ const SalaryDatabase = () => {
   }, [])
 
   const handleTableRowClick = (data: any) => {
-    dispatch(getSingleGroupSalaryAsync({ groupName: data, date: date }))
-    navigate('/single-group-salary')
+    navigate('/single-group-salary', { state: { additionalData: data }})
   }
 
   useEffect(() => {
@@ -74,9 +73,7 @@ useEffect(() => {
     getDateRange(filter.date, filter.nextDate)
     dispatch(getAllGroupSalaryAsync(filter))
 }, [filter])
-console.log("DATE RANGE", dateRange)
 
-console.log(filter)
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -113,14 +110,14 @@ console.log(filter)
             </tr>
             {allGroupSalaryList && allGroupSalaryList.map((element: any, index: number) => {
               return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer' onClick={() => handleTableRowClick(element.groupName)}>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.groupName ? element.groupName : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.numberOfEmployees ? element.numberOfEmployees : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalEarning ? element.totalEarning : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalBasicSalary ? element.totalBasicSalary : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalHoursAsPerEmployee ? element.totalHoursAsPerEmployee : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalWorkingHour ? element.totalWorkingHour : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalPendingHour ? element.totalPendingHour : 0}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalAbsentHour ? element.totalAbsentHour : 0}</td>
+                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.numberOfEmployees ? element.numberOfEmployees : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalEarning ? (element.totalEarning).toFixed(1) : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalBasicSalary ? (element.totalBasicSalary).toFixed(1) : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalHoursAsPerEmployee ? (element.totalHoursAsPerEmployee).toFixed(1) : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalWorkingHour ? (element.totalWorkingHour).toFixed(1) : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalPendingHour ? (element.totalPendingHour).toFixed(1) : 0}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.totalAbsentHour ? (element.totalAbsentHour).toFixed(1) : 0}</td>
               </tr>
             })}
           </tbody>
@@ -150,7 +147,6 @@ console.log(filter)
               }}
               onClickDay={() => {
                 if (calenderDayClicked.length > 0) {
-                  console.log("hlo")
                   setShowCalender(false);
                   setcalenderDayClicked([]);
                 }

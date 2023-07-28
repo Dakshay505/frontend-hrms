@@ -1,23 +1,10 @@
 import axios from "axios";
-import { getAllAttandenceApiPath, getAllTodayPunchesApiPath, getMyAttandenceApiPath, getPresentBelowApiPath, updateAttendanceApiPath } from "../../APIRoutes";
-
-
-// READ
-export const getAllTodayPunches = async () => {
-  try {
-    const { data } = await axios.get(`${getAllTodayPunchesApiPath}`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (err: any) {
-    console.log(err.response.data);
-  }
-};
+import { getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
 
 // READ
-export const getPresentBelow = async () => {
+export const getStaffAttendance = async () => {
   try {
-    const { data } = await axios.get(`${getPresentBelowApiPath}`, {
+    const { data } = await axios.get(`${getStaffAttendanceApiPath}`, {
       withCredentials: true,
     });
     return data;
@@ -41,7 +28,19 @@ function convertToQueryString(data: any) {
 export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    console.log(`${getAllAttandenceApiPath}?${filterDatta}`)
+    const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
+export const getSingleGroupAttendance = async (sendData: any) => {
+  try {
+    const filterDatta = convertToQueryString(sendData);
+    console.log("APIAPI", `${getAllAttandenceApiPath}?${filterDatta}`)
     const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
       withCredentials: true,
     });
@@ -63,10 +62,23 @@ export const getMyAttandence = async (sendData: any) => {
   }
 };
 
+// READ
+export const getGroupAttendance = async () => {
+  try {
+    const { data } = await axios.get(`${getGroupAttendanceApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
+
 // UPDATE Attendance
 export const updateAttendance = async (updateData: any) => {
   try {
-    console.log("updateData", updateData)
+    console.log(updateData)
     const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
       withCredentials: true,
     });

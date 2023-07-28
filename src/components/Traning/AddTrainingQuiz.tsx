@@ -12,6 +12,7 @@ export const AddTrainingQuiz = () => {
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const [groupName, setGroupName] = useState("All Groups");
+    console.log(groupName)
     const [jobProfileName, setjobProfileName] = useState("All Job Profiles");
 
     useEffect(() => {
@@ -51,7 +52,6 @@ export const AddTrainingQuiz = () => {
             console.log(`Selected input value: ${correctAnswer}`);
         }
     }, [selectedOption, options]);
-
     const { register, handleSubmit, reset } = useForm();
     return (
         <div className='mx-10 pb-[32px]'>
@@ -66,11 +66,8 @@ export const AddTrainingQuiz = () => {
                         points: data['points'],
                         question: data['question']
                     }
-
-                    console.log("data", Data)
                     dispatch(addTrainingQuizAsync(Data));
-                    reset()
-;
+                    reset();
                     // handleFormSubmit();
                 })}
             >

@@ -11,12 +11,15 @@ import Receipt from '../../assets/Receipt.svg'
 import XCircle from '../../assets/XCircle.svg'
 import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const [employementTypeValue, setEmployementTypeValue] = useState('');
+    const [addMoreEmployee, setAddMoreEmployee] = useState(false)
     const [overTimeValue, setOverTimeValue] = useState("No");
-    const [overtimerate, setOvertimerate] = useState<any>("");
+    const [overtimerate, setOvertimerate] = useState<any>(0);
     const [showOtp, setShowOtp] = useState(false);
     const [otpCheck, setOtpCheck] = useState<any>(false);
     const [otpSent, setOtpSent] = useState<any>("");
@@ -26,8 +29,6 @@ const AddEmployee = () => {
         workingDay: "",
         workingHours: ""
     });
-
-    
 
     const {
         register,
@@ -70,16 +71,16 @@ const AddEmployee = () => {
         }
     };
     useEffect(() => {
-        if (overTimeReqValues.salary !== ""  && overTimeReqValues.workingDay !== "" && overTimeReqValues.workingHours !== "") {
+        if (overTimeReqValues.salary !== "" && overTimeReqValues.workingDay !== "" && overTimeReqValues.workingHours !== "") {
             const salary = Number(overTimeReqValues.salary);
             const workingDay = Number(overTimeReqValues.workingDay);
             const workingHours = Number(overTimeReqValues.workingHours);
             const totalWorkingDays = salary / (workingDay * 4.3 * workingHours);
             const overtimeRate = totalWorkingDays.toFixed(2);
-            if(overTimeValue === "Yes"){
+            if (overTimeValue === "Yes") {
                 setOvertimerate(totalWorkingDays);
-            } else{
-                setOvertimerate("");
+            } else {
+                setOvertimerate(0);
             }
             console.log(overtimeRate);
         }
@@ -138,7 +139,6 @@ const AddEmployee = () => {
 
         input.value = newValue;
     };
-    console.log("lvnldfn", overTimeReqValues)
 
 
 
@@ -169,7 +169,8 @@ const AddEmployee = () => {
 
     const resetFields = () => {
         setPhoneNumber('');
-        setOvertimerate('');
+        setOvertimerate(0);
+        setOverTimeValue("No")
     };
     return (
         <div className="mx-8 py-[32px]">
@@ -180,24 +181,40 @@ const AddEmployee = () => {
             <div className='mt-10'>
                 <form
                     onSubmit={handleSubmit((data: any) => {
-                        data = {
-                            ...data,
-                            overTime: overTimeValue,
-                        };
+                        if (overTimeValue === "Yes") {
+                            data = {
+                                ...data,
+                                overTime: true,
+                            };
+                        } else {
+                            data = {
+                                ...data,
+                                overTime: false,
+                            };
+                        }
                         console.log(data);
                         setShowOtp(true);
                         dispatch(createEmployeeAsync(data)).then(() => {
-                            getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
-                                if (res.data.Status === "Success") {
-                                    setOtpSent("OTP Sent");
+                            reset();
+                            if (!otpCheck) {
+                                getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
+                                    if (res.data.Status === "Success") {
+                                        setOtpSent("OTP Sent");
+                                    }
+                                    else {
+                                        setOtpSent("OTP not Sent");
+                                    }
+                                })
+                            } else {
+                                if (addMoreEmployee) {
+                                    resetFields();
                                 }
-                                else {
-                                    setOtpSent("OTP not Sent");
+                                if (!addMoreEmployee) {
+                                    resetFields();
+                                    navigate("/view-modify-database")
                                 }
-                            })
+                            }
                         })
-                        reset();
-                        resetFields();
                     })}>
                     <div className='flex flex-col gap-5'>
                         <div className='flex gap-10'>
@@ -208,8 +225,8 @@ const AddEmployee = () => {
                                 <div>
                                     <input
                                         {...register('name', { required: 'Name is required', validate: validateEmployeeName })}
-                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                        onChange={handleEmployeeNameChange} // Add the onChange event handler
+                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                        onChange={handleEmployeeNameChange}
                                     />
                                     {errors.name && <p className="text-red-500">{String(errors.name.message)}</p>}
                                 </div>
@@ -221,13 +238,12 @@ const AddEmployee = () => {
                                 <div>
                                     <input
                                         {...register('email', {
-                                            required: 'Email is required',
                                             pattern: {
                                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                                 message: 'Invalid email address',
                                             },
                                         })}
-                                        type="email" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                        type="email" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                         placeholder='abc@gmail.com'
                                     />
                                     {errors.email && <p className="text-red-500">{String(errors.email.message)}</p>}
@@ -242,11 +258,11 @@ const AddEmployee = () => {
                                 <div>
                                     <select
                                         {...register('jobProfileName', { required: "Job Profile required" })}
-                                        defaultValue={"Job Profile"} className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
+                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'
                                         onChange={handleJobProfileChange}>
                                         <option value="JobProfile">Job Profiles</option>
                                         {jobProfileList && jobProfileList.map((element: any, index: number) => {
-                                            return <option value={element.jobProfileName} key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.jobProfileName}</option>
+                                            return <option value={element.jobProfileName} key={index}>{element.jobProfileName}</option>
                                         })}
                                     </select>
                                 </div>
@@ -258,10 +274,10 @@ const AddEmployee = () => {
                                 <div>
                                     <select
                                         {...register('groupName', { required: "Group Name required" })}
-                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
+                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'>
                                         <option value="Group">Group</option>
                                         {groupList && groupList.map((element: any, index: number) => {
-                                            return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
+                                            return <option value={element.groupName} key={index}>{element.groupName}</option>
                                         })}
                                     </select>
                                 </div>
@@ -280,7 +296,7 @@ const AddEmployee = () => {
                                         {...register('contactNumber', { required: "Phone No. required" })}
                                         pattern={'^\d{10,11}$'}
                                         required
-                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                     />
                                 </div>
                                 {phoneNumber.length > 0 && !isValid && (
@@ -290,38 +306,18 @@ const AddEmployee = () => {
                                     <p className='text-green-500'>Phone number is valid!</p>
                                 )}
                             </div>
-                            {employementTypeValue === "Fixed Salary Employee" &&
-                                <div className='flex flex-col gap-3'>
-                                    <div>
-                                        <p className='text-sm font-normal text-[#1C1C1C]'>Salary</p>
-                                    </div>
-                                    <div>
-                                        <input
-                                            {...register('salary', { required: "salary requires" })}
-                                            type="number"
-                                            className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                            name="salary"
-                                            placeholder='₹'
-                                            onChange={handleSalaryChange}
-                                        />
-                                        {errors.salary && <p className="text-red-500">{String(errors.salary.message)}</p>}
-                                    </div>
-                                </div>
-                            }
-                            {employementTypeValue === "Contract Employee" && <div className='flex flex-col gap-3'>
+                            <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Expected Salary</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Employee Code</p>
                                 </div>
                                 <div>
                                     <input
-                                        {...register('expactedSalary', { required: "expected salary requires" })}
-                                        name="salary"
-                                        placeholder='₹'
-                                        onChange={handleSalaryChange}
-                                        type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]' />
+                                        type="text"
+                                        {...register('employeeCode', { required: true })}
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
                                 </div>
-                                {errors.expactedSalary && <p className="text-red-500">{String(errors.expactedSalary.message)}</p>}
-                            </div>}
+                            </div>
                         </div>
 
                         {/* FIXED SALARY EMPLOYEE */}
@@ -330,24 +326,41 @@ const AddEmployee = () => {
                                 <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
+                                            <p className='text-sm font-normal text-[#1C1C1C]'>Salary</p>
+                                        </div>
+                                        <div>
+                                            <input
+                                                {...register('salary', { required: "salary requires" })}
+                                                type="number"
+                                                className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                                name="salary"
+                                                placeholder='₹'
+                                                onChange={handleSalaryChange}
+                                            />
+                                            {errors.salary && <p className="text-red-500">{String(errors.salary.message)}</p>}
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col gap-3'>
+                                        <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Lunch Time</p>
                                         </div>
                                         <div>
                                             <select
                                                 {...register('lunchTime', { required: true })}
-                                                className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
+                                                className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px] focus:outline-none'
                                             >
                                                 <option value="">Select lunch time</option>
                                                 <option value="0.5">30 min</option>
                                                 <option value="0.75">45 min</option>
                                                 <option value="1">1 hour</option>
-                                                <option value="1.30">1:30 hour</option>
+                                                <option value="1.5">1:30 hour</option>
                                                 <option value="2">2 hour</option>
-                                                <option value="2.30">2:30 hour</option>
+                                                <option value="2.5">2:30 hour</option>
                                             </select>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Working Days</p>
@@ -356,10 +369,8 @@ const AddEmployee = () => {
                                         >
                                             <select
                                                 {...register('workingDays', { required: true })}
-
-                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingDay: event.target.value})}
-
-                                                className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px]'
+                                                onChange={(event) => setOverTimeReqValues({ ...overTimeReqValues, workingDay: event.target.value })}
+                                                className='border border-solid border-[#DEDEDE] rounded px-3 h-10 w-[324px] focus:outline-none'
                                             >
                                                 <option value="">Select working days</option>
                                                 <option value="1">1</option>
@@ -372,9 +383,6 @@ const AddEmployee = () => {
                                             </select>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Working Hours</p>
@@ -382,10 +390,8 @@ const AddEmployee = () => {
                                         <div>
                                             <select
                                                 {...register('workingHours', { required: true })}
-
-                                                onChange={(event) => setOverTimeReqValues({...overTimeReqValues, workingHours: event.target.value})}
-
-                                                className='border border-solid border-[#DEDEDE] rounded py-2 px-3 h-10 w-[324px]'
+                                                onChange={(event) => setOverTimeReqValues({ ...overTimeReqValues, workingHours: event.target.value })}
+                                                className='border border-solid border-[#DEDEDE] rounded py-2 px-3 h-10 w-[324px] focus:outline-none'
                                             >
                                                 <option value="">Select Working Hours</option>
                                                 <option value="4">4 hour</option>
@@ -400,7 +406,8 @@ const AddEmployee = () => {
                                             </select>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Overtime?</p>
@@ -409,17 +416,14 @@ const AddEmployee = () => {
                                             <select
                                                 {...register('overTime', { required: true })}
                                                 defaultValue="No"
-                                                className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'
+                                                className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'
                                                 onChange={handleOverTimeChange}
                                             >
-
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Overtime Rate</p>
@@ -427,12 +431,12 @@ const AddEmployee = () => {
                                         <div>
                                             {/* Conditionally show the calculated overtime rate when overTimeValue is true */}
                                             <input
-                                                {...register('overTimeRate', { required: overTimeValue })}
+                                                {...register('overTimeRate')}
                                                 type='number'
                                                 disabled={overTimeValue === "No"}
                                                 onChange={(event) => setOvertimerate(event.target.value)}
-                                                value={overtimerate}
-                                                className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                                value={(overtimerate).toFixed(2)}
+                                                className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                             />
                                         </div>
                                     </div>
@@ -441,6 +445,20 @@ const AddEmployee = () => {
                             : ""
                         }
                         {/* FIXED SALARY EMPLOYEE END */}
+                        {employementTypeValue === "Contract Employee" && <div className='flex flex-col gap-3'>
+                            <div>
+                                <p className='text-sm font-normal text-[#1C1C1C]'>Expected Salary</p>
+                            </div>
+                            <div>
+                                <input
+                                    {...register('expactedSalary', { required: "expected salary requires" })}
+                                    name="salary"
+                                    placeholder='₹'
+                                    onChange={handleSalaryChange}
+                                    type="number" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none' />
+                            </div>
+                            {errors.expactedSalary && <p className="text-red-500">{String(errors.expactedSalary.message)}</p>}
+                        </div>}
                     </div>
                     <div className='flex flex-col gap-4 mt-10'>
                         <div className='flex gap-[9px] ps-2'>
@@ -451,8 +469,8 @@ const AddEmployee = () => {
                             <label htmlFor='otpCheck' className='text-sm font-normal text-[#1C1C1C] tracking-[0.25px]'>Verify OTP Later</label>
                         </div>
                         <div className='flex gap-6'>
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
+                            <button onClick={() => setAddMoreEmployee(false)} type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
+                            <button onClick={() => setAddMoreEmployee(true)} type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
                         </div>
                     </div>
                 </form>
@@ -505,6 +523,14 @@ const AddEmployee = () => {
                                             if (res.data.Status === "Success") {
                                                 setOtpVerified("Verified");
                                                 setShowOtp(false);
+                                                resetFields();
+                                                if (addMoreEmployee) {
+                                                    resetFields();
+                                                }
+                                                if (!addMoreEmployee) {
+                                                    resetFields();
+                                                    navigate("/view-modify-database")
+                                                }
                                             } else {
                                                 setOtpVerified("Not Verified");
                                             }

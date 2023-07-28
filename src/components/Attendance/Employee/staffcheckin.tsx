@@ -7,13 +7,17 @@ import approve from "../../../assets/Check.png"
 import deny from "../../../assets/X.png";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAttandenceAsync, updateAttendanceAsync } from "../../../redux/Slice/AttandenceSlice";
+import LoaderGif from '../../../assets/loadergif.gif'
 
 
 export const StaffCheckin = () => {
     const dispatch = useDispatch();
-    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
+    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees); 
     const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
     const [allAttandenceList1, setAllAttandenceList1] = useState([]);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status)
+
     useEffect(() => {
         let arr1: any = [];
         let index1: number = 0;
@@ -22,7 +26,7 @@ export const StaffCheckin = () => {
             const arr = (element.punches).filter((element: any) => element.status === "pending")
             if (arr.length === 0) {
                 arr1.splice(index1, 1)
-                console.log("hi")
+                setAllAttandenceList1(arr1)
             } else {
                 arr1[index1].punches = arr;
                 setAllAttandenceList1(arr1)
@@ -30,7 +34,6 @@ export const StaffCheckin = () => {
             }
         })
     }, [allAttandenceList])
-
     useEffect(() => {
         const date = new Date();
         const year = date.getFullYear();
@@ -94,6 +97,9 @@ export const StaffCheckin = () => {
                 <div className="text-[#2E2E2E] text-2xl font-inter font-bold leading-8">
                     Daily Staff Check-in
                 </div>
+                {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
 
                 {allAttandenceList1 && allAttandenceList1.map((element: any, index: number) => {
                     const latestAttendance = element.punches[0];
@@ -113,9 +119,16 @@ export const StaffCheckin = () => {
                                         const data = {
                                             employeeId: element.employeeId?._id,
                                             punchInTime: latestAttendance.punchIn,
-                                            status: "approved"
+                                            status: "approved",
+                                            date: (latestAttendance.punchIn).slice(0,10)
                                         }
-                                        dispatch(updateAttendanceAsync(data)).then(() => dispatch(getAllAttandenceAsync()));
+                                        dispatch(updateAttendanceAsync(data)).then(() => {
+                                            const date = new Date();
+                                            const year = date.getFullYear();
+                                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                                            const day = String(date.getDate()).padStart(2, '0');
+                                            dispatch(getAllAttandenceAsync({ date: `${year}-${month}-${day}` })) 
+                                        });
                                     }}>
                                     <img src={approve} alt="" className="h-[16px] w-[16px]" />
                                     Approved</button>
@@ -124,9 +137,15 @@ export const StaffCheckin = () => {
                                         const data = {
                                             employeeId: element.employeeId?._id,
                                             punchInTime: latestAttendance.punchIn,
-                                            status: "rejected"
+                                            status: "rejected",
+                                            date: (latestAttendance.punchIn).slice(0,10)
                                         }
-                                        dispatch(updateAttendanceAsync(data)).then(() => dispatch(getAllAttandenceAsync()));
+                                        dispatch(updateAttendanceAsync(data)).then(() => {
+                                            const date = new Date();
+                                            const year = date.getFullYear();
+                                            const month = String(date.getMonth() + 1).padStart(2, '0');
+                                            const day = String(date.getDate()).padStart(2, '0');
+                                            dispatch(getAllAttandenceAsync({ date: `${year}-${month}-${day}` }))});
                                     }}>
                                     <img src={deny} alt="" className="h-[16px] w-[16px]" />
                                     Deny</button>

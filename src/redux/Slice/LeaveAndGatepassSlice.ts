@@ -51,9 +51,9 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
 // READ APPROVED LEAVES
 export const getAllApprovedLeavesAsync: any = createAsyncThunk(
     'getallApprovedLeaves',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedLeaves();
+            const response: any = await getAllApprovedLeaves(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -66,6 +66,7 @@ export const getAllAcceptedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllAcceptedLeaves();
+            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -78,6 +79,7 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
+            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -125,6 +127,7 @@ export const updateAcceptedLeavesAsync: any = createAsyncThunk(
     'updateAcceptedLeaves',
     async (data) => {
         try {
+            console.log("Data",data);
             const response: any = await updateAcceptedLeaves(data);
             return response;
         } catch (error: any) {
@@ -149,9 +152,9 @@ export const getAllPendingGatePassAsync: any = createAsyncThunk(
 // READ APPROVED GATEPASS
 export const getAllApprovedGatePassAsync: any = createAsyncThunk(
     'getallApprovedGatePasses',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedGatePass();
+            const response: any = await getAllApprovedGatePass(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -199,6 +202,7 @@ export const updateAcceptedGatePassAsync: any = createAsyncThunk(
     'updateAcceptedGatePass',
     async (data) => {
         try {
+            console.log(data);
             const response: any = await updateAcceptedGatePass(data);
             return response;
         } catch (error: any) {
@@ -250,14 +254,14 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.acceptedLeaves = action.payload.acceptedLeaveWithFilteredPeriods;
+                state.acceptedLeaves = action.payload.allAcceptedRequest;
             })
             .addCase(getAllRejectedLeavesAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllRejectedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedLeaves = action.payload.rejectedLeaveWithFilteredPeriods;
+                state.rejectedLeaves = action.payload.allRejectedLeave;
             })
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
@@ -284,7 +288,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllApprovedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.approvedGatePasses = action.payload.approvedGatePassWithFilteredPeriods;
+                state.approvedGatePasses = action.payload.allApprovedLeave;
             })
             .addCase(getAllAcceptedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
@@ -298,7 +302,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllRejectedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedGatePasses = action.payload.rejectedGatePassWithFilteredPeriods;
+                state.rejectedGatePasses = action.payload.allRejectedLeave;
             })
             .addCase(updatePendingGatePassAsync.pending, (state) => {
                 state.status = 'loading';

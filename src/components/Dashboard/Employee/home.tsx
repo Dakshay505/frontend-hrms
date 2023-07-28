@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-// import round from "../../assets/Group 1.png"
+import round from "../../../assets/Group 1.png"
 import { useEffect } from "react"
 import { getLoggedInUserDataAsync } from "../../../redux/Slice/loginSlice"
-import { getPresentBelowAsync } from "../../../redux/Slice/AttandenceSlice"
+import { getStaffAttendanceAsync } from "../../../redux/Slice/AttandenceSlice"
 import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
 import Calendar from 'react-calendar';
 import { getMyLeavesAndGatePassAsync } from "../../../redux/Slice/LeaveAndGatepassSlice"
@@ -13,8 +13,9 @@ export const Employeehome = () => {
 
     const dispatch = useDispatch()
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
-    // const persentBelowList = useSelector((state: any) => state.attandence.presentBelow);
     const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
+    const staffAttendanceList = useSelector((state: any) => state.attandence.staffAttendance)
+    console.log("staffAttendanceList", staffAttendanceList)
     const [myLeaves, setMyLeaves] = useState<any>([])
     const [leaves, setLeaves] = useState<any>([])
     useEffect(() => {
@@ -27,8 +28,9 @@ export const Employeehome = () => {
     }, [myLeaveAndGatepassList])
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync())
-        dispatch(getPresentBelowAsync())
+        dispatch(getStaffAttendanceAsync())
         dispatch(getMyLeavesAndGatePassAsync());
+
     }, [])
 
     const newLeaves = myLeaves.flatMap(({ from, to }: any) => {
@@ -77,20 +79,20 @@ export const Employeehome = () => {
 
 
                     <div className="flex items-start gap-[20px] self-stretch overflow-auto">
-                        {/* {persentBelowList && persentBelowList.map((element: any, index: number) => {
+                        {staffAttendanceList && staffAttendanceList.map((element: any, index: number) => {
 
                             return <div key={index} className="flex flex-col justify-center  bg-[#FAFAFA] rounded-[8px] border border-primary-border self-stretch px-[20px] py-[16px]  items-start p-[4px] gap-[2px] min-w-[216px]">
                                 <div className='flex items-center gap-[12px]'>
                                     <img src={round} alt="" className='w-[24px] h-[24px]' />
                                     <p className="text-[#283093] font-inter font-bold text-[24px] leading-[32px]">
-                                        {element.present ? element.present : "NaN"} / 5
+                                        {element.todayPresent ? element.todayPresent : "0"} / {element.totalEmployees}
                                     </p>
 
                                 </div>
-                                <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>{element.jobProfile ? element.jobProfile : "Not Avilable"}</p>
+                                <p className='items-start self-stretch pb-0 gap-[8px] text-[#000000] font-inter font-medium text-[16px] leading-[28px] whitespace-nowrap'>{element.thisJobProfile.jobProfileName ? element.thisJobProfile.jobProfileName : "Not Avilable"}</p>
                             </div>
 
-                        })} */}
+                        })}
                     </div>
 
                 </div>

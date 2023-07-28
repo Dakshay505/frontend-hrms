@@ -22,7 +22,6 @@ const ViewModifyDatabase = () => {
     })
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter));
-        console.log("filter", filter)
     }, [filter])
 
     // SEARCH
@@ -66,7 +65,6 @@ const ViewModifyDatabase = () => {
     }
     const handleJobprofileTableRowClick = (data: any) => {
         const jobProfileId = { jobProfileId: data._id }
-        console.log(jobProfileId)
         dispatch(getSingleJobProfileAsync(jobProfileId));
         navigate(`/jobprofile-info`, { state: { data: data } });
     }
@@ -108,25 +106,20 @@ const ViewModifyDatabase = () => {
     const employeePagination = Math.ceil((count || 0) / itemsPerPage);
 
     const dispatchPagination = (pageNumber: number) => {
-        console.log("page no-", pageNumber);
         setCurrentPage(pageNumber);
         setFilter({ ...filter, page: pageNumber });
         dispatch(getAllEmployeeAsync(filter));
     };
     const handleNextPage = () => {
-        console.log('handleNextPage');
         const nextPage = currentPage + 1;
         if (nextPage <= employeePagination) {
-            console.log("nextPage: " + nextPage)
             dispatchPagination(nextPage);
         }
     };
 
     const handlePreviousPage = () => {
-        console.log('handlePreviousPage');
         const previousPage = currentPage - 1;
         if (previousPage >= 1) {
-            console.log("previous page", previousPage)
             dispatchPagination(previousPage);
         }
     };
@@ -138,7 +131,7 @@ const ViewModifyDatabase = () => {
             <div className="flex justify-between pt-8">
                 <div className="flex gap-7 items-center justify-center">
                     <div>
-                        <h1 className="text-2xl font-bold text-[#2E2E2E]">View Database</h1>
+                        <h1 className="text-2xl font-bold text-[#2E2E2E] whitespace-nowrap">View Database</h1>
                     </div>
                     <div>
                         <form
@@ -174,7 +167,7 @@ const ViewModifyDatabase = () => {
                     {databaseValue !== "Employees" && <Link to="/update-hierarchy">
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={Pencil} className='w-4' alt="" /><p className="px-2">Update Hierarchy</p></div>
                     </Link>}
-                    <Link to={path}>
+                    <Link to={path} className='w-[92px] h-10'>
                         <div className='flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add</p></div>
                     </Link>
                 </div>
@@ -274,7 +267,7 @@ const ViewModifyDatabase = () => {
                         {databaseValue === "Employees" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
-                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Employee ID</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group</td>
@@ -285,7 +278,7 @@ const ViewModifyDatabase = () => {
                                 </tr>
                                 {employeeDetailList && employeeDetailList.map((element: any, index: number) => {
                                     return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employeeCode ? element.employeeCode : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.name ? element.name : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobProfileId?.jobProfileName ? element.jobProfileId?.jobProfileName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.groupId?.groupName ? element.groupId?.groupName : "Not Avilable"}</td>
@@ -341,13 +334,13 @@ const ViewModifyDatabase = () => {
                         {databaseValue === "Groups" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE]'>
-                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group ID</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group Name</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Description</td>
                                 </tr>
                                 {groupList && groupList.map((element: any, index: number) => {
                                     return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleGroupTableRowClick(element)}>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline'>{element.groupName ? element.groupName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.description ? element.description : "Not Avilable"}</td>
                                     </tr>
@@ -358,7 +351,7 @@ const ViewModifyDatabase = () => {
                         {databaseValue === "Job Profiles" && <table>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
-                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                                    <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile ID</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile Name</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Description</td>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Rank</td>
@@ -366,7 +359,7 @@ const ViewModifyDatabase = () => {
                                 </tr>
                                 {jobProfileList && jobProfileList.map((element: any, index: number) => {
                                     return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleJobprofileTableRowClick(element)}>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.jobProfileName ? element.jobProfileName : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobDescription ? element.jobDescription : "Not Avilable"}</td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobRank ? element.jobRank : "Not Avilable"}</td>

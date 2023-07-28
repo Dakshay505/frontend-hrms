@@ -12,13 +12,17 @@ import GreenCheck from '../../../assets/GreenCheck.svg';
 import RedX from '../../../assets/RedX.svg';
 import SpinnerGap from '../../../assets/SpinnerGap.svg'
 import DotsThreeVertical from '../../../assets/DotsThreeVertical.svg'
-
+import CaretDown from "../../../assets/CaretDown11.svg"
+import CaretUp from "../../../assets/CaretUp.svg"
+import LoaderGif from '../../../assets/loadergif.gif'
 
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
     const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
     const myAttandenceList = useSelector((state: any) => state.attandence.myAttandence);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status)
 
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
@@ -140,7 +144,6 @@ export const Employeeattendence = () => {
             setShowTableRow([...showTableRow, index])
         }
     }
-    console.log("showTableRow", showTableRow)
 
     const [showStatusDropdown, setShowStatusDropdown] = useState<any>([]);
     const handleDotClicked = (data: any) => {
@@ -152,7 +155,7 @@ export const Employeeattendence = () => {
             setShowStatusDropdown([data]);
         }
     }
-    
+
 
     const tileClassName = ({ date }: any) => {
         const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -241,8 +244,11 @@ export const Employeeattendence = () => {
                         </div>
                     </div>}
                 </div>
-                <div className='mt-10 overflow-auto'>
-                    {attandenceValue === "Your Attandence" ? <div className='py-6'>
+                {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+                <div className=''>
+                    {attandenceValue === "Your Attandence" ? <div className="py-6 mb-24 overflow-auto">
                         {/* TABLE STARTS HERE */}
                         <table>
                             <tbody>
@@ -255,14 +261,13 @@ export const Employeeattendence = () => {
                                 </tr>
                                 {myAttandenceList && myAttandenceList.map((element: any, index: number) => {
                                     const punchesList = [...(element.punches)];
-                                    console.log("normal", punchesList)
                                     const sortedPunches = punchesList.sort((a: any, b: any) => {
                                         return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                                     })
                                     const latestPunches = sortedPunches[0];
                                     return <>
-                                        <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
+                                        <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
+                                            <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
@@ -284,8 +289,8 @@ export const Employeeattendence = () => {
                                             </td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                         </tr>
-                                        {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                                            return <tr key={index}>
+                                        {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                                            return <tr key={element._id + element.punchIn}>
                                                 <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
@@ -317,7 +322,7 @@ export const Employeeattendence = () => {
                     </div> : ""}
 
                     {attandenceValue === "Staff Attandence" ?
-                        <div className='pt-6 pb-24 relative overflow-auto'>
+                        <div className='py-6 mb-24 overflow-auto'>
                             {/* TABLE STARTS HERE */}
                             <table>
                                 <tbody>
@@ -336,9 +341,9 @@ export const Employeeattendence = () => {
                                         })
                                         const latestPunches = sortedPunches[0];
                                         return <>
-                                            <tr key={index} className='hover:bg-[#FAFAFA]'>
+                                            <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]'>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
-                                                <td onClick={() => { handleRowClick(index) }} className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                                                <td onClick={() => { handleRowClick(index) }} className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                 <td className='py-4 px-5'>
@@ -353,7 +358,7 @@ export const Employeeattendence = () => {
                                                             </div>
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-6 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn, date: (latestPunches.punchIn).slice(0, 10)})).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
                                                             </div>}
                                                         </span>}
@@ -369,7 +374,7 @@ export const Employeeattendence = () => {
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-6 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl border border-solid border-[#DEDEDE]">
                                                                 <p
                                                                     onClick={() => {
-                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }}
                                                                     className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                             </div>}
@@ -385,10 +390,10 @@ export const Employeeattendence = () => {
                                                             </div>
                                                             {showStatusDropdown.includes(latestPunches.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                                 <p onClick={() => {
-                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                    dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                 }}
                                                                     className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
                                                             </div>}
@@ -396,64 +401,64 @@ export const Employeeattendence = () => {
                                                 </td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                             </tr>
-                                            {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                                                return <tr key={index}>
+                                            {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element1: any) => {
+                                                return <tr key={element1._id + element1.punchIn}>
                                                     <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                                     <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
-                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element1.punchIn ? new Date(element1.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element1.punchOut ? new Date(element1.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                     <td className='py-4 px-5'>
-                                                        {element.status === "approved" &&
+                                                        {element1.status === "approved" &&
                                                             <span className='relative flex gap-3 items-center bg-[#E9F7EF] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
-dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }}
-                                                                    className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
+                                                                        className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Reject</p>
                                                                 </div>}
                                                             </span>}
-                                                        {element.status === "rejected" &&
+                                                        {element1.status === "rejected" &&
                                                             <span className='relative flex gap-3 items-center bg-[#FCECEC] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
-                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                                 </div>}
                                                             </span>}
-                                                        {(element.status === "pending") &&
+                                                        {(element1.status === "pending") &&
                                                             <span className='relative flex gap-3 items-center bg-[#FEF5ED] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
-                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
                                                                     <p onClick={() => {
-                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejeected", punchInTime: latestPunches.punchIn })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
+                                                                        dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejeected", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E] w-full">Reject</p>
                                                                 </div>}
                                                             </span>}
                                                     </td>
-                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element1.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                                 </tr>
                                             })}
                                         </>
@@ -462,54 +467,53 @@ dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "r
                             </table>
                             {/* TABLE ENDS HERE */}
                         </div> : ""}
-                        <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
-                <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
-                    <button
-                        onClick={() => {
-                            const nextDate = new Date(date);
-                            nextDate.setDate(date.getDate() - 1);
-                            setDate(nextDate);
-                        }}>
-                        <img src={CaretLeft} alt="" className="w-4 h-4" />
-                    </button>
-                    {showCalender && <div className="filterCalender absolute z-20 bottom-28">
-                        <Calendar
-                            tileClassName={tileClassName}
-                            onChange={(event) => {
-                                calenderDayClicked.length === 0 ? setDate(event) : "";
-                                calenderDayClicked.length === 1 ? setnextDate(event) : "";
-                                if (calenderDayClicked.length < 1) {
-                                    setcalenderDayClicked([...calenderDayClicked, 1]);
-                                }
-                            }}
-                            onClickDay={() => {
-                                if (calenderDayClicked.length > 0) {
-                                    console.log("hlo")
-                                    setShowCalender(false);
-                                    setcalenderDayClicked([]);
-                                }
-                            }}
-                            className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
-                            formatShortWeekday={(locale, date) => {
-                                console.log(locale)
-                                return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
-                            }} />
-                    </div>}
-                    <p
-                        onClick={() => {
-                            setShowCalender(!showCalender);
-                        }}
-                        className="text-sm font-medium text-[#283093] cursor-pointer">{`${formatDate(date)} - ${nextDate ? formatDate(nextDate) : formatDate(date)}`}</p>
-                    <button
-                        onClick={() => {
-                            const nextDate = new Date(date);
-                            nextDate.setDate(date.getDate() + 1);
-                            setDate(nextDate);
-                        }}>
-                        <img src={CaretRight} className="w-4 h-4" alt="" />
-                    </button>
-                </div>
-            </div>
+                    <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+                        <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
+                            <button
+                                onClick={() => {
+                                    const nextDate = new Date(date);
+                                    nextDate.setDate(date.getDate() - 1);
+                                    setDate(nextDate);
+                                }}>
+                                <img src={CaretLeft} alt="" className="w-4 h-4" />
+                            </button>
+                            {showCalender && <div className="filterCalender absolute z-20 bottom-28">
+                                <Calendar
+                                    tileClassName={tileClassName}
+                                    onChange={(event) => {
+                                        calenderDayClicked.length === 0 ? setDate(event) : "";
+                                        calenderDayClicked.length === 1 ? setnextDate(event) : "";
+                                        if (calenderDayClicked.length < 1) {
+                                            setcalenderDayClicked([...calenderDayClicked, 1]);
+                                        }
+                                    }}
+                                    onClickDay={() => {
+                                        if (calenderDayClicked.length > 0) {
+                                            setShowCalender(false);
+                                            setcalenderDayClicked([]);
+                                        }
+                                    }}
+                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-[7px] w-[252px] h-[280px] text-[16px]"
+                                    formatShortWeekday={(locale, date) => {
+                                        console.log(locale)
+                                        return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+                                    }} />
+                            </div>}
+                            <p
+                                onClick={() => {
+                                    setShowCalender(!showCalender);
+                                }}
+                                className="text-sm font-medium text-[#283093] cursor-pointer">{`${formatDate(date)} - ${nextDate ? formatDate(nextDate) : formatDate(date)}`}</p>
+                            <button
+                                onClick={() => {
+                                    const nextDate = new Date(date);
+                                    nextDate.setDate(date.getDate() + 1);
+                                    setDate(nextDate);
+                                }}>
+                                <img src={CaretRight} className="w-4 h-4" alt="" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
