@@ -20,6 +20,8 @@ export const createJobProfiles = async (jobProfileData: any) => {
     console.log(err.response.data);
   }
 };
+
+
 export const getSingleJobProfile = async (JobprofileId: any) => {
   try {
     // console.log("id", JobprofileId.departmentId);
@@ -32,7 +34,7 @@ export const getSingleJobProfile = async (JobprofileId: any) => {
     console.error(error);
   }
 };
-
+ 
 // READ
 export const getAllJobProfiles = async () => {
   try {
