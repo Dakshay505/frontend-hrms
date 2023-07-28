@@ -10,11 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from 'react'
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
+import LoaderGif from '../../assets/loadergif.gif'
 
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
   const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
   const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
+
+  const loaderStatus = useSelector((state: any) => state.attandence.status)
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -97,7 +100,9 @@ export const AttendenceDtabase = () => {
             </div>
           </Link>
         </div>
-
+        {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
         <div className='py-6 overflow-auto'>
           {/* TABLE STARTS HERE */}
           <table>

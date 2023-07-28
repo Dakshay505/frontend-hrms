@@ -13,11 +13,8 @@ export const EmployeeLeaveHome = () => {
 
   const dispatch = useDispatch();
   const allApprovedLeaveList = useSelector((state: any) => state.leave.acceptedLeaves);
-  console.log("acceptedLeaves", allApprovedLeaveList)
   const allPendindLeaveList = useSelector((state: any) => state.leave.pendingLeaves);
-  console.log("allPendindLeaveList", allPendindLeaveList);
   const allRejectedLeaveList = useSelector((state: any) => state.leave.rejectedLeaves);
-  console.log("allRejectedLeaveList", allRejectedLeaveList);
   const allApprovedGatePassList = useSelector((state: any) => state.leave.approvedGatePasses);
   const allPendingGatePassList = useSelector((state: any) => state.leave.pendingGatePasses);
   const allRejectedGatePassList = useSelector((state: any) => state.leave.rejectedGatePasses);

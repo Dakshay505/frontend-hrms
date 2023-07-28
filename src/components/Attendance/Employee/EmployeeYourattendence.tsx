@@ -14,13 +14,15 @@ import SpinnerGap from '../../../assets/SpinnerGap.svg'
 import DotsThreeVertical from '../../../assets/DotsThreeVertical.svg'
 import CaretDown from "../../../assets/CaretDown11.svg"
 import CaretUp from "../../../assets/CaretUp.svg"
-
+import LoaderGif from '../../../assets/loadergif.gif'
 
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
     const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
     const myAttandenceList = useSelector((state: any) => state.attandence.myAttandence);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status)
 
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
@@ -242,8 +244,11 @@ export const Employeeattendence = () => {
                         </div>
                     </div>}
                 </div>
-                <div className='mt-10 overflow-auto'>
-                    {attandenceValue === "Your Attandence" ? <div className='py-6'>
+                {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+                <div className=''>
+                    {attandenceValue === "Your Attandence" ? <div className="py-6 mb-24 overflow-auto">
                         {/* TABLE STARTS HERE */}
                         <table>
                             <tbody>
@@ -317,7 +322,7 @@ export const Employeeattendence = () => {
                     </div> : ""}
 
                     {attandenceValue === "Staff Attandence" ?
-                        <div className='pt-6 pb-24 relative overflow-auto'>
+                        <div className='py-6 mb-24 overflow-auto'>
                             {/* TABLE STARTS HERE */}
                             <table>
                                 <tbody>
@@ -409,10 +414,10 @@ export const Employeeattendence = () => {
                                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
                                                                         dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "rejected", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }}
@@ -425,10 +430,10 @@ export const Employeeattendence = () => {
                                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-10 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
                                                                         dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>
@@ -440,10 +445,10 @@ export const Employeeattendence = () => {
                                                                     <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                                 </div>
-                                                                <div onClick={() => handleDotClicked(element.punchIn)} className="flex justify-center items-center cursor-pointer">
+                                                                <div onClick={() => handleDotClicked(element1.punchIn)} className="flex justify-center items-center cursor-pointer">
                                                                     <img src={DotsThreeVertical} className="w-[10px] h-[10px]" alt="" />
                                                                 </div>
-                                                                {showStatusDropdown.includes(element.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
+                                                                {showStatusDropdown.includes(element1.punchIn) && <div className="absolute -right-10 -bottom-20 z-10 flex flex-col justify-center items-center bg-[#FAFAFA] rounded-xl">
                                                                     <p onClick={() => {
                                                                         dispatch(updateAttendanceAsync({ employeeId: element.employeeId?._id, status: "approved", punchInTime: element1.punchIn, date: (latestPunches.punchIn).slice(0, 10) })).then(() => { dispatch(getAllAttandenceAsync(filter)), setShowStatusDropdown([]) })
                                                                     }} className="p-2 hover:bg-[#FFF] cursor-pointer text-sm font-medium text-[#2E2E2E]">Approve</p>

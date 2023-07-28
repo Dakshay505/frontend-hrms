@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import glass from '../../assets/MagnifyingGlass.png'
-import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getSingleGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
@@ -14,6 +14,7 @@ import Calendar from "react-calendar";
 import { useLocation } from "react-router-dom";
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
+import LoaderGif from '../../assets/loadergif.gif'
 
 const SingleGroupAttendance = () => {
     const location = useLocation();
@@ -22,6 +23,10 @@ const SingleGroupAttendance = () => {
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const allAttandenceList = useSelector((state: any) => state.attandence.singleGroupAttendance)
+    console.log("allAttandenceList", allAttandenceList);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status)
+
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
     const [date, setDate] = useState<any>(new Date());
@@ -73,21 +78,22 @@ const SingleGroupAttendance = () => {
     }, [additionalData])
     const [dateRange, setDateRange] = useState<any>([])
     useEffect(() => {
-        function getDateRange(startDate: any, endDate: any) {
-            if (nextDate) {
-                const result = [];
-                const currentDate = new Date(startDate);
-                const finalDate = new Date(endDate);
-                while (currentDate <= finalDate) {
-                    result.push(currentDate.toISOString().slice(0, 10));
-                    currentDate.setDate(currentDate.getDate() + 1);
+            function getDateRange(startDate: any, endDate: any) {
+                if (nextDate) {
+                    const result = [];
+                    const currentDate = new Date(startDate);
+                    const finalDate = new Date(endDate);
+                    while (currentDate <= finalDate) {
+                        result.push(currentDate.toISOString().slice(0, 10));
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    setDateRange([...result])
                 }
-                setDateRange([...result])
             }
-        }
         getDateRange(filter.date, filter.nextDate)
-        dispatch(getGroupAttendanceAsync(filter))
+        dispatch(getSingleGroupAttendanceAsync(filter))
     }, [filter])
+    console.log("filter", filter)
     useEffect(() => {
         const arr: any = [];
         for (let i = 0; i < allAttandenceList.length; i++) {
@@ -242,7 +248,10 @@ const SingleGroupAttendance = () => {
                     </div>
                 </div>
             </div>
-            <div className="py-8 overflow-auto">
+            {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+            <div className="py-6 mb-24 overflow-auto">
                 <table>
                     <tbody>
                         <tr className='bg-[#ECEDFE] cursor-default'>
@@ -284,8 +293,8 @@ const SingleGroupAttendance = () => {
                                     </td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                 </tr>
-                                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                                    return <tr key={index}>
+                                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                                    return <tr key={element._id + element.punchIn}>
                                         <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                         <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
@@ -307,7 +316,7 @@ const SingleGroupAttendance = () => {
                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                 </span>}
                                         </td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                     </tr>
                                 })}
                             </>
