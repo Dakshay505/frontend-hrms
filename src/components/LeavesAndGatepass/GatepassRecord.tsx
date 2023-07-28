@@ -21,7 +21,7 @@ export const GatepassRecord = () => {
   }, [])
   const {
     register,
-   
+
   } = useForm();
 
 
@@ -45,7 +45,7 @@ export const GatepassRecord = () => {
       <div className="pt-8">
         <div className="flex w-[688px] items-start gap-[291px]">
           <p className="text-2xl text-[#2E2E2E] font-bold leading-8">
-          Gatepass Records
+            Gatepass Records
           </p>
         </div>
         <div className=" flex pt-6 justify-between items-end self-stretch ">
@@ -92,35 +92,36 @@ export const GatepassRecord = () => {
       <div className=''>
         <div className='mt-10 overflow-auto'>
           <div className='py-6'>
-          {/* TABLE STARTS HERE */}
-          <table>
-            <tbody>
-              <tr className='bg-[#ECEDFE] cursor-default'>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Time</td>
-                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
-              </tr>
-              {allApprovedGatePassList && allApprovedGatePassList.map((element: any, index: number) => {
-                const fromToArray = element.gatePass;
-                const lastObject = fromToArray[fromToArray.length - 1];
-                console.log(`last${index}`, lastObject)
-
-                return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.date ? (lastObject.date).slice(0, 10) : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.time ? lastObject.time : "Not Avilable"}</td>
-                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy ? lastObject.acceptedBy : "Not Avilable"}</td>
+            {/* TABLE STARTS HERE */}
+            <table>
+              <tbody>
+                <tr className='bg-[#ECEDFE] cursor-default'>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Time</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
                 </tr>
-              })}
-            </tbody>
-          </table>
-          {/* TABLE ENDS HERE */}
+                {allApprovedGatePassList && allApprovedGatePassList.map((element: any, index: number) => {
+                  // const fromToArray = element.gatePass;
+                  // const lastObject = fromToArray[fromToArray.length - 1];
+                  // console.log(`last${index}`, lastObject)
+                  if (element.gatePassTime) {
+                    return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.gatePassDate ? (element.gatePassDate).slice(0, 10) : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.gatePassTime ? element.gatePassTime : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.acceptedBy ? element.acceptedBy : "Not Avilable"}</td>
+                    </tr>
+                  }
+                })}
+              </tbody>
+            </table>
+            {/* TABLE ENDS HERE */}
+          </div>
         </div>
       </div>
-    </div>
     </div >
   )
 }

@@ -1,6 +1,6 @@
-// export const apiPath = `http://localhost:5050`;
+export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
-export const apiPath = `https://hrms-backend-04fw.onrender.com`;
+// export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
 
@@ -58,9 +58,9 @@ export const createLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave`
 
 // GATEPASS APIS
 export const getPendingGatePassApiPath = `${apiPath}/api/v1/leave/pendinggatepass`
-export const getApprovedGatePassApiPath = `${apiPath}/api/v1/leave/approvedgatepass`
+export const getApprovedGatePassApiPath = `${apiPath}/api/v1/leave/approved`
 export const getAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/acceptedgatepass`
-export const getRejectedGatePassApiPath = `${apiPath}/api/v1/leave/rejectedgatepass`
+export const getRejectedGatePassApiPath = `${apiPath}/api/v1/leave/rejected`
 export const updatePendingGatePassApiPath = `${apiPath}/api/v1/leave/acceptgatepass`
 export const updateAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/approvegatepass`
 export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`

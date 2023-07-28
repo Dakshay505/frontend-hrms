@@ -123,17 +123,17 @@ export const LeaveRecords = () => {
                   <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Message</td>
                 </tr>
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
-                  const fromToArray = element.fromTo;
-                  const lastObject = fromToArray[fromToArray.length - 1];
-                  console.log(`last${index}`, lastObject)
+                  // const fromToArray = element.fromTo;
+                  // const lastObject = fromToArray[fromToArray.length - 1];
+                  // console.log(`last${index}`, lastObject)
 
                   return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.from ? (lastObject.from).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.to ? (lastObject.to).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.acceptedBy?.name ? lastObject.acceptedBy?.name : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{lastObject.message ? lastObject.message : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.from ? (element.from).slice(0, 10) : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.to ? (element.to).slice(0, 10) : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.acceptedBy?.name ? element.acceptedBy?.name : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.message ? element.message : "Not Avilable"}</td>
                   </tr>
                 })}
               </tbody>
