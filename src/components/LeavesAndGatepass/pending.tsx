@@ -14,14 +14,8 @@ export const PendingLeaves = () => {
   const [activeButton, setActiveButton] = useState('Pending');
   const dispatch = useDispatch();
   const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
-  console.log("all accepted", allApprovedLeaveList)
   const allAcceptedLeaveList = useSelector((state: any) => state.leave.acceptedLeaves);
-  console.log("all accepted", allAcceptedLeaveList)
-  const allRejectedLeaveList = useSelector((state: any) => state.leave.rejectedLeaves);
-  const allApprovedGatePassList = useSelector((state: any) => state.leave.approvedGatePasses);
-  const allAcceptedGatePassList = useSelector((state: any) => state.leave.acceptedGatePasses);
   const allRejectedGatePassList = useSelector((state: any) => state.leave.rejectedGatePasses);
-
   useEffect(() => {
     // LEAVES
     dispatch(getAllApprovedLeavesAsync());
@@ -74,7 +68,7 @@ export const PendingLeaves = () => {
                 {/*  usemap on this */}
                 {/* LEAVE */}
                 {allAcceptedLeaveList && allAcceptedLeaveList.map((element: any, index: number) => {
-                  const currentDate = new Date();
+                  const currentDate = new Date(element.appliedDate);
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: '2-digit',
@@ -123,6 +117,12 @@ export const PendingLeaves = () => {
                       </div>
                     </div>
                   } else {
+                    const currentDate = new Date(element.gatePassDate);
+                    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    });
                     return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                       <div className='flex justify-between'>
                         <div className='flex flex-col gap-3'>
@@ -143,7 +143,7 @@ export const PendingLeaves = () => {
                               currentStatus: element.status,
                               employeeId: element.employeeId?._id,
                               status: "approved",
-                              gatePassDate: element.date,
+                              gatePassDate: element.gatePassDate,
                               gatePassTime: element.gatePassTime
                             })).then(() => {
                               dispatch(getAllApprovedGatePassAsync());
@@ -156,8 +156,8 @@ export const PendingLeaves = () => {
                               currentStatus: element.status,
                               employeeId: element.employeeId?._id,
                               status: "rejected",
-                              gatePassDate: (element.date).slice(0, 10),
-                              gatePassTime: element.time
+                              gatePassDate: element.gatePassDate,
+                              gatePassTime: element.gatePassTime
                             })).then(() => {
                               dispatch(getAllApprovedGatePassAsync());
                               dispatch(getAllAcceptedGatePassAsync());
@@ -168,62 +168,6 @@ export const PendingLeaves = () => {
                       </div>
                     </div>
                   }
-
-                })}
-                {/* GATEPASS */}
-                {allAcceptedGatePassList && allAcceptedGatePassList.map((element: any, index: number) => {
-                  const gatePassList = element.gatePass;
-                  const lastGatePass = gatePassList[gatePassList.length - 1];
-                  const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  });
-                  return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
-                    <div className='flex justify-between'>
-                      <div className='flex flex-col gap-3'>
-                        <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
-                        <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
-                      </div>
-                      <div>
-                        <p className='text-[16px] leading-6 font-medium'>Gatepass: {lastGatePass.time ? lastGatePass.time : "Not Avilable"}</p>
-                      </div>
-                    </div>
-                    <div className='flex gap-8 justify-between mt-8'>
-                      <div>
-                        <p className='text-sm font-normal text-[#2E2E2E]'>{lastGatePass.message ? lastGatePass.message : "Not Avilable"}</p>
-                      </div>
-                      <div className='flex gap-4'>
-                        <button
-                          onClick={() => dispatch(updateAcceptedGatePassAsync({
-                            currentStatus: lastGatePass.status,
-                            employeeId: element.employeeId?._id,
-                            status: "approved",
-                            gatePassDate: (lastGatePass.date).slice(0, 10),
-                            gatePassTime: lastGatePass.time
-                          })).then(() => {
-                            dispatch(getAllApprovedGatePassAsync());
-                            dispatch(getAllAcceptedGatePassAsync());
-                            dispatch(getAllRejectedGatePassAsync());
-                          })}
-                          className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
-                        <button
-                          onClick={() => dispatch(updateAcceptedGatePassAsync({
-                            currentStatus: lastGatePass.status,
-                            employeeId: element.employeeId?._id,
-                            status: "rejected",
-                            gatePassDate: (lastGatePass.date).slice(0, 10),
-                            gatePassTime: lastGatePass.time
-                          })).then(() => {
-                            dispatch(getAllApprovedGatePassAsync());
-                            dispatch(getAllAcceptedGatePassAsync());
-                            dispatch(getAllRejectedGatePassAsync());
-                          })}
-                          className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
-                      </div>
-                    </div>
-                  </div>
                 })}
               </div>
             )}
@@ -232,14 +176,14 @@ export const PendingLeaves = () => {
                 {/* usemap on this */}
                 {/* LEAVE */}
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
-                  const currentDate = new Date();
+                  const currentDate = new Date(element.appliedDate);
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
                   });
                   const options: any = { day: "numeric", month: "short" };
-                  if (element.fromDate) {
+                  if (element.from) {
                     return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                       <div className='flex justify-between'>
                         <div className='flex flex-col gap-3'>
@@ -255,6 +199,12 @@ export const PendingLeaves = () => {
                       </div>
                     </div>
                   } else {
+                    const currentDate = new Date(element.gatePassDate);
+                    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    });
                     return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                       <div className='flex justify-between'>
                         <div className='flex flex-col gap-3'>
@@ -262,7 +212,7 @@ export const PendingLeaves = () => {
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                         </div>
                         <div>
-                          <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.gatePassTime ? element.date : "Not Avilable"}</p>
+                          <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.gatePassTime ? element.gatePassTime : "Not Avilable"}</p>
                         </div>
                       </div>
                       <div className='mt-8'>
@@ -270,33 +220,6 @@ export const PendingLeaves = () => {
                       </div>
                     </div>
                   }
-
-                })}
-                {/* GATEPASS */}
-                {allApprovedGatePassList && allApprovedGatePassList.map((element: any, index: number) => {
-                  const gatePassList = element.gatePass;
-                  const lastGatePass = gatePassList[gatePassList.length - 1];
-                  const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  });
-                  // const options: any = { day: "numeric", month: "short" };
-                  return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
-                    <div className='flex justify-between'>
-                      <div className='flex flex-col gap-3'>
-                        <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
-                        <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
-                      </div>
-                      <div>
-                        <p className='text-[16px] leading-6 font-medium'>Gatepass: {lastGatePass.time ? lastGatePass.time : "Not Avilable"}</p>
-                      </div>
-                    </div>
-                    <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastGatePass.message ? lastGatePass.message : "Not Avilable"}</p>
-                    </div>
-                  </div>
                 })}
               </div>
             )}
@@ -304,8 +227,8 @@ export const PendingLeaves = () => {
               <div>
                 {/* usemap on this */}
                 {/* LEAVE */}
-                {allRejectedLeaveList && allRejectedLeaveList.map((element: any, index: number) => {
-                  const currentDate = new Date();
+                {allRejectedGatePassList && allRejectedGatePassList.map((element: any, index: number) => {
+                  const currentDate = new Date(element.appliedDate);
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
                     month: '2-digit',
@@ -328,6 +251,12 @@ export const PendingLeaves = () => {
                       </div>
                     </div>
                   } else {
+                    const currentDate = new Date(element.gatePassDate);
+                    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    });
                     return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                       <div className='flex justify-between'>
                         <div className='flex flex-col gap-3'>
@@ -335,7 +264,7 @@ export const PendingLeaves = () => {
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                         </div>
                         <div>
-                          <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.time ? element.time : "Not Avilable"}</p>
+                          <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.gatePassTime ? element.gatePassTime : "Not Avilable"}</p>
                         </div>
                       </div>
                       <div className='mt-8'>
@@ -344,32 +273,6 @@ export const PendingLeaves = () => {
                     </div>
                   }
 
-                })}
-                {/* GATEPASS */}
-                {allRejectedGatePassList && allRejectedGatePassList.map((element: any, index: number) => {
-                  const gatePassList = element.gatePass;
-                  const lastGatePass = gatePassList[gatePassList.length - 1];
-                  const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  });
-                  // const options: any = { day: "numeric", month: "short" };
-                  return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
-                    <div className='flex justify-between'>
-                      <div className='flex flex-col gap-3'>
-                        <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
-                        <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
-                      </div>
-                      <div>
-                        <p className='text-[16px] leading-6 font-medium'>Gatepass: {lastGatePass.time ? lastGatePass.time : "Not Avilable"}</p>
-                      </div>
-                    </div>
-                    <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastGatePass.rejectedReason ? lastGatePass.rejectedReason : "Not Avilable"}</p>
-                    </div>
-                  </div>
                 })}
               </div>
             )}
