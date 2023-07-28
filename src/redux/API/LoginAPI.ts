@@ -9,13 +9,7 @@ export const adminLogin = async (loginData: any) => {
     // console.log(data);
     return data;
   } catch (error:any) {
-    if (error.response && (error.response.status === 400 || error.response.status === 404)) {
-      console.log(error.response.data.message);
-    } else if (error.response && error.response.data) {
-      console.log(error.response.data);
-    } else {
-      console.log(error.toString());
-    }
+    return error.response.data
   }
 };
 // loginApi for EMPLOYEE
