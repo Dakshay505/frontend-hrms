@@ -50,7 +50,7 @@ export const addTrainingQuizAsync: any = createAsyncThunk(
 );
 
 // get quiz
-export const fetchQuizQuestionsAsync = createAsyncThunk(
+export const fetchQuizQuestionsAsync: any = createAsyncThunk(
     'quiz/fetchQuizQuestions',
     async (jobProfileId, { rejectWithValue }) => {
       try {
@@ -112,7 +112,7 @@ export const TrainingSlice = createSlice({
                 state.loading = false;
                 state.questions = action.payload;
               })
-              .addCase(fetchQuizQuestionsAsync.rejected, (state, action) => {
+              .addCase(fetchQuizQuestionsAsync.rejected, (state) => {
                 state.loading = false;
                 // state.error = action.payload;
               });

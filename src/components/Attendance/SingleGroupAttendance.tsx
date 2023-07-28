@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import glass from '../../assets/MagnifyingGlass.png'
-import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getSingleGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
@@ -14,14 +14,19 @@ import Calendar from "react-calendar";
 import { useLocation } from "react-router-dom";
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
+import LoaderGif from '../../assets/loadergif.gif'
 
 const SingleGroupAttendance = () => {
     const location = useLocation();
-    const additionalData = location.state?.additionalData;
+    const [additionalData, setAdditionalData] = useState(location.state?.additionalData);
     const dispatch = useDispatch();
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const allAttandenceList = useSelector((state: any) => state.attandence.singleGroupAttendance)
+    console.log("allAttandenceList", allAttandenceList);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status)
+
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
     const [date, setDate] = useState<any>(new Date());
@@ -41,6 +46,13 @@ const SingleGroupAttendance = () => {
     useEffect(() => {
         dispatch(getAllGroupsAsync())
         dispatch(getAllJobProfileAsync())
+        if(additionalData !== ""){
+            setFilter({
+                ...filter,
+                groupName: additionalData
+            })
+            setAdditionalData("")
+        }
     }, [])
     useEffect(() => {
         const currentDate = new Date(date);
@@ -66,27 +78,32 @@ const SingleGroupAttendance = () => {
         }
     }, [nextDate])
     useEffect(() => {
-        setFilter({
-            ...filter,
-            groupName: additionalData
-        })
+        if(additionalData!=="" || additionalData){
+
+            setFilter({
+                ...filter,
+                groupName: additionalData
+            })
+        }
     }, [additionalData])
     const [dateRange, setDateRange] = useState<any>([])
     useEffect(() => {
-        function getDateRange(startDate: any, endDate: any) {
-            if (nextDate) {
-                const result = [];
-                const currentDate = new Date(startDate);
-                const finalDate = new Date(endDate);
-                while (currentDate <= finalDate) {
-                    result.push(currentDate.toISOString().slice(0, 10));
-                    currentDate.setDate(currentDate.getDate() + 1);
+            function getDateRange(startDate: any, endDate: any) {
+                if (nextDate) {
+                    const result = [];
+                    const currentDate = new Date(startDate);
+                    const finalDate = new Date(endDate);
+                    while (currentDate <= finalDate) {
+                        result.push(currentDate.toISOString().slice(0, 10));
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    setDateRange([...result])
                 }
-                setDateRange([...result])
             }
-        }
         getDateRange(filter.date, filter.nextDate)
-        dispatch(getGroupAttendanceAsync(filter))
+        if(additionalData === ""){
+            dispatch(getSingleGroupAttendanceAsync(filter))
+        }
     }, [filter])
     useEffect(() => {
         const arr: any = [];
@@ -242,7 +259,10 @@ const SingleGroupAttendance = () => {
                     </div>
                 </div>
             </div>
-            <div className="py-8 overflow-auto">
+            {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+            <div className="py-6 mb-24 overflow-auto">
                 <table>
                     <tbody>
                         <tr className='bg-[#ECEDFE] cursor-default'>
@@ -260,7 +280,7 @@ const SingleGroupAttendance = () => {
                             })
                             const latestPunches = sortedPunches[0];
                             return <>
-                                <tr key={index} className='hover:bg-[#FAFAFA]'>
+                                <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]'>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                     <td onClick={() => { handleRowClick(index) }} className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
@@ -284,8 +304,8 @@ const SingleGroupAttendance = () => {
                                     </td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                 </tr>
-                                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                                    return <tr key={index}>
+                                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                                    return <tr key={element._id + element.punchIn}>
                                         <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                         <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
@@ -307,7 +327,7 @@ const SingleGroupAttendance = () => {
                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                 </span>}
                                         </td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                     </tr>
                                 })}
                             </>

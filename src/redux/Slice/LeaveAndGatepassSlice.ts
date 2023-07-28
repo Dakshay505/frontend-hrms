@@ -51,9 +51,9 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
 // READ APPROVED LEAVES
 export const getAllApprovedLeavesAsync: any = createAsyncThunk(
     'getallApprovedLeaves',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedLeaves();
+            const response: any = await getAllApprovedLeaves(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -151,9 +151,9 @@ export const getAllPendingGatePassAsync: any = createAsyncThunk(
 // READ APPROVED GATEPASS
 export const getAllApprovedGatePassAsync: any = createAsyncThunk(
     'getallApprovedGatePasses',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedGatePass();
+            const response: any = await getAllApprovedGatePass(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
