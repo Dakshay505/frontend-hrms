@@ -18,13 +18,14 @@ import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 import XCircle from '../../assets/XCircle.svg'
 import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
 import { getAllAttandenceAsync } from '../../redux/Slice/AttandenceSlice';
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
+import X from "../../assets/X.svg"
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -181,6 +182,22 @@ export const EmployeeProfile = () => {
             setShowTableRow([...showTableRow, index])
         }
     }
+
+
+    const [showQrRow, setShowQrRow] = useState<any>([]);
+
+    const handleQrRowClick = (index: number) => {
+        const isExpanded = showQrRow.includes(index)
+        if (isExpanded) {
+            setShowQrRow(showQrRow.filter((belowRowIndex: any) => belowRowIndex !== index))
+        }
+        else {
+            setShowQrRow([index])
+        }
+    }
+
+
+
 
 
     return (
@@ -567,14 +584,24 @@ export const EmployeeProfile = () => {
                                         <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.assignedBy?.name ? element.assignedBy?.name : "Not Avi."}</span></p>
                                         <p className='text-sm font-normal text-[#000000]'>{element.createdAt ? new Date(element.createdAt).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avi."}, {element.createdAt ? (element.createdAt).slice(0, 10) : "Not Avi."}</p>
                                     </div>
-                                    <Link to={element.proofPicture} className='flex items-center gap-[6px] cursor-pointer'>
+                                    <div onClick={() => handleQrRowClick(index)} className='flex items-center gap-[6px] cursor-pointer'>
                                         <div>
                                             <p className='text-[12px] leading-4 font-medium text-[#283093] underline'>Open Photo</p>
                                         </div>
                                         <div>
                                             <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
                                         </div>
-                                    </Link>
+                                    </div>
+                                    {showQrRow.includes(index) && <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='fixed right-0 top-0 left-0 bottom-0 flex justify-center items-center'>
+                                        <div className='relative p-10 rounded-lg bg-[#FAFAFA]'>
+                                            <div onClick={() => handleQrRowClick(index)} className='absolute right-3 top-3 cursor-pointer'>
+                                                <img src={X} className='w-6 h-6' alt="" />
+                                            </div>
+                                            <div>
+                                                <img src={element.proofPicture} className='h-96' alt="" />
+                                            </div>
+                                        </div>
+                                    </div>}
                                 </div>
                             </div>
                         })}
