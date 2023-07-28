@@ -14,6 +14,7 @@ import Calendar from "react-calendar";
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
+import LoaderGif from '../../assets/loadergif.gif'
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,9 @@ export const AttendenceDashboardList = () => {
   const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+
+  const loaderStatus = useSelector((state: any) => state.attandence.status)
+
   const [date, setDate] = useState<any>(new Date());
   const [nextDate, setnextDate] = useState<any>();
   const [showCalender, setShowCalender] = useState(false);
@@ -250,7 +254,10 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-      <div className='py-6 overflow-auto'>
+      {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+      <div className='py-6 mb-24 overflow-auto'>
         {/* TABLE STARTS HERE */}
         <table>
           <tbody>
@@ -269,7 +276,7 @@ export const AttendenceDashboardList = () => {
               })
               const latestPunches = sortedPunches[0];
               return <>
-                <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
+                <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                   <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
@@ -293,8 +300,8 @@ export const AttendenceDashboardList = () => {
                   </td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                 </tr>
-                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any, index: number) => {
-                  return <tr key={index}>
+                {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
+                  return <tr key={element._id + element.punchIn}>
                     <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                     <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>

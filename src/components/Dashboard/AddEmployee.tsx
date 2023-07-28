@@ -11,10 +11,13 @@ import Receipt from '../../assets/Receipt.svg'
 import XCircle from '../../assets/XCircle.svg'
 import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const [employementTypeValue, setEmployementTypeValue] = useState('');
+    const [addMoreEmployee, setAddMoreEmployee] = useState(false)
     const [overTimeValue, setOverTimeValue] = useState("No");
     const [overtimerate, setOvertimerate] = useState<any>(0);
     const [showOtp, setShowOtp] = useState(false);
@@ -166,7 +169,8 @@ const AddEmployee = () => {
 
     const resetFields = () => {
         setPhoneNumber('');
-        setOvertimerate('');
+        setOvertimerate(0);
+        setOverTimeValue("No")
     };
     return (
         <div className="mx-8 py-[32px]">
@@ -191,17 +195,26 @@ const AddEmployee = () => {
                         console.log(data);
                         setShowOtp(true);
                         dispatch(createEmployeeAsync(data)).then(() => {
-                            getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
-                                if (res.data.Status === "Success") {
-                                    setOtpSent("OTP Sent");
+                            reset();
+                            if (!otpCheck) {
+                                getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
+                                    if (res.data.Status === "Success") {
+                                        setOtpSent("OTP Sent");
+                                    }
+                                    else {
+                                        setOtpSent("OTP not Sent");
+                                    }
+                                })
+                            } else {
+                                if (addMoreEmployee) {
+                                    resetFields();
                                 }
-                                else {
-                                    setOtpSent("OTP not Sent");
+                                if (!addMoreEmployee) {
+                                    resetFields();
+                                    navigate("/view-modify-database")
                                 }
-                            })
+                            }
                         })
-                        reset();
-                        resetFields();
                     })}>
                     <div className='flex flex-col gap-5'>
                         <div className='flex gap-10'>
@@ -422,7 +435,7 @@ const AddEmployee = () => {
                                                 type='number'
                                                 disabled={overTimeValue === "No"}
                                                 onChange={(event) => setOvertimerate(event.target.value)}
-                                                value={overtimerate}
+                                                value={(overtimerate).toFixed(2)}
                                                 className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                             />
                                         </div>
@@ -456,8 +469,8 @@ const AddEmployee = () => {
                             <label htmlFor='otpCheck' className='text-sm font-normal text-[#1C1C1C] tracking-[0.25px]'>Verify OTP Later</label>
                         </div>
                         <div className='flex gap-6'>
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
+                            <button onClick={() => setAddMoreEmployee(false)} type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Employee</p></button>
+                            <button onClick={() => setAddMoreEmployee(true)} type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]'><img src={BluePlus} className='w-4' alt="" /><p className="px-2">Add More Employees</p></button>
                         </div>
                     </div>
                 </form>
@@ -510,6 +523,14 @@ const AddEmployee = () => {
                                             if (res.data.Status === "Success") {
                                                 setOtpVerified("Verified");
                                                 setShowOtp(false);
+                                                resetFields();
+                                                if (addMoreEmployee) {
+                                                    resetFields();
+                                                }
+                                                if (!addMoreEmployee) {
+                                                    resetFields();
+                                                    navigate("/view-modify-database")
+                                                }
                                             } else {
                                                 setOtpVerified("Not Verified");
                                             }
