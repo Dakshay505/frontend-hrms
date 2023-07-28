@@ -15,10 +15,9 @@ export const EmployeeLeaveHome = () => {
   const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
   const allPendindLeaveList = useSelector((state: any) => state.leave.pendingLeaves);
   const allRejectedLeaveList = useSelector((state: any) => state.leave.rejectedLeaves);
+  console.log("data", allRejectedLeaveList)
   const allApprovedGatePassList = useSelector((state: any) => state.leave.approvedGatePasses);
   const allPendingGatePassList = useSelector((state: any) => state.leave.pendingGatePasses);
-  const allRejectedGatePassList = useSelector((state: any) => state.leave.rejectedGatePasses);
-
   const loaderStatus = useSelector((state: any) => state.leave.status)
 
   useEffect(() => {
@@ -248,8 +247,6 @@ export const EmployeeLeaveHome = () => {
                 {/* usemap on this */}
                 {/* LEAVE */}
                 {allRejectedLeaveList && allRejectedLeaveList.map((element: any, index: number) => {
-                  const leaveList = element.fromTo;
-                  const lastLeave = leaveList[leaveList.length - 1];
                   const currentDate = new Date();
                   const formattedDate = currentDate.toLocaleDateString('en-GB', {
                     day: '2-digit',
@@ -257,46 +254,45 @@ export const EmployeeLeaveHome = () => {
                     year: 'numeric',
                   });
                   const options: any = { day: "numeric", month: "short" };
-                  return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
-                    <div className='flex justify-between'>
-                      <div className='flex flex-col gap-3'>
-                        <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
-                        <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
+                  if (element.from) {
+                    return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
+                      <div className='flex justify-between'>
+                        <div className='flex flex-col gap-3'>
+                          <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
+                          <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
+                        </div>
+                        <div>
+                          <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(element.from)).toLocaleDateString("en-US", options)} - {(new Date(element.to)).toLocaleDateString("en-US", options)}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(lastLeave.from)).toLocaleDateString("en-US", options)} - {(new Date(lastLeave.to)).toLocaleDateString("en-US", options)}</p>
-                      </div>
-                    </div>
-                    <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastLeave.rejectedReason ? lastLeave.rejectedReason : "Not Avilable"}</p>
-                    </div>
-                  </div>
-                })}
-                {/* GATEPASS */}
-                {allRejectedGatePassList && allRejectedGatePassList.map((element: any, index: number) => {
-                  const gatePassList = element.gatePass;
-                  const lastGatePass = gatePassList[gatePassList.length - 1];
-                  const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  });
-                  // const options: any = { day: "numeric", month: "short" };
-                  return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
-                    <div className='flex justify-between'>
-                      <div className='flex flex-col gap-3'>
-                        <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
-                        <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
-                      </div>
-                      <div>
-                        <p className='text-[16px] leading-6 font-medium'>Gatepass: {lastGatePass.time ? lastGatePass.time : "Not Avilable"}</p>
+                      <div className='mt-8'>
+                        <p className='text-sm font-normal text-[#2E2E2E]'>{element.rejectedReason ? element.rejectedReason : "Not Avilable"}</p>
                       </div>
                     </div>
-                    <div className='mt-8'>
-                      <p className='text-sm font-normal text-[#2E2E2E]'>{lastGatePass.rejectedReason ? lastGatePass.rejectedReason : "Not Avilable"}</p>
+                  } else {
+                    const currentDate = new Date(element.gatePassDate);
+                    const formattedDate = currentDate.toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    });
+                    return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
+                      <div className='flex justify-between'>
+                        <div className='flex flex-col gap-3'>
+                          <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
+                          <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
+                        </div>
+                        <div>
+                          <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.time ? element.time : "Not Avilable"}</p>
+                        </div>
+                      </div>
+                      <div className='mt-8'>
+                        <p className='text-sm font-normal text-[#2E2E2E]'>{element.rejectedReason ? element.rejectedReason : "Not Avilable"}</p>
+                      </div>
                     </div>
-                  </div>
+
+                  }
+
                 })}
               </div>
             )}
