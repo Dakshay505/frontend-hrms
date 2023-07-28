@@ -7,6 +7,7 @@ import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
 import Calendar from 'react-calendar';
 import { getMyLeavesAndGatePassAsync } from "../../../redux/Slice/LeaveAndGatepassSlice"
 import { useState } from 'react'
+import { Link } from "react-router-dom"
 
 export const Employeehome = () => {
 
@@ -115,10 +116,12 @@ export const Employeehome = () => {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4 absolute bottom-[24px] right-0">
-                        <div className="flex justify-between p-6 w-[300px] h-20 rounded-lg bg-[#ECEDFE]">
-                            <p className="text-xl font-medium text-[#283093]">Continue Training</p>
-                            <img src={ArrowSqureOut} className="w-8 h-8" alt="" />
-                        </div>
+                        <Link to="/employee-EmployeeAssesmentQuiz">
+                            <div className="flex justify-between p-6 w-[300px] h-20 rounded-lg bg-[#ECEDFE]">
+                                <p className="text-xl font-medium text-[#283093]">Continue Training</p>
+                                <img src={ArrowSqureOut} className="w-8 h-8" alt="" />
+                            </div>
+                        </Link>
                         <div className="flex justify-between p-6 w-[300px] h-20 rounded-lg bg-[#ECEDFE]">
                             <p className="text-xl font-medium text-[#283093]">View Documents</p>
                             <img src={ArrowSqureOut} className="w-8 h-8" alt="" />

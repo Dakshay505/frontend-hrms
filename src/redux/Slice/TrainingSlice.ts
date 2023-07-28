@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addTrainingDocuments, addTrainingLinks, addTrainingQuizApi, getQuizQuestions } from '../API/TrainingApi';
+import { addTrainingDocuments, addTrainingLinks, addTrainingQuizApi, getQuizQuestions,submitAnswers } from '../API/TrainingApi';
 
 const initialState = {
     status: "idle",
     questions: [],
     loading: false,
     error: null as string | null,
+    result: null,
+    data: null,
 };
 
 // CREATE
@@ -48,32 +50,35 @@ export const addTrainingQuizAsync: any = createAsyncThunk(
         }
     }
 );
-
+ 
 // get quiz
-export const fetchQuizQuestionsAsync = createAsyncThunk(
+export const fetchQuizQuestionsAsync: any = createAsyncThunk(
     'quiz/fetchQuizQuestions',
-    async (jobProfileId, { rejectWithValue }) => {
+    async (jobProfileId, ) => {
       try {
         const questions = await getQuizQuestions(jobProfileId);
         return questions;
       } catch (error:any) {
-        return rejectWithValue(error.message);
+        return (error.message);
       }
     }
   );
 
-//   // get quiz
-// export const fetchQuizQuestionsAsync = createAsyncThunk(
-//     'quiz/fetchQuizQuestions',
-//     async (data, { rejectWithValue }) => {
-//       try {
-//         const questions = await getQuizQuestions(data);
-//         return questions;
-//       } catch (error:any) {
-//         return rejectWithValue(error.message);
-//       }
-//     }
-//   );
+// // Submit Answer Question
+export const submitAnswersAsync:any = createAsyncThunk(
+    'quiz/submitAnswers',
+    async (Data:any, ) => {
+      try {
+        const response = await submitAnswers(Data);
+        console.log("sliceeeeeeeeeeeeeeee",Data);
+        return response;
+      } catch (error: any) {
+        return (error.response.data);
+      }
+    }
+  );
+  
+
 
 
 export const TrainingSlice = createSlice({
@@ -111,12 +116,26 @@ export const TrainingSlice = createSlice({
               .addCase(fetchQuizQuestionsAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.questions = action.payload;
+                state.status = 'succeeded';
               })
               .addCase(fetchQuizQuestionsAsync.rejected, (state, action) => {
                 state.loading = false;
                 // state.error = action.payload;
+                state.status = 'failed';
+              })
+            .addCase(submitAnswersAsync.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+              })
+              .addCase(submitAnswersAsync.fulfilled, (state, action) => {
+                state.loading = false;
+                state.result = action.payload;
+              })
+              .addCase(submitAnswersAsync.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
               });
-        
+
     },
 });
 
