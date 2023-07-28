@@ -17,12 +17,10 @@ interface QuizData {
 export const EmployeeAssessmentQuiz = () => {
     const dispatch = useDispatch();
     const { questions } = useSelector((state: RootState) => state.training);
-
     // console.log(questions)
     const jobProfileId = useSelector((state: RootState) => state.login.loggedInUserData?.employee?.jobProfileId?._id)
     const result = useSelector((state: any) => state.training.result)
     console.log("result", result)
-
     useEffect(() => {
         dispatch(fetchQuizQuestionsAsync(jobProfileId));
 
@@ -31,9 +29,6 @@ export const EmployeeAssessmentQuiz = () => {
     const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>({});
     const [submitted, setSubmitted] = useState(false);
     const [isPassed, setIsPassed] = useState(false);
-    
-    const score = Object.values(userAnswers).filter((answer, index) => answer === questions[index]).length;
-
     const totalQuestions = questions.length;
 
     const handleGoBack = () => {
@@ -88,43 +83,6 @@ export const EmployeeAssessmentQuiz = () => {
                     Percentage: {result.percent}
                 </p>
             )}
-
-            {(!submitted || isPassed) && questions.map((questionData: QuizData, questionIndex: number) => (
-                <div key={questionIndex} className="my-4 flex flex-col gap-[16px]">
-                    <p className="font-semibold">
-                        {questionIndex + 1}. {questionData.question}
-                    </p>
-                    {questionData.options.map((option, optionIndex) => {
-                        const inputId = `question_${questionIndex}_option_${optionIndex}`;
-                        const isChecked = userAnswers[questionIndex] === option;
-                        const isCorrectAnswer = submitted && option === questions[questionIndex];
-
-                        return (
-                            <div key={optionIndex} className='gap-[10px] flex'>
-                                <input
-                                    type="radio"
-                                    id={inputId}
-                                    name={`question_${questionIndex}`}
-                                    value={option}
-                                    checked={isChecked}
-                                    onChange={() => setUserAnswers({ ...userAnswers, [questionIndex]: option })}
-                                    disabled={submitted}
-                                />
-                                <label
-                                    htmlFor={inputId}
-                                    className={`
-                                        ${isChecked && !isCorrectAnswer && submitted ? 'bg-red-200' : ''}
-                                        ${isCorrectAnswer && submitted ? 'bg-green-200' : ''}
-                                    `}
-                                >
-                                    {option}
-                                </label>
-                            </div>
-                        );
-                    })}
-                </div>
-            ))}
-
 
             {!submitted || isPassed ? (
                 questions.map((questionData: QuizData, questionIndex: number) => (
