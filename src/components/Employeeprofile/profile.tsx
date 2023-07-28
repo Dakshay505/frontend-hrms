@@ -23,9 +23,10 @@ import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
 import { getAllAttandenceAsync } from '../../redux/Slice/AttandenceSlice';
-import CaretDown from "../../assets/CaretDown11.svg"
-import CaretUp from "../../assets/CaretUp.svg"
-import X from "../../assets/X.svg"
+import CaretDown from "../../assets/CaretDown11.svg";
+import CaretUp from "../../assets/CaretUp.svg";
+import X from "../../assets/X.svg";
+import EditPicture from "../../assets/EditPicture.svg";
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export const EmployeeProfile = () => {
     const { handleSubmit, register } = useForm();
     const [employeeId, setEmployeeId] = useState("")
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+    console.log("singleEmployee", singleEmployee)
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
@@ -56,6 +58,8 @@ export const EmployeeProfile = () => {
     const [showInputBoxGender, setShowInputBoxGender] = useState(false);
     const [inputBoxGenderValue, setInputBoxGenderValue] = useState<any>("");
 
+    const [profilePicture, setProfilePicture] = useState("https://cdn-icons-png.flaticon.com/512/219/219983.png")
+
     function formatDate(date: any) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -71,6 +75,11 @@ export const EmployeeProfile = () => {
         setInputBoxEmailValue(singleEmployee.email);
         setInputBoxContactNumberValue(singleEmployee.contactNumber);
         setInputBoxGenderValue(singleEmployee.gender);
+        if(singleEmployee.profilePicture){
+            setProfilePicture(singleEmployee.profilePicture)
+        } else{
+            setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
+        }
         if (singleEmployee._id) {
             dispatch(getQrAssignAsync(singleEmployee._id));
         }
@@ -108,15 +117,6 @@ export const EmployeeProfile = () => {
     const handleCancelDelete = () => {
         setShowConfirmation(false);
     };
-
-    // employee info
-    const Profile = singleEmployee.profileId
-    let image: any = '';
-    if (Profile && Profile.profilePicture) {
-        image = Profile.profilePicture;
-    } else {
-        image = "https://cdn-icons-png.flaticon.com/512/219/219983.png";
-    }
 
 
 
@@ -196,10 +196,6 @@ export const EmployeeProfile = () => {
         }
     }
 
-
-
-
-
     return (
         <div className='px-[40px] pt-[32px]'>
             <div>
@@ -208,7 +204,12 @@ export const EmployeeProfile = () => {
             <div className="flex mt-10 gap-6">
                 <div className="flex flex-col gap-2 items-center">
                     <div className="flex flex-col justify-center items-center gap-[16px] py-8 px-4 bg-[#FAFAFA] rounded-lg border border-solid border-[#DEDEDE] w-[192px] ">
-                        <img src={image} alt="Employee Image" className='rounded-full object-cover w-[144px] h-[144px]' />
+                        <div className='relative'>
+                            <img src={profilePicture} alt="Employee Image" className='rounded-full object-cover w-[144px] h-[144px]' />
+                            <div className='absolute right-4 bottom-1 cursor-pointer'>
+                                <img src={EditPicture} className='w-[24px] h-[24px]' alt="" />
+                            </div>
+                        </div>
                         <p className="text-center text-[18px] leading-6 font-semibold text-[#2E2E2E]">
                             {singleEmployee.name}
                         </p>
@@ -576,9 +577,8 @@ export const EmployeeProfile = () => {
                         {qrAssign && qrAssign.map((element: any, index: number) => {
                             return <div key={index} className='flex gap-6 justify-between py-4 px-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] w-[297px]'>
                                 <div className='flex items-center justify-center'>
-                                    <img src={image} className='w-16 h-16 rounded-full' alt="" />
+                                    <img src={profilePicture} className='w-16 h-16 rounded-full' alt="" />
                                 </div>
-                                {/* <img src={element.proofPicture} className='w-full h-full' alt="" /> */}
                                 <div className='flex flex-col gap-5'>
                                     <div>
                                         <p className='text-[16px] leading-5 font-medium tracking-[0.1px] text-[#000000] cursor-pointer'>By: <span className='underline'>{element.assignedBy?.name ? element.assignedBy?.name : "Not Avi."}</span></p>
