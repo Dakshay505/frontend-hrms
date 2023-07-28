@@ -62,7 +62,7 @@ export const getQuizQuestions = async (jobProfileId: any) => {
   }
 };
 
-
+ 
 
 // submit answers api
 export const submitAnswers = async (Data: any) => {
@@ -76,6 +76,8 @@ export const submitAnswers = async (Data: any) => {
     console.log(err.response.data);
   }
 };
+
+
 
 
 
