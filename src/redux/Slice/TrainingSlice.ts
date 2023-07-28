@@ -135,7 +135,8 @@ export const TrainingSlice = createSlice({
             .addCase(submitAnswersAsync.rejected, (state, action) => {
               state.loading = false;
               state.error = action.payload;
-            });
+            }); 
+
 
     },
 });
