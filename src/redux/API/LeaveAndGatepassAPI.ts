@@ -1,6 +1,19 @@
 import axios from "axios";
 import { createLeavesAndGatePassApiPath, getAcceptedGatePassApiPath, getAcceptedLeavesApiPath, getAllLeavesAndGatePassApiPath, getApprovedGatePassApiPath, getApprovedLeavesApiPath, getMyLeavesAndGatepassApiPath, getPendingGatePassApiPath, getPendingLeavesApiPath, getRejectedGatePassApiPath, getRejectedLeavesApiPath, updateAcceptedGatePassApiPath, updateAcceptedLeavesApiPath, updatePendingGatePassApiPath, updatePendingLeavesApiPath } from "../../APIRoutes";
 // LEAVES
+
+function convertToQueryString(data: any) {
+  let queryStr = '';
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
+      if (queryStr !== '') {
+        queryStr += '&';
+      }
+      queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+    }
+  }
+  return queryStr;
+}
 // READ APPROVED LEAVES
 export const getAllPendingLeaves = async () => {
   try {
@@ -12,9 +25,10 @@ export const getAllPendingLeaves = async () => {
   }
 }
 // READ APPROVED LEAVES
-export const getAllApprovedLeaves = async () => {
+export const getAllApprovedLeaves = async (sendData: any) => {
   try {
-    const { data } = await axios.get(`${getApprovedLeavesApiPath}`, { withCredentials: true });
+    const filterDatta = convertToQueryString(sendData);
+    const { data } = await axios.get(`${getApprovedLeavesApiPath}?${filterDatta}`, { withCredentials: true });
     return data;
   }
   catch (error: any) {
@@ -108,9 +122,10 @@ export const getAllPendingGatePass = async () => {
   }
 }
 // READ APPROVED GATEPASS
-export const getAllApprovedGatePass = async () => {
+export const getAllApprovedGatePass = async (sendData: any) => {
+  const filterDatta = convertToQueryString(sendData);
   try {
-    const { data } = await axios.get(`${getApprovedGatePassApiPath}`, { withCredentials: true });
+    const { data } = await axios.get(`${getApprovedGatePassApiPath}?${filterDatta}`, { withCredentials: true });
     return data;
   }
   catch (error: any) {

@@ -18,7 +18,7 @@ import LoaderGif from '../../assets/loadergif.gif'
 
 const SingleGroupAttendance = () => {
     const location = useLocation();
-    const additionalData = location.state?.additionalData;
+    const [additionalData, setAdditionalData] = useState(location.state?.additionalData);
     const dispatch = useDispatch();
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
@@ -46,6 +46,13 @@ const SingleGroupAttendance = () => {
     useEffect(() => {
         dispatch(getAllGroupsAsync())
         dispatch(getAllJobProfileAsync())
+        if(additionalData !== ""){
+            setFilter({
+                ...filter,
+                groupName: additionalData
+            })
+            setAdditionalData("")
+        }
     }, [])
     useEffect(() => {
         const currentDate = new Date(date);
@@ -71,10 +78,13 @@ const SingleGroupAttendance = () => {
         }
     }, [nextDate])
     useEffect(() => {
-        setFilter({
-            ...filter,
-            groupName: additionalData
-        })
+        if(additionalData!=="" || additionalData){
+
+            setFilter({
+                ...filter,
+                groupName: additionalData
+            })
+        }
     }, [additionalData])
     const [dateRange, setDateRange] = useState<any>([])
     useEffect(() => {
@@ -91,9 +101,10 @@ const SingleGroupAttendance = () => {
                 }
             }
         getDateRange(filter.date, filter.nextDate)
-        dispatch(getSingleGroupAttendanceAsync(filter))
+        if(additionalData === ""){
+            dispatch(getSingleGroupAttendanceAsync(filter))
+        }
     }, [filter])
-    console.log("filter", filter)
     useEffect(() => {
         const arr: any = [];
         for (let i = 0; i < allAttandenceList.length; i++) {

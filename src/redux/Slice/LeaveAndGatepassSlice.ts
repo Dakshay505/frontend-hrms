@@ -42,7 +42,6 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllPendingLeaves();
-            console.log("1", response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -52,9 +51,9 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
 // READ APPROVED LEAVES
 export const getAllApprovedLeavesAsync: any = createAsyncThunk(
     'getallApprovedLeaves',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedLeaves();
+            const response: any = await getAllApprovedLeaves(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -67,6 +66,7 @@ export const getAllAcceptedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllAcceptedLeaves();
+            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -79,7 +79,6 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
-            console.log("rejected", response)
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -115,9 +114,7 @@ export const updatePendingLeavesAsync: any = createAsyncThunk(
     'updatePendingLeaves',
     async (data) => {
         try {
-            console.log("Async data", data)
             const response: any = await updatePendingLeaves(data);
-            console.log(response, "response")
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -129,6 +126,7 @@ export const updateAcceptedLeavesAsync: any = createAsyncThunk(
     'updateAcceptedLeaves',
     async (data) => {
         try {
+            console.log("Data",data);
             const response: any = await updateAcceptedLeaves(data);
             return response;
         } catch (error: any) {
@@ -153,9 +151,9 @@ export const getAllPendingGatePassAsync: any = createAsyncThunk(
 // READ APPROVED GATEPASS
 export const getAllApprovedGatePassAsync: any = createAsyncThunk(
     'getallApprovedGatePasses',
-    async () => {
+    async (data) => {
         try {
-            const response: any = await getAllApprovedGatePass();
+            const response: any = await getAllApprovedGatePass(data);
             return response;
         } catch (error: any) {
             console.log(error.message);
@@ -191,7 +189,6 @@ export const updatePendingGatePassAsync: any = createAsyncThunk(
     'updatePendingGatePass',
     async (data) => {
         try {
-            console.log("data gatepass", data);
             const response: any = await updatePendingGatePass(data);
             return response;
         } catch (error: any) {
@@ -204,6 +201,7 @@ export const updateAcceptedGatePassAsync: any = createAsyncThunk(
     'updateAcceptedGatePass',
     async (data) => {
         try {
+            console.log(data);
             const response: any = await updateAcceptedGatePass(data);
             return response;
         } catch (error: any) {
@@ -234,8 +232,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllPendingLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                // state.pendingLeaves = action.payload.pendingLeaveWithFilteredPeriods;
-                state.pendingLeaves = action.payload.allPendingRequest;
+                state.pendingLeaves = action.payload.pendingLeaveWithFilteredPeriods;
             })
             .addCase(getAllLeavesAndGatePassAsync.pending, (state) => {
                 state.status = 'loading';
@@ -256,7 +253,6 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllAcceptedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                // state.acceptedLeaves = action.payload.acceptedLeaveWithFilteredPeriods;
                 state.acceptedLeaves = action.payload.allAcceptedRequest;
             })
             .addCase(getAllRejectedLeavesAsync.pending, (state) => {
@@ -264,7 +260,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllRejectedLeavesAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedLeaves = action.payload.allRejectedLeave;
+                state.rejectedLeaves = action.payload.rejectedLeaveWithFilteredPeriods;
             })
             .addCase(updatePendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
@@ -291,7 +287,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllApprovedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.approvedGatePasses = action.payload.approvedGatePassWithFilteredPeriods;
+                state.approvedGatePasses = action.payload.allApprovedLeave;
             })
             .addCase(getAllAcceptedGatePassAsync.pending, (state) => {
                 state.status = 'loading';
@@ -305,7 +301,7 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getAllRejectedGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.rejectedGatePasses = action.payload.rejectedGatePassWithFilteredPeriods;
+                state.rejectedGatePasses = action.payload.allRejectedLeave;
             })
             .addCase(updatePendingGatePassAsync.pending, (state) => {
                 state.status = 'loading';
