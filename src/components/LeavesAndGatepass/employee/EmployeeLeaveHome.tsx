@@ -128,7 +128,6 @@ export const EmployeeLeaveHome = () => {
                       </div>
                     </div>
                   } else {
-                    console.log("element.time", element.time)
                     return <div key={index} className='mt-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] p-6 min-w-[688px]'>
                       <div className='flex justify-between'>
                         <div className='flex flex-col gap-3'>
@@ -182,11 +181,7 @@ export const EmployeeLeaveHome = () => {
                 {/* usemap on this */}
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
                   const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                  });
+                  const formattedDate = currentDate.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric',});
                   const options: any = { day: "numeric", month: "short" };
                   let gatePassDate;
                   if (element.gatePassDate) {
