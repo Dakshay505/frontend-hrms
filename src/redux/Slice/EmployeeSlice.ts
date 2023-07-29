@@ -95,7 +95,8 @@ export const addDocumentsAsync: any = createAsyncThunk(
     }
   }
 );
-export const addImageAsync: any = createAsyncThunk("addImage", async (data) => {
+export const addImageAsync: any = createAsyncThunk("addImage",
+ async (data) => {
   try {
     const response: any = await addImage(data);
     return response;

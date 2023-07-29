@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { apiPath } from "../../APIRoutes";
 import notify from "../../assets/Bell.png";
@@ -9,6 +8,8 @@ import doc from "../../assets/File.png";
 import alert from "../../assets/notification.png";
 import highAlert from "../../assets/warning.png";
 import info from "../../assets/info.png";
+import toast from 'react-hot-toast';
+
 type NotificationData = {
   message: string;
   date: string;
@@ -50,15 +51,9 @@ const NotificationList = () => {
     socket.on("notification", (notification: any) => {
       console.log("notification.... ", notification);
       const length = notification.notification.length;
-      toast(notification.notification[length - 1].message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
+      toast.success(notification.notification[length - 1].message, {
+        style: { border: '1px solid #713200', padding: '16px', color: '#713200', },
+        iconTheme: { primary: '#713200', secondary: '#FFFAEE', },
       });
       setNotifications((prevNotifications) => [
         notification,

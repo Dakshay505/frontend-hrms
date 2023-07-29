@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 import logo from "../assets/meta.png"
@@ -69,6 +68,8 @@ export default function EmployeeAside(props: Props) {
   const [activeItem, setActiveItem] = useState<string>("home");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData.employee);
+
   const dispatch = useDispatch()
   const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee)
   const profileData = useSelector((state: any) => state.employee.singleEmployee.profileId?.profilePicture)
@@ -100,6 +101,11 @@ export default function EmployeeAside(props: Props) {
         </Link>
 
         <div className="flex items-center  gap-[16px]">
+          {(loggedInUserData.jobProfileId?.jobProfileName).toLowerCase() === "hr" && 
+          <Link to="/" className="bg-[#ECEDFE] py-3 px-4 text-sm font-medium rounded-lg text-[#283093] cursor-pointer">
+            <h1>Switch as Admin</h1>
+          </Link>
+          }
           <Link to='/employee-notifications'>
             <div>
               <img src={notification} alt="notification" className="w-[24px]" />
@@ -144,15 +150,15 @@ export default function EmployeeAside(props: Props) {
           <div className="relative flex justify-center">
             <div className="flex justify-between border border-primary-border w-[208px] h-11 bg-[#fafafa] rounded-full items-left self-stretch px-[2px] py-[6px]">
               <div className="flex items-center gap-[10px] flex-1 pr-0">
-                <Link to="/emp">
-                  <img src={profileData} alt="" className="w-[1.5rem] ms-2" />
-                </Link>
+                  <div className="ps-1">
+                    <img src={profileData} alt="" className="w-9 h-9 object-cover rounded-full" />
+                  </div>
                 <div className="flex flex-col items-left justify-center gap-[4px] flex-1">
                   <p className="overflow-hidden text-[#283093] leading-[16px] text-cap leading-trim-both font-inter text-xs font-semibold tracking-[0.5px] line-clamp-1">
                     {Employee ? Employee.name : "employee"}
                   </p>
                   <p className="overflow-hidden text-[#666] truncate leading-[16px] text-cap leading-trim-both font-inter text-xs font-normal tracking-[0.5px]">
-                    Production Manager
+                    Employee
                   </p>
                 </div>
               </div>
@@ -171,14 +177,14 @@ export default function EmployeeAside(props: Props) {
                 >
                   Change Password
                 </Link>
-                  <div onClick={() => dispatch(logoutUserAsync())} className="flex justify-center items-center bg-[#283093] h-[31px] w-[125px] py-[10px] px-4 rounded cursor-pointer">
-                    <div>
-                      <img src={signin} alt="" className='h-[11px] w-[11px]' />
-                    </div>
-                    <div>
-                      <p className="text-[12px] leading-[13px] font-medium text-[#FBFBFC] px-[5px]">Logout</p>
-                    </div>
+                <div onClick={() => dispatch(logoutUserAsync())} className="flex justify-center items-center bg-[#283093] h-[31px] w-[125px] py-[10px] px-4 rounded cursor-pointer">
+                  <div>
+                    <img src={signin} alt="" className='h-[11px] w-[11px]' />
                   </div>
+                  <div>
+                    <p className="text-[12px] leading-[13px] font-medium text-[#FBFBFC] px-[5px]">Logout</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
