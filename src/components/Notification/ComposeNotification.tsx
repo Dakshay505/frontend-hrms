@@ -8,7 +8,7 @@ import FileArrowUp from "../../assets/FileArrowUp.png";
 import axios from "axios";
 import io from "socket.io-client";
 
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 import { apiPath } from "../../APIRoutes";
 
 
@@ -62,16 +62,10 @@ const ComposeNotification = () => {
       console.log(data)
       await axios.post(`${apiPath}/api/v1/notifications`, data);
       console.log('Notification sent successfully');
-      toast("Notification sent successfully", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      })
+      toast.success("Notification sent successfully", {
+        style: { border: '1px solid #713200', padding: '16px', color: '#713200', },
+        iconTheme: { primary: '#713200', secondary: '#FFFAEE', },
+      });
     } catch (error) {
       console.error('Error sending notification:', error);
     }

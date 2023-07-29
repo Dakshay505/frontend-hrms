@@ -12,7 +12,7 @@ import training from "../assets/video.svg"
 import notification from "../assets/Bell.png"
 import calenderr from "../assets/attendence.svg";
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import arrowside from "../assets/gray-left.png"
 import openn from "../assets/r-arrow.png"
@@ -66,6 +66,8 @@ export default function aside(props: Props) {
   const dispatch = useDispatch();
   const [activeItem, setActiveItem] = useState<string>("home");
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
   return (
     // main
     <div className="flex flex-col">
@@ -79,6 +81,11 @@ export default function aside(props: Props) {
         </Link>
 
         <div className="flex items-center  gap-[16px]">
+          {loggedInUserData.employee && (loggedInUserData?.employee.jobProfileId.jobProfileName)?.toLowerCase() === "hr" &&
+          <Link to="/emphome" className="bg-[#ECEDFE] py-3 px-4 text-sm font-medium rounded-lg text-[#283093] cursor-pointer">
+            <h1>Switch as Employee</h1>
+          </Link>
+           }
           <Link to='/show-notifications'>
             <div>
               <img src={notification} alt="notification" className="w-[24px]" />

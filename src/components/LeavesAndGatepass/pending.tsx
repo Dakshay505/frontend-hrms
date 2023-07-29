@@ -4,7 +4,7 @@ import plane from "../../assets/AirplaneTilt.svg";
 import door from "../../assets/DoorOpen.png";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllAcceptedGatePassAsync, getAllAcceptedLeavesAsync, getAllApprovedGatePassAsync, getAllApprovedLeavesAsync, getAllRejectedGatePassAsync, getAllRejectedLeavesAsync, updateAcceptedGatePassAsync, updateAcceptedLeavesAsync } from '../../redux/Slice/LeaveAndGatepassSlice';
+import { getAllAcceptedLeavesAsync, getAllApprovedLeavesAsync, getAllRejectedLeavesAsync, updateAcceptedGatePassAsync, updateAcceptedLeavesAsync } from '../../redux/Slice/LeaveAndGatepassSlice';
 import X from '../../assets/X.svg';
 import Check from '../../assets/Check.svg';
 
@@ -20,10 +20,6 @@ export const PendingLeaves = () => {
     dispatch(getAllApprovedLeavesAsync());
     dispatch(getAllAcceptedLeavesAsync());
     dispatch(getAllRejectedLeavesAsync());
-    // GATEPASS
-    dispatch(getAllApprovedGatePassAsync());
-    dispatch(getAllAcceptedGatePassAsync());
-    dispatch(getAllRejectedGatePassAsync());
   }, [])
 
   const handleButtonClick = (buttonName: any) => {
@@ -144,11 +140,7 @@ export const PendingLeaves = () => {
                               status: "approved",
                               gatePassDate: element.gatePassDate,
                               gatePassTime: element.gatePassTime
-                            })).then(() => {
-                              dispatch(getAllApprovedGatePassAsync());
-                              dispatch(getAllAcceptedGatePassAsync());
-                              dispatch(getAllRejectedGatePassAsync());
-                            })}
+                            }))}
                             className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
                           <button
                             onClick={() => dispatch(updateAcceptedGatePassAsync({
@@ -157,11 +149,7 @@ export const PendingLeaves = () => {
                               status: "rejected",
                               gatePassDate: element.gatePassDate,
                               gatePassTime: element.gatePassTime
-                            })).then(() => {
-                              dispatch(getAllApprovedGatePassAsync());
-                              dispatch(getAllAcceptedGatePassAsync());
-                              dispatch(getAllRejectedGatePassAsync());
-                            })}
+                            }))}
                             className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
                         </div>
                       </div>

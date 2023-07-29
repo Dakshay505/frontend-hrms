@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import glass from "../../assets/MagnifyingGlass.png";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllApprovedGatePassAsync } from "../../redux/Slice/LeaveAndGatepassSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 
 
@@ -24,30 +23,30 @@ export const GatepassRecord = () => {
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
-    dispatch(getAllApprovedGatePassAsync()).then((res: any) => {
-      const employeeData = res.payload.allApprovedLeave;
-      const arr: any = [];
-      if (employeeData) {
-        for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
-        }
-        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-      }
-    });
+    // dispatch(getAllApprovedGatePassAsync()).then((res: any) => {
+    //   const employeeData = res.payload.allApprovedLeave;
+    //   const arr: any = [];
+    //   if (employeeData) {
+    //     for (let i = 0; i < employeeData.length; i++) {
+    //       arr.push(employeeData[i].employeeId.name)
+    //     }
+    //     setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
+    //   }
+    // });
   }, [])
 
   useEffect(() => {
     console.log(filter);
-    dispatch(getAllApprovedGatePassAsync(filter)).then((res: any) => {
-      const employeeData = res.payload.allApprovedLeave;
-      const arr: any = [];
-      if (employeeData) {
-        for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
-        }
-        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-      }
-    });
+    // dispatch(getAllApprovedGatePassAsync(filter)).then((res: any) => {
+    //   const employeeData = res.payload.allApprovedLeave;
+    //   const arr: any = [];
+    //   if (employeeData) {
+    //     for (let i = 0; i < employeeData.length; i++) {
+    //       arr.push(employeeData[i].employeeId.name)
+    //     }
+    //     setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
+    //   }
+    // });
   }, [filter])
 
 

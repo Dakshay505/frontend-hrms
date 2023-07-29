@@ -47,7 +47,6 @@ import { EmployeeLeaveHome } from "./components/LeavesAndGatepass/employee/Emplo
 import { ApplyForLeave } from "./components/LeavesAndGatepass/employee/ApplyForLeave";
 import { ViewLeavesRecord } from "./components/LeavesAndGatepass/employee/ViewLeavesRecord";
 import { ProductedRoute } from "./ProtectedRoute/ProductedRoute";
-import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ProductedRouteEmployee } from "./ProtectedRoute/ProtectedRouteEmployee";
 import { useSelector } from "react-redux";
@@ -64,7 +63,7 @@ import AttendanceOverview from "./components/Attendance/AttendanceOverview";
 import SingleGroupAttendance from "./components/Attendance/SingleGroupAttendance";
 import { TrainingResource } from "./Employee/training/TrainingResource";
 import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -308,24 +307,24 @@ const router = createBrowserRouter([
   },
   {
     path: "/your-documents",
-    element:<ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/change-password",
-    element:<ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/employee-notifications",
-    element:<ProductedRoute><Employeeaside> <NotificationList></NotificationList> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/employee-TrainingResource",
-    element:<ProductedRoute><Employeeaside> <TrainingResource></TrainingResource> </Employeeaside></ProductedRoute>
-   },
-   {
-    path:"/employee-EmployeeAssesmentQuiz",
-    element:<ProductedRoute><Employeeaside> <EmployeeAssessmentQuiz></EmployeeAssessmentQuiz> </Employeeaside></ProductedRoute>
-   },
+    element: <ProductedRoute><Employeeaside> <Yourdoc></Yourdoc> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/change-password",
+    element: <ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/employee-notifications",
+    element: <ProductedRoute><Employeeaside> <NotificationList></NotificationList> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/employee-TrainingResource",
+    element: <ProductedRoute><Employeeaside> <TrainingResource></TrainingResource> </Employeeaside></ProductedRoute>
+  },
+  {
+    path: "/employee-EmployeeAssesmentQuiz",
+    element: <ProductedRoute><Employeeaside> <EmployeeAssessmentQuiz></EmployeeAssessmentQuiz> </Employeeaside></ProductedRoute>
+  },
   {
     path: "/pending-leaves",
     element: (
@@ -534,15 +533,9 @@ function App() {
     socket.on("notification", (notification: any) => {
       console.log("notification.... ", notification);
       const length = notification.notification.length;
-      toast(notification.notification[length - 1].message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
+      toast.success(notification.notification[length - 1].message, {
+        style: { border: '1px solid #713200', padding: '16px', color: '#713200', },
+        iconTheme: { primary: '#713200', secondary: '#FFFAEE', },
       });
     });
 
@@ -561,18 +554,7 @@ function App() {
   return (
     <React.StrictMode>
       <RouterProvider router={router} />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <Toaster position="top-right" reverseOrder={false} />
     </React.StrictMode>
   );
 }
