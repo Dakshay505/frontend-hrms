@@ -16,7 +16,6 @@ const initialState = {
 };
 
 // LEAVES
-
 // READ MY LEAVES AND GATEPASS
 export const getMyLeavesAndGatePassAsync: any = createAsyncThunk(
     'getMyLeavesAndGatepass',
@@ -42,6 +41,7 @@ export const getAllPendingLeavesAsync: any = createAsyncThunk(
         }
     }
 );
+
 // READ APPROVED LEAVES
 export const getAllApprovedLeavesAsync: any = createAsyncThunk(
     'getallApprovedLeaves',
@@ -54,32 +54,33 @@ export const getAllApprovedLeavesAsync: any = createAsyncThunk(
         }
     }
 );
+
 // READ ACCEPTED LEAVES
 export const getAllAcceptedLeavesAsync: any = createAsyncThunk(
     'getallAcceptedLeaves',
     async () => {
         try {
             const response: any = await getAllAcceptedLeaves();
-            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
         }
     }
 );
+
 // READ REJECTED LEAVES
 export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     'getallRejectedLeaves',
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
-            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
         }
     }
 );
+
 // READ MY LEAVES AND GATEPASS
 export const getAllLeavesAndGatePassAsync: any = createAsyncThunk(
     'getAllLeavesAndGatePassAsync',
@@ -92,6 +93,7 @@ export const getAllLeavesAndGatePassAsync: any = createAsyncThunk(
         }
     }
 );
+
 // CREATE LEAVES AND GATEPASS
 export const createLeavesAndGatePassAsync: any = createAsyncThunk(
     'createLeavesAndGatepass',
@@ -104,6 +106,7 @@ export const createLeavesAndGatePassAsync: any = createAsyncThunk(
         }
     }
 );
+
 // UPDATED PENDING LEAVES
 export const updatePendingLeavesAsync: any = createAsyncThunk(
     'updatePendingLeaves',
@@ -116,12 +119,12 @@ export const updatePendingLeavesAsync: any = createAsyncThunk(
         }
     }
 );
+
 // UPDATED ACCEPTED LEAVES
 export const updateAcceptedLeavesAsync: any = createAsyncThunk(
     'updateAcceptedLeaves',
     async (data) => {
         try {
-            console.log("Data",data);
             const response: any = await updateAcceptedLeaves(data);
             return response;
         } catch (error: any) {
@@ -143,12 +146,12 @@ export const updatePendingGatePassAsync: any = createAsyncThunk(
         }
     }
 );
+
 // UPDATED ACCEPTED GATEPASS
 export const updateAcceptedGatePassAsync: any = createAsyncThunk(
     'updateAcceptedGatePass',
     async (data) => {
         try {
-            console.log(data);
             const response: any = await updateAcceptedGatePass(data);
             return response;
         } catch (error: any) {
@@ -170,8 +173,8 @@ export const LeaveSlice = createSlice({
             })
             .addCase(getMyLeavesAndGatePassAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.myLeavesAndGatePass = action.payload.leaves
-                state.upperLevelEmployee = action.payload.upperLevelEmployee
+                state.myLeavesAndGatePass = action.payload.leaves;
+                state.upperLevelEmployee = action.payload.upperLevelEmployee;
             })
             .addCase(getAllPendingLeavesAsync.pending, (state) => {
                 state.status = 'loading';
