@@ -278,7 +278,7 @@ export const EmployeeProfile = () => {
                             setShowInputBoxEmail(false);
                             setShowInputBoxContactNumber(false);
                             setShowInputBoxGender(false);
-                        })}
+                        })} 
                     >
                         <div className="flex flex-col gap-3">
                             {!singleEmployee.verified && <div className='flex gap-[10px] items-center bg-[#FCECEC] rounded-lg p-4'>

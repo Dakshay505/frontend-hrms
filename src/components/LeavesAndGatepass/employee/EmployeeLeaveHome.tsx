@@ -15,7 +15,6 @@ export const EmployeeLeaveHome = () => {
   const allApprovedLeaveList = useSelector((state: any) => state.leave.acceptedLeaves);
   const allPendindLeaveList = useSelector((state: any) => state.leave.pendingLeaves);
   const allRejectedLeaveList = useSelector((state: any) => state.leave.rejectedLeaves);
-
   const loaderStatus = useSelector((state: any) => state.leave.status)
 
   useEffect(() => {

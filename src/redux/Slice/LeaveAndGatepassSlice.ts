@@ -73,6 +73,7 @@ export const getAllRejectedLeavesAsync: any = createAsyncThunk(
     async () => {
         try {
             const response: any = await getAllRejectedLeaves();
+            console.log(response);
             return response;
         } catch (error: any) {
             console.log(error.message);
