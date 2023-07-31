@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import upload from "../../assets/UploadSimple.png";
-import { uploadDocumentApiPath } from "../../APIRoutes";
-
+import { useLocation } from 'react-router-dom';
+import DocumentFrame from '../../assets/documentFrame.svg'
 // import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
 interface Document {
   id: string;
@@ -11,60 +10,47 @@ interface Document {
 }
 
 const ViewDoc: React.FC = () => {
+  const location = useLocation();
+  const [additionalData, setAdditionalData] = useState(location.state?.data);
+  console.log(additionalData, "additionalData")
+  //   const handleFormSubmit = (data: any) => {
+  //     const formData = new FormData();
+  //     formData.append('file', selectedFile);
+  //     formData.append('fileName', data.resourceDocsName);
+  //     formData.append('groupName', data.groupName);
+  //     formData.append('JobProfileName', data.JobProfileName);
+  //     for (const entry of formData.entries()) {
+  //         console.log(entry[0] + ": " + entry[1]);
+  //     }
+  //     dispatch(addDocumentsAsync(formData))
+  // }
 
+  // const [selectedFile, setSelectedFile] = useState<any>(null);
 
-//   const handleFormSubmit = (data: any) => {
-//     const formData = new FormData();
-//     formData.append('file', selectedFile);
-//     formData.append('fileName', data.resourceDocsName);
-//     formData.append('groupName', data.groupName);
-//     formData.append('JobProfileName', data.JobProfileName);
-//     for (const entry of formData.entries()) {
-//         console.log(entry[0] + ": " + entry[1]);
-//     }
-//     dispatch(addDocumentsAsync(formData))
-// }
+  const documentList = [
+    {
+      documentName: "Resume.pdf"
+    },
+    {
+      documentName: "Resume.pdf"
+    },
+    {
+      documentName: "Resume.pdf"
+    },
+    {
+      documentName: "Resume.pdf"
+    },
+    {
+      documentName: "Resume.pdf"
+    },
+    {
+      documentName: "Resume.pdf"
+    },
+  ]
 
-// const [selectedFile, setSelectedFile] = useState<any>(null);
-
-
-
-  const [imageUrls, setImageUrls] = useState<Document[]>([]);
-  // const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get(`${uploadDocumentApiPath}`, {
-          withCredentials: true,
-        });
-        // console.log("Fetching data",data)
-        if (data && data.doc && Array.isArray(data.doc) && data.doc.length > 0) {
-          const documents = data.doc[0].document;
-          const mappedImages = documents.map((document: any) => ({
-            id: document._id,
-            name: document.docsName,
-            url: document.docs,
-          }));
-          setImageUrls(mappedImages);
-        } else {
-          // setError('Invalid data structure');
-        }
-      } catch (error) {
-        // setError('Error fetching data: ' + (error as Error).message);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
-  const openImageInNewTab = (url: string) => {
-    window.open(url, '_blank');
-  };
 
   return (
-    <div className="flex pt-[32px] w-[770px] gap-[40px] flex-col items-start">
+    <div className="flex items-stretch pt-[32px] px-0 py-[40px] w-[770px] gap-[40px] flex-col">
       <div className="flex px-[40px] w-[100%] py-[0] gap-[40px] flex-col items-start">
         <div className="flex justify-between w-[100%] gap-[50px] items-start">
           <div className="flex flex-col gap-[8px]">
@@ -72,7 +58,7 @@ const ViewDoc: React.FC = () => {
               Viewing Documents
             </p>
             <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
-              For Madhav Sharma
+              For {additionalData}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">
@@ -89,23 +75,20 @@ const ViewDoc: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div className="flex mx-[40px] gap-[20px] w-[648px] flex-wrap">
-        {imageUrls.map((document) => (
-          <div
-            key={document.id}
-            className="w-[200px] cursor-pointer h-[210px] border-2 border-primary-border rounded-[5px]"
-            onClick={() => openImageInNewTab(document.url)}
-          >
-            <img
-              src={document.url}
-              alt={document.name}
-              className="relative overflow-hidden bg-cover bg-center opacity-60 z-[-111111] w-[200px] h-[207px]"
-            />
-            <h1 className="text-[#2E2E2E] text-center text-sm font-inter font-medium leading-8 bg-[#ECEDFE] border-2 border-[#9198F7] rounded-b-[5px] z-9999999999 relative">{document.name}</h1>
+      {/* DOCUMENT CODE STARTS HERE */}
+      <div className='mx-[40px] w-full'>
+        <div className='mt-6 pb-6 overflow-auto'>
+          <div className='grid grid-cols-3 gap-5'>
+            {documentList && documentList.map((element: any, index: any) => {
+              return <div key={index} className='w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
+                <img src={DocumentFrame} className='w-full' alt="" />
+                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.documentName}</p>
+              </div>
+            })}
           </div>
-        ))}
+        </div>
       </div>
+      {/* DOCUMENT CODE ENDS HERE */}
     </div>
   );
 };

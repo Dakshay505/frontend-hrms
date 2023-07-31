@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import searchImg from "../../assets/MagnifyingGlass.png";
 import upload from "../../assets/UploadSimple.png";
 import request from "../../assets/DownloadSimple.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import approve from "../../assets/Check.png"
 import resume from "../../assets/ArrowSquareOut.png"
 import deny from "../../assets/X.png"
@@ -32,9 +32,9 @@ export const DocumentDash = () => {
       const arr = [];
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
-          arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfile.jobProfileName })
+          arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfileId.jobProfileName })
         } else {
-          arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfile.jobProfileName })
+          arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfileId.jobProfileName })
         }
       }
       setFetchedSuggestions(arr)
@@ -85,10 +85,17 @@ export const DocumentDash = () => {
     console.log("cancel")
   };
 
-  const handleToView = () => {
-    console.log("view page ")
+  const handleToView = (element: any) => {
+    setSearch(element)
+    setSuggestions([]);
+    console.log("view page ", element)
   }
+  const navigate = useNavigate()
 
+  const navigates = () => {
+    navigate("/viewdocuments",{state:{data:search}})
+    console.log("navigate",search)
+  }
 
 
   return (
@@ -105,7 +112,7 @@ export const DocumentDash = () => {
               className="flex items-center"
             >
               <div className="relative flex  items-center bg-[#ECEDFE] border p-[12px] w-[250px] rounded-[8px]">
-                <div onClick={() => handleToView()} className="absolute flex items-center right-1 top-1 bottom-0 w-[34px] h-[34px] rounded-[8px] bg-primary-blue justify-center border">
+                <div onClick={() => navigates()} className="absolute flex items-center right-1 top-1 bottom-0 w-[34px] h-[34px] rounded-[8px] bg-primary-blue justify-center border">
                   <label htmlFor="searchInput" className="">
                     <img src={searchImg} alt="" className="h-4 w-4" />
                   </label>
@@ -115,7 +122,7 @@ export const DocumentDash = () => {
                 {suggestions.length > 0 && (
                   <div className="absolute top-10 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
                     {suggestions.map((element: any) => {
-                      return <div className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer">
+                      return <div onClick={() => handleToView(element.name)} className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer">
                         <div>
                           <img src={element.profilePicture} className="w-[50px] h-[50px] rounded-full" alt="" />
                         </div>
