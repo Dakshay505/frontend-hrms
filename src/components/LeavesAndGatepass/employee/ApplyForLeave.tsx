@@ -101,6 +101,17 @@ export const ApplyForLeave = () => {
                                 </select>
                             </div>
                         </div>
+                        <div className="flex flex-col gap-3">
+                            <div className="flex gap-[10px]">
+                                <p className="text-sm font-normal text-[#1C1C1C]">Apply for an Employee</p>
+                                <input type="checkbox" />
+                            </div>
+                            <div>
+                                <input
+                                    className="border border-solid border-[#DEDEDE] text-[#666666] w-[320px] h-10 px-2 focus:outline-none rounded"
+                                    type="search" />
+                            </div>
+                        </div>
                         {applicationTypeValue === "Leave" && <div className="flex flex-col gap-3">
                             <div>
                                 <p className="text-sm font-normal text-[#1C1C1C]">Date From</p>

@@ -36,7 +36,7 @@ return (
             })}
         >
             <div>
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
+                <h1 className="text-2xl font-bold text-[#2E2E2E]">Job Profile Information</h1>
             </div>
             <div className="flex flex-col gap-3 mt-10">
                 {!showInputBoxJobProfileName &&
@@ -77,7 +77,7 @@ return (
                 {!showInputBoxJobProfileDescription &&
                     <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                         <div className="flex items-center gap-3">
-                            <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Group Description</p>
+                            <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Job Profile Description</p>
                             <img src={edit} onClick={() => {
                                 setShowInputBoxJobProfileDescription(!showInputBoxJobProfileDescription);
                             }} className="w-3 h-3" alt="" />
@@ -90,7 +90,7 @@ return (
                     <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                         <div className="flex flex-col">
                             <div className="flex gap-3">
-                                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Group Description</p>
+                                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Job Profile Description</p>
                             </div>
                             <div>
                                 <input
