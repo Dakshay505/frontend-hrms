@@ -28,7 +28,7 @@ const AttendanceOverview = () => {
               <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
       <div className="mt-8 overflow-auto">
-        <table>
+        <table className="w-full">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group Name</td>

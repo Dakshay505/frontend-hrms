@@ -264,7 +264,7 @@ const ViewModifyDatabase = () => {
                 <div className='mt-10 overflow-auto'>
                     <div className='py-6'>
                         {/* TABLE FOR EMPLOYEE */}
-                        {databaseValue === "Employees" && <table>
+                        {databaseValue === "Employees" && <table className='w-full'>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Employee ID</td>
@@ -331,7 +331,7 @@ const ViewModifyDatabase = () => {
                         </table>}
                         {/* TABLE FOR EMPLOYEE ENDS */}
                         {/* TABLE FOR DEPARTMENT */}
-                        {databaseValue === "Groups" && <table>
+                        {databaseValue === "Groups" && <table className='w-full'>
                             <tbody>
                                 <tr className='bg-[#ECEDFE]'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group ID</td>
@@ -340,15 +340,15 @@ const ViewModifyDatabase = () => {
                                 </tr>
                                 {groupList && groupList.map((element: any, index: number) => {
                                     return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleGroupTableRowClick(element)}>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline'>{element.groupName ? element.groupName : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.description ? element.description : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  border-b border-solid border-[#EBEBEB]'>{element.description ? element.description : "Not Avilable"}</td>
                                     </tr>
                                 })}
                             </tbody>
                         </table>}
                         {/* TABLE FOR DEPARTMENTS ENDS */}
-                        {databaseValue === "Job Profiles" && <table>
+                        {databaseValue === "Job Profiles" && <table className='w-full'>
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Job Profile ID</td>
@@ -359,11 +359,11 @@ const ViewModifyDatabase = () => {
                                 </tr>
                                 {jobProfileList && jobProfileList.map((element: any, index: number) => {
                                     return <tr key={index} className='hover:bg-[#FAFAFA] cursor-default' onClick={() => handleJobprofileTableRowClick(element)}>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.jobProfileName ? element.jobProfileName : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobDescription ? element.jobDescription : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.jobRank ? element.jobRank : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.employmentType ? element.employmentType : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]'>{element.jobProfileName ? element.jobProfileName : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.jobDescription ? element.jobDescription : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.jobRank ? element.jobRank : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.employmentType ? element.employmentType : "Not Avilable"}</td>
                                     </tr>
                                 })}
                             </tbody>

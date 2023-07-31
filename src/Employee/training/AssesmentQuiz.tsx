@@ -18,7 +18,7 @@ export const EmployeeAssessmentQuiz = () => {
     const dispatch = useDispatch();
     const { questions } = useSelector((state: RootState) => state.training);
     // console.log(questions)
-    const jobProfileId = useSelector((state: RootState) => state.login.loggedInUserData?.employee?.jobProfileId?._id)
+    const jobProfileId = useSelector((state: any) => state.login.loggedInUserData?.employee?.jobProfileId?._id)
     const result = useSelector((state: any) => state.training.result)
     console.log("result", result)
     useEffect(() => {
