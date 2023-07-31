@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import upload from "../../assets/UploadSimple.png";
 import { useLocation } from 'react-router-dom';
 import DocumentFrame from '../../assets/documentFrame.svg'
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeeImageAsync } from '../../redux/Slice/EmployeeSlice';
 // import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
 interface Document {
   id: string;
@@ -10,9 +12,18 @@ interface Document {
 }
 
 const ViewDoc: React.FC = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
-  const [additionalData, setAdditionalData] = useState(location.state?.data);
-  console.log(additionalData, "additionalData")
+  const [EmployeeName, setEmployeeName] = useState(location.state?.name);
+  const [EmployeeId, setEmployeeId] = useState(location.state?.empId);
+  const documentList = useSelector((state: any) => state.employee.singleEmployee?.profileId?.document);
+  console.log("singleEmployee",documentList)
+  const data={
+    employeeId:EmployeeId
+  }
+  useEffect(() => {
+    dispatch(getEmployeeImageAsync(data));
+  },[])
   //   const handleFormSubmit = (data: any) => {
   //     const formData = new FormData();
   //     formData.append('file', selectedFile);
@@ -27,26 +38,7 @@ const ViewDoc: React.FC = () => {
 
   // const [selectedFile, setSelectedFile] = useState<any>(null);
 
-  const documentList = [
-    {
-      documentName: "Resume.pdf"
-    },
-    {
-      documentName: "Resume.pdf"
-    },
-    {
-      documentName: "Resume.pdf"
-    },
-    {
-      documentName: "Resume.pdf"
-    },
-    {
-      documentName: "Resume.pdf"
-    },
-    {
-      documentName: "Resume.pdf"
-    },
-  ]
+ 
 
 
   return (
@@ -58,7 +50,7 @@ const ViewDoc: React.FC = () => {
               Viewing Documents
             </p>
             <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
-              For {additionalData}
+              For {EmployeeName}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">
@@ -82,7 +74,7 @@ const ViewDoc: React.FC = () => {
             {documentList && documentList.map((element: any, index: any) => {
               return <div key={index} className='w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
                 <img src={DocumentFrame} className='w-full' alt="" />
-                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.documentName}</p>
+                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.docsName? element.docsName:"Documnet"}</p>
               </div>
             })}
           </div>
