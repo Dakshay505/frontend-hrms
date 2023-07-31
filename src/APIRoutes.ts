@@ -1,6 +1,6 @@
-export const apiPath = `http://localhost:5050`;
+// export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
-// export const apiPath = `https://hrms-backend-04fw.onrender.com`;
+export const apiPath = `https://hrms-lix0.onrender.com`;
 
 // JOB PROFILE API
 
@@ -49,6 +49,7 @@ export const getPendingLeavesApiPath = `${apiPath}/api/v1/leave/pending`
 export const getApprovedLeavesApiPath = `${apiPath}/api/v1/leave/approved`
 export const getAcceptedLeavesApiPath = `${apiPath}/api/v1/leave/accepted`
 export const getRejectedLeavesApiPath = `${apiPath}/api/v1/leave/rejected`
+export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 export const updatePendingLeavesApiPath = `${apiPath}/api/v1/leave/acceptleave`
 export const updateAcceptedLeavesApiPath = `${apiPath}/api/v1/leave/approveleave`
 
@@ -57,13 +58,8 @@ export const getMyLeavesAndGatepassApiPath = `${apiPath}/api/v1/leave/myleave`
 export const createLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave`
 
 // GATEPASS APIS
-export const getPendingGatePassApiPath = `${apiPath}/api/v1/leave/pendinggatepass`
-export const getApprovedGatePassApiPath = `${apiPath}/api/v1/leave/approved`
-export const getAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/acceptedgatepass`
-export const getRejectedGatePassApiPath = `${apiPath}/api/v1/leave/rejected`
 export const updatePendingGatePassApiPath = `${apiPath}/api/v1/leave/acceptgatepass`
 export const updateAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/approvegatepass`
-export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`
 
 // attendance 
 export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAttendance`
@@ -77,6 +73,7 @@ export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`
 export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
 export const addTrainingQuizApiPath = `${apiPath}/api/v1/quiz/addQuestion`
 export const addAssesmentQuizApiPath = `${apiPath}/api/v1/quiz/getQuiz`
+export const SubmitAnswerApiPath = `${apiPath}/api/v1/quiz/submitAnswer`
 
 
 
