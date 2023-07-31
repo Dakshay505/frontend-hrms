@@ -250,7 +250,7 @@ export const Employeeattendence = () => {
                 <div className=''>
                     {attandenceValue === "Your Attandence" ? <div className="py-6 mb-24 overflow-auto">
                         {/* TABLE STARTS HERE */}
-                        <table>
+                        <table className="w-full">
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -324,7 +324,7 @@ export const Employeeattendence = () => {
                     {attandenceValue === "Staff Attandence" ?
                         <div className='py-6 mb-24 overflow-auto'>
                             {/* TABLE STARTS HERE */}
-                            <table>
+                            <table className="w-full">
                                 <tbody>
                                     <tr className='bg-[#ECEDFE] cursor-default'>
                                         <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>

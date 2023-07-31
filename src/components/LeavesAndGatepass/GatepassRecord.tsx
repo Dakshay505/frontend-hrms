@@ -3,6 +3,7 @@ import glass from "../../assets/MagnifyingGlass.png";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
+import { getAllApprovedLeavesAsync } from "../../redux/Slice/LeaveAndGatepassSlice";
 
 
 export const GatepassRecord = () => {
@@ -18,37 +19,39 @@ export const GatepassRecord = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
-  const allApprovedGatePassList = useSelector((state: any) => state.leave.approvedGatePasses);
-  console.log(allApprovedGatePassList)
+  const allApprovedLeaveList = useSelector((state: any) => state.leave.approvedLeaves);
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
-    // dispatch(getAllApprovedGatePassAsync()).then((res: any) => {
-    //   const employeeData = res.payload.allApprovedLeave;
-    //   const arr: any = [];
-    //   if (employeeData) {
-    //     for (let i = 0; i < employeeData.length; i++) {
-    //       arr.push(employeeData[i].employeeId.name)
-    //     }
-    //     setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-    //   }
-    // });
+    dispatch(getAllApprovedLeavesAsync()).then((res: any) => {
+      const employeeData = res.payload.allApprovedLeave;
+        const arr: any = [];
+        if (employeeData) {
+          for (let i = 0; i < employeeData.length; i++) {
+            arr.push(employeeData[i].employeeId.name)
+          }
+          setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
+        }
+    });
   }, [])
 
   useEffect(() => {
     console.log(filter);
-    // dispatch(getAllApprovedGatePassAsync(filter)).then((res: any) => {
-    //   const employeeData = res.payload.allApprovedLeave;
-    //   const arr: any = [];
-    //   if (employeeData) {
-    //     for (let i = 0; i < employeeData.length; i++) {
-    //       arr.push(employeeData[i].employeeId.name)
-    //     }
-    //     setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-    //   }
-    // });
+    dispatch(getAllApprovedLeavesAsync(filter)).then((res: any) => {
+      const employeeData = res.payload.allApprovedLeave;
+        const arr: any = [];
+        if (employeeData) {
+          for (let i = 0; i < employeeData.length; i++) {
+            arr.push(employeeData[i].employeeId.name)
+          }
+          setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
+        }
+    });
   }, [filter])
 
+  const handleTableRowClick = (data: any) => {
+    console.log(data._id)
+  }
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -70,16 +73,21 @@ export const GatepassRecord = () => {
       setSuggestions([]);
     }
   };
-
-  const handleTableRowClick = (data: any) => {
-    console.log(data._id)
-  }
   const getSuggestions = (inputValue: any) => {
     const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
       suggestion?.toLowerCase().includes(inputValue.toLowerCase())
     );
     setSuggestions(filteredSuggestions);
   };
+
+  function convertTimeToAMPM(time: any) {
+    const [hour, minute] = time.split(':');
+    let hourNum = Number(hour);
+    const meridiem = hourNum >= 12 ? 'PM' : 'AM';
+    hourNum = hourNum % 12 || 12;
+    const convertedTime = `${hourNum}:${minute} ${meridiem}`;
+    return convertedTime;
+  }
 
   return (
     <div className="mx-10">
@@ -187,26 +195,26 @@ export const GatepassRecord = () => {
         <div className='mt-2 overflow-auto'>
           <div className='py-6'>
             {/* TABLE STARTS HERE */}
-            <table>
+            <table className="w-full">
               <tbody>
                 <tr className='bg-[#ECEDFE] cursor-default'>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Gatepass Date</td>
                   <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
                   <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Time</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approving Supervisor</td>
                 </tr>
-                {allApprovedGatePassList && allApprovedGatePassList.map((element: any, index: number) => {
-                  // const fromToArray = element.gatePass;
-                  // const lastObject = fromToArray[fromToArray.length - 1];
-                  // console.log(`last${index}`, lastObject)
-                  if (element.gatePassTime) {
+                {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
+                  if (element.gatePassDate) {
+                    const gatePassDate = new Date(new Date(element.gatePassDate).getTime() + new Date(element.gatePassDate).getTimezoneOffset() * 60000);
+                    const day1 = String(gatePassDate.getDate()).padStart(2, '0');
+                    const month1 = String(gatePassDate.getMonth() + 1).padStart(2, '0');
+                    const year1 = gatePassDate.getFullYear();
+                    const gatePassDateFormatted = `${day1}/${month1}/${year1}`;
                     return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element._id}</td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.gatePassDate ? (element.gatePassDate).slice(0, 10) : "Not Avilable"}</td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.gatePassTime ? element.gatePassTime : "Not Avilable"}</td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.acceptedBy ? element.acceptedBy : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.gatePassDate ? gatePassDateFormatted : "Not avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.gatePassTime ? convertTimeToAMPM(element.gatePassTime) : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.acceptedBy.name ? element.acceptedBy.name : "Not Avilable"}</td>
                     </tr>
                   }
                 })}
