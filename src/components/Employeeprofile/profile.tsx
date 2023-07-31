@@ -214,7 +214,7 @@ export const EmployeeProfile = () => {
                         <div className='relative'>
                             <img src={profilePicture} alt="Employee Image" className='rounded-full object-cover w-[144px] h-[144px]' />
                             <div className='absolute right-4 bottom-1 cursor-pointer'>
-                                <label htmlFor="ProPic"><img src={EditPicture} className='w-[24px] h-[24px]' alt="" /></label>
+                                <label className='cursor-pointer' htmlFor="ProPic"><img src={EditPicture} className='w-[24px] h-[24px]' alt="" /></label>
                                 <input onChange={(event: any) => {
                                     console.log(event.target.files[0])
                                     const formData = new FormData();
@@ -223,7 +223,7 @@ export const EmployeeProfile = () => {
                                     dispatch(addImageAsync(formData)).then(() => {
                                         dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
                                     })
-                                }} className='absolute opacity-0' id="ProPic" type="file" />
+                                }} className='hidden' id="ProPic" type="file" />
                             </div>
                         </div>
                         <p className="text-center text-[18px] leading-6 font-semibold text-[#2E2E2E]">
