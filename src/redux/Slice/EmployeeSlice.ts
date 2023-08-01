@@ -10,7 +10,8 @@ import {
   updateEmployee,
   pagination,
   getQrAssign,
-  updatePassword
+  updatePassword,
+  newPassword
 } from "../API/EmployeeAPI";
 
 const initialState = {
@@ -156,6 +157,18 @@ export const updatePasswordAsync: any = createAsyncThunk(
     }
   }
 );
+// new password
+export const newPasswordAsync: any = createAsyncThunk(
+  'newPasswordAsync',
+  async (data) => {
+    try {
+      const response = await newPassword(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
   
 
 export const EmployeeSlice = createSlice({
@@ -246,6 +259,12 @@ export const EmployeeSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(updatePasswordAsync.fulfilled, (state) => {
+        state.status = 'idle';
+      })
+      .addCase(newPasswordAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(newPasswordAsync.fulfilled, (state) => {
         state.status = 'idle';
       })
   },

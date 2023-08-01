@@ -518,19 +518,15 @@ function App() {
     idd = user.employee._id;
   }
 
+
+  
   useEffect(() => {
-    setupSocketConnection();
-  }, []);
-
-
-  const setupSocketConnection = () => {
-    const socket = io(apiPath, { query: { employeeId: idd } });
-
-    socket.on("connect", () => {
+    const newSocket = io(`${apiPath}?employeeId=${idd}`);
+    newSocket.on('connect', () => {
       console.log("Connected to websocket");
     });
 
-    socket.on("notification", (notification: any) => {
+    newSocket.on("notification", (notification: any) => {
       console.log("notification.... ", notification);
       const length = notification.notification.length;
       toast.success(notification.notification[length - 1].message, {
@@ -539,18 +535,18 @@ function App() {
       });
     });
 
-    socket.on("disconnect", () => {
+    newSocket.on('disconnect', () => {
       console.log("Disconnected from websocket");
     });
 
-    socket.on("error", (error: any) => {
+    newSocket.on('error', (error: any) => {
       console.log(error.message);
     });
 
     return () => {
-      socket.disconnect();
+      newSocket.close();
     };
-  };
+  }, []);
   return (
     <React.StrictMode>
       <RouterProvider router={router} />

@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import upload from "../../assets/UploadSimple.png";
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import DocumentFrame from '../../assets/documentFrame.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { getEmployeeImageAsync } from '../../redux/Slice/EmployeeSlice';
 // import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
-interface Document {
-  id: string;
-  name: string;
-  url: string;
-}
+// interface Document {
+//   id: string;
+//   name: string;
+//   url: string;
+// }
 
 const ViewDoc: React.FC = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const [EmployeeName, setEmployeeName] = useState(location.state?.name);
-  const [EmployeeId, setEmployeeId] = useState(location.state?.empId);
+  // const location = useLocation();
+  // const [EmployeeName, setEmployeeName] = useState(location.state?.name);
+  // const [EmployeeId, setEmployeeId] = useState(location.state?.empId);
   const documentList = useSelector((state: any) => state.employee.singleEmployee?.profileId?.document);
   console.log("singleEmployee",documentList)
   const data={
-    employeeId:EmployeeId
+    // employeeId:EmployeeId
   }
   useEffect(() => {
     dispatch(getEmployeeImageAsync(data));
@@ -50,7 +50,7 @@ const ViewDoc: React.FC = () => {
               Viewing Documents
             </p>
             <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
-              For {EmployeeName}
+              {/* For {EmployeeName} */}
             </p>
           </div>
           <div className="flex items-center gap-[20px]">

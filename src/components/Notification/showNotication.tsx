@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { fetchNotifications } from '../../redux/Slice/notificationSlice';
 import glass from '../../assets/MagnifyingGlass.png'
 import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function ShowNotication() {
-    const [notification, setNotificationData] = useState<any>([])
+    const notification: any = []
     const id = useSelector((state:any) => state.login);
     console.log("id",id)
 
