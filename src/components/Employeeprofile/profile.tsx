@@ -28,6 +28,7 @@ import CaretUp from "../../assets/CaretUp.svg";
 import X from "../../assets/X.svg";
 import EditPicture from "../../assets/EditPicture.svg";
 import eye from "../../assets/Eye.png"
+import toast from 'react-hot-toast';
 import LoaderGif from '../../assets/loadergif.gif'
 
 export const EmployeeProfile = () => {
@@ -272,7 +273,12 @@ export const EmployeeProfile = () => {
                     <form
                         onSubmit={handleSubmit((data) => {
                             const sendData = { employeeId: employeeId, data: data }
-                            dispatch(updateEmployeeAsync(sendData)).then(() => {
+                            dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
+                                if (res.payload.success) {
+                                    toast.success(res.payload.message);
+                                } else {
+                                    toast.error(res.payload.message);
+                                }
                                 dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
                             });
                             setShowInputBoxName(false);
@@ -281,7 +287,7 @@ export const EmployeeProfile = () => {
                             setShowInputBoxEmail(false);
                             setShowInputBoxContactNumber(false);
                             setShowInputBoxGender(false);
-                        })} 
+                        })}
                     >
                         <div className="flex flex-col gap-3">
                             {!singleEmployee.verified && <div className='flex gap-[10px] items-center bg-[#FCECEC] rounded-lg p-4'>
@@ -512,7 +518,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
 
-                                {/* password */}
+                            {/* password */}
                             {!showInputBoxPassword &&
                                 <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
@@ -534,18 +540,27 @@ export const EmployeeProfile = () => {
                                         <div className='relative'>
                                             <input
                                                 {...register('password', { required: true })}
+                                                value={inputBoxPasswordValue}
                                                 onChange={(event) => setInputBoxPasswordValue(event.target.value)}
                                                 className="text-[12px] leading-5 font-normal pe-4 focus:outline-none"
                                                 type={`${showPassword ? "text" : "password"}`} />
-                                                <img onClick={() => setShowPassword(!showPassword)} src={eye} className='absolute w-[13px] z-10 right-0 bottom-1 cursor-pointer' alt="" />
+                                            <img onClick={() => setShowPassword(!showPassword)} src={eye} className='absolute w-[13px] z-10 right-0 bottom-1 cursor-pointer' alt="" />
                                         </div>
                                     </div>
                                     <div className="flex justify-center items-center">
                                         <button
-                                        onClick={() => {
-                                            dispatch(newPasswordAsync({employeeId: employeeId, password: inputBoxPasswordValue}))
-                                            setShowInputBoxPassword(false);
-                                        }}
+                                            onClick={() => {
+                                                dispatch(newPasswordAsync({ employeeId: employeeId, password: inputBoxPasswordValue })).then((res: any) => {
+                                                    console.log("hihihihi")
+                                                    if (res.payload.success) {
+                                                        toast.success(res.payload.message);
+                                                    } else {
+                                                        toast.error(res.payload.message);
+                                                    }
+                                                })
+                                                setInputBoxPasswordValue("");
+                                                setShowInputBoxPassword(false);
+                                            }}
                                             className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
                                             type="submit">
                                             <img src={check} className="w-4 h-4" alt="" />
@@ -553,7 +568,7 @@ export const EmployeeProfile = () => {
                                     </div>
                                 </div>}
 
-                                {/* Password ends */}
+                            {/* Password ends */}
                             {!showInputBoxContactNumber &&
                                 <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">

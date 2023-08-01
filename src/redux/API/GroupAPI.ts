@@ -16,7 +16,7 @@ export const createGroup = async (addGroupData: any) => {
     );
     return data;
   } catch (err: any) {
-    console.log(err.response.data);
+    return err.response.data
   }
 };
 

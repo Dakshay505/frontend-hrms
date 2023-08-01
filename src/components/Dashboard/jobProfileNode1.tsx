@@ -31,7 +31,7 @@ const JobProfileNode1 = ({ jobProfile,group }: any) => {
       {employee.length>0 ? employee.map((emp: any, index: number) => (
         <div key={index}>
           <h3 className='flex text-[#666666]'>Job Profile : <img src={CaretRight} />{jobProfile.jobProfileName}</h3>
-          <Link to={"/employee-profile"}><p  className=''>Emoloyee Name : <span className='font-bold'>{emp.name}</span> </p></Link>
+          <Link to={"/employee-profile"}><p  className=''>Employee Name : <span className='font-bold'>{emp.name}</span> </p></Link>
         </div>
       )) :""}
       {childJobProfileArray && childJobProfileArray.map((childProfile: any, index: number) => (

@@ -9,7 +9,6 @@ import {
 // CREATE
 export const createJobProfiles = async (jobProfileData: any) => {
   try {
-    console.log(jobProfileData);
     const { data } = await axios.post(
       `${createJobProfileApiPath}`,
       jobProfileData,
@@ -17,7 +16,7 @@ export const createJobProfiles = async (jobProfileData: any) => {
     );
     return data;
   } catch (err: any) {
-    console.log(err.response.data);
+    return err.response.data
   }
 };
 
