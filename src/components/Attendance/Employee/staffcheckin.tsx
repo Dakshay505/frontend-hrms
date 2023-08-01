@@ -12,7 +12,7 @@ import LoaderGif from '../../../assets/loadergif.gif'
 
 export const StaffCheckin = () => {
     const dispatch = useDispatch();
-    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees); 
+    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords); 
     const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
     const [allAttandenceList1, setAllAttandenceList1] = useState([]);
 

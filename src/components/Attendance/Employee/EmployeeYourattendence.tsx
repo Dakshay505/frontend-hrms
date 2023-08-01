@@ -18,7 +18,7 @@ import LoaderGif from '../../../assets/loadergif.gif'
 
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
-    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
+    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
     const myAttandenceList = useSelector((state: any) => state.attandence.myAttandence);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
