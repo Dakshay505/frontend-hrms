@@ -57,4 +57,3 @@ export const SalarySlice = createSlice({
 });
 
 export default SalarySlice.reducer;
-    

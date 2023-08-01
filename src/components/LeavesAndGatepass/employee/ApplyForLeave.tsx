@@ -196,7 +196,14 @@ export const ApplyForLeave = () => {
                         <div className="flex flex-col gap-3">
                             <div className="flex gap-[10px]">
                                 <p className="text-sm font-normal text-[#1C1C1C]">Apply for an Employee</p>
+                                <label htmlFor="checkLeave">
+                                    <div className={`flex items-center box-border w-[32.5px] h-5 rounded-[63px] ${employeeBox ? ` border-[1.25px] border-solid border-[#B0B0B0]` : "justify-end bg-[#414EF1]"}`}>
+                                        <div className={`rounded-full ${employeeBox ? `bg-[#B0B0B0] ms-1 h-[10px] w-[10px]`: "bg-[#FFFFFF] me-[3px] h-[15px] w-[15px]"} `}></div>
+                                    </div>
+                                </label>
                                 <input
+                                id="checkLeave"
+                                className="hidden"
                                 onChange={(event) => {
                                     setEmployeeBox(!event.target.checked)
                                 }}
