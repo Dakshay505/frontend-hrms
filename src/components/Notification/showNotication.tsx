@@ -11,7 +11,6 @@ export default function ShowNotification() {
     const [employeeId, setEmployeeId] = useState("");
     const [notifications, setNotifications] = useState<any[]>([]);
     console.log(employeeId)
-
     useEffect(() => {
         dispatch(getAllEmployeeAsync()).then((res: any) => {
             const employeeData = res.payload.employees;
@@ -113,7 +112,7 @@ export default function ShowNotification() {
                     </div>
                 </div>
             </div>
-            <table className="table w-[70%] mt-[3rem]">
+            <table className="table w-[100%] mt-[3rem]">
                 <thead>
                     <tr className='bg-[#ECEDFE] flex justify-between px-5 cursor-default'>
                         <th className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</th>

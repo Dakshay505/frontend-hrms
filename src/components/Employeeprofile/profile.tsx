@@ -6,7 +6,7 @@ import check from "../../assets/Check.png"
 import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addImageAsync, deleteEmployeeAsync, getQrAssignAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { addImageAsync, deleteEmployeeAsync, getQrAssignAsync, getSingleEmployeeAsync, newPasswordAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
@@ -27,6 +27,7 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import X from "../../assets/X.svg";
 import EditPicture from "../../assets/EditPicture.svg";
+import eye from "../../assets/Eye.png"
 import LoaderGif from '../../assets/loadergif.gif'
 
 export const EmployeeProfile = () => {
@@ -38,7 +39,6 @@ export const EmployeeProfile = () => {
 
     const loaderStatus = useSelector((state: any) => state.employee.status)
 
-    console.log("singleEmployee", singleEmployee)
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
@@ -55,6 +55,10 @@ export const EmployeeProfile = () => {
 
     const [showInputBoxEmail, setShowInputBoxEmail] = useState(false);
     const [inputBoxEmailValue, setInputBoxEmailValue] = useState<any>("");
+
+    const [showInputBoxPassword, setShowInputBoxPassword] = useState(false);
+    const [inputBoxPasswordValue, setInputBoxPasswordValue] = useState<any>("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const [showInputBoxContactNumber, setShowInputBoxContactNumber] = useState(false);
     const [inputBoxContactValue, setInputBoxContactNumberValue] = useState<any>("");
@@ -216,7 +220,6 @@ export const EmployeeProfile = () => {
                             <div className='absolute right-4 bottom-1 cursor-pointer'>
                                 <label className='cursor-pointer' htmlFor="ProPic"><img src={EditPicture} className='w-[24px] h-[24px]' alt="" /></label>
                                 <input onChange={(event: any) => {
-                                    console.log(event.target.files[0])
                                     const formData = new FormData();
                                     formData.append('file', event.target.files[0]);
                                     formData.append('employeeId', employeeId);
@@ -508,6 +511,49 @@ export const EmployeeProfile = () => {
                                         </button>
                                     </div>
                                 </div>}
+
+                                {/* password */}
+                            {!showInputBoxPassword &&
+                                <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                                    <div className="flex items-center gap-3">
+                                        <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Password</p>
+                                        <img src={edit} onClick={() => {
+                                            setShowInputBoxPassword(!showInputBoxPassword);
+                                        }} className="w-3 h-3" alt="" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"></p>
+                                    </div>
+                                </div >}
+                            {showInputBoxPassword &&
+                                <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                                    <div className="flex flex-col">
+                                        <div className="flex gap-3">
+                                            <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Password</p>
+                                        </div>
+                                        <div className='relative'>
+                                            <input
+                                                {...register('password', { required: true })}
+                                                onChange={(event) => setInputBoxPasswordValue(event.target.value)}
+                                                className="text-[12px] leading-5 font-normal pe-4 focus:outline-none"
+                                                type={`${showPassword ? "text" : "password"}`} />
+                                                <img onClick={() => setShowPassword(!showPassword)} src={eye} className='absolute w-[13px] z-10 right-0 bottom-1 cursor-pointer' alt="" />
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-center items-center">
+                                        <button
+                                        onClick={() => {
+                                            dispatch(newPasswordAsync({employeeId: employeeId, password: inputBoxPasswordValue}))
+                                            setShowInputBoxPassword(false);
+                                        }}
+                                            className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                            type="submit">
+                                            <img src={check} className="w-4 h-4" alt="" />
+                                        </button>
+                                    </div>
+                                </div>}
+
+                                {/* Password ends */}
                             {!showInputBoxContactNumber &&
                                 <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                                     <div className="flex items-center gap-3">
