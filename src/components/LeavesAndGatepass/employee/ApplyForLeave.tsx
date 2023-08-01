@@ -205,7 +205,11 @@ export const ApplyForLeave = () => {
                                 id="checkLeave"
                                 className="hidden"
                                 onChange={(event) => {
-                                    setEmployeeBox(!event.target.checked)
+                                    setEmployeeBox(!event.target.checked);
+                                    if(!employeeBox){
+                                        setSuggestions([]);
+                                        setSearch("")
+                                    }
                                 }}
                                 type="checkbox" />
                             </div>
