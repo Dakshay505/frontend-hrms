@@ -7,6 +7,8 @@ import { getAllAcceptedLeavesAsync, getAllPendingLeavesAsync, getAllRejectedLeav
 import X from '../../../assets/X.svg';
 import Check from '../../../assets/Check.svg';
 import LoaderGif from '../../../assets/loadergif.gif'
+import GreenCheck from '../../../assets/GreenCheck.svg'
+import RedX from '../../../assets/RedX.svg'
 
 export const EmployeeLeaveHome = () => {
   const [activeButton, setActiveButton] = useState('Pending');
@@ -200,8 +202,14 @@ export const EmployeeLeaveHome = () => {
                           <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                         </div>
-                        <div>
+                        <div className='flex flex-col gap-4'>
                           <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(element.from)).toLocaleDateString("en-US", options)} - {(new Date(element.to)).toLocaleDateString("en-US", options)}</p>
+                          <div className='flex justify-end'>
+                            <div className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                              <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                              <span className='text-sm font-normal text-[#186A3B]'>{(element.status).charAt(0).toUpperCase() + (element.status).slice(1).toLowerCase()}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className='flex gap-8 justify-between mt-8'>
@@ -217,8 +225,14 @@ export const EmployeeLeaveHome = () => {
                           <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{gatePassDate}</p>
                         </div>
-                        <div>
+                        <div className='flex flex-col gap-4'>
                           <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.gatePassTime ? convertTimeToAMPM(element.gatePassTime) : "Not Avilable"}</p>
+                          <div className='flex justify-end'>
+                            <div className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
+                              <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
+                              <span className='text-sm font-normal text-[#186A3B]'>{(element.status).charAt(0).toUpperCase() + (element.status).slice(1).toLowerCase()}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className='flex gap-8 justify-between mt-8'>
@@ -259,8 +273,14 @@ export const EmployeeLeaveHome = () => {
                           <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{formattedDate}</p>
                         </div>
-                        <div>
+                        <div className='flex flex-col gap-4'>
                           <p className='text-[16px] leading-6 font-medium'>Leave: {(new Date(element.from)).toLocaleDateString("en-US", options)} - {(new Date(element.to)).toLocaleDateString("en-US", options)}</p>
+                          <div className='flex justify-end'>
+                            <div className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                              <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                              <span className='text-sm font-normal text-[#8A2626]'>{(element.status).charAt(0).toUpperCase() + (element.status).slice(1).toLowerCase()}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className='flex gap-8 justify-between mt-8'>
@@ -276,8 +296,14 @@ export const EmployeeLeaveHome = () => {
                           <p className='text-[16px] leading-5 font-medium text-[#2E2E2E] underline'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</p>
                           <p className='text-[16px] leading-6 font-normal text-[#666666]'>{gatePassDate}</p>
                         </div>
-                        <div>
+                        <div className='flex flex-col gap-4'>
                           <p className='text-[16px] leading-6 font-medium'>Gatepass: {element.gatePassTime ? convertTimeToAMPM(element.gatePassTime) : "Not Avilable"}</p>
+                          <div className='flex justify-end'>
+                            <div className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
+                              <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
+                              <span className='text-sm font-normal text-[#8A2626]'>{(element.status).charAt(0).toUpperCase() + (element.status).slice(1).toLowerCase()}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className='flex gap-8 justify-between mt-8'>

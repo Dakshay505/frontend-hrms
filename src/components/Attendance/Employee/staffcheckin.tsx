@@ -102,13 +102,14 @@ export const StaffCheckin = () => {
             </div> : ""}
 
                 {allAttandenceList1 && allAttandenceList1.map((element: any, index: number) => {
+                    console.log("elellelel", element)
                     const latestAttendance = element.punches[0];
-                    return <div key={index} className="flex p-[24px] items-start gap-[32px] border self-stretch rounded-[8px] border-primary-border bg-[#FAFAFA]">
+                    return <div key={index} className="flex p-[24px] items-start gap-[32px] border self-stretch rounded-[8px] border-primary-border bg-[#FAFAFA] max-w-[688px]">
                         <div className="flex flex-col items-start gap-[16px] flex-1 self-stretch">
                             <div className="flex items-center text-[#2E2E2E] text-[16px] font-inter font-semibold leading-2">{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</div>
                             <div className="flex py-[8px] px-[16px] bg-[#ECEDFE] rounded-3xl items-center  text-primary-blue text-[14px] font-inter  gap-[8px]  leading-2 ">
                                 <img src={bag} alt="" className="w-[10px] h-[10px]" />
-                                Production Head, {latestAttendance?.status || "No Status"}
+                                {element.employeeId.jobProfileId.jobProfileName}
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-[24px] flex-1 self-stretch ">
