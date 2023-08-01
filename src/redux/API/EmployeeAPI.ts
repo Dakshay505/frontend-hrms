@@ -5,6 +5,7 @@ import {
   getEmployeeImageApiPath,
   getQrAssignApiPath,
   getSingleEmployeeApiPath,
+  newPasswordApiPath,
   updateEmployeeApiPath,
   updatePasswordApiPath,
   uploadDocumentApiPath,
@@ -153,6 +154,17 @@ export const getQrAssign = async (id: any) => {
 export const updatePassword = async (document: any) => {
   try {
     const { data } = await axios.put(`${updatePasswordApiPath}`, document.data, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
+export const newPassword = async (sendData: any) => {
+  try {
+    const { data } = await axios.put(`${newPasswordApiPath}`, sendData, {
       withCredentials: true,
     });
     return data;

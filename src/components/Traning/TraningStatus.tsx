@@ -8,10 +8,10 @@ import { RootState } from '../../Store';
 export const TraningStatus = () => {
   const dispatch = useDispatch();
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
-  const [groupName, setGroupName] = useState('All Groups');
+  // const [groupName, setGroupName] = useState('All Groups');
   const groupList = useSelector((state: any) => state.group.groups);
-  const [jobProfileName, setjobProfileName] = useState('All Job Profiles');
-  console.log(groupName, jobProfileName)
+  // const [jobProfileName, setjobProfileName] = useState('All Job Profiles');
+  // console.log(groupName, jobProfileName)
 
   useEffect(() => {
     dispatch(getAllGroupsAsync());

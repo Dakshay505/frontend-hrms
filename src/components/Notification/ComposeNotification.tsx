@@ -73,8 +73,6 @@ const ComposeNotification = () => {
 
   useEffect(() => {
     const newSocket = io(`${apiPath}?employeeId=${id}`);
-    // setSocket(newSocket);
-
     newSocket.on('connect', () => {
       console.log("Connected to websocket");
     });
