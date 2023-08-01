@@ -409,7 +409,7 @@ export const Employeeattendence = () => {
                                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element1.punchOut ? new Date(element1.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                                     <td className='py-4 px-5'>
                                                         {element1.status === "approved" &&
-                                                            <span className='relative flex gap-3 items-center bg-[#E9F7EF] h-[26px] rounded-[46px] py-2 px-4'>
+                                                            <span className='relative flex gap-3 items-center bg-[#E9F7EF] w-[135px] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
@@ -425,7 +425,7 @@ export const Employeeattendence = () => {
                                                                 </div>}
                                                             </span>}
                                                         {element1.status === "rejected" &&
-                                                            <span className='relative flex gap-3 items-center bg-[#FCECEC] h-[26px] rounded-[46px] py-2 px-4'>
+                                                            <span className='relative flex gap-3 items-center bg-[#FCECEC] w-[135px] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
@@ -440,7 +440,7 @@ export const Employeeattendence = () => {
                                                                 </div>}
                                                             </span>}
                                                         {(element1.status === "pending") &&
-                                                            <span className='relative flex gap-3 items-center bg-[#FEF5ED] h-[26px] rounded-[46px] py-2 px-4'>
+                                                            <span className='relative flex gap-3 items-center bg-[#FEF5ED] w-[125px] h-[26px] rounded-[46px] py-2 px-4'>
                                                                 <div className="flex gap-2 items-center">
                                                                     <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
