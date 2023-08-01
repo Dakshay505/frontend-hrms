@@ -1,16 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ShowNotifications } from "../API/notificationsApi";
 
-
-
-export const fetchNotifications :any = createAsyncThunk(
-    "notifications/fetchNotifications",
-    async (id) => {
-      const response = await ShowNotifications({ id });
-      return response;
-    }
-  );
-  
+export const fetchNotifications: any = createAsyncThunk(
+  "notifications/fetchNotifications",
+  async (id) => {
+    const response = await ShowNotifications(id); // Pass the id directly instead of an object
+    return response;
+  }
+);
 
 const NotificationsSlice = createSlice({
   name: "notifications",
