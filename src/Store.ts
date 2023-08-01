@@ -8,6 +8,7 @@ import UpdateHierarchyReducer from './redux/Slice/updateHierarchySlice'
 import AttandenceReducer from './redux/Slice/AttandenceSlice';
 import TrainingReducer from './redux/Slice/TrainingSlice';
 import SalaryReducer from './redux/Slice/SalarySlice';
+import notificationSlice from './redux/Slice/notificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     updateHierarchy: UpdateHierarchyReducer,
     attandence: AttandenceReducer,
     training: TrainingReducer,
-    salary: SalaryReducer
+    salary: SalaryReducer,
+    notification: notificationSlice,
   },
 })
 

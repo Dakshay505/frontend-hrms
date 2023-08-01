@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import { getNotificationApiPath } from '../../APIRoutes';
+import { useState, useEffect } from 'react';
+import { fetchNotifications } from '../../redux/Slice/notificationSlice';
 import glass from '../../assets/MagnifyingGlass.png'
-import axios from "axios"
+import { useDispatch, useSelector } from 'react-redux';
+
+
 export default function ShowNotication() {
     const [notification, setNotificationData] = useState<any>([])
+    const id = useSelector((state:any) => state.login);
+    console.log("id",id)
 
-    axios.get(`${getNotificationApiPath}`)
-        .then(function (response) {
-            setNotificationData(response.data.notification)
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
-    console.log(notification)
+    const dispatch = useDispatch()
 
+    useEffect(() => {
+      dispatch(fetchNotifications("64b6b0d427e4fbc4d20c5c51"));
+      console.log("eapcfubifcbawofc",id)
+    }, [dispatch]);
     return (
-
         <div className='mx-10'>
             <div className="flex justify-between pt-8">
                 <div className="flex gap-10 items-center justify-center">
@@ -26,12 +26,11 @@ export default function ShowNotication() {
                         <form action="">
                             <label htmlFor="searchInput" className="flex gap-2 items-center cursor-text  w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none">
                                 <img src={glass} alt="" className="h-4 w-4" />
-                                <input className="w-full h-[1rem]" type='search' placeholder='search' />
+                                <input className="w-full h-[1rem] outline-none" type='search' placeholder='search' />
                             </label>
                         </form>
                     </div>
                 </div>
-
             </div>
             <div>
                 <table className="table mt-[3rem]">
@@ -55,8 +54,6 @@ export default function ShowNotication() {
                     </tbody>
                 </table>
             </div>
-
-
         </div>
     )
 

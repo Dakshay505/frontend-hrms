@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import glass from '../../assets/MagnifyingGlass.png';
+import { RootState } from '../../Store';
 
 export const TraningStatus = () => {
   const dispatch = useDispatch();
@@ -57,57 +58,14 @@ export const TraningStatus = () => {
     setSuggestions(filteredSuggestions);
   };
 
-  // Dummy data for groupList and jobProfileList
-  const dummyGroupList = [
-    { groupName: 'Group 1' },
-    { groupName: 'Group 2' },
-    // Add more dummy groups as needed
-  ];
 
-  const dummyJobProfileList = [
-    { jobProfileName: 'Job Profile 1' },
-    { jobProfileName: 'Job Profile 2' },
-    // Add more dummy job profiles as needed
-  ];
 
-  // Dummy data for trainingStatus
-  const dummyTrainingStatus = [
-    {
-      _id: '1',
-      employeeId: { name: 'John Doe' },
-      attendance: [
-        {
-          date: '2023-07-19T12:34:56',
-          JobProfile: 'Job Profile 1',
-          TrainingStatus: 'Completed',
-          Marks: '95%',
-        },
-      ],
-    },
-    {
-      _id: '2',
-      employeeId: { name: 'Jane Smith' },
-      attendance: [
-        {
-          date: '2023-07-18T09:00:00',
-          JobProfile: 'Job Profile 2',
-          TrainingStatus: 'In Progress',
-          Marks: '85%',
-        },
-      ],
-    },
-    // Add more dummy training status data as needed
-  ];
 
-  // Dispatch dummy data to Redux state (Replace with real dispatch)
-  useEffect(() => {
-    // Simulate API calls to fetch data and update Redux state
-    dispatch({ type: 'SET_GROUPS', payload: dummyGroupList });
-    dispatch({ type: 'SET_JOB_PROFILES', payload: dummyJobProfileList });
-    dispatch({ type: 'SET_TRAINING_STATUS', payload: dummyTrainingStatus });
-  }, []);
 
-  const trainingStatus = useSelector((state: any) => state.attandence.staffAttandence);
+  const jobProfileId = useSelector((state: RootState) => state.jobProfile.jobProfiles)
+  console.log("sc hiavcisac", jobProfileId)
+
+
 
   const handleTableRowClick = (data: any) => {
     console.log(data._id);
@@ -124,28 +82,53 @@ export const TraningStatus = () => {
             <p className='text-[#000000] text-[16px] leading-6 font-medium'>For:</p>
             <div>
               <select
-                onChange={(event) => setGroupName(event.target.value)}
-                className='flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'
-              >
-                <option>All Groups</option>
-                {groupList &&
-                  groupList.map((element: any, index: number) => {
-                    return <option key={index}>{element.groupName}</option>;
-                  })}
+                onChange={(event) => {
+                  if (event.target.value === "All Groups") {
+                    setFilter({
+                      ...filter,
+                      groupName: ""
+                    })
+                  } else {
+                    setFilter({
+                      ...filter,
+                      groupName: event.target.value
+                    })
+                  }
+                }}
+                value={filter.groupName}
+                className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                <option value="All Groups">All Groups</option>
+                {groupList && groupList.map((element: any, index: number) => {
+                  return <option
+                    key={index}
+                    value={element.groupName}
+                  >
+                    {element.groupName}
+                  </option>
+                })}
               </select>
             </div>
-            <div>
+             <div>
               <select
-                onChange={(event) => setjobProfileName(event.target.value)}
-                className='flex border border-solid border-[#DEDEDE] rounded-lg text-sm text-[#666666] w-[176px] h-10 px-5'
-              >
-                <option>All Job Profiles</option>
-                {jobProfileList &&
-                  jobProfileList.map((element: any, index: number) => {
-                    return (
-                      <option key={index}>{element.jobProfileName}</option>
-                    );
-                  })}
+                onChange={(event) => {
+                  if (event.target.value === "All Job Profiles") {
+                    setFilter({
+                      ...filter,
+                      jobProfileName: ""
+                    })
+                  } else {
+                    setFilter({
+                      ...filter,
+                      jobProfileName: event.target.value
+                    })
+                  }
+                }}
+                value={filter.jobProfileName}
+                className='border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none'>
+                <option value="All Job Profiles">All Job Profiles</option>
+                {jobProfileList && jobProfileList.map((element: any, index: number) => {
+                  return <option key={index} value={element.jobProfileName}>{element.jobProfileName}</option>
+                })}
               </select>
             </div>
           </div>
@@ -198,7 +181,7 @@ export const TraningStatus = () => {
 
         <div className='py-6 relative'>
           {/* TABLE STARTS HERE */}
-          <table className='z-0'>
+          <table className='z-[-100000] absolute'>
             <tbody>
               <tr className='bg-[#ECEDFE] cursor-default'>
                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>
@@ -217,9 +200,11 @@ export const TraningStatus = () => {
                   Marks
                 </td>
               </tr>
-              {trainingStatus &&
-                trainingStatus.map((element: any, index: number) => {
-                  const latestAttendance = element.attendance[0];
+              {jobProfileId &&
+                jobProfileId.map((element: any, index: number) => {
+
+                  const result = useSelector((state: any) => state.training)
+                  console.log(result);
 
                   return (
                     <tr
@@ -228,30 +213,22 @@ export const TraningStatus = () => {
                       onClick={() => handleTableRowClick(element)}
                     >
                       <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                        {latestAttendance.date
-                          ? latestAttendance.date.slice(0, 10)
-                          : 'Not Available'}
+                        {element.createdAt.slice(0, 10)}
                       </td>
                       <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>
-                        {element.employeeId?.name
-                          ? element.employeeId?.name
+                        {element.jobProfileName
+                          ? element.jobProfileName
                           : 'Not Available'}
                       </td>
                       <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                        {latestAttendance.JobProfile
-                          ? latestAttendance.JobProfile
+                        {element.jobProfileName
+                          ? element.jobProfileName
                           : 'Not Available'}
                       </td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                        {latestAttendance.TrainingStatus
-                          ? latestAttendance.TrainingStatus
-                          : 'Not Available'}
+                      <td>
+                    
                       </td>
-                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                        {latestAttendance.Marks
-                          ? latestAttendance.Marks
-                          : 'Not Available'}
-                      </td>
+                    
                     </tr>
                   );
                 })}

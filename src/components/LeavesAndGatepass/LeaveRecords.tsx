@@ -25,13 +25,13 @@ export const LeaveRecords = () => {
     dispatch(getAllJobProfileAsync());
     dispatch(getAllApprovedLeavesAsync()).then((res: any) => {
       const employeeData = res.payload.allApprovedLeave;
-      const arr: any = [];
-      if (employeeData) {
-        for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
+        const arr: any = [];
+        if (employeeData) {
+          for (let i = 0; i < employeeData.length; i++) {
+            arr.push(employeeData[i].employeeId.name)
+          }
+          setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
         }
-        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-      }
     });
   }, [])
 
@@ -39,13 +39,13 @@ export const LeaveRecords = () => {
     console.log(filter);
     dispatch(getAllApprovedLeavesAsync(filter)).then((res: any) => {
       const employeeData = res.payload.allApprovedLeave;
-      const arr: any = [];
-      if (employeeData) {
-        for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
+        const arr: any = [];
+        if (employeeData) {
+          for (let i = 0; i < employeeData.length; i++) {
+            arr.push(employeeData[i].employeeId.name)
+          }
+          setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
         }
-        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-      }
     });
   }, [filter])
 
@@ -79,6 +79,8 @@ export const LeaveRecords = () => {
     );
     setSuggestions(filteredSuggestions);
   };
+
+  
   return (
     <div className="mx-10">
       <div className="pt-8">
@@ -185,25 +187,38 @@ export const LeaveRecords = () => {
         <div className='mt-2 overflow-auto'>
           <div className='py-6'>
             {/* TABLE STARTS HERE */}
-            <table>
+            <table className="w-full">
               <tbody>
                 <tr className='bg-[#ECEDFE] cursor-default'>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>ID</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date Approved</td>
                   <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave From</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Leave to</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Accepted By</td>
-                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Message</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Time Period</td>
+                  <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approving Supervisor</td>
                 </tr>
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
-                  return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{index + 1}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.from ? (element.from).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.to ? (element.to).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.acceptedBy?.name ? element.acceptedBy?.name : "Not Avilable"}</td>
-                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.message ? element.message : "Not Avilable"}</td>
-                  </tr>
+                  if (element.from && element.from) {
+                    const approvedDate = new Date(new Date(element.approvedDate).getTime() + new Date(element.approvedDate).getTimezoneOffset() * 60000);
+                    const day1 = String(approvedDate.getDate()).padStart(2, '0');
+                    const month1 = String(approvedDate.getMonth() + 1).padStart(2, '0');
+                    const year1 = approvedDate.getFullYear();
+                    const approvedDateFormatted = `${day1}/${month1}/${year1}`;
+                    const fromDate = new Date(new Date(element.from).getTime() + new Date(element.from).getTimezoneOffset() * 60000);
+                    const day2 = String(fromDate.getDate()).padStart(2, '0');
+                    const month2 = String(fromDate.getMonth() + 1).padStart(2, '0');
+                    const year2 = fromDate.getFullYear();
+                    const fromDateFormatted = `${day2}/${month2}/${year2}`;
+                    const toDate = new Date(new Date(element.to).getTime() + new Date(element.to).getTimezoneOffset() * 60000);
+                    const day3 = String(toDate.getDate()).padStart(2, '0');
+                    const month3 = String(toDate.getMonth() + 1).padStart(2, '0');
+                    const year3 = toDate.getFullYear();
+                    const toDateFormatted = `${day3}/${month3}/${year3}`;
+                    return <tr key={index} className='hover:bg-[#FAFAFA]' onClick={() => handleTableRowClick(element)}>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approvedDate ? approvedDateFormatted : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.from ? fromDateFormatted : "Not Avilable"} - {element.to ? toDateFormatted : "Not Avilable"}</td>
+                      <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.acceptedBy?.name ? element.acceptedBy?.name : "Not Avilable"}</td>
+                    </tr>
+                  }
                 })}
               </tbody>
             </table>
