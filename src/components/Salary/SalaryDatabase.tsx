@@ -96,7 +96,7 @@ useEffect(() => {
 
       {/* TABLE START HERE */}
       <div className="py-6 overflow-auto">
-        <table className="z-0">
+        <table className="z-0 w-full">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group Name</td>

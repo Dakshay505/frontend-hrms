@@ -119,7 +119,7 @@ export const TrainingSlice = createSlice({
               state.questions = action.payload;
               state.status = 'succeeded';
             })
-            .addCase(fetchQuizQuestionsAsync.rejected, (state, action) => {
+            .addCase(fetchQuizQuestionsAsync.rejected, (state) => {
               state.loading = false;
               // state.error = action.payload;
               state.status = 'failed';

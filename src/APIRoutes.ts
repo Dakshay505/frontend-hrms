@@ -1,7 +1,8 @@
-//export const apiPath = `http://localhost:5050`;
+
+export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
-export const apiPath =`https://hrms-lix0.onrender.com`;
+
 
 // JOB PROFILE API
 
@@ -79,7 +80,6 @@ export const addTrainingDocumentApiPath = `${apiPath}/api/v1/training/add`
 export const addTrainingQuizApiPath = `${apiPath}/api/v1/quiz/addQuestion`
 export const addAssesmentQuizApiPath = `${apiPath}/api/v1/quiz/getQuiz`
 export const SubmitAnswerApiPath = `${apiPath}/api/v1/quiz/submitAnswer`
-
 
 
 // notifications

@@ -18,7 +18,7 @@ import LoaderGif from '../../../assets/loadergif.gif'
 
 export const Employeeattendence = () => {
     const dispatch = useDispatch();
-    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.employees);
+    const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
     const myAttandenceList = useSelector((state: any) => state.attandence.myAttandence);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
@@ -250,7 +250,7 @@ export const Employeeattendence = () => {
                 <div className=''>
                     {attandenceValue === "Your Attandence" ? <div className="py-6 mb-24 overflow-auto">
                         {/* TABLE STARTS HERE */}
-                        <table>
+                        <table className="w-full">
                             <tbody>
                                 <tr className='bg-[#ECEDFE] cursor-default'>
                                     <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -324,7 +324,7 @@ export const Employeeattendence = () => {
                     {attandenceValue === "Staff Attandence" ?
                         <div className='py-6 mb-24 overflow-auto'>
                             {/* TABLE STARTS HERE */}
-                            <table>
+                            <table className="w-full">
                                 <tbody>
                                     <tr className='bg-[#ECEDFE] cursor-default'>
                                         <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>

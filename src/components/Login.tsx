@@ -20,9 +20,7 @@ export function Login() {
     }
     const onSubmit = (data: any) => {
         if (isValidEmail(data.email)) {
-            console.log("Valid email address!", data);
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
-                console.log("res", res.payload)
                 if (res.payload.success) {
                     setErrorMessage("");
                 } else {
@@ -35,9 +33,7 @@ export function Login() {
                 phone: data.email,
                 password: data.password
             }
-            console.log("Invalid email address!", data);
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
-                console.log("res", res.payload)
                 if (res.payload.success) {
                     setErrorMessage("");
                 } else {

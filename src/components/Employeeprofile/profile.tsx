@@ -6,7 +6,7 @@ import check from "../../assets/Check.png"
 import "../../deletebtn.css"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEmployeeAsync, getQrAssignAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { addImageAsync, deleteEmployeeAsync, getQrAssignAsync, getSingleEmployeeAsync, updateEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
@@ -18,7 +18,7 @@ import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 import XCircle from '../../assets/XCircle.svg'
 import PaperPlaneTilt from '../../assets/PaperPlaneTilt.svg';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
@@ -27,6 +27,7 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import X from "../../assets/X.svg";
 import EditPicture from "../../assets/EditPicture.svg";
+import LoaderGif from '../../assets/loadergif.gif'
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -34,6 +35,9 @@ export const EmployeeProfile = () => {
     const { handleSubmit, register } = useForm();
     const [employeeId, setEmployeeId] = useState("")
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+
+    const loaderStatus = useSelector((state: any) => state.employee.status)
+
     console.log("singleEmployee", singleEmployee)
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
@@ -75,9 +79,9 @@ export const EmployeeProfile = () => {
         setInputBoxEmailValue(singleEmployee.email);
         setInputBoxContactNumberValue(singleEmployee.contactNumber);
         setInputBoxGenderValue(singleEmployee.gender);
-        if(singleEmployee.profilePicture){
+        if (singleEmployee.profilePicture) {
             setProfilePicture(singleEmployee.profilePicture)
-        } else{
+        } else {
             setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
         }
         if (singleEmployee._id) {
@@ -201,13 +205,25 @@ export const EmployeeProfile = () => {
             <div>
                 <h1 className="text-2xl font-bold text-[#2E2E2E]">Employee Information</h1>
             </div>
+            {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+                <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
             <div className="flex mt-10 gap-6">
                 <div className="flex flex-col gap-2 items-center">
                     <div className="flex flex-col justify-center items-center gap-[16px] py-8 px-4 bg-[#FAFAFA] rounded-lg border border-solid border-[#DEDEDE] w-[192px] ">
                         <div className='relative'>
                             <img src={profilePicture} alt="Employee Image" className='rounded-full object-cover w-[144px] h-[144px]' />
                             <div className='absolute right-4 bottom-1 cursor-pointer'>
-                                <img src={EditPicture} className='w-[24px] h-[24px]' alt="" />
+                                <label className='cursor-pointer' htmlFor="ProPic"><img src={EditPicture} className='w-[24px] h-[24px]' alt="" /></label>
+                                <input onChange={(event: any) => {
+                                    console.log(event.target.files[0])
+                                    const formData = new FormData();
+                                    formData.append('file', event.target.files[0]);
+                                    formData.append('employeeId', employeeId);
+                                    dispatch(addImageAsync(formData)).then(() => {
+                                        dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
+                                    })
+                                }} className='hidden' id="ProPic" type="file" />
                             </div>
                         </div>
                         <p className="text-center text-[18px] leading-6 font-semibold text-[#2E2E2E]">
@@ -635,7 +651,9 @@ export const EmployeeProfile = () => {
             <div className='py-8'>
                 <div className='flex gap-3 items-center'>
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Attendance</h1>
-                    <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                    <Link to="/attendance-database">
+                        <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                    </Link>
                 </div>
                 <div className='py-8 overflow-auto'>
                     <table>

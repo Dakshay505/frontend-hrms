@@ -227,7 +227,7 @@ const SingleGroupSalary = () => {
                 </div>
             </div>
             <div className="py-6 mb-28 overflow-auto">
-                <table className="z-0">
+                <table className="z-0 w-full">
                     <tbody>
                         <tr className='bg-[#ECEDFE] cursor-default'>
                             <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Day and Date</td>

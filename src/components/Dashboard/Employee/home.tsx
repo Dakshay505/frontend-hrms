@@ -15,12 +15,10 @@ export const Employeehome = () => {
     const Employee = useSelector((state: any) => state.login.loggedInUserData?.employee);
     const myLeaveAndGatepassList = useSelector((state: any) => state.leave.myLeavesAndGatePass);
     const staffAttendanceList = useSelector((state: any) => state.attandence.staffAttendance)
-    console.log("staffAttendanceList", staffAttendanceList)
     const [myLeaves, setMyLeaves] = useState<any>([])
     const [leaves, setLeaves] = useState<any>([])
     useEffect(() => {
         if (myLeaveAndGatepassList) {
-            console.log("myLeaveAndGatepassList", myLeaveAndGatepassList)
             setMyLeaves(myLeaveAndGatepassList.filter((element: any) => {
                 return element.from
             }))

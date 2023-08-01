@@ -3,8 +3,12 @@ import usersThree from '../../assets/UsersThree.png'
 import GearSix from '../../assets/GearSix.png'
 import Briefcase from '../../assets/Briefcase.png'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
+
+    const data = useSelector((state: any) => state.login.loggedInUserData)
+    console.log(data);
     return (
         <div className="mx-10">
             <div className='pt-8'>

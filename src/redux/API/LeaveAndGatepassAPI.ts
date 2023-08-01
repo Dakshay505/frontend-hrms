@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createLeavesAndGatePassApiPath, getAcceptedGatePassApiPath, getAcceptedLeavesApiPath, getAllLeavesAndGatePassApiPath, getApprovedGatePassApiPath, getApprovedLeavesApiPath, getMyLeavesAndGatepassApiPath, getPendingGatePassApiPath, getPendingLeavesApiPath, getRejectedGatePassApiPath, getRejectedLeavesApiPath, updateAcceptedGatePassApiPath, updateAcceptedLeavesApiPath, updatePendingGatePassApiPath, updatePendingLeavesApiPath } from "../../APIRoutes";
+import { createLeavesAndGatePassApiPath, getAcceptedLeavesApiPath, getAllLeavesAndGatePassApiPath, getApprovedLeavesApiPath, getMyLeavesAndGatepassApiPath, getPendingLeavesApiPath, getRejectedLeavesApiPath, updateAcceptedGatePassApiPath, updateAcceptedLeavesApiPath, updatePendingGatePassApiPath, updatePendingLeavesApiPath } from "../../APIRoutes";
 // LEAVES
 
 function convertToQueryString(data: any) {
@@ -14,7 +14,7 @@ function convertToQueryString(data: any) {
   }
   return queryStr;
 }
-// READ APPROVED LEAVES
+// READ PENDING LEAVES
 export const getAllPendingLeaves = async () => {
   try {
     const { data } = await axios.get(`${getPendingLeavesApiPath}`, { withCredentials: true });
@@ -24,6 +24,7 @@ export const getAllPendingLeaves = async () => {
     console.log(error.response.data)
   }
 }
+
 // READ APPROVED LEAVES
 export const getAllApprovedLeaves = async (sendData: any) => {
   try {
@@ -35,6 +36,7 @@ export const getAllApprovedLeaves = async (sendData: any) => {
     console.log(error.response.data)
   }
 }
+
 // READ ACCEPTED LEAVES
 export const getAllAcceptedLeaves = async () => {
   try {
@@ -45,6 +47,7 @@ export const getAllAcceptedLeaves = async () => {
     console.log(error.response.data)
   }
 }
+
 // READ REJECTED LEAVES
 export const getAllRejectedLeaves = async () => {
   try {
@@ -55,16 +58,7 @@ export const getAllRejectedLeaves = async () => {
     console.log(error.response.data)
   }
 }
-// CREATE MYLEAVES LEAVES AND GATEPASS
-export const createLeavesAndGatePass = async (createData: any) => {
-  try {
-    const { data } = await axios.post(`${createLeavesAndGatePassApiPath}`, createData, { withCredentials: true });
-    return data;
-  }
-  catch (error: any) {
-    console.log(error.response.data)
-  }
-}
+
 // READ MYLEAVES LEAVES AND GATEPASS
 export const getMyLeavesAndGatePass = async () => {
   try {
@@ -75,6 +69,18 @@ export const getMyLeavesAndGatePass = async () => {
     console.log(error.response.data)
   }
 }
+
+// CREATE MYLEAVES LEAVES AND GATEPASS
+export const createLeavesAndGatePass = async (createData: any) => {
+  try {
+    const { data } = await axios.post(`${createLeavesAndGatePassApiPath}`, createData, { withCredentials: true });
+    return data;
+  }
+  catch (error: any) {
+    console.log(error.response.data)
+  }
+}
+
 // GET ALL LEAVES AND GATEPASS
 export const getAllLeavesAndGatePass = async () => {
   try {
@@ -85,6 +91,7 @@ export const getAllLeavesAndGatePass = async () => {
     console.log(error.response.data)
   }
 }
+
 // UPDATE PENDING LEAVES
 export const updatePendingLeaves = async (updatedData: any) => {
   try {
@@ -96,7 +103,8 @@ export const updatePendingLeaves = async (updatedData: any) => {
     console.log(error.response.data)
   }
 }
-// UPDATE REJECTED LEAVES
+
+// UPDATE ACCEPTED LEAVES
 export const updateAcceptedLeaves = async (updatedData: any) => {
 
   try {
@@ -109,50 +117,7 @@ export const updateAcceptedLeaves = async (updatedData: any) => {
   }
 }
 
-
-// GATEPASS
-// READ APPROVED GATEPASS
-export const getAllPendingGatePass = async () => {
-  try {
-    const { data } = await axios.get(`${getPendingGatePassApiPath}`, { withCredentials: true });
-    return data;
-  }
-  catch (error: any) {
-    console.log(error.response.data)
-  }
-}
-// READ APPROVED GATEPASS
-export const getAllApprovedGatePass = async (sendData: any) => {
-  const filterDatta = convertToQueryString(sendData);
-  try {
-    const { data } = await axios.get(`${getApprovedGatePassApiPath}?${filterDatta}`, { withCredentials: true });
-    return data;
-  }
-  catch (error: any) {
-    console.log(error.response.data)
-  }
-}
-// READ ACCEPTED GATEPASS
-export const getAllAcceptedGatePass = async () => {
-  try {
-    const { data } = await axios.get(`${getAcceptedGatePassApiPath}`, { withCredentials: true });
-    return data;
-  }
-  catch (error: any) {
-    console.log(error.response.data)
-  }
-}
-// READ REJECTED GATEPASS
-export const getAllRejectedGatePass = async () => {
-  try {
-    const { data } = await axios.get(`${getRejectedGatePassApiPath}`, { withCredentials: true });
-    return data;
-  }
-  catch (error: any) {
-    console.log(error.response.data)
-  }
-}
-// READ PENDING LEAVES
+// READ PENDING GATEPASS
 export const updatePendingGatePass = async (updatedData: any) => {
   try {
     const { data } = await axios.patch(`${updatePendingGatePassApiPath}`, updatedData, { withCredentials: true });
@@ -163,7 +128,8 @@ export const updatePendingGatePass = async (updatedData: any) => {
     console.log(error.response.data)
   }
 }
-// READ REJECTED LEAVES
+
+// READ ACCEPTED GATEPASS
 export const updateAcceptedGatePass = async (updatedData: any) => {
   try {
     const { data } = await axios.patch(`${updateAcceptedGatePassApiPath}`, updatedData, { withCredentials: true });

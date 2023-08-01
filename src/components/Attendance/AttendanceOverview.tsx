@@ -28,7 +28,7 @@ const AttendanceOverview = () => {
               <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
       <div className="mt-8 overflow-auto">
-        <table>
+        <table className="w-full">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Group Name</td>
@@ -39,11 +39,11 @@ const AttendanceOverview = () => {
             </tr>
             {groupAttendanceList && groupAttendanceList.map((element: any, index: number) => {
               return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer' onClick={() => { handleRowClick(element) }}>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.groupName ? element.groupName : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.present ? element.present : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{(element.totalEmployeesInGroup - element.present) ? (element.totalEmployeesInGroup - element.present) : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{((element.punchIn).length - (element.punchOut).length) ? ((element.punchIn).length - (element.punchOut).length) : "0"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.present ? element.present : "0"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{(element.totalEmployeesInGroup - element.present) ? (element.totalEmployeesInGroup - element.present) : "0"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{((element.punchIn).length - (element.punchOut).length) ? ((element.punchIn).length - (element.punchOut).length) : "0"}</td>
               </tr>
             })}
           </tbody>
