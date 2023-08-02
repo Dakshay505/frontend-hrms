@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
 import { getAllEmployeeAsync } from "../../redux/Slice/EmployeeSlice";
 import { fetchNotifications } from '../../redux/Slice/notificationSlice';
-
+import cross from "../../assets/X.png"
 export default function ShowNotification() {
     const dispatch = useDispatch();
     const [search, setSearch] = useState('');
@@ -34,7 +34,6 @@ export default function ShowNotification() {
         }
       };
       
-
     const handleInputChange = (event: any) => {
         if (event.target.value !== "") {
             setSearch(event.target.value);
@@ -43,6 +42,12 @@ export default function ShowNotification() {
             setSearch(event.target.value);
             setSuggestions([]);
         }
+    };
+
+    const handleClearSearch = () => {
+        setSearch("");
+        setSuggestions([]);
+        setNotifications([]);
     };
 
     const getSuggestions = (inputValue: any) => {
@@ -74,6 +79,16 @@ export default function ShowNotification() {
                                                 required
                                                 className="border border-solid border-[#DEDEDE] text-sm font-normal text-[#666666] w-[220px] h-10 px-[20px] focus:outline-none rounded"
                                             />
+                                            {search && (
+                                                <button
+                                                    type="button"
+                                                    className="absolute top-[15px] right-[23px] text-gray-500"
+                                                    onClick={handleClearSearch}
+                                                >
+                                                   <img src={cross} alt="" className='h-[10px] w-[10px]' />
+                                                        
+                                                </button>
+                                            )}
                                             {suggestions.length > 0 && (
                                                 <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
                                                     {suggestions.map((element: any, index: any) => (
@@ -112,7 +127,7 @@ export default function ShowNotification() {
                     </div>
                 </div>
             </div>
-            <table className="table w-[100%] mt-[3rem]">
+            <table className="table w-[70%] mt-[3rem]">
                 <thead>
                     <tr className='bg-[#ECEDFE] flex justify-between px-5 cursor-default'>
                         <th className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</th>
