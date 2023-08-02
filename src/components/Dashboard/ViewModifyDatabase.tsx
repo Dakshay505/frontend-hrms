@@ -8,17 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
 import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import glass from '../../assets/MagnifyingGlass.png'
+import LoaderGif from '../../assets/loadergif.gif'
 
 const ViewModifyDatabase = () => {
-    const itemsPerPage = 20; // Number of items per page
-    const [currentPage, setCurrentPage] = useState(1);
 
     const [filter, setFilter] = useState({
         name: "",
         groupName: "",
-        jobProfileName: "",
-        limit: itemsPerPage,
-        page: currentPage
+        jobProfileName: ""
     })
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter));
@@ -30,9 +27,11 @@ const ViewModifyDatabase = () => {
     const [search, setSearch] = useState('');
     const [suggestions, setSuggestions] = useState<any>([]);
 
-
     const dispatch = useDispatch();
     const employeeDetailList = useSelector((state: any) => state.employee.employees);
+
+    const loaderStatus = useSelector((state: any) => state.employee.status)
+
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles)
     const [path, setPath] = useState('/addemployee')
@@ -99,32 +98,6 @@ const ViewModifyDatabase = () => {
         setSuggestions(filteredSuggestions);
     };
 
-    // pagination 
-    const count = 9;
-
-    // Calculate the total number of pages
-    const employeePagination = Math.ceil((count || 0) / itemsPerPage);
-
-    const dispatchPagination = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
-        setFilter({ ...filter, page: pageNumber });
-        dispatch(getAllEmployeeAsync(filter));
-    };
-    const handleNextPage = () => {
-        const nextPage = currentPage + 1;
-        if (nextPage <= employeePagination) {
-            dispatchPagination(nextPage);
-        }
-    };
-
-    const handlePreviousPage = () => {
-        const previousPage = currentPage - 1;
-        if (previousPage >= 1) {
-            dispatchPagination(previousPage);
-        }
-    };
-    const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
-
     return (
 
         <div className='mx-10'>
@@ -172,7 +145,7 @@ const ViewModifyDatabase = () => {
                     </Link>
                 </div>
             </div>
-            {databaseValue === "Employees" && <div className='my-10 flex gap-5'>
+            {databaseValue === "Employees" && <div className='mt-10 flex gap-5'>
                 <div className='flex gap-4'>
                     <div>
                         <select
@@ -260,9 +233,12 @@ const ViewModifyDatabase = () => {
                     </div>
                 </div>
             </div>}
+            {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+                <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
             <div className=''>
-                <div className='mt-10 overflow-auto'>
-                    <div className='py-6'>
+                <div className='mt-3 overflow-auto'>
+                    <div className='py-5'>
                         {/* TABLE FOR EMPLOYEE */}
                         {databaseValue === "Employees" && <table className='w-full'>
                             <tbody>
@@ -290,45 +266,9 @@ const ViewModifyDatabase = () => {
                                         </td>
                                     </tr>
                                 })}
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-
-                                    <td>
-                                        <div className="flex gap-[10px] justify-center mt-4">
-                                            <button
-                                                className="px-3 py-2 mx-1"
-                                                onClick={handlePreviousPage}
-                                                disabled={currentPage === 1}
-                                            >
-                                                &laquo;
-
-                                            </button>
-
-                                            {pageNumbers.map((page) => (
-                                                <button
-                                                    key={page}
-                                                    className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
-                                                    onClick={() => dispatchPagination(page)}
-                                                >
-                                                    {page}
-                                                </button>
-                                            ))}
-
-                                            <button
-                                                className="px-3 py-2 mx-1"
-                                                onClick={handleNextPage}
-                                                disabled={currentPage === employeePagination}
-                                            >
-                                                &raquo;
-                                            </button>
-                                        </div>
-                                    </td>
-
-                                </tr>
                             </tbody>
                         </table>}
+                        
                         {/* TABLE FOR EMPLOYEE ENDS */}
                         {/* TABLE FOR DEPARTMENT */}
                         {databaseValue === "Groups" && <table className='w-full'>

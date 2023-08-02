@@ -29,6 +29,7 @@ export const createEmployee = async (employeeData: any) => {
 // UPDATE
 export const updateEmployee = async (employeeData: any) => {
   try {
+    console.log("employeeData", employeeData)
     const { data } = await axios.patch(
       `${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData.data,
       { withCredentials: true }
