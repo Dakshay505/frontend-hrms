@@ -92,7 +92,6 @@ const UpdateHierarcy = () => {
             <select
               onChange={(event: any) => setSelectedValue(event.target.value)}
               className="px-5 bg-[#ECEDFE] h-10 rounded-lg text-sm font-medium text-[#283093] focus:outline-none">
-              <option>Groups</option>
               <option>Job Profile</option>
               <option>Employee</option>
             </select>

@@ -1,30 +1,42 @@
 import axios from "axios"
 import { apiPath } from "./APIRoutes"
 import { useEffect, useState } from "react";
-import GroupNode1 from "./components/Dashboard/GroupNode1";
+import JobProfileNode1 from "./components/Dashboard/jobProfileNode1";
 
 const Hierarchy1 = () => {
-    // const [noParentJobProfileArray, setnoParentJobProfileArray] = useState<any>([]);
-    const [noParentGroupArray, setnoParentGroupArray] = useState<any>([]);
-    const getGroupWithNoParent = async () => {
-        try {
-          const { data } = await axios.get(`${apiPath}/api/v1/group/getgroupnoparent`)
-          setnoParentGroupArray(data)
-          return data;
-        }
-        catch (err) {
-          console.log(err);
-        }
-      }
-      useEffect(() => {
-        getGroupWithNoParent();
-      }, []);
+  const [noParentJobProfileArray, setnoParentJobProfileArray] = useState<any>([]);
+
+  // const getGroupWithNoParent = async () => {
+  //     try {
+  //       const { data } = await axios.get(`${apiPath}/api/v1/group/getgroupnoparent`)
+  //       setnoParentGroupArray(data)
+  //       return data;
+  //     }
+  //     catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  const getJobProfileWithNoParent = async () => {
+    const { data } = await axios.get(
+      `${apiPath}/api/v1/jobprofile/getjobprofilewithnoparent`
+    );
+    setnoParentJobProfileArray(data.jobProfile);
+    return data.jobProfile;
+  };
+  useEffect(() => {
+    getJobProfileWithNoParent()
+  }, []);
+  console.log("no parent jobProfile", noParentJobProfileArray)
   return (
-    <div className="mt-10 border border-solid border-[#DEDEDE] py-3 rounded bg-[#FAFAFA]">
-          {noParentGroupArray && noParentGroupArray.map((element: any, index: number) => {
-            return <GroupNode1 key={index} group={element} />
-          })}
-        </div>
+    <div>
+      {noParentJobProfileArray &&
+        noParentJobProfileArray.map((childProfile: any, index: number) => (
+          <JobProfileNode1
+            key={index}
+            jobProfile={childProfile}
+          />
+        ))}
+    </div>
   )
 }
 
