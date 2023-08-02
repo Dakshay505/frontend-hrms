@@ -133,6 +133,7 @@ export const updatePendingGatePass = async (updatedData: any) => {
 export const updateAcceptedGatePass = async (updatedData: any) => {
   try {
     const { data } = await axios.patch(`${updateAcceptedGatePassApiPath}`, updatedData, { withCredentials: true });
+    console.log(data);
     return data;
   }
   catch (error: any) {

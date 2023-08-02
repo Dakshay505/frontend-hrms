@@ -23,6 +23,7 @@ export const createEmployee = async (employeeData: any) => {
     return data;
   } catch (error: any) {
     console.log(error.response.data);
+    return error.response.data
   }
 };
 // UPDATE
@@ -34,7 +35,7 @@ export const updateEmployee = async (employeeData: any) => {
     );
     return data;
   } catch (error: any) {
-    console.log(error.response.data);
+    return error.response.data
   }
 };
 
@@ -169,6 +170,6 @@ export const newPassword = async (sendData: any) => {
     });
     return data;
   } catch (err: any) {
-    console.log(err.response.data);
+    return err.response.data
   }
 };

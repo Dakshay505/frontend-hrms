@@ -7,6 +7,7 @@ import signin from "../assets/SignIn.png"
 import { Navigate } from 'react-router-dom';
 import XCircle from "../assets/XCircle.svg"
 import LoaderGif from '../assets/loadergif.gif'
+import toast from 'react-hot-toast';
 
 export function Login() {
     const [errorMessage, setErrorMessage] = useState("")
@@ -21,6 +22,11 @@ export function Login() {
     const onSubmit = (data: any) => {
         if (isValidEmail(data.email)) {
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
+                if (res.payload.success) {
+                    toast.success(res.payload.message);
+                } else {
+                    toast.error(res.payload.message);
+                }
                 if (res.payload.success) {
                     setErrorMessage("");
                 } else {

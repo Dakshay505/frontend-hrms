@@ -519,7 +519,7 @@ function App() {
   }
 
 
-  
+
   useEffect(() => {
     const newSocket = io(`${apiPath}?employeeId=${idd}`);
     newSocket.on('connect', () => {
@@ -550,7 +550,10 @@ function App() {
   return (
     <React.StrictMode>
       <RouterProvider router={router} />
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </React.StrictMode>
   );
 }

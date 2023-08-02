@@ -12,6 +12,7 @@ import XCircle from '../../assets/XCircle.svg'
 import axios from 'axios';
 import { getOtpApiPath, verifyApiPath } from '../../APIRoutes';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AddEmployee = () => {
     const dispatch = useDispatch();
@@ -194,7 +195,12 @@ const AddEmployee = () => {
                         }
                         console.log(data);
                         setShowOtp(true);
-                        dispatch(createEmployeeAsync(data)).then(() => {
+                        dispatch(createEmployeeAsync(data)).then((res: any) => {
+                            if(res.payload.success){
+                                toast.success(res.payload.message);
+                            } else{
+                                toast.error(res.payload.message);
+                            }
                             reset();
                             if (!otpCheck) {
                                 getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {

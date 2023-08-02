@@ -6,7 +6,6 @@ import { adminLoginApiPath, employeeLoginApiPath, getLoginDataApiPath, logoutApi
 export const adminLogin = async (loginData: any) => {
   try {
     const { data } = await axios.post(`${adminLoginApiPath}`, loginData, {withCredentials: true});
-    // console.log(data);
     return data;
   } catch (error:any) {
     return error.response.data
