@@ -9,20 +9,37 @@ import Pencil from '../../assets/PencilSimple.svg'
 import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import glass from '../../assets/MagnifyingGlass.png'
 import LoaderGif from '../../assets/loadergif.gif'
+import CaretLeft from '../../assets/CaretLeft.svg'
+import CaretRight1 from '../../assets/CaretRight1.svg'
 
 const ViewModifyDatabase = () => {
+    const [count, setCount] = useState(10);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     const [filter, setFilter] = useState({
         name: "",
         groupName: "",
-        jobProfileName: ""
+        jobProfileName: "",
+        page: 1,
+        limit: 20
     })
     useEffect(() => {
-        dispatch(getAllEmployeeAsync(filter));
+        dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
+            setCount(data.payload.count)
+        });
     }, [filter])
 
-    // SEARCH
+    // PAGINATION = 
+    useEffect(() => {
+        setTotalPage(Math.ceil(count / filter.limit))
+    }, [count])
 
+    useEffect(() => {
+        setFilter({...filter, page: page})
+    }, [page])
+
+    // SEARCH
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
     const [suggestions, setSuggestions] = useState<any>([]);
@@ -39,6 +56,7 @@ const ViewModifyDatabase = () => {
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
+            setCount(data.payload.count)
             const employeeData = data.payload.employees;
             const arr = [];
             for (let i = 0; i < employeeData.length; i++) {
@@ -68,6 +86,21 @@ const ViewModifyDatabase = () => {
         navigate(`/jobprofile-info`, { state: { data: data } });
     }
 
+    const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([])
+
+    useEffect(() => {
+        setPagiArrIncludes([page - 1])
+    }, [page])
+    const pagination = () => {
+        const element = [];
+        for (let i = 0; i < totalPage; i++) {
+            element.push(<p onClick={() => {
+                setPage(i + 1)
+                setPagiArrIncludes([i])
+            }} className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""} rounded-full px-3 cursor-pointer`} key={i}>{i + 1}</p>)
+        }
+        return element
+    }
 
     const handleInputChange = (event: any) => {
         if (event.target.value !== "") {
@@ -268,8 +301,25 @@ const ViewModifyDatabase = () => {
                                 })}
                             </tbody>
                         </table>}
-                        
                         {/* TABLE FOR EMPLOYEE ENDS */}
+
+                        {/* PAGINATION STARTS */}
+                        <div className='flex gap-4 items-center justify-center'>
+                            <div onClick={() => {
+                                if (page > 1) {
+                                    setPage(page - 1)
+                                }
+                            }}> <img src={CaretLeft} alt="" /> </div>
+                            {pagination()}
+                            <div onClick={() => {
+                                if(page !== totalPage){
+                                    setPage(page + 1)
+                                }
+                            }}> <img src={CaretRight1} alt="" /></div>
+                        </div>
+                        {/* PAGINATIN ENDS */}
+
+
                         {/* TABLE FOR DEPARTMENT */}
                         {databaseValue === "Groups" && <table className='w-full'>
                             <tbody>
