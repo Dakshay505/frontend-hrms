@@ -27,6 +27,7 @@ export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfi
 export const getQrAssignApiPath = `${apiPath}/api/v1/employee/docs/getProofPicture`
 export const updatePasswordApiPath = `${apiPath}/api/v1/employee/changePassword`
 export const newPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`
+export const salaryLogApiPath = `${apiPath}/api/v1/employee/salaryLog`
 
 // OTP VERIFICATION
 export const getOtpApiPath = `${apiPath}/api/v1/otpVerify/getotp`

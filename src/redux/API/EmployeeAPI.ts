@@ -6,6 +6,7 @@ import {
   getQrAssignApiPath,
   getSingleEmployeeApiPath,
   newPasswordApiPath,
+  salaryLogApiPath,
   updateEmployeeApiPath,
   updatePasswordApiPath,
   uploadDocumentApiPath,
@@ -124,18 +125,6 @@ export const getEmployeeImage = async (employeeId: any) => {
   }
 };
 
-// pagination
-export const pagination = async (page: any) => {
-  try {
-    const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
-      withCredentials: true, 
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
-};
 
 
 
@@ -174,3 +163,16 @@ export const newPassword = async (sendData: any) => {
     return err.response.data
   }
 };
+
+export const salaryLog = async (employeeId: any) => {
+try {
+  const { data } = await axios.get(`${salaryLogApiPath}/${employeeId}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    return err.response.data
+  }
+};
+
+

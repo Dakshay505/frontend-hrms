@@ -2,7 +2,7 @@ import { useEffect, useState, } from 'react';
 
 import "../../../deletebtn.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { getQrAssignAsync } from '../../../redux/Slice/EmployeeSlice';
+import { getQrAssignAsync, salaryLogAsync } from '../../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
@@ -18,7 +18,7 @@ import CaretUp from "../../../assets/CaretUp.svg";
 import X from "../../../assets/X.svg";
 import LoaderGif from '../../../assets/loadergif.gif'
 import Picture from './Picture';
-
+import SalaryLog from './SalaryLog';
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
@@ -51,6 +51,7 @@ export const EmployeeProfile = () => {
         }
         if (singleEmployee._id) {
             dispatch(getQrAssignAsync(singleEmployee._id));
+            dispatch(salaryLogAsync(singleEmployee._id))
         }
     }, [singleEmployee])
 
@@ -68,10 +69,6 @@ export const EmployeeProfile = () => {
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
     }, [])
-
-    
-
-
 
     const documentList = [
         {
@@ -128,6 +125,8 @@ export const EmployeeProfile = () => {
                 <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
             <Picture />        
+
+            <SalaryLog />
 
             {/* QR Assigning Logs STARTS HERE */}
             {qrAssign && qrAssign.length > 0 && <div className='mt-10'>
