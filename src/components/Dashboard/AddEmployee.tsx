@@ -196,13 +196,14 @@ const AddEmployee = () => {
                         console.log(data);
                         setShowOtp(true);
                         dispatch(createEmployeeAsync(data)).then((res: any) => {
-                            if(res.payload.success){
-                                toast.success(res.payload.message);
-                            } else{
-                                toast.error(res.payload.message);
-                            }
-                            reset();
+                            
                             if (!otpCheck) {
+                                if(res.payload.success){
+                                    toast.success(res.payload.message);
+                                    reset();
+                                } else{
+                                    toast.error(res.payload.message);
+                                }
                                 getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
                                     if (res.data.Status === "Success") {
                                         setOtpSent("OTP Sent");
@@ -213,11 +214,23 @@ const AddEmployee = () => {
                                 })
                             } else {
                                 if (addMoreEmployee) {
-                                    resetFields();
+                                    if(res.payload.success){
+                                        toast.success(res.payload.message);
+                                        reset();
+                                        resetFields();
+                                    } else{
+                                        toast.error(res.payload.message);
+                                    }
                                 }
                                 if (!addMoreEmployee) {
-                                    resetFields();
-                                    navigate("/view-modify-database")
+                                    if(res.payload.success){
+                                        toast.success(res.payload.message);
+                                        resetFields();
+                                        reset();
+                                        navigate("/view-modify-database")
+                                    } else{
+                                        toast.error(res.payload.message);
+                                    }
                                 }
                             }
                         })
