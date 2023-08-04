@@ -13,6 +13,7 @@ const JobProfileNode1 = ({ jobProfile }: any) => {
   }
   const getEmployee = async () => {
     const { data } = await axios.get(`${apiPath}/api/v1/employee/emp?jobProfileName=${encodeURIComponent(jobProfile.jobProfileName)}`, { withCredentials: true })
+    console.log("data", data)
     setEmployee(data.employees)
     return data.employees;
   }

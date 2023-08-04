@@ -136,9 +136,9 @@ export const EmployeeProfile = () => {
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>QR Assigning Logs</h1>
                 </div>
                 <div className='mt-6 pb-6 overflow-auto'>
-                    <div className='grid grid-cols-4 gap-5 w-[1260px]'>
+                    <div className='flex gap-5'>
                         {qrAssign && qrAssign.map((element: any, index: number) => {
-                            return <div key={index} className='flex gap-6 justify-between py-4 px-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] w-[297px]'>
+                            return <div key={index} className='flex gap-6 justify-between py-4 px-6 border border-solid border-[#DEDEDE] rounded-lg bg-[#FAFAFA] min-w-[297px]'>
                                 <div className='flex items-center justify-center'>
                                     <img src={profilePicture} className='w-16 h-16 rounded-full' alt="" />
                                 </div>
@@ -181,9 +181,9 @@ export const EmployeeProfile = () => {
                     <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                 </div>
                 <div className='mt-6 pb-6 overflow-auto'>
-                    <div className='grid grid-cols-4 gap-5 w-[872px]'>
+                    <div className='flex gap-5'>
                         {documentList && documentList.map((element: any, index: any) => {
-                            return <div key={index} className='w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
+                            return <div key={index} className='min-w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
                                 <img src={DocumentFrame} className='w-full' alt="" />
                                 <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.documentName}</p>
                             </div>
