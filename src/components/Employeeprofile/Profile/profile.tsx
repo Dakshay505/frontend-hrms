@@ -1,14 +1,13 @@
 import { useEffect, useState, } from 'react';
-
 import "../../../deletebtn.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { getQrAssignAsync, salaryLogAsync } from '../../../redux/Slice/EmployeeSlice';
+import { getQrAssignAsync, getSingleEmployeeAsync, salaryLogAsync } from '../../../redux/Slice/EmployeeSlice';
 import { getAllJobProfileAsync } from '../../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../../redux/Slice/GroupSlice';
 import ArrowSqureOut from '../../../assets/ArrowSquareOut.svg'
 import ArrowSqureOutBlack from '../../../assets/ArrowSquareOutBlack.svg'
 import DocumentFrame from '../../../assets/documentFrame.svg'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import GreenCheck from '../../../assets/GreenCheck.svg';
 import RedX from '../../../assets/RedX.svg';
 import SpinnerGap from '../../../assets/SpinnerGap.svg'
@@ -22,17 +21,13 @@ import SalaryLog from './SalaryLog';
 
 export const EmployeeProfile = () => {
     const dispatch = useDispatch();
+    const location = useLocation();
+    const [additionalData, setAdditionalData] = useState<any>(location.state?.additionalData);
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
-
     const loaderStatus = useSelector((state: any) => state.employee.status)
-
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
-    
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);
-
-
-    const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");
-
+    console.log("qrAssign", qrAssign)
     const [profilePicture, setProfilePicture] = useState("https://cdn-icons-png.flaticon.com/512/219/219983.png")
 
     function formatDate(date: any) {
@@ -43,13 +38,12 @@ export const EmployeeProfile = () => {
     }
 
     useEffect(() => {
-        setInputBoxNameValue(singleEmployee.name);
         if (singleEmployee.profilePicture) {
             setProfilePicture(singleEmployee.profilePicture)
         } else {
             setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
         }
-        if (singleEmployee._id) {
+        if(singleEmployee._id){
             dispatch(getQrAssignAsync(singleEmployee._id));
             dispatch(salaryLogAsync(singleEmployee._id))
         }
@@ -58,16 +52,24 @@ export const EmployeeProfile = () => {
     useEffect(() => {
         const nextDate = new Date();
         const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        const data = { name: inputBoxNameValue, date: formatDate(date), nextDate: formatDate(nextDate) }
-        if (inputBoxNameValue === singleEmployee.name) {
-            dispatch(getAllAttandenceAsync(data)).then((res: any) => {
-                setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
-            })
-        }
-    }, [inputBoxNameValue])
-    useEffect(() => {
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
+        if (additionalData !== "") {
+            dispatch(getSingleEmployeeAsync(additionalData)).then((res: any) => {
+                dispatch(salaryLogAsync(res.payload.employeeData._id));
+                dispatch(getQrAssignAsync(res.payload.employeeData._id));
+                let data = {};
+                if (res.payload.employeeData.employeeCode) {
+                    data = { name: res.payload.employeeData.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
+                } else {
+                    data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
+                }
+                dispatch(getAllAttandenceAsync(data)).then((res: any) => {
+                    setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
+                })
+            })
+            setAdditionalData("");
+        } 
     }, [])
 
     const documentList = [
@@ -124,7 +126,7 @@ export const EmployeeProfile = () => {
             {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
                 <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
-            <Picture />        
+            <Picture />
 
             <SalaryLog />
 

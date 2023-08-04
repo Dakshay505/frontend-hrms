@@ -7,10 +7,10 @@ import { useState } from "react"
 const SalaryLog = () => {
 
     const salaryLogList = useSelector((state: any) => state.employee.salaryLogSingleEmployee);
-    console.log("salaryLogList", salaryLogList)
     const [showPopup, setShowPopup] = useState<any>([])
     return (
-        <div className="mt-10">
+        <>
+        {salaryLogList && salaryLogList.length > 0 && <div className="mt-10">
             <div>
                 <h1 className='text-2xl font-bold text-[#2E2E2E]'>Salary Logs</h1>
             </div>
@@ -26,7 +26,7 @@ const SalaryLog = () => {
                             <div className="flex flex-col gap-4">
                                 <div>
                                     <div>
-                                        <h3 className="text-[16px] leading-5 font-medium text-[#1C1C1C] tracking-[0.1px]">₹ {(element.overTimeRate).toFixed(2)} per hour</h3>
+                                        <h3 className="text-[16px] leading-5 font-medium text-[#1C1C1C] tracking-[0.1px]">₹ {element.overTimeRate && (element.overTimeRate).toFixed(2)} per hour</h3>
                                     </div>
                                     <div>
                                         <p className="text-sm font-medium  text-[#666666] tracking-[0.25px]">{formattedDate}</p>
@@ -85,7 +85,7 @@ const SalaryLog = () => {
                                                 </tr>
                                                 <tr>
                                                     <td className="text-sm font-semibold text-[#3B3B3B] tracking-[0.25px] px-3 pt-3">Overtime Rate</td>
-                                                    <td className="text-sm font-normal text-[#3B3B3B] tracking-[0.25px] px-3 pt-3">₹ {(element.overTimeRate).toFixed(2)}</td>
+                                                    <td className="text-sm font-normal text-[#3B3B3B] tracking-[0.25px] px-3 pt-3">₹ {element.overTimeRate && (element.overTimeRate).toFixed(2)}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -96,7 +96,8 @@ const SalaryLog = () => {
                     )
                 })}
             </div>
-        </div >
+        </div >}
+        </>
     )
 }
 

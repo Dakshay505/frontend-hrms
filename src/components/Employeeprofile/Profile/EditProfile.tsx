@@ -16,7 +16,6 @@ import { getOtpApiPath, verifyApiPath } from "../../../APIRoutes"
 const EditProfile = () => {
     const dispatch = useDispatch()
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
-    console.log("singleEmployee", singleEmployee)
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
 
@@ -111,7 +110,6 @@ const EditProfile = () => {
             <form
                 onSubmit={handleSubmit((data: any) => {
                     const { overTime } = data;
-                    console.log("overTime", overTime)
                     if (overTime === "Yes") {
                         data = { ...data, overTime: true }
                     }
@@ -408,7 +406,6 @@ const EditProfile = () => {
                                 <button
                                     onClick={() => {
                                         dispatch(newPasswordAsync({ employeeId: employeeId, password: inputBoxPasswordValue })).then((res: any) => {
-                                            console.log("hihihihi")
                                             if (res.payload.success) {
                                                 toast.success(res.payload.message);
                                             } else {
@@ -700,7 +697,7 @@ const EditProfile = () => {
                             <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Overtime Rate</p>
                         </div>
                         <div>
-                            <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{inputBoxOverTimeValue && (singleEmployee.overTimeRate).toFixed(2)}</p>
+                            <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{inputBoxOverTimeValue && singleEmployee.overTimeRate && (singleEmployee.overTimeRate).toFixed(2)}</p>
                         </div>
                     </div >
                 </div>

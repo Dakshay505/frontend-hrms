@@ -245,7 +245,6 @@ export const EmployeeSlice = createSlice({
       })
       .addCase(salaryLogAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        console.log("action.payload", action.payload)
         state.salaryLogSingleEmployee =  action.payload.salaryLog;
       })
       .addCase(getQrAssignAsync.pending, (state) => {

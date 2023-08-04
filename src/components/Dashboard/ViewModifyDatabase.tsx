@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllGroupsAsync, getSingleGroupAsync } from '../../redux/Slice/GroupSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
@@ -71,9 +71,8 @@ const ViewModifyDatabase = () => {
     const navigate = useNavigate();
     const handleTableRowClick = (data: any) => {
         const employeeId = { employeeId: data._id }
-        dispatch(getSingleEmployeeAsync(employeeId));
         dispatch(getEmployeeImageAsync(employeeId));
-        navigate(`/employee-profile`, { state: { data: data } });
+        navigate(`/employee-profile`, { state: { additionalData: employeeId } });
     }
     const handleGroupTableRowClick = (data: any) => {
         const groupId = { groupId: data._id }
@@ -304,7 +303,7 @@ const ViewModifyDatabase = () => {
                         {/* TABLE FOR EMPLOYEE ENDS */}
 
                         {/* PAGINATION STARTS */}
-                        <div className='flex gap-4 items-center justify-center'>
+                        {databaseValue === "Employees" && <div className='flex gap-4 items-center justify-center'>
                             <div onClick={() => {
                                 if (page > 1) {
                                     setPage(page - 1)
@@ -316,7 +315,7 @@ const ViewModifyDatabase = () => {
                                     setPage(page + 1)
                                 }
                             }}> <img src={CaretRight1} alt="" /></div>
-                        </div>
+                        </div>}
                         {/* PAGINATIN ENDS */}
 
 

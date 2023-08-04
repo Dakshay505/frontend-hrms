@@ -8,15 +8,12 @@ import { updateHierarchyGroupAsync, updateHierarchyJobProfileAsync } from "../..
 import axios from "axios";
 import { apiPath } from "../../APIRoutes";
 import JobProfileNode from "./jobProfileNode";
-import GroupNode from "./GroupNode";
 import Hierarchy1 from "../../hierarchy1";
 
 const UpdateHierarcy = () => {
-  const [selectedValue, setSelectedValue] = useState("Groups");
+  const [selectedValue, setSelectedValue] = useState("Job Profile");
   const [noParentJobProfileArray, setnoParentJobProfileArray] = useState<any>([]);
-  const [noParentGroupArray, setnoParentGroupArray] = useState<any>([]);
   const dispatch = useDispatch();
-  const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
   const getJobProfileWithNoParent = async () => {
@@ -24,23 +21,12 @@ const UpdateHierarcy = () => {
     setnoParentJobProfileArray(data.jobProfile)
     return data.jobProfile;
   }
-  const getGroupWithNoParent = async () => {
-    try {
-      const { data } = await axios.get(`${apiPath}/api/v1/group/getgroupnoparent`)
-      setnoParentGroupArray(data)
-      return data;
-    }
-    catch (err) {
-      console.log(err);
-    }
-  }
 
 
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
     getJobProfileWithNoParent();
-    getGroupWithNoParent();
   }, []);
   const { handleSubmit, register } = useForm();
   return (
@@ -80,7 +66,6 @@ const UpdateHierarcy = () => {
             dispatch(updateHierarchyGroupAsync(data))
               .then(() => {
                 dispatch(getAllGroupsAsync());
-                getGroupWithNoParent();
               })
           }
         })}>
@@ -104,47 +89,10 @@ const UpdateHierarcy = () => {
           })}
         </div> : ""}
 
-        {selectedValue === "Groups" ? <div className="mt-10 border border-solid border-[#DEDEDE] py-3 rounded bg-[#FAFAFA]">
-          {noParentGroupArray && noParentGroupArray.map((element: any, index: number) => {
-            return <GroupNode key={index} group={element} />
-          })}
-        </div> : ""}
         {selectedValue === "Employee" ? <div className="mt-10 border border-solid border-[#DEDEDE] py-3 rounded bg-[#FAFAFA]">
          <Hierarchy1/>
         </div> : ""}
 
-        {(selectedValue === "Groups") ? <div className="flex gap-10 mt-10">
-          <div className='flex flex-col gap-3'>
-            <div>
-              <p className='text-sm font-normal text-[#1C1C1C]'>Groups</p>
-            </div>
-            <div>
-              <select
-                {...register('groupName', { required: true })}
-                className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
-                <option>All Groups</option>
-                {groupList && groupList.map((element: any, index: number) => {
-                  return <option key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
-                })}
-              </select>
-            </div>
-          </div>
-          <div className='flex flex-col gap-3'>
-            <div>
-              <p className='text-sm font-normal text-[#1C1C1C]'>Parent Group</p>
-            </div>
-            <div>
-              <select
-                {...register('parentGroupName')}
-                className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
-                <option>All Groups</option>
-                {groupList && groupList.map((element: any, index: number) => {
-                  return <option value={element.groupName} key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
-                })}
-              </select>
-            </div>
-          </div>
-        </div> : ""}
         {(selectedValue === "Job Profile") ? <div className="flex gap-10 mt-10">
           <div className='flex flex-col gap-3'>
             <div>
