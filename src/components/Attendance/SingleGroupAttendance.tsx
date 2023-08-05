@@ -23,7 +23,6 @@ const SingleGroupAttendance = () => {
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const allAttandenceList = useSelector((state: any) => state.attandence.singleGroupAttendance)
-    console.log("allAttandenceList", allAttandenceList);
 
     const loaderStatus = useSelector((state: any) => state.attandence.status)
 

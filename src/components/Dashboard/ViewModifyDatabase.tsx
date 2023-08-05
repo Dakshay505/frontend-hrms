@@ -27,6 +27,16 @@ const ViewModifyDatabase = () => {
     useEffect(() => {
         dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
             setCount(data.payload.count)
+            const employeeData = data.payload.employees;
+            const arr = [];
+            for (let i = 0; i < employeeData.length; i++) {
+                if (employeeData[i].profilePicture) {
+                    arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                } else {
+                    arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                }
+            }
+            setFetchedSuggestions(arr)
         });
     }, [filter])
 
@@ -36,7 +46,7 @@ const ViewModifyDatabase = () => {
     }, [count])
 
     useEffect(() => {
-        setFilter({...filter, page: page})
+        setFilter({ ...filter, page: page })
     }, [page])
 
     // SEARCH
@@ -55,15 +65,18 @@ const ViewModifyDatabase = () => {
     const [databaseValue, setDatabaseValue] = useState("Employees");
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     useEffect(() => {
-        dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
-            setCount(data.payload.count)
-            const employeeData = data.payload.employees;
+        dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
+            const employeeData = res.payload.employees;
             const arr = [];
             for (let i = 0; i < employeeData.length; i++) {
-                arr.push(employeeData[i].name)
+                if (employeeData[i].profilePicture) {
+                    arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                } else {
+                    arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                }
             }
             setFetchedSuggestions(arr)
-        });
+        })
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
     }, [])
@@ -102,30 +115,25 @@ const ViewModifyDatabase = () => {
     }
 
     const handleInputChange = (event: any) => {
+        setSearch(event.target.value);
+        setFilter({
+            ...filter,
+            name: event.target.value
+        })
         if (event.target.value !== "") {
+            setPage(1);
             setLabelVisible(false);
-            setSearch(event.target.value);
-            setFilter({
-                ...filter,
-                name: event.target.value
-            })
             getSuggestions(event.target.value);
         }
         else {
             setLabelVisible(true);
-            setSearch(event.target.value);
-            setFilter({
-                ...filter,
-                name: event.target.value
-            })
             setSuggestions([]);
         }
     };
 
     const getSuggestions = (inputValue: any) => {
-
         const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-            suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+            (suggestion.name)?.toLowerCase().includes(inputValue.toLowerCase())
         );
         setSuggestions(filteredSuggestions);
     };
@@ -246,7 +254,7 @@ const ViewModifyDatabase = () => {
                             value={search}
                             className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
                         />
-                        {suggestions.length > 0 && (
+                        {/* {suggestions.length > 0 && (
                             <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
                                 {suggestions.map((suggestion: any, index: any) => (
                                     <input type="text" readOnly key={index}
@@ -260,6 +268,28 @@ const ViewModifyDatabase = () => {
                                             setSuggestions([]);
                                         }} />
                                 ))}
+                            </div>
+                        )} */}
+                        {suggestions.length > 0 && (
+                            <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                {suggestions.map((element: any, index: any) => {
+                                    return <div key={index} onClick={() => {
+                                        setSearch(element.name);
+                                        setFilter({
+                                            ...filter,
+                                            name: element.name
+                                        })
+                                        setSuggestions([]);
+                                    }} className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer">
+                                        <div>
+                                            <img src={element.profilePicture} className="w-[50px] h-[50px] rounded-full" alt="" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium #1C1C1C">{element.name}</p>
+                                            <p className="text-[12px] leading-5 font-normal text-[#757575]">{element.jobProfileName}</p>
+                                        </div>
+                                    </div>
+                                })}
                             </div>
                         )}
                     </div>
@@ -311,7 +341,7 @@ const ViewModifyDatabase = () => {
                             }}> <img src={CaretLeft} alt="" /> </div>
                             {pagination()}
                             <div onClick={() => {
-                                if(page !== totalPage){
+                                if (page !== totalPage) {
                                     setPage(page + 1)
                                 }
                             }}> <img src={CaretRight1} alt="" /></div>

@@ -24,6 +24,9 @@ const EditProfile = () => {
     const [showInputBoxName, setShowInputBoxName] = useState(false);
     const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");
 
+    const [showInputBoxEmployeeCode, setShowInputBoxEmployeeCode] = useState(false);
+    const [inputBoxEmployeeCodeValue, setInputBoxEmployeeCodeValue] = useState<any>("");
+
     const [showInputBoxJobProfile, setShowInputBoxJobProfile] = useState(false);
     const [inputBoxJobProfileValue, setInputBoxJobProfileValue] = useState<any>("");
 
@@ -62,6 +65,7 @@ const EditProfile = () => {
     useEffect(() => {
         setEmployeeId(singleEmployee._id);
         setInputBoxNameValue(singleEmployee.name);
+        setInputBoxEmployeeCodeValue(singleEmployee.employeeCode)
         setInputBoxJobProfileValue(singleEmployee.jobProfileId?.jobProfileName);
         setInputBoxGroupValue(singleEmployee.groupId?.groupName);
         setInputBoxEmailValue(singleEmployee.email);
@@ -126,6 +130,7 @@ const EditProfile = () => {
                         dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
                     });
                     setShowInputBoxName(false);
+                    setShowInputBoxEmployeeCode(false);
                     setShowInputBoxJobProfile(false);
                     setShowInputBoxGroup(false);
                     setShowInputBoxEmail(false);
@@ -243,6 +248,41 @@ const EditProfile = () => {
                                         className="text-[12px] leading-5 font-normal focus:outline-none"
                                         value={inputBoxNameValue}
                                         onChange={(event) => setInputBoxNameValue(event.target.value)}
+                                        type="text" />
+                                </div>
+                            </div>
+                            <div className="flex justify-center items-center">
+                                <button
+                                    className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                    type="submit">
+                                    <img src={check} className="w-4 h-4" alt="" />
+                                </button>
+                            </div>
+                        </div>}
+                    {!showInputBoxEmployeeCode &&
+                        <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Employee Code</p>
+                                <img src={edit} onClick={() => {
+                                    setShowInputBoxEmployeeCode(!showInputBoxEmployeeCode);
+                                }} className="w-3 h-3" alt="" />
+                            </div>
+                            <div>
+                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{singleEmployee.employeeCode}</p>
+                            </div>
+                        </div >}
+                    {showInputBoxEmployeeCode &&
+                        <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Employee Code</p>
+                                </div>
+                                <div>
+                                    <input
+                                        {...register('employeeCode', { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputBoxEmployeeCodeValue}
+                                        onChange={(event) => setInputBoxEmployeeCodeValue(event.target.value)}
                                         type="text" />
                                 </div>
                             </div>

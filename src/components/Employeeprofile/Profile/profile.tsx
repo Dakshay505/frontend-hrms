@@ -27,7 +27,6 @@ export const EmployeeProfile = () => {
     const loaderStatus = useSelector((state: any) => state.employee.status)
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);
-    console.log("qrAssign", qrAssign)
     const [profilePicture, setProfilePicture] = useState("https://cdn-icons-png.flaticon.com/512/219/219983.png")
 
     function formatDate(date: any) {
@@ -219,7 +218,8 @@ export const EmployeeProfile = () => {
                                     return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                                 })
                                 const latestPunches = sortedPunches[0];
-                                return <>
+                                if(element.employeeId.employeeCode === singleEmployee.employeeCode){
+                                    return <>
                                     <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                         <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
@@ -271,6 +271,7 @@ export const EmployeeProfile = () => {
                                         </tr>
                                     })}
                                 </>
+                                }
                             })}
                         </tbody>
                     </table>
