@@ -77,7 +77,7 @@ const AddEmployee = () => {
             const workingDay = Number(overTimeReqValues.workingDay);
             const workingHours = Number(overTimeReqValues.workingHours);
             const totalWorkingDays = salary / (workingDay * 4.3 * workingHours);
-            const overtimeRate = totalWorkingDays.toFixed(2);
+            const overtimeRate = totalWorkingDays && totalWorkingDays.toFixed(2);
             if (overTimeValue === "Yes") {
                 setOvertimerate(totalWorkingDays);
             } else {
@@ -454,7 +454,7 @@ const AddEmployee = () => {
                                                 type='number'
                                                 disabled={overTimeValue === "No"}
                                                 onChange={(event) => setOvertimerate(event.target.value)}
-                                                value={(overtimerate).toFixed(2)}
+                                                value={overtimerate && (overtimerate).toFixed(2)}
                                                 className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                             />
                                         </div>
