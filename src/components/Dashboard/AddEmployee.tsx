@@ -77,7 +77,7 @@ const AddEmployee = () => {
             const workingDay = Number(overTimeReqValues.workingDay);
             const workingHours = Number(overTimeReqValues.workingHours);
             const totalWorkingDays = salary / (workingDay * 4.3 * workingHours);
-            const overtimeRate = totalWorkingDays.toFixed(2);
+            const overtimeRate = totalWorkingDays && totalWorkingDays.toFixed(2);
             if (overTimeValue === "Yes") {
                 setOvertimerate(totalWorkingDays);
             } else {
@@ -196,13 +196,14 @@ const AddEmployee = () => {
                         console.log(data);
                         setShowOtp(true);
                         dispatch(createEmployeeAsync(data)).then((res: any) => {
-                            if(res.payload.success){
-                                toast.success(res.payload.message);
-                            } else{
-                                toast.error(res.payload.message);
-                            }
-                            reset();
+                            
                             if (!otpCheck) {
+                                if(res.payload.success){
+                                    toast.success(res.payload.message);
+                                    reset();
+                                } else{
+                                    toast.error(res.payload.message);
+                                }
                                 getOtpAsync({ phoneNumber: phoneNumber }).then((res) => {
                                     if (res.data.Status === "Success") {
                                         setOtpSent("OTP Sent");
@@ -213,11 +214,23 @@ const AddEmployee = () => {
                                 })
                             } else {
                                 if (addMoreEmployee) {
-                                    resetFields();
+                                    if(res.payload.success){
+                                        toast.success(res.payload.message);
+                                        reset();
+                                        resetFields();
+                                    } else{
+                                        toast.error(res.payload.message);
+                                    }
                                 }
                                 if (!addMoreEmployee) {
-                                    resetFields();
-                                    navigate("/view-modify-database")
+                                    if(res.payload.success){
+                                        toast.success(res.payload.message);
+                                        resetFields();
+                                        reset();
+                                        navigate("/view-modify-database")
+                                    } else{
+                                        toast.error(res.payload.message);
+                                    }
                                 }
                             }
                         })
@@ -441,7 +454,7 @@ const AddEmployee = () => {
                                                 type='number'
                                                 disabled={overTimeValue === "No"}
                                                 onChange={(event) => setOvertimerate(event.target.value)}
-                                                value={(overtimerate).toFixed(2)}
+                                                value={overtimerate && (overtimerate).toFixed(2)}
                                                 className='border border-solid outline-none border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                             />
                                         </div>

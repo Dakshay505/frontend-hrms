@@ -2,51 +2,81 @@ import { useState, useEffect } from 'react'
 import BluePlus from '../../assets/BluePlus.png'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeAsync, getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+import { getAllEmployeeAsync, getEmployeeImageAsync } from '../../redux/Slice/EmployeeSlice';
 import { getAllGroupsAsync, getSingleGroupAsync } from '../../redux/Slice/GroupSlice';
 import { useNavigate } from 'react-router-dom';
 import Pencil from '../../assets/PencilSimple.svg'
 import { getAllJobProfileAsync, getSingleJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import glass from '../../assets/MagnifyingGlass.png'
+import LoaderGif from '../../assets/loadergif.gif'
+import CaretLeft from '../../assets/CaretLeft.svg'
+import CaretRight1 from '../../assets/CaretRight1.svg'
 
 const ViewModifyDatabase = () => {
-    const itemsPerPage = 20; // Number of items per page
-    const [currentPage, setCurrentPage] = useState(1);
+    const [count, setCount] = useState(10);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     const [filter, setFilter] = useState({
         name: "",
         groupName: "",
         jobProfileName: "",
-        limit: itemsPerPage,
-        page: currentPage
+        page: 1,
+        limit: 20
     })
     useEffect(() => {
-        dispatch(getAllEmployeeAsync(filter));
+        dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
+            setCount(data.payload.count)
+            const employeeData = data.payload.employees;
+            const arr = [];
+            for (let i = 0; i < employeeData.length; i++) {
+                if (employeeData[i].profilePicture) {
+                    arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                } else {
+                    arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                }
+            }
+            setFetchedSuggestions(arr)
+        });
     }, [filter])
 
-    // SEARCH
+    // PAGINATION = 
+    useEffect(() => {
+        setTotalPage(Math.ceil(count / filter.limit))
+    }, [count])
 
+    useEffect(() => {
+        setFilter({ ...filter, page: page })
+    }, [page])
+
+    // SEARCH
     const [isLabelVisible, setLabelVisible] = useState(true);
     const [search, setSearch] = useState('');
     const [suggestions, setSuggestions] = useState<any>([]);
 
-
     const dispatch = useDispatch();
     const employeeDetailList = useSelector((state: any) => state.employee.employees);
+
+    const loaderStatus = useSelector((state: any) => state.employee.status)
+
     const groupList = useSelector((state: any) => state.group.groups);
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles)
     const [path, setPath] = useState('/addemployee')
     const [databaseValue, setDatabaseValue] = useState("Employees");
     const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
     useEffect(() => {
-        dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
-            const employeeData = data.payload.employees;
+        dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
+            const employeeData = res.payload.employees;
             const arr = [];
             for (let i = 0; i < employeeData.length; i++) {
-                arr.push(employeeData[i].name)
+                if (employeeData[i].profilePicture) {
+                    arr.push({ name: employeeData[i].name, profilePicture: employeeData[i].profilePicture, jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                } else {
+                    arr.push({ name: employeeData[i].name, profilePicture: "https://cdn-icons-png.flaticon.com/512/219/219983.png", jobProfileName: employeeData[i].jobProfileId.jobProfileName })
+                }
             }
             setFetchedSuggestions(arr)
-        });
+        })
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
     }, [])
@@ -54,9 +84,8 @@ const ViewModifyDatabase = () => {
     const navigate = useNavigate();
     const handleTableRowClick = (data: any) => {
         const employeeId = { employeeId: data._id }
-        dispatch(getSingleEmployeeAsync(employeeId));
         dispatch(getEmployeeImageAsync(employeeId));
-        navigate(`/employee-profile`, { state: { data: data } });
+        navigate(`/employee-profile`, { state: { additionalData: employeeId } });
     }
     const handleGroupTableRowClick = (data: any) => {
         const groupId = { groupId: data._id }
@@ -69,61 +98,45 @@ const ViewModifyDatabase = () => {
         navigate(`/jobprofile-info`, { state: { data: data } });
     }
 
+    const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([])
+
+    useEffect(() => {
+        setPagiArrIncludes([page - 1])
+    }, [page])
+    const pagination = () => {
+        const element = [];
+        for (let i = 0; i < totalPage; i++) {
+            element.push(<p onClick={() => {
+                setPage(i + 1)
+                setPagiArrIncludes([i])
+            }} className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""} rounded-full px-3 cursor-pointer`} key={i}>{i + 1}</p>)
+        }
+        return element
+    }
 
     const handleInputChange = (event: any) => {
+        setSearch(event.target.value);
+        setFilter({
+            ...filter,
+            name: event.target.value
+        })
         if (event.target.value !== "") {
+            setPage(1);
             setLabelVisible(false);
-            setSearch(event.target.value);
-            setFilter({
-                ...filter,
-                name: event.target.value
-            })
             getSuggestions(event.target.value);
         }
         else {
             setLabelVisible(true);
-            setSearch(event.target.value);
-            setFilter({
-                ...filter,
-                name: event.target.value
-            })
             setSuggestions([]);
         }
     };
 
     const getSuggestions = (inputValue: any) => {
-
         const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-            suggestion?.toLowerCase().includes(inputValue.toLowerCase())
+            (suggestion.name)?.toLowerCase().includes(inputValue.toLowerCase())
         );
         setSuggestions(filteredSuggestions);
     };
-
-    // pagination 
-    const count = 9;
-
-    // Calculate the total number of pages
-    const employeePagination = Math.ceil((count || 0) / itemsPerPage);
-
-    const dispatchPagination = (pageNumber: number) => {
-        setCurrentPage(pageNumber);
-        setFilter({ ...filter, page: pageNumber });
-        dispatch(getAllEmployeeAsync(filter));
-    };
-    const handleNextPage = () => {
-        const nextPage = currentPage + 1;
-        if (nextPage <= employeePagination) {
-            dispatchPagination(nextPage);
-        }
-    };
-
-    const handlePreviousPage = () => {
-        const previousPage = currentPage - 1;
-        if (previousPage >= 1) {
-            dispatchPagination(previousPage);
-        }
-    };
-    const pageNumbers = Array.from({ length: employeePagination }, (_, i) => i + 1);
 
     return (
 
@@ -172,7 +185,7 @@ const ViewModifyDatabase = () => {
                     </Link>
                 </div>
             </div>
-            {databaseValue === "Employees" && <div className='my-10 flex gap-5'>
+            {databaseValue === "Employees" && <div className='mt-10 flex gap-5'>
                 <div className='flex gap-4'>
                     <div>
                         <select
@@ -241,7 +254,7 @@ const ViewModifyDatabase = () => {
                             value={search}
                             className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
                         />
-                        {suggestions.length > 0 && (
+                        {/* {suggestions.length > 0 && (
                             <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
                                 {suggestions.map((suggestion: any, index: any) => (
                                     <input type="text" readOnly key={index}
@@ -256,13 +269,38 @@ const ViewModifyDatabase = () => {
                                         }} />
                                 ))}
                             </div>
+                        )} */}
+                        {suggestions.length > 0 && (
+                            <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                {suggestions.map((element: any, index: any) => {
+                                    return <div key={index} onClick={() => {
+                                        setSearch(element.name);
+                                        setFilter({
+                                            ...filter,
+                                            name: element.name
+                                        })
+                                        setSuggestions([]);
+                                    }} className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer">
+                                        <div>
+                                            <img src={element.profilePicture} className="w-[50px] h-[50px] rounded-full" alt="" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium #1C1C1C">{element.name}</p>
+                                            <p className="text-[12px] leading-5 font-normal text-[#757575]">{element.jobProfileName}</p>
+                                        </div>
+                                    </div>
+                                })}
+                            </div>
                         )}
                     </div>
                 </div>
             </div>}
+            {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+                <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
             <div className=''>
-                <div className='mt-10 overflow-auto'>
-                    <div className='py-6'>
+                <div className='mt-3 overflow-auto'>
+                    <div className='py-5'>
                         {/* TABLE FOR EMPLOYEE */}
                         {databaseValue === "Employees" && <table className='w-full'>
                             <tbody>
@@ -290,46 +328,27 @@ const ViewModifyDatabase = () => {
                                         </td>
                                     </tr>
                                 })}
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-
-                                    <td>
-                                        <div className="flex gap-[10px] justify-center mt-4">
-                                            <button
-                                                className="px-3 py-2 mx-1"
-                                                onClick={handlePreviousPage}
-                                                disabled={currentPage === 1}
-                                            >
-                                                &laquo;
-
-                                            </button>
-
-                                            {pageNumbers.map((page) => (
-                                                <button
-                                                    key={page}
-                                                    className={`px-3 py-2 mx-1 ${page === currentPage ? 'bg-blue-500 rounded-full shadow-lg px-[15px] text-white' : 'bg-gray-200  rounded-full shadow-lg px-[15px]'}`}
-                                                    onClick={() => dispatchPagination(page)}
-                                                >
-                                                    {page}
-                                                </button>
-                                            ))}
-
-                                            <button
-                                                className="px-3 py-2 mx-1"
-                                                onClick={handleNextPage}
-                                                disabled={currentPage === employeePagination}
-                                            >
-                                                &raquo;
-                                            </button>
-                                        </div>
-                                    </td>
-
-                                </tr>
                             </tbody>
                         </table>}
                         {/* TABLE FOR EMPLOYEE ENDS */}
+
+                        {/* PAGINATION STARTS */}
+                        {databaseValue === "Employees" && <div className='flex gap-4 items-center justify-center'>
+                            <div onClick={() => {
+                                if (page > 1) {
+                                    setPage(page - 1)
+                                }
+                            }}> <img src={CaretLeft} alt="" /> </div>
+                            {pagination()}
+                            <div onClick={() => {
+                                if (page !== totalPage) {
+                                    setPage(page + 1)
+                                }
+                            }}> <img src={CaretRight1} alt="" /></div>
+                        </div>}
+                        {/* PAGINATIN ENDS */}
+
+
                         {/* TABLE FOR DEPARTMENT */}
                         {databaseValue === "Groups" && <table className='w-full'>
                             <tbody>

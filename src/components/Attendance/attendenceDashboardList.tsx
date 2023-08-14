@@ -65,7 +65,6 @@ export const AttendenceDashboardList = () => {
         setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
       }
     });
-    console.log(fetchedSuggestions);
     dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
   }, [])
@@ -109,7 +108,6 @@ export const AttendenceDashboardList = () => {
       }
     }
     getDateRange(filter.date, filter.nextDate)
-    console.log(filter);
     dispatch(getAllAttandenceAsync(filter))
   }, [filter])
 
@@ -354,7 +352,6 @@ export const AttendenceDashboardList = () => {
               }}
               onClickDay={() => {
                 if (calenderDayClicked.length > 0) {
-                  console.log("hlo")
                   setShowCalender(false);
                   setcalenderDayClicked([]);
                 }

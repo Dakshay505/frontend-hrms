@@ -8,16 +8,17 @@ import {
   getEmployeeImage,
   getSingleEmployee,
   updateEmployee,
-  pagination,
   getQrAssign,
   updatePassword,
-  newPassword
+  newPassword,
+  salaryLog
 } from "../API/EmployeeAPI";
 
 const initialState = {
   employees: [],
   singleEmployee: {}, 
   qrAssign: {},
+  salaryLogSingleEmployee: [],
   status: "idle",
 };
 
@@ -36,7 +37,6 @@ export const createEmployeeAsync: any = createAsyncThunk(
 
 // READ
 export const getAllEmployeeAsync: any = createAsyncThunk(
-
     'getallemployees',
     async (data) => {
         try {
@@ -48,12 +48,25 @@ export const getAllEmployeeAsync: any = createAsyncThunk(
   }
 
 );
-// READ SINFLE EMPLOYEE
+// READ SINGLE EMPLOYEE
 export const getSingleEmployeeAsync: any = createAsyncThunk(
   "getSingleemployees",
   async (data) => {
     try {
       const response: any = await getSingleEmployee(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+
+// READ SALARY LOG
+export const salaryLogAsync: any = createAsyncThunk(
+  "salaryLogAsync",
+  async (data) => {
+    try {
+      const response: any = await salaryLog(data);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -113,21 +126,6 @@ export const getEmployeeImageAsync: any = createAsyncThunk(
       return response;
     } catch (error: any) {
       console.log(error.message);
-    }
-  }
-);
-
-// pagination
-
-export const getPaginationAsync = createAsyncThunk(
-  'pagination',
-  async (page) => {
-    try {
-      const response = await pagination(page);
-      return response;
-    } catch (error:any) {
-      console.log(error.message);
-      throw error;
     }
   }
 );
@@ -242,12 +240,12 @@ export const EmployeeSlice = createSlice({
           state.status = "idle";
           state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
         })
-      .addCase(getPaginationAsync.pending, (state) => {
+      .addCase(salaryLogAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(getPaginationAsync.fulfilled, (state, action) => {
+      .addCase(salaryLogAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.employees =  action.payload.employees;
+        state.salaryLogSingleEmployee =  action.payload.salaryLog;
       })
       .addCase(getQrAssignAsync.pending, (state) => {
         state.status = 'loading';

@@ -95,7 +95,7 @@ useEffect(() => {
       </div>
 
       {/* TABLE START HERE */}
-      <div className="py-6 overflow-auto">
+      <div className="py-6 mb-24 overflow-auto">
         <table className="z-0 w-full">
           <tbody>
             <tr className='bg-[#ECEDFE] cursor-default'>

@@ -102,7 +102,6 @@ export const StaffCheckin = () => {
             </div> : ""}
 
                 {allAttandenceList1 && allAttandenceList1.map((element: any, index: number) => {
-                    console.log("elellelel", element)
                     const latestAttendance = element.punches[0];
                     return <div key={index} className="flex p-[24px] items-start gap-[32px] border self-stretch rounded-[8px] border-primary-border bg-[#FAFAFA] max-w-[688px]">
                         <div className="flex flex-col items-start gap-[16px] flex-1 self-stretch">
