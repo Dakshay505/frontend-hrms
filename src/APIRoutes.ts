@@ -1,8 +1,8 @@
 
-// export const apiPath = `http://localhost:5050`;
+export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
-export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `https://chawlacomponents.com`;
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
@@ -10,7 +10,7 @@ export const apiPath = `https://chawlacomponents.com`;
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;
 export const getJobProfileApiPath = `${apiPath}/api/v1/jobprofile`;
 
-// DEPARTMENT API
+// group API
 
 export const createGroupApiPath = `${apiPath}/api/v1/group/add`;
 export const getGroupApiPath = `${apiPath}/api/v1/group`;
@@ -98,3 +98,8 @@ export const getAllGroupSalaryApiPath = `${apiPath}/api/v1/attendance/groupSalar
 export const getSingleGroupSalaryApiPath = `${apiPath}/api/v1/attendance`
 
 
+// Department
+export const addDepartmentApiPath = `${apiPath}/api/v1/department/add`
+export const addParentDepartmentApiPath = `${apiPath}/api/v1/department/addParent`
+export const getAllDepartmentApiPath = `${apiPath}/api/v1/department/getAllDepartment`
+export const getAllParentDepartmentApiPath = `${apiPath}/api/v1/department/getAllParent`

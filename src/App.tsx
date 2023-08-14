@@ -3,6 +3,7 @@ import "./App.css";
 import Aside from "./components/aside";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+
 import Home from './components/Dashboard/Home';
 import AddEmployee from './components/Dashboard/AddEmployee';
 import AddNewFieldEmployee from './components/Dashboard/AddNewFieldEmployee';
@@ -64,6 +65,8 @@ import SingleGroupAttendance from "./components/Attendance/SingleGroupAttendance
 import { TrainingResource } from "./Employee/training/TrainingResource";
 import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
 import toast, { Toaster } from 'react-hot-toast';
+import AddDepartment from "./components/Dashboard/AddDepartment";
+import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
 
 const router = createBrowserRouter([
   {
@@ -498,6 +501,26 @@ const router = createBrowserRouter([
         <ShowNotication />{" "}
       </Aside>
       //  </ProductedRoute>
+    ),
+  },
+  {
+    path: "/add-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/add-parent-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddParentDepartment />
+        </Aside>
+      </ProductedRoute>
     ),
   },
   {
