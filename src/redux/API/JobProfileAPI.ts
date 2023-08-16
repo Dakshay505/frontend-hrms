@@ -74,10 +74,7 @@ export const updateJobProfileDepartment = async (Data: any) => {
 export const deleteDepartmentToJobProfile = async (Data: any) => {
   try {
     console.log(Data);
-    const { data } = await axios.delete(
-      `${deleteJobProfileDepartmentApiPath}`,
-      Data
-    );
+    const { data } = await axios.delete(`${deleteJobProfileDepartmentApiPath}`,{data:Data});
     return data;
   } catch (error: any) {
     console.log(error.response.data);

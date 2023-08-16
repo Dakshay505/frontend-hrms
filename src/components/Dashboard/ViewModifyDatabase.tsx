@@ -211,11 +211,11 @@ const ViewModifyDatabase = () => {
       dispatch(getAllJobProfileAsync());
     });
   };
-  const deleteAssignedDepartment = (element:any) => {
-    console.log("1",element);
+  const deleteAssignedDepartment = (element: any) => {
+    console.log("1", element);
     const data = {
-      departmentName: selectedDepartment,
-      jobProfileName: assignedName,
+      departmentName: element.department.departmentName,
+      jobProfileName: element.jobProfileName,
     };
 
     dispatch(deleteDepartmentToJobProfileAsync(data)).then(() => {
@@ -635,7 +635,7 @@ const ViewModifyDatabase = () => {
                             {/* Department */}
                             {element.department ? (
                               <div
-                                onClick={(element) => {
+                                onClick={() => {
                                   deleteAssignedDepartment(element);
                                 }}
                                 className="flex items-center gap-[8px]"
@@ -645,7 +645,7 @@ const ViewModifyDatabase = () => {
                                     ? element.department.departmentName
                                     : "invaild"}
                                 </p>
-                                <div className="border p-1">
+                                <div className="">
                                   <img src={deleteIcon} alt="delete" />
                                 </div>
                               </div>

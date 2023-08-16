@@ -92,7 +92,7 @@ export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
 export const getSingleJobProfileApiPath = `${apiPath}/api/v1/jobprofile`
 export const updateJobProfileApiPath = `${apiPath}/api/v1/jobprofile/update`
 export const addJobProfileDepartmentApiPath = `${apiPath}/api/v1/jobprofile/addDepartment`
-export const deleteJobProfileDepartmentApiPath = `${apiPath}/api/v1/jobprofile/deleteDepartment`
+export const deleteJobProfileDepartmentApiPath = `${apiPath}/api/v1/jobProfile/deleteDepartment`
 
 
 // SALARY
