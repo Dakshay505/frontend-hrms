@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createJobProfiles,
+  deleteDepartmentToJobProfile,
   getAllJobProfiles,
   getSingleJobProfile,
   updateJobProfile,
@@ -54,6 +55,18 @@ export const updateJobProfileDepartmentAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await updateJobProfileDepartment(data);
+      console.log(response);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const deleteDepartmentToJobProfileAsync: any = createAsyncThunk(
+  "deleteDepartmentToJobProfile",
+  async (data) => {
+    try {
+      const response: any = await deleteDepartmentToJobProfile(data);
       console.log(response);
       return response;
     } catch (error: any) {
@@ -117,9 +130,21 @@ export const JobProfileSlice = createSlice({
       .addCase(updateJobProfileDepartmentAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(updateJobProfileDepartmentAsync.fulfilled, function (state: any) {
-        state.status = "idle";
-      });
+      .addCase(
+        updateJobProfileDepartmentAsync.fulfilled,
+        function (state: any) {
+          state.status = "idle";
+        }
+      )
+      .addCase(deleteDepartmentToJobProfileAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        deleteDepartmentToJobProfileAsync.fulfilled,
+        function (state: any) {
+          state.status = "idle";
+        }
+      );
   },
 });
 

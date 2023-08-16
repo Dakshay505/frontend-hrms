@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Pencil from "../../assets/PencilSimple.svg";
 import {
+  deleteDepartmentToJobProfileAsync,
   getAllJobProfileAsync,
   getSingleJobProfileAsync,
   updateJobProfileDepartmentAsync,
@@ -210,11 +211,21 @@ const ViewModifyDatabase = () => {
       dispatch(getAllJobProfileAsync());
     });
   };
+  const deleteAssignedDepartment = (element:any) => {
+    console.log("1",element);
+    const data = {
+      departmentName: selectedDepartment,
+      jobProfileName: assignedName,
+    };
+
+    dispatch(deleteDepartmentToJobProfileAsync(data)).then(() => {
+      dispatch(getAllJobProfileAsync());
+    });
+  };
 
   const [selectedDepartment, setSelectedDepartment] = useState(
     "Choose a Department"
   );
-  console.log(jobProfileList);
   const handleDepartmentChange = (event: any) => {
     setSelectedDepartment(event.target.value);
   };
@@ -623,9 +634,18 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
                             {/* Department */}
                             {element.department ? (
-                              <div className="flex items-center gap-[8px]">
-                                <p>{element.department.departmentName}</p>
-                                <div>
+                              <div
+                                onClick={(element) => {
+                                  deleteAssignedDepartment(element);
+                                }}
+                                className="flex items-center gap-[8px]"
+                              >
+                                <p>
+                                  {element.department.departmentName
+                                    ? element.department.departmentName
+                                    : "invaild"}
+                                </p>
+                                <div className="border p-1">
                                   <img src={deleteIcon} alt="delete" />
                                 </div>
                               </div>
