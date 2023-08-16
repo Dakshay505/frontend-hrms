@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   addJobProfileDepartmentApiPath,
   createJobProfileApiPath,
+  deleteJobProfileDepartmentApiPath,
   getJobProfileApiPath,
   getSingleJobProfileApiPath,
   updateJobProfileApiPath,
@@ -64,6 +65,18 @@ export const updateJobProfileDepartment = async (Data: any) => {
       `${addJobProfileDepartmentApiPath}`,
       Data,
       { withCredentials: true }
+    );
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const deleteDepartmentToJobProfile = async (Data: any) => {
+  try {
+    console.log(Data);
+    const { data } = await axios.delete(
+      `${deleteJobProfileDepartmentApiPath}`,
+      Data
     );
     return data;
   } catch (error: any) {
