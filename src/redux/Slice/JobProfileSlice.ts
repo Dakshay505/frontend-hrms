@@ -4,6 +4,7 @@ import {
   getAllJobProfiles,
   getSingleJobProfile,
   updateJobProfile,
+  updateJobProfileDepartment,
 } from "../API/JobProfileAPI";
 
 const initialState = {
@@ -21,7 +22,7 @@ export const createJobProfileAsync: any = createAsyncThunk(
       return response;
     } catch (error: any) {
       console.log(error.message);
-    } 
+    }
   }
 );
 export const getSingleJobProfileAsync: any = createAsyncThunk(
@@ -41,6 +42,18 @@ export const updateJobProfileAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await updateJobProfile(data);
+      console.log(response);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const updateJobProfileDepartmentAsync: any = createAsyncThunk(
+  "updateJobProfileDepartment",
+  async (data) => {
+    try {
+      const response: any = await updateJobProfileDepartment(data);
       console.log(response);
       return response;
     } catch (error: any) {
@@ -87,16 +100,24 @@ export const JobProfileSlice = createSlice({
       .addCase(getSingleJobProfileAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(getSingleJobProfileAsync.fulfilled, (state: any, action: any) => {
+      .addCase(
+        getSingleJobProfileAsync.fulfilled,
+        (state: any, action: any) => {
           state.status = "idle";
-          console.log("get", action.payload.jobProfileData)
-          state.jobProfileData = action.payload.jobProfileData
+          console.log("get", action.payload.jobProfileData);
+          state.jobProfileData = action.payload.jobProfileData;
         }
       )
       .addCase(updateJobProfileAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(updateJobProfileAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      })
+      .addCase(updateJobProfileDepartmentAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateJobProfileDepartmentAsync.fulfilled, function (state: any) {
         state.status = "idle";
       });
   },
