@@ -103,7 +103,7 @@ const AddParentDepartment = () => {
               className="flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4 h-10"
             >
               <img src={Plus} className="w-4" alt="" />
-              <p className="px-2">Add Parnet Department</p>
+              <p className="px-2">Add Parent Department</p>
             </button>
           </div>
         </form>
