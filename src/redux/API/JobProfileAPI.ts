@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  addJobProfileDepartmentApiPath,
   createJobProfileApiPath,
   getJobProfileApiPath,
   getSingleJobProfileApiPath,
@@ -16,10 +17,9 @@ export const createJobProfiles = async (jobProfileData: any) => {
     );
     return data;
   } catch (err: any) {
-    return err.response.data
+    return err.response.data;
   }
 };
-
 
 export const getSingleJobProfile = async (JobprofileId: any) => {
   try {
@@ -33,7 +33,7 @@ export const getSingleJobProfile = async (JobprofileId: any) => {
     console.error(error);
   }
 };
- 
+
 // READ
 export const getAllJobProfiles = async () => {
   try {
@@ -48,7 +48,21 @@ export const getAllJobProfiles = async () => {
 export const updateJobProfile = async (jobprofileData: any) => {
   try {
     console.log("jobProfileData", jobprofileData);
-    const { data } = await axios.patch(`${updateJobProfileApiPath}/${jobprofileData.jobProfileId}`,jobprofileData.data,
+    const { data } = await axios.patch(
+      `${updateJobProfileApiPath}/${jobprofileData.jobProfileId}`,
+      jobprofileData.data,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const updateJobProfileDepartment = async (Data: any) => {
+  try {
+    const { data } = await axios.patch(
+      `${addJobProfileDepartmentApiPath}`,
+      Data,
       { withCredentials: true }
     );
     return data;

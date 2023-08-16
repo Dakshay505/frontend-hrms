@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import BluePlus from "../../assets/BluePlus.png";
+import deleteIcon from "../../assets/Trash.svg";
 import greyPlus from "../../assets/gretyPlus.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import Pencil from "../../assets/PencilSimple.svg";
 import {
   getAllJobProfileAsync,
   getSingleJobProfileAsync,
+  updateJobProfileDepartmentAsync,
 } from "../../redux/Slice/JobProfileSlice";
 import glass from "../../assets/MagnifyingGlass.png";
 import LoaderGif from "../../assets/loadergif.gif";
@@ -25,7 +27,7 @@ import {
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
-
+import userIcon from "../../assets/UsersThree.svg";
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
@@ -182,12 +184,39 @@ const ViewModifyDatabase = () => {
       setSuggestions([]);
     }
   };
-
   const getSuggestions = (inputValue: any) => {
     const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
       suggestion.name?.toLowerCase().includes(inputValue.toLowerCase())
     );
     setSuggestions(filteredSuggestions);
+  };
+  const [assignDepartment, setAssignDepartment] = useState(false);
+  const [assignedName, setAssignedName] = useState("");
+  const handleDepartmentEdit = (element: any) => {
+    setAssignDepartment(true);
+    const name = element.jobProfileName;
+    setAssignedName(name);
+    // console.log("element", element.jobProfileName);
+    // console.log("state name:- ", assignedName);
+  };
+  const assigningDepartment = () => {
+    setAssignDepartment(false);
+    const data = {
+      departmentName: selectedDepartment,
+      jobProfileName: assignedName,
+    };
+
+    dispatch(updateJobProfileDepartmentAsync(data)).then(() => {
+      dispatch(getAllJobProfileAsync());
+    });
+  };
+
+  const [selectedDepartment, setSelectedDepartment] = useState(
+    "Choose a Department"
+  );
+  console.log(jobProfileList);
+  const handleDepartmentChange = (event: any) => {
+    setSelectedDepartment(event.target.value);
   };
   return (
     <div className="mx-10">
@@ -577,28 +606,40 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => handleJobprofileTableRowClick(element)}
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
                           </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
+                          <td
+                            onClick={() =>
+                              handleJobprofileTableRowClick(element)
+                            }
+                            className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]"
+                          >
                             {element.jobProfileName
                               ? element.jobProfileName
                               : "Not Avilable"}
                           </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
                             {/* Department */}
                             {element.department ? (
-                              element.department.departmentName
+                              <div className="flex items-center gap-[8px]">
+                                <p>{element.department.departmentName}</p>
+                                <div>
+                                  <img src={deleteIcon} alt="delete" />
+                                </div>
+                              </div>
                             ) : (
-                              <div className="flex items-center">
+                              <div
+                                onClick={() => handleDepartmentEdit(element)}
+                                className="flex items-center gap-[8px]"
+                              >
                                 <img
                                   src={greyPlus}
                                   className="w-4 h-3"
                                   alt=""
                                 />
-                                <p>Assign</p>
+                                <p className="underline">Assign</p>
                               </div>
                             )}
                           </td>
@@ -712,6 +753,62 @@ const ViewModifyDatabase = () => {
             )}
           </div>
         </div>
+        {/* popup */}
+        {assignDepartment && (
+          <div
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+            className="fixed flex justify-center items-center top-0 bottom-0 right-0 left-0"
+          >
+            <div className="bg-[#FFFFFF] p-10">
+              <div className="flex items-center gap-2 pb-4 w-[640px] border-b border-solid border-[#B0B0B0]">
+                <div>
+                  <img src={userIcon} alt="user" />
+                </div>
+                <div>
+                  <h3 className="text-[18px] leading-6 font-medium text-[#1C1C1C]">
+                    Assign Department to ‘ {assignedName} ’
+                  </h3>
+                </div>
+              </div>
+              <div className="pt-6 flex flex-col gap-3">
+                <p className="ms-1 text-[14px]">Department</p>
+                <div>
+                  <select
+                    className="px-[12px] py-[16px] rounded border w-full focus:outline-none"
+                    onChange={handleDepartmentChange}
+                  >
+                    <option>Choose a Department</option>
+                    {departmentList &&
+                      departmentList.map((element: any, index: number) => {
+                        return (
+                          <option key={index}>{element.departmentName}</option>
+                        );
+                      })}
+                  </select>
+                </div>
+              </div>
+              <div className="pt-[21px]">
+                <div className="flex gap-4 justify-end">
+                  <div
+                    onClick={() => setAssignDepartment(false)}
+                    className="flex justify-center items-center h-[34px] w-[96px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer"
+                  >
+                    <p className="text-sm font-medium text-[#3B3B3B]">Cancel</p>
+                  </div>
+                  <div
+                    onClick={() => {
+                      assigningDepartment();
+                    }}
+                    className="flex justify-center items-center h-[34px] w-[122px] bg-[#283093] rounded-lg cursor-pointer"
+                  >
+                    <p className="text-sm font-medium text-[#FBFBFC]">Assign</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* popup */}
       </div>
     </div>
   );
