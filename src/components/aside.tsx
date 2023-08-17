@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
   },
   { id: "Documents", name: "Documents", icon: doc, Link: "/document" },
   { id: "Notification", name: "Notification", icon: bellIcon, Link: "/compose-notification" },
-  { id: "Salaries", name: "Salaries", icon: salary, Link: "/salary-database" },
+  { id: "Salaries", name: "Salaries", icon: salary, Link: "/salary-parent-department" },
   {
     id: "SalaTraining Contentries",
     name: "Training Content",
