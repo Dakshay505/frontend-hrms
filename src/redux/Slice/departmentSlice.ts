@@ -3,12 +3,16 @@ import {
   createDepartment,
   createParnetDepartment,
   getAllDepartment,
+  getDepartmentByParent,
   getParentAllDepartment,
+  getjobProfileBySubDepartmentName,
 } from "../API/departmentAPI";
 
 const initialState = {
   department: [],
   parentdepartment: [],
+  myDepartment: [],
+  departmentJobProfile:[],
   status: "idle",
 };
 
@@ -60,6 +64,28 @@ export const getAllParentDepartmentAsync: any = createAsyncThunk(
     }
   }
 );
+export const getDepartmentByParentAsync: any = createAsyncThunk(
+  "getDepartmentByParent",
+  async (data) => {
+    try {
+      const response: any = await getDepartmentByParent(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const getjobProfileBySubDepartmentNameAsync: any = createAsyncThunk(
+  "getjobProfileBySubDepartmentName",
+  async (data) => {
+    try {
+      const response: any = await getjobProfileBySubDepartmentName(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
 
 export const departmentSlice = createSlice({
   name: "department",
@@ -97,6 +123,26 @@ export const departmentSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.parentdepartment = action.payload.allParentDepartment;
+        }
+      )
+      .addCase(getDepartmentByParentAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getDepartmentByParentAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.myDepartment = action.payload.allDepartment;
+        }
+      )
+      .addCase(getjobProfileBySubDepartmentNameAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getjobProfileBySubDepartmentNameAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.departmentJobProfile = action.payload.jobProfile;
         }
       );
   },

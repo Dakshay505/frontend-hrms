@@ -67,6 +67,8 @@ import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
 import toast, { Toaster } from 'react-hot-toast';
 import AddDepartment from "./components/Dashboard/AddDepartment";
 import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
+import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
+import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryDepartment";
 
 const router = createBrowserRouter([
   {
@@ -519,6 +521,26 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <AddParentDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-parent-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryWithDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryDepartment />
         </Aside>
       </ProductedRoute>
     ),

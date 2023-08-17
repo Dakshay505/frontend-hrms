@@ -1,5 +1,5 @@
 import axios from "axios";
-import { addDepartmentApiPath, addParentDepartmentApiPath, getAllDepartmentApiPath, getAllParentDepartmentApiPath } from "../../APIRoutes";
+import { addDepartmentApiPath, addParentDepartmentApiPath, getAllDepartmentApiPath, getAllParentDepartmentApiPath, getDepartmentByParentApiPath, getjobProfileBySubDepartmentNameApiPath } from "../../APIRoutes";
 
 // CREATE
 export const createDepartment = async (department: any) => {
@@ -38,6 +38,22 @@ export const getParentAllDepartment = async () => {
     const { data } = await axios.get(`${getAllParentDepartmentApiPath}`, {
       withCredentials: true,
     });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const getDepartmentByParent = async (Data:any) => {
+  try {
+    const { data } = await axios.get(`${getDepartmentByParentApiPath}?departmentName=${Data}`, {withCredentials: true});
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const getjobProfileBySubDepartmentName = async (Data:any) => {
+  try {
+    const { data } = await axios.get(`${getjobProfileBySubDepartmentNameApiPath}?departmentName=${Data}`, {withCredentials: true});
     return data;
   } catch (err: any) {
     console.log(err.response.data);
