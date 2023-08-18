@@ -68,7 +68,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import AddDepartment from "./components/Dashboard/AddDepartment";
 import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
 import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
-import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryDepartment";
+import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryBySubDepartment";
+import SalaryJobProfilebyDepartment from "./components/Salary/SalaryDepartment/SalaryJobProfilebyDepartment";
 
 const router = createBrowserRouter([
   {
@@ -541,6 +542,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <SalaryDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-jobProfile-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryJobProfilebyDepartment />
         </Aside>
       </ProductedRoute>
     ),

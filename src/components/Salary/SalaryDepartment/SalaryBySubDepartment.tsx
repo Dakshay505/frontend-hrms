@@ -1,24 +1,33 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
-  getAllDepartmentAsync,
-  getAllParentDepartmentAsync,
+  getDepartmentByParentAsync,
+  getjobProfileBySubDepartmentNameAsync,
 } from "../../../redux/Slice/departmentSlice";
-import { useNavigate } from "react-router-dom";
-function SalaryWithDepartment() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+import { useDispatch, useSelector } from "react-redux";
+import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
 
-  const parentDepartmentList = useSelector(
-    (state: any) => state.department.parentdepartment
+// getDepartmentByParentAsync
+function SalaryDepartment() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const [parentDepartment, setParentDepartment] = useState(
+    location.state?.parentDepartment
+  );
+  
+  const subDepartmentList = useSelector(
+    (state: any) => state.department.myDepartment
   );
   useEffect(() => {
-    dispatch(getAllParentDepartmentAsync());
-    dispatch(getAllDepartmentAsync());
+    
+    dispatch(getSalaryBySubDepartmentAsync(""));
+    dispatch(getDepartmentByParentAsync(parentDepartment));
   }, []);
-  const handleSelectedParent = (element: any) => {
-    const data = element.departmentName;
-    navigate("/salary-department", { state: { parentDepartment: data } });
+  const navigate = useNavigate();
+  const handlerSelectedSubDepartment = (element: any) => {
+    dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
+    navigate("/salary-jobProfile-department");
+    console.log(element.departmentName);
   };
   return (
     <div className="px-10 py-8">
@@ -34,19 +43,16 @@ function SalaryWithDepartment() {
                 Sr.no
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Parent Department
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Child Department
+                Sub Department
               </td>
             </tr>
-            {parentDepartmentList &&
-              parentDepartmentList.map((element: any, index: number) => {
+            {subDepartmentList &&
+              subDepartmentList.map((element: any, index: number) => {
                 return (
                   <tr
                     key={index}
                     onClick={() => {
-                      handleSelectedParent(element);
+                      handlerSelectedSubDepartment(element);
                     }}
                   >
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
@@ -54,9 +60,6 @@ function SalaryWithDepartment() {
                     </td>
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
-                    </td>
-                    <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
-                      {element.childDepartmentId.length}
                     </td>
                   </tr>
                 );
@@ -69,4 +72,4 @@ function SalaryWithDepartment() {
   );
 }
 
-export default SalaryWithDepartment;
+export default SalaryDepartment;
