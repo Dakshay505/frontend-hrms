@@ -70,7 +70,7 @@ export const SalarySlice = createSlice({
             })
             .addCase(getSalaryBySubDepartmentAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.salaryOfSubDepartment =  action.payload.data;
+                state.salaryOfSubDepartment =  action.payload.dep;
             })
     },
 });

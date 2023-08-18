@@ -1,61 +1,89 @@
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
 
 // getDepartmentByParentAsync
 function SalaryJobProfilebyDepartment() {
+  const location = useLocation();
   const dispatch = useDispatch();
-  const subDepartmentList = useSelector(
-    (state: any) => state.department.departmentJobProfile
+  const [parentDepartment, setParentDepartment] = useState(
+    location.state?.parentDepartment
   );
+
+  const subDepartmentList = useSelector(
+    (state: any) => state.salary.salaryOfSubDepartment
+  );
+  console.log(subDepartmentList);
+  useEffect(() => {
+    dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
+    // dispatch(getDepartmentByParentAsync(parentDepartment));
+  }, []);
+  const navigate = useNavigate();
+  const handlerSelectedSubDepartment = (element: any) => {
+    dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
+    // navigate("/salary-jobProfile-department");
+    console.log(element.departmentName);
+  };
   return (
     <div className="px-10 py-8">
       <div>
-        <h1 className="text-2xl font-bold text-[#2E2E2E]">Salary Database</h1>
+        <h1 className="text-2xl font-bold text-[#2E2E2E]">Shjyjalary Database</h1>
       </div>
       {/* TABLE START HERE */}
       <div className="py-6 mb-24 overflow-auto">
-        <table className="z-0 table-fixed">
+        <table className="z-0  table-fixed">
           <tbody>
             <tr className="bg-[#ECEDFE] cursor-default">
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Sr.no
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Job Profile
+                Job Profiles
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Employees
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Net Salary
+                Pending Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Avg Basic Salary
+                Working Hours
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Total Earnings
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Total Hours
               </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Productive Hours
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Pending Hours
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Absent Hours
-              </td>
             </tr>
             {subDepartmentList &&
-              subDepartmentList.map((element: any, index: number) => {
-                return (
-                  <tr key={index}>
+              subDepartmentList.map((department: any, index: any) => {
+                return department.data.map((jobProfile: any, subIndex: any) => (
+                  <tr
+                    key={`${index}-${subIndex}`}
+                    onClick={() => {
+                      handlerSelectedSubDepartment(department);
+                    }}
+                  >
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {index + 1}
+                      {jobProfile.jobProfileName}
                     </td>
-                    <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
-                      {element.jobProfileName}
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.totalEmployee}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.pendingHours}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.workingHours}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.totalEarning}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.totalHours || "-"}
                     </td>
                   </tr>
-                );
+                ));
               })}
           </tbody>
         </table>
