@@ -18,6 +18,7 @@ function SalaryWithDepartment() {
   }, []);
   const handleSelectedParent = (element: any) => {
     const data = element.departmentName;
+    console.log("data", data);
     navigate("/salary-department", { state: { parentDepartment: data } });
   };
   return (

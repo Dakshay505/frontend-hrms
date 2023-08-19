@@ -48,6 +48,7 @@ export const getSingleGroupSalary = async (sendData: any) => {
 export const getSalaryBySubDepartment = async (sendData: any) => {
   // const filterDatta = convertToQueryString(sendData);
   try {
+    console.log("sendData", sendData);
     const { data } = await axios.get(
       `${getSalaryBySubDepartmentApiPath}?departmentName=${sendData}`,
       { withCredentials: true }

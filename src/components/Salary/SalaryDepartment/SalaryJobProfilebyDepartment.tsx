@@ -54,10 +54,13 @@ function SalaryJobProfilebyDepartment() {
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Total Hours
               </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+              Total Salary Of Employee
+              </td>
             </tr>
             {subDepartmentList &&
               subDepartmentList.map((department: any, index: any) => {
-                return department.data.map((jobProfile: any, subIndex: any) => (
+                return department.salaryData.map((jobProfile: any, subIndex: any) => (
                   <tr
                     key={`${index}-${subIndex}`}
                     onClick={() => {
@@ -65,22 +68,25 @@ function SalaryJobProfilebyDepartment() {
                     }}
                   >
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.jobProfileName}
+                      {jobProfile.jobProfilesName}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.totalEmployee}
+                      {jobProfile.numberOfEmployee}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.pendingHours.toFixed(4)}
+                      {jobProfile.employeePendingHours}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.workingHours}
+                      {jobProfile.employeeWorkingHours}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.totalEarning}
+                      {jobProfile.employeeTotalEarning}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.totalHours || "-"}
+                      {jobProfile.employeeTotalHours || "-"}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {jobProfile.totalSalaryOfEmployee}
                     </td>
                   </tr>
                 ));

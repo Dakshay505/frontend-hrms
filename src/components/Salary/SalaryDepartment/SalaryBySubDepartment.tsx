@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {getjobProfileBySubDepartmentNameAsync,
-} from "../../../redux/Slice/departmentSlice";
+import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
 
@@ -16,7 +15,7 @@ function SalaryDepartment() {
   const subDepartmentList = useSelector(
     (state: any) => state.salary.salaryOfSubDepartment
   );
-  console.log(subDepartmentList);
+  console.log(parentDepartment);
   useEffect(() => {
     dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
   }, []);
@@ -36,9 +35,7 @@ function SalaryDepartment() {
         <table className="z-0  table-fixed">
           <tbody>
             <tr className="bg-[#ECEDFE] cursor-default">
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Sr.no
-              </td>
+              
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Sub Department
               </td>
@@ -52,6 +49,9 @@ function SalaryDepartment() {
                 Pending Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Absent Hours
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Working Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -59,6 +59,9 @@ function SalaryDepartment() {
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Total Hours
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Total Salary Of Employee
               </td>
             </tr>
             {subDepartmentList &&
@@ -70,39 +73,60 @@ function SalaryDepartment() {
                       handlerSelectedSubDepartment(element);
                     }}
                   >
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {index + 1}
-                    </td>
+                   
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.length}
+                      {element.numberOfJobProfiles}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce(
-                        (acc: any, job: any) => acc + job.totalEmployee,
+                      {element.salaryData.reduce(
+                        (acc: any, job: any) => acc + job.numberOfEmployee,
                         0
                       )}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce((acc: any, job: any) => acc + job.pendingHours, 0).toFixed(2)}
+                      {element.salaryData
+                        .reduce(
+                          (acc: any, job: any) =>
+                            acc + job.employeePendingHours,
+                          0
+                        )
+                        .toFixed(2)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce(
-                        (acc: any, job: any) => acc + job.workingHours,
+                      {element.salaryData
+                        .reduce(
+                          (acc: any, job: any) =>
+                            acc +
+                            (job.employeeTotalHours - job.employeePendingHours),
+                          0
+                        )
+                        .toFixed(2)}
+                    </td>
+
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {element.salaryData.reduce(
+                        (acc: any, job: any) => acc + job.employeeWorkingHours,
                         0
                       )}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce(
-                        (acc: any, job: any) => acc + job.totalEarning,
+                      {element.salaryData.reduce(
+                        (acc: any, job: any) => acc + job.employeeTotalEarning,
                         0
                       )}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce(
-                        (acc: any, job: any) => acc + job.totalHours,
+                      {element.salaryData.reduce(
+                        (acc: any, job: any) => acc + job.employeeTotalHours,
+                        0
+                      )}
+                    </td>
+                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                      {element.salaryData.reduce(
+                        (acc: any, job: any) => acc + job.totalSalaryOfEmployee,
                         0
                       )}
                     </td>

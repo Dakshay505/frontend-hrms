@@ -110,4 +110,4 @@ export const getjobProfileBySubDepartmentNameApiPath = `${apiPath}/api/v1/depart
 
 
 // new Salary
-export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/getSalary`
+export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`
