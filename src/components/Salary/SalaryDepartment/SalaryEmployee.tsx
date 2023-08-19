@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployeeSalaryAsync } from "../../../redux/Slice/SalarySlice";
+import LoaderGif from "../../../assets/loadergif.gif";
 
 // getDepartmentByParentAsync
 function SalaryEmployee() {
@@ -13,7 +14,9 @@ function SalaryEmployee() {
   console.log(employees);
   useEffect(() => {
     dispatch(getEmployeeSalaryAsync(jobProfile));
+    setJobProfile("")
   }, []);
+  const loaderStatus = useSelector((state: any) => state.salary.status);
 
   return (
     <div className="px-10 py-8">
@@ -44,6 +47,13 @@ function SalaryEmployee() {
                 Basic Salary
               </td>
             </tr>
+            {loaderStatus === "loading" ? (
+              <div className="flex  justify-center  w-full">
+                <img src={LoaderGif} className="w-10 h-12" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
             {employees &&
               employees.map((element: any, index: number) => {
                 function formatDateToCustomString(date: any) {

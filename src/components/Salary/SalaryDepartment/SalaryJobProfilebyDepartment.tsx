@@ -10,7 +10,7 @@ function SalaryJobProfilebyDepartment() {
   const [parentDepartment, setParentDepartment] = useState(
     location.state?.steel
   );
-    console.log("parent",parentDepartment)
+  console.log("parent", parentDepartment)
   const subDepartmentList = useSelector(
     (state: any) => state.salary.salaryOfSubDepartment
   );
@@ -21,10 +21,10 @@ function SalaryJobProfilebyDepartment() {
   }, []);
   const navigate = useNavigate();
   const handlerSelectedSubDepartment = (element: any) => {
-    console.log("element selected",element);
+    console.log("element selected", element);
     // dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
-    navigate("/salary-Employee",{ state: { jobProfile: element } });
-    console.log(element.departmentName);
+    navigate("/salary-Employee", { state: { jobProfile: element } });
+    setParentDepartment("")
   };
   return (
     <div className="px-10 py-8">
@@ -66,7 +66,7 @@ function SalaryJobProfilebyDepartment() {
                 return department.salaryData.map(
                   (jobProfile: any, subIndex: any) => (
                     <tr
-                    className="cursor-pointer"
+                      className="cursor-pointer"
                       key={`${index}-${subIndex}`}
                       onClick={() => {
                         handlerSelectedSubDepartment(jobProfile.jobProfilesName);
@@ -82,9 +82,7 @@ function SalaryJobProfilebyDepartment() {
                         {(jobProfile.employeePendingHours).toFixed(2)}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                        {jobProfile.employeeTotalHours -
-                          (jobProfile.employeePendingHours +
-                            jobProfile.employeeWorkingHours).toFixed(2)}
+                        {(jobProfile.employeeTotalHours -(jobProfile.employeePendingHours +jobProfile.employeeWorkingHours)).toFixed(2)}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                         {jobProfile.employeeWorkingHours}
