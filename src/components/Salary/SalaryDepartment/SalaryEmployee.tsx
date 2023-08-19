@@ -8,7 +8,7 @@ function SalaryEmployee() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [jobProfile, setJobProfile] = useState(location.state?.jobProfile);
-
+  console.log("jobProfile in employee",jobProfile);
   const employees = useSelector((state: any) => state.salary.salaryOfEmployee);
   console.log(employees);
   useEffect(() => {

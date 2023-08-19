@@ -59,7 +59,7 @@ export const getSalaryBySubDepartment = async (sendData: any) => {
   }
 };
 export const getEmployeeSalary = async (sendData: any) => {
-  const filterDatta = convertToQueryString({departmentName:sendData});
+  const filterDatta = convertToQueryString({jobProfileName:sendData});
   try {
     const { data } = await axios.get(
       `${getEmployeeSalaryApiPath}?${filterDatta}`,

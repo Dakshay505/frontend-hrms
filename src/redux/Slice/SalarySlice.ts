@@ -48,6 +48,7 @@ export const getEmployeeSalaryAsync: any = createAsyncThunk(
     'getEmployeeSalary',
     async (data) => {
         try {
+            console.log("data",data)
             const response: any = await getEmployeeSalary(data);
             return response;
         } catch (error: any) {
