@@ -70,6 +70,7 @@ import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
 import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryBySubDepartment";
 import SalaryJobProfilebyDepartment from "./components/Salary/SalaryDepartment/SalaryJobProfilebyDepartment";
+import SalaryEmployee from "./components/Salary/SalaryDepartment/SalaryEmployee";
 
 const router = createBrowserRouter([
   {
@@ -552,6 +553,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <SalaryJobProfilebyDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-Employee",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryEmployee />
         </Aside>
       </ProductedRoute>
     ),

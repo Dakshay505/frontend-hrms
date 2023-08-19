@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllDepartmentAsync,
-  getAllParentDepartmentAsync,
-} from "../../../redux/Slice/departmentSlice";
+import {getAllParentDepartmentAsync,} from "../../../redux/Slice/departmentSlice";
 import { useNavigate } from "react-router-dom";
 function SalaryWithDepartment() {
   const dispatch = useDispatch();
@@ -14,7 +11,6 @@ function SalaryWithDepartment() {
   );
   useEffect(() => {
     dispatch(getAllParentDepartmentAsync());
-    dispatch(getAllDepartmentAsync());
   }, []);
   const handleSelectedParent = (element: any) => {
     const data = element.departmentName;

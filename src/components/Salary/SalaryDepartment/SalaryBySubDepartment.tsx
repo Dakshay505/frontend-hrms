@@ -22,8 +22,8 @@ function SalaryDepartment() {
   const navigate = useNavigate();
   const handlerSelectedSubDepartment = (element: any) => {
     dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
-    navigate("/salary-jobProfile-department");
-    console.log(element.departmentName);
+    navigate("/salary-jobProfile-department",{ state: { steel: parentDepartment }});
+    console.log("element.departmentName",element.departmentName);
   };
   return (
     <div className="px-10 py-8">
@@ -34,7 +34,7 @@ function SalaryDepartment() {
       <div className="py-6 mb-24 overflow-auto">
         <table className="z-0  table-fixed">
           <tbody>
-            <tr className="bg-[#ECEDFE] cursor-default">
+            <tr className="bg-[#ECEDFE] cursor-pointer">
               
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Sub Department
@@ -72,12 +72,13 @@ function SalaryDepartment() {
                     onClick={() => {
                       handlerSelectedSubDepartment(element);
                     }}
+                    className="cursor-pointer"
                   >
                    
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
                     </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                    <td className="py-4 px-5 cursor-pointer text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                       {element.numberOfJobProfiles}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
