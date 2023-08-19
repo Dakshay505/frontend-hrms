@@ -100,7 +100,7 @@ function SalaryDepartment() {
                         .reduce(
                           (acc: any, job: any) =>
                             acc +
-                            (job.employeeTotalHours - job.employeePendingHours),
+                            (job.employeeTotalHours - (job.employeePendingHours+job.employeeWorkingHours)),
                           0
                         )
                         .toFixed(2)}
