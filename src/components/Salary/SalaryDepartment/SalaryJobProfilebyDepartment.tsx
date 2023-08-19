@@ -109,3 +109,4 @@ function SalaryJobProfilebyDepartment() {
 }
 
 export default SalaryJobProfilebyDepartment;
+// as
