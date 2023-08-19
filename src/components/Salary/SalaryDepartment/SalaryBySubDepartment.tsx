@@ -86,10 +86,7 @@ function SalaryDepartment() {
                       )}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.data.reduce(
-                        (acc: any, job: any) => acc + job.pendingHours,
-                        0
-                      )}
+                      {element.data.reduce((acc: any, job: any) => acc + job.pendingHours, 0).toFixed(2)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                       {element.data.reduce(

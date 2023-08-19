@@ -29,7 +29,7 @@ function SalaryJobProfilebyDepartment() {
   return (
     <div className="px-10 py-8">
       <div>
-        <h1 className="text-2xl font-bold text-[#2E2E2E]">Shjyjalary Database</h1>
+        <h1 className="text-2xl font-bold text-[#2E2E2E]">Salary Database</h1>
       </div>
       {/* TABLE START HERE */}
       <div className="py-6 mb-24 overflow-auto">
@@ -71,7 +71,7 @@ function SalaryJobProfilebyDepartment() {
                       {jobProfile.totalEmployee}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.pendingHours}
+                      {jobProfile.pendingHours.toFixed(4)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                       {jobProfile.workingHours}

@@ -11,10 +11,13 @@ import { useEffect, useState } from 'react'
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
 import LoaderGif from '../../assets/loadergif.gif'
+import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import close from "../../assets/x1.png"
 
 export const AttendenceDtabase = () => {
   const dispatch = useDispatch();
   const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
+  // console.log("kdfcboubcoudcf", allAttandenceList)
   const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
 
   const loaderStatus = useSelector((state: any) => state.attandence.status)
@@ -23,10 +26,10 @@ export const AttendenceDtabase = () => {
 
   const handleRowClick = (index: number) => {
     const isExpanded = showTableRow.includes(index)
-    if(isExpanded){
+    if (isExpanded) {
       setShowTableRow(showTableRow.filter((belowRowIndex: any) => belowRowIndex !== index))
     }
-    else{
+    else {
       setShowTableRow([...showTableRow, index])
     }
   }
@@ -101,8 +104,8 @@ export const AttendenceDtabase = () => {
           </Link>
         </div>
         {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
-              <img src={LoaderGif} className='w-6 h-6' alt="" />
-            </div> : ""}
+          <img src={LoaderGif} className='w-6 h-6' alt="" />
+        </div> : ""}
         <div className='py-6 overflow-auto'>
           {/* TABLE STARTS HERE */}
           <table className="w-full">
@@ -114,17 +117,33 @@ export const AttendenceDtabase = () => {
                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
+                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photos</td>
               </tr>
               {allAttandenceList && allAttandenceList.map((element: any, index: number) => {
                 const punchesList = [...(element.punches)];
+
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                   return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                 })
                 const latestPunches = sortedPunches[0];
+                console.log("latestPunches", latestPunches)
+                // open image
+                const [isImageOpen, setIsImageOpen] = useState(false);
+                const [selectedImage, setSelectedImage] = useState('');
+
+                const handleImageClick = (imageSrc: any) => {
+                  setSelectedImage(imageSrc);
+                  setIsImageOpen(true);
+                };
+
+                const handleCloseImage = () => {
+                  setIsImageOpen(false);
+                };
+
                 return <>
-                  <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => {handleRowClick(index)}}>
+                  <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
-                    <td className='flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} alt="" />: ""}</td>
+                    <td className='flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} alt="" /> : ""}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                     <td className='py-4 px-5'>
@@ -145,6 +164,42 @@ export const AttendenceDtabase = () => {
                         </span>}
                     </td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                    {/* photo open */}
+
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>
+                      {latestPunches?.status === "approved" && latestPunches.approvedImage && (
+                        <div className="flex gap-[10px] cursor-pointer">
+                          <div>
+                            <p
+                              className='text-[12px] leading-4 font-medium text-[#283093] underline'
+                              onClick={() => handleImageClick(latestPunches.approvedImage)}
+                            >
+                              Open Photo
+                            </p>
+                          </div>
+                          <div >
+                            <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
+                          </div>
+                        </div>
+                      )}
+
+                      {isImageOpen && (
+                        <div  className="absolute left-0 right-0 m-auto flex justify-center">
+                          <img
+                            src={selectedImage}
+                            alt="Approved"
+                            className="modal-image"
+                          />
+                          <button
+                            className="close-button absolute right-[36rem] p-[10px]"
+                            onClick={handleCloseImage}
+                          >
+                            <img src={close} alt="" className="h-[25px] w-[25px] "/>
+                          </button>
+                        </div>
+                      )}
+                    </td>
+
                   </tr>
                   {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                     return <tr key={element._id + element.punchIn}>
