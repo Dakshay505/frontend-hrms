@@ -46,6 +46,9 @@ function SalaryJobProfilebyDepartment() {
                 Pending Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Absent Hours
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Working Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -55,41 +58,48 @@ function SalaryJobProfilebyDepartment() {
                 Total Hours
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-              Total Salary Of Employee
+                Total Salary Of Employee
               </td>
             </tr>
             {subDepartmentList &&
               subDepartmentList.map((department: any, index: any) => {
-                return department.salaryData.map((jobProfile: any, subIndex: any) => (
-                  <tr
-                    key={`${index}-${subIndex}`}
-                    onClick={() => {
-                      handlerSelectedSubDepartment(department);
-                    }}
-                  >
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.jobProfilesName}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.numberOfEmployee}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.employeePendingHours}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.employeeWorkingHours}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.employeeTotalEarning}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.employeeTotalHours || "-"}
-                    </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {jobProfile.totalSalaryOfEmployee}
-                    </td>
-                  </tr>
-                ));
+                return department.salaryData.map(
+                  (jobProfile: any, subIndex: any) => (
+                    <tr
+                      key={`${index}-${subIndex}`}
+                      onClick={() => {
+                        handlerSelectedSubDepartment(department);
+                      }}
+                    >
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.jobProfilesName}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.numberOfEmployee}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {(jobProfile.employeePendingHours).toFixed(2)}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.employeeTotalHours -
+                          (jobProfile.employeePendingHours +
+                            jobProfile.employeeWorkingHours).toFixed(2)}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.employeeWorkingHours}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.employeeTotalEarning}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.employeeTotalHours || "-"}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                        {jobProfile.totalSalaryOfEmployee}
+                      </td>
+                    </tr>
+                  )
+                );
               })}
           </tbody>
         </table>
