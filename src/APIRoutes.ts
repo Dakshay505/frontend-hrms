@@ -107,3 +107,7 @@ export const getAllDepartmentApiPath = `${apiPath}/api/v1/department/getAllDepar
 export const getAllParentDepartmentApiPath = `${apiPath}/api/v1/department/getAllParent`
 export const getDepartmentByParentApiPath = `${apiPath}/api/v1/department/getDepartmentByParent`
 export const getjobProfileBySubDepartmentNameApiPath = `${apiPath}/api/v1/department/getJobProfile`
+
+
+// new Salary
+export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`

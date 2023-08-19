@@ -18,6 +18,7 @@ function SalaryWithDepartment() {
   }, []);
   const handleSelectedParent = (element: any) => {
     const data = element.departmentName;
+    console.log("data", data);
     navigate("/salary-department", { state: { parentDepartment: data } });
   };
   return (
@@ -36,6 +37,9 @@ function SalaryWithDepartment() {
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Parent Department
               </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Child Department
+              </td>
             </tr>
             {parentDepartmentList &&
               parentDepartmentList.map((element: any, index: number) => {
@@ -51,6 +55,9 @@ function SalaryWithDepartment() {
                     </td>
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
+                    </td>
+                    <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
+                      {element.childDepartmentId.length}
                     </td>
                   </tr>
                 );
