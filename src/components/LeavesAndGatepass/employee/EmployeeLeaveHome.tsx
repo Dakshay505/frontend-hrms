@@ -9,9 +9,14 @@ import Check from '../../../assets/Check.svg';
 import LoaderGif from '../../../assets/loadergif.gif'
 import GreenCheck from '../../../assets/GreenCheck.svg'
 import RedX from '../../../assets/RedX.svg'
+import XSquare from '../../../assets/XSquare11.svg'
 
 export const EmployeeLeaveHome = () => {
   const [activeButton, setActiveButton] = useState('Pending');
+  const [showGatepassPopup, setShowGatepassPopup] = useState(false)
+  const [showLeavesPopup, setShowLeavesPopup] = useState(false)
+  const [rejectedReasonGatepass, setRejectedReasonGatepass] = useState("")
+  const [rejectedReasonLeaves, setRejectedReasonLeaves] = useState("")
 
   const dispatch = useDispatch();
   const allApprovedLeaveList = useSelector((state: any) => state.leave.acceptedLeaves);
@@ -103,21 +108,10 @@ export const EmployeeLeaveHome = () => {
                           <p className='text-sm font-normal text-[#2E2E2E]'>{element.message}</p>
                         </div>
                         <div className='flex gap-4'>
-                          <button onClick={() => dispatch(updatePendingLeavesAsync({
-                            employeeId: element.employeeId?._id,
-                            status: "accepted",
-                            from: element.from,
-                            to: element.to
-                          })).then(() => {
-                            dispatch(getAllPendingLeavesAsync());
-                            dispatch(getAllAcceptedLeavesAsync());
-                            dispatch(getAllRejectedLeavesAsync());
-                          })}
-                            className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
                           <button
                             onClick={() => dispatch(updatePendingLeavesAsync({
                               employeeId: element.employeeId?._id,
-                              status: "rejected",
+                              status: "accepted",
                               from: element.from,
                               to: element.to
                             })).then(() => {
@@ -125,8 +119,61 @@ export const EmployeeLeaveHome = () => {
                               dispatch(getAllAcceptedLeavesAsync());
                               dispatch(getAllRejectedLeavesAsync());
                             })}
+                            className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
+                          <button
+                            onClick={() => setShowLeavesPopup(true)}
                             className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
                         </div>
+                        {showLeavesPopup && <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center'>
+                          <div className='w-[720px] h-[281px] p-10 bg-[#FFFFFF]'>
+                            <div className='flex gap-2 pt-2 pb-4 border-b border-solid border-[#B0B0B0]'>
+                              <div>
+                                <img src={XSquare} className='w-6 h-6' alt="" />
+                              </div>
+                              <div>
+                                <p className='text-[18px] leading-6 font-medium text-[#1C1C1C] tracking-[0.15px]'>Deny Leave?</p>
+                              </div>
+                            </div>
+                            <div className='flex flex-col gap-3 pt-6'>
+                              <div>
+                                <p className='text-sm font-normal tracking-[0.25px] text-[#1C1C1C]'>Enter reason</p>
+                              </div>
+                              <div>
+                                <input
+                                  required
+                                  onChange={(event) => setRejectedReasonLeaves(event.target.value)}
+                                  className='border border-solid border-[#B0B0B0] w-[640px] h-10 rounded px-4 focus:outline-none'
+                                  type="text" />
+                              </div>
+                            </div>
+                            <div className='flex justify-end pt-[33px]'>
+                              <div className='flex gap-4'>
+                                <button
+                                  onClick={() => {
+                                    setShowLeavesPopup(false)
+                                  }}
+                                  className='flex justify-center items-center py-3 px-4 w-[96px] h-[34px] border border-solid border-[#3B3B3B] rounded-lg'><p className='text-sm font-medium tracking-[0.25px] text-[#3B3B3B]'>Cancel</p></button>
+                                <button
+                                  onClick={() => {
+                                    dispatch(updatePendingLeavesAsync({
+                                      employeeId: element.employeeId?._id,
+                                      status: "rejected",
+                                      from: element.from,
+                                      to: element.to,
+                                      rejectedReason: rejectedReasonLeaves
+                                    })).then(() => {
+                                      dispatch(getAllPendingLeavesAsync());
+                                      dispatch(getAllAcceptedLeavesAsync());
+                                      dispatch(getAllRejectedLeavesAsync());
+                                    })
+                                    setShowLeavesPopup(false);
+                                    setRejectedReasonLeaves("");
+                                  }}
+                                  className='flex justify-center items-center py-3 px-4 w-[153px] h-[34px] bg-[#283093] rounded-lg'><p className='text-sm font-medium tracking-[0.25px] text-[#FBFBFC] whitespace-nowrap'>Deny Leave</p></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>}
                       </div>
                     </div>
                   } else {
@@ -159,19 +206,60 @@ export const EmployeeLeaveHome = () => {
                             })}
                             className='flex items-center justify-center w-[122px] h-10 py-3 px-4 bg-[#283093] rounded-sm'><img src={Check} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#FBFBFC]'>Approve</p></button>
                           <button
-                            onClick={() => dispatch(updatePendingGatePassAsync({
-                              currentStatus: element.status,
-                              employeeId: element.employeeId?._id,
-                              status: "rejected",
-                              gatePassDate: element.gatePassDate,
-                              gatePassTime: element.gatePassTime
-                            })).then(() => {
-                              dispatch(getAllPendingLeavesAsync());
-                              dispatch(getAllAcceptedLeavesAsync());
-                              dispatch(getAllRejectedLeavesAsync());
-                            })}
+                            onClick={() => setShowGatepassPopup(true)}
                             className='flex items-center justify-center w-[100px] h-10 py-3 px-4 border border-solid border-[#283093] rounded-sm'><img src={X} alt="check" className='w-4 h-4' /><p className='px-2 text-sm font-medium text-[#283093]'>Deny</p></button>
                         </div>
+                        {showGatepassPopup && <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className='fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center'>
+                          <div className='w-[720px] h-[281px] p-10 bg-[#FFFFFF]'>
+                            <div className='flex gap-2 pt-2 pb-4 border-b border-solid border-[#B0B0B0]'>
+                              <div>
+                                <img src={XSquare} className='w-6 h-6' alt="" />
+                              </div>
+                              <div>
+                                <p className='text-[18px] leading-6 font-medium text-[#1C1C1C] tracking-[0.15px]'>Deny Gatepass?</p>
+                              </div>
+                            </div>
+                            <div className='flex flex-col gap-3 pt-6'>
+                              <div>
+                                <p className='text-sm font-normal tracking-[0.25px] text-[#1C1C1C]'>Enter reason</p>
+                              </div>
+                              <div>
+                                <input
+                                  required
+                                  onChange={(event) => setRejectedReasonGatepass(event.target.value)}
+                                  className='border border-solid border-[#B0B0B0] w-[640px] h-10 rounded px-4 focus:outline-none'
+                                  type="text" />
+                              </div>
+                            </div>
+                            <div className='flex justify-end pt-[33px]'>
+                              <div className='flex gap-4'>
+                                <button
+                                  onClick={() => {
+                                    setShowGatepassPopup(false)
+                                  }}
+                                  className='flex justify-center items-center py-3 px-4 w-[96px] h-[34px] border border-solid border-[#3B3B3B] rounded-lg'><p className='text-sm font-medium tracking-[0.25px] text-[#3B3B3B]'>Cancel</p></button>
+                                <button
+                                  onClick={() => {
+                                    dispatch(updatePendingGatePassAsync({
+                                      currentStatus: element.status,
+                                      employeeId: element.employeeId?._id,
+                                      status: "rejected",
+                                      gatePassDate: element.gatePassDate,
+                                      gatePassTime: element.gatePassTime,
+                                      rejectedReason: rejectedReasonGatepass
+                                    })).then(() => {
+                                      dispatch(getAllPendingLeavesAsync());
+                                      dispatch(getAllAcceptedLeavesAsync());
+                                      dispatch(getAllRejectedLeavesAsync());
+                                    })
+                                    setShowGatepassPopup(false)
+                                    setRejectedReasonGatepass("")
+                                  }}
+                                  className='flex justify-center items-center py-3 px-4 w-[153px] h-[34px] bg-[#283093] rounded-lg'><p className='text-sm font-medium tracking-[0.25px] text-[#FBFBFC] whitespace-nowrap'>Deny Gatepass</p></button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>}
                       </div>
                     </div>
                   }
@@ -183,7 +271,7 @@ export const EmployeeLeaveHome = () => {
                 {/* usemap on this */}
                 {allApprovedLeaveList && allApprovedLeaveList.map((element: any, index: number) => {
                   const currentDate = new Date();
-                  const formattedDate = currentDate.toLocaleDateString('en-GB', {day: '2-digit', month: '2-digit', year: 'numeric',});
+                  const formattedDate = currentDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', });
                   const options: any = { day: "numeric", month: "short" };
                   let gatePassDate;
                   if (element.gatePassDate) {

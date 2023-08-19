@@ -1,17 +1,16 @@
 
-
-// export const apiPath = `http://localhost:5050`;
+export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
-export const apiPath = `https://hrms-lix0.onrender.com`;
-
-
+// export const apiPath = `https://hrms-lix0.onrender.com`;
+// export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
 
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;
 export const getJobProfileApiPath = `${apiPath}/api/v1/jobprofile`;
 
-// DEPARTMENT API
+// group API
 
 export const createGroupApiPath = `${apiPath}/api/v1/group/add`;
 export const getGroupApiPath = `${apiPath}/api/v1/group`;
@@ -28,6 +27,7 @@ export const getEmployeeImageApiPath = `${apiPath}/api/v1/employee/docs/getProfi
 export const getQrAssignApiPath = `${apiPath}/api/v1/employee/docs/getProofPicture`
 export const updatePasswordApiPath = `${apiPath}/api/v1/employee/changePassword`
 export const newPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`
+export const salaryLogApiPath = `${apiPath}/api/v1/employee/salaryLog`
 
 // OTP VERIFICATION
 export const getOtpApiPath = `${apiPath}/api/v1/otpVerify/getotp`
@@ -91,6 +91,8 @@ export const getNotificationApiPath = `${apiPath}/api/v1/notifications`
 // jobprofile
 export const getSingleJobProfileApiPath = `${apiPath}/api/v1/jobprofile`
 export const updateJobProfileApiPath = `${apiPath}/api/v1/jobprofile/update`
+export const addJobProfileDepartmentApiPath = `${apiPath}/api/v1/jobprofile/addDepartment`
+export const deleteJobProfileDepartmentApiPath = `${apiPath}/api/v1/jobProfile/deleteDepartment`
 
 
 // SALARY
@@ -98,3 +100,10 @@ export const getAllGroupSalaryApiPath = `${apiPath}/api/v1/attendance/groupSalar
 export const getSingleGroupSalaryApiPath = `${apiPath}/api/v1/attendance`
 
 
+// Department
+export const addDepartmentApiPath = `${apiPath}/api/v1/department/add`
+export const addParentDepartmentApiPath = `${apiPath}/api/v1/department/addParent`
+export const getAllDepartmentApiPath = `${apiPath}/api/v1/department/getAllDepartment`
+export const getAllParentDepartmentApiPath = `${apiPath}/api/v1/department/getAllParent`
+export const getDepartmentByParentApiPath = `${apiPath}/api/v1/department/getDepartmentByParent`
+export const getjobProfileBySubDepartmentNameApiPath = `${apiPath}/api/v1/department/getJobProfile`

@@ -1,6 +1,8 @@
 import axios from "axios";
 import {
+  addJobProfileDepartmentApiPath,
   createJobProfileApiPath,
+  deleteJobProfileDepartmentApiPath,
   getJobProfileApiPath,
   getSingleJobProfileApiPath,
   updateJobProfileApiPath,
@@ -9,7 +11,6 @@ import {
 // CREATE
 export const createJobProfiles = async (jobProfileData: any) => {
   try {
-    console.log(jobProfileData);
     const { data } = await axios.post(
       `${createJobProfileApiPath}`,
       jobProfileData,
@@ -17,10 +18,9 @@ export const createJobProfiles = async (jobProfileData: any) => {
     );
     return data;
   } catch (err: any) {
-    console.log(err.response.data);
+    return err.response.data;
   }
 };
-
 
 export const getSingleJobProfile = async (JobprofileId: any) => {
   try {
@@ -34,7 +34,7 @@ export const getSingleJobProfile = async (JobprofileId: any) => {
     console.error(error);
   }
 };
- 
+
 // READ
 export const getAllJobProfiles = async () => {
   try {
@@ -49,9 +49,32 @@ export const getAllJobProfiles = async () => {
 export const updateJobProfile = async (jobprofileData: any) => {
   try {
     console.log("jobProfileData", jobprofileData);
-    const { data } = await axios.patch(`${updateJobProfileApiPath}/${jobprofileData.jobProfileId}`,jobprofileData.data,
+    const { data } = await axios.patch(
+      `${updateJobProfileApiPath}/${jobprofileData.jobProfileId}`,
+      jobprofileData.data,
       { withCredentials: true }
     );
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const updateJobProfileDepartment = async (Data: any) => {
+  try {
+    const { data } = await axios.patch(
+      `${addJobProfileDepartmentApiPath}`,
+      Data,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const deleteDepartmentToJobProfile = async (Data: any) => {
+  try {
+    console.log(Data);
+    const { data } = await axios.delete(`${deleteJobProfileDepartmentApiPath}`,{data:Data});
     return data;
   } catch (error: any) {
     console.log(error.response.data);

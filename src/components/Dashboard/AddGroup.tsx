@@ -3,6 +3,7 @@ import Plus from "../../assets/Plus.png"
 import { useDispatch, useSelector } from 'react-redux'
 import { createGroupAsync, getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import {useEffect, useState} from "react"
+import toast from 'react-hot-toast';
 
 const AddGroup = () => {
     const dispatch = useDispatch();
@@ -56,7 +57,12 @@ const AddGroup = () => {
                         }
                     }
                     dispatch(createGroupAsync(data))
-                    .then(() => {
+                    .then((res: any) => {
+                        if(res.payload.success){
+                            toast.success(res.payload.message);
+                        } else{
+                            toast.error(res.payload.message);
+                        }
                         dispatch(getAllGroupsAsync());
                     });
                     reset()

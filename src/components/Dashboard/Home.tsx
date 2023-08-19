@@ -1,14 +1,11 @@
 import userPlus from '../../assets/UserPlus.png'
+import departmentLogo from '../../assets/department.svg'
 import usersThree from '../../assets/UsersThree.png'
 import GearSix from '../../assets/GearSix.png'
 import Briefcase from '../../assets/Briefcase.png'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 const Home = () => {
-
-    const data = useSelector((state: any) => state.login.loggedInUserData)
-    console.log(data);
     return (
         <div className="mx-10">
             <div className='pt-8'>
@@ -20,20 +17,26 @@ const Home = () => {
                 </div>
                 <div className='flex gap-4'>
                     <Link to='/addemployee'>
-                        <div className='flex flex-col items-center justify-center bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
-                            <img className='w-[32px] h-[32px]' src={userPlus} alt="" />
+                        <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
+                            <img className='w-[32px] h-[32px]' src={userPlus} alt="Add Employee" />
                             <p className='text-[#283093] text-xl leading-7 font-medium'>Add Employee</p>
                         </div>
                     </Link>
+                    <Link to='/add-department'>
+                        <div className='flex flex-col items-center justify-center gap-[12px]  bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
+                            <img className='w-[25px] h-[32px]' src={departmentLogo} alt="Add Department" />
+                            <p className='text-[#283093] text-xl leading-7 font-medium'>Add Department</p>
+                        </div>
+                    </Link>
                     <Link to='/add-job-profile'>
-                        <div className='flex flex-col items-center justify-center bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
-                            <img className='w-[32px] h-[32px]' src={Briefcase} alt="" />
+                        <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
+                            <img className='w-[32px] h-[32px]' src={Briefcase} alt="Add Job Profile" />
                             <p className='text-[#283093] text-xl leading-7 font-medium'>Add Job Profile</p>
                         </div>
                     </Link>
                     <Link to="/view-modify-database">
-                        <div className='flex flex-col items-center justify-center bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
-                            <img className='w-[32px] h-[32px]' src={usersThree} alt="" />
+                        <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
+                            <img className='w-[32px] h-[32px]' src={usersThree} alt="View Database" />
                             <p className='text-[#283093] text-xl leading-7 font-medium'>View Database</p>
                         </div>
                     </Link>

@@ -3,6 +3,7 @@ import "./App.css";
 import Aside from "./components/aside";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+
 import Home from './components/Dashboard/Home';
 import AddEmployee from './components/Dashboard/AddEmployee';
 import AddNewFieldEmployee from './components/Dashboard/AddNewFieldEmployee';
@@ -25,7 +26,7 @@ import { LeaveRecords } from './components/LeavesAndGatepass/LeaveRecords';
 import { GatepassRecord } from './components/LeavesAndGatepass/GatepassRecord';
 import { Login } from './components/Login';
 
-import { EmployeeProfile } from './components/Employeeprofile/profile';
+import { EmployeeProfile } from './components/Employeeprofile/Profile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
 import { JobProfileInfo } from './components/Employeeprofile/jobprofileinfo';
@@ -64,6 +65,10 @@ import SingleGroupAttendance from "./components/Attendance/SingleGroupAttendance
 import { TrainingResource } from "./Employee/training/TrainingResource";
 import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
 import toast, { Toaster } from 'react-hot-toast';
+import AddDepartment from "./components/Dashboard/AddDepartment";
+import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
+import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
+import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryDepartment";
 
 const router = createBrowserRouter([
   {
@@ -501,6 +506,46 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/add-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/add-parent-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddParentDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-parent-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryWithDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/salary-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
     path: "*",
     element: (
       <NotFound></NotFound>
@@ -519,7 +564,7 @@ function App() {
   }
 
 
-  
+
   useEffect(() => {
     const newSocket = io(`${apiPath}?employeeId=${idd}`);
     newSocket.on('connect', () => {
@@ -550,7 +595,10 @@ function App() {
   return (
     <React.StrictMode>
       <RouterProvider router={router} />
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </React.StrictMode>
   );
 }

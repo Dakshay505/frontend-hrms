@@ -6,6 +6,7 @@ import {
   getQrAssignApiPath,
   getSingleEmployeeApiPath,
   newPasswordApiPath,
+  salaryLogApiPath,
   updateEmployeeApiPath,
   updatePasswordApiPath,
   uploadDocumentApiPath,
@@ -23,18 +24,20 @@ export const createEmployee = async (employeeData: any) => {
     return data;
   } catch (error: any) {
     console.log(error.response.data);
+    return error.response.data
   }
 };
 // UPDATE
 export const updateEmployee = async (employeeData: any) => {
   try {
+    console.log("employeeData", employeeData)
     const { data } = await axios.patch(
       `${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData.data,
       { withCredentials: true }
     );
     return data;
   } catch (error: any) {
-    console.log(error.response.data);
+    return error.response.data
   }
 };
 
@@ -122,18 +125,6 @@ export const getEmployeeImage = async (employeeId: any) => {
   }
 };
 
-// pagination
-export const pagination = async (page: any) => {
-  try {
-    const response = await axios.get(`${getEmployeeApiPath}?page=${page}`, {
-      withCredentials: true, 
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
-};
 
 
 
@@ -169,6 +160,19 @@ export const newPassword = async (sendData: any) => {
     });
     return data;
   } catch (err: any) {
-    console.log(err.response.data);
+    return err.response.data
   }
 };
+
+export const salaryLog = async (employeeId: any) => {
+try {
+  const { data } = await axios.get(`${salaryLogApiPath}/${employeeId}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    return err.response.data
+  }
+};
+
+
