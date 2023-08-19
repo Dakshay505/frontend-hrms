@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getAllGroupSalary, getSalaryBySubDepartment, getSingleGroupSalary } from '../API/SalaryAPI';
+import { getAllGroupSalary, getEmployeeSalary, getSalaryBySubDepartment, getSingleGroupSalary } from '../API/SalaryAPI';
 
 const initialState = {
    allGroupsSalary: [],
    singleGroupsSalary: [],
    salaryOfSubDepartment:[],
+   salaryOfEmployee:[],
    status: 'idle',
 };
 
@@ -43,6 +44,17 @@ export const getSalaryBySubDepartmentAsync: any = createAsyncThunk(
         }
     }
 );
+export const getEmployeeSalaryAsync: any = createAsyncThunk(
+    'getEmployeeSalary',
+    async (data) => {
+        try {
+            const response: any = await getEmployeeSalary(data);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
 
 export const SalarySlice = createSlice({
     name: 'salary',
@@ -71,6 +83,13 @@ export const SalarySlice = createSlice({
             .addCase(getSalaryBySubDepartmentAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
                 state.salaryOfSubDepartment =  action.payload.departmentSalary;
+            })
+            .addCase(getEmployeeSalaryAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getEmployeeSalaryAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.salaryOfEmployee =  action.payload.attendanceRecords;
             })
     },
 });
