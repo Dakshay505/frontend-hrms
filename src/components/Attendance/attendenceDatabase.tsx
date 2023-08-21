@@ -227,10 +227,10 @@ export const AttendenceDtabase = () => {
                 <img
                   src={selectedImage}
                   alt="Approved"
-                  className="modal-image"
+                  className="h-[20rem]"
                 />
                 <button
-                  className="close-button absolute right-[32rem] p-[10px]"
+                  className="close-button absolute top-[-1rem] right-[37rem] p-[10px]"
                   onClick={handleCloseImage}
                 >
                   <img src={close} alt="" className="h-[25px] w-[25px] " />
