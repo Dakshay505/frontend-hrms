@@ -106,19 +106,14 @@ export const AttendenceDtabase = () => {
 
   const handlerFatchMore = () => {
     setPage(prevPage => prevPage + 1);
-  };
-  const groupAttendanceList = useSelector((state: any) => state.attandence.groupAttendance)
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) {
-      return;
-    }
-    handlerFatchMore()
 
+   
   };
+  
+
+  const groupAttendanceList = useSelector((state: any) => state.attandence.groupAttendance)
+  
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -127,7 +122,6 @@ export const AttendenceDtabase = () => {
   const totalPresent = groupAttendanceList.reduce((acc: any, group: any) => acc + group.present, 0);
   const totalEmployees = groupAttendanceList.reduce((acc: any, group: any) => acc + group.totalEmployeesInGroup, 0);
   const totalAbsent = totalEmployees - totalPresent;
-
   return (
     <div className="px-10 pt-8">
       <div className="flex flex-col flex-start">
