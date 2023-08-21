@@ -19,7 +19,7 @@ function SalaryJobProfilebyDepartment() {
   );
   console.log(subDepartmentList);
   useEffect(() => {
-    dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
+    dispatch(getSalaryBySubDepartmentAsync(filter));
     // dispatch(getDepartmentByParentAsync(parentDepartment));
   }, []);
   const navigate = useNavigate();
@@ -45,7 +45,8 @@ function SalaryJobProfilebyDepartment() {
      groupName: "",
      jobProfileName: "",
      date: "",
-     nextDate: ""
+     nextDate: "",
+     departmentName:parentDepartment
    });
  
   

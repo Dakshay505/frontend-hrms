@@ -24,14 +24,15 @@ function SalaryDepartment() {
     (state: any) => state.salary.salaryOfSubDepartment
   );
   useEffect(() => {
-    dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
+    dispatch(getSalaryBySubDepartmentAsync(filter));
   }, []);
   const navigate = useNavigate();
   
   const handlerSelectedSubDepartment = (element: any) => {
-    dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
+    dispatch(getjobProfileBySubDepartmentNameAsync(filter));
     navigate("/salary-jobProfile-department", { state: { steel: parentDepartment } });
     setParentDepartment("")
+    
   };
 
 
@@ -46,7 +47,8 @@ function SalaryDepartment() {
     groupName: "",
     jobProfileName: "",
     date: "",
-    nextDate: ""
+    nextDate: "",
+    departmentName:parentDepartment
   });
 
  
@@ -168,6 +170,7 @@ function SalaryDepartment() {
                   <tr
                     key={index}
                     onClick={() => {
+                      console.log(element)
                       handlerSelectedSubDepartment(element);
                     }}
                     className="cursor-pointer"
