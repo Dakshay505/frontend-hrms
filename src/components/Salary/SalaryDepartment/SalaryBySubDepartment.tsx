@@ -168,6 +168,7 @@ function SalaryDepartment() {
                   <tr
                     key={index}
                     onClick={() => {
+                      console.log(element)
                       handlerSelectedSubDepartment(element);
                     }}
                     className="cursor-pointer"

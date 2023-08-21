@@ -3,7 +3,7 @@ import glass from "../../assets/MagnifyingGlass.png";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
-import { useEffect,useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
@@ -15,7 +15,8 @@ import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg"
 import CaretUp from "../../assets/CaretUp.svg"
 import LoaderGif from '../../assets/loadergif.gif'
-
+import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import close from "../../assets/x1.png"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
 
@@ -44,7 +45,7 @@ export const AttendenceDashboardList = () => {
 
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
- 
+
   const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
@@ -54,11 +55,11 @@ export const AttendenceDashboardList = () => {
     jobProfileName: "",
     date: "",
     nextDate: "",
-    page:1
-   
+    page: 1
+
   });
   const [page, setPage] = useState(1);
-  const [items, setItems] = useState<any[]>([]); 
+  const [items, setItems] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -71,50 +72,50 @@ export const AttendenceDashboardList = () => {
       date: `${year}-${month}-${day}`
     })
   }, [date])
-   useEffect(()=>{
-     dispatch(getAllGroupsAsync())
+  useEffect(() => {
+    dispatch(getAllGroupsAsync())
     dispatch(getAllJobProfileAsync())
 
-   },[])
-   const fetchData = async () => {
-    
+  }, [])
+  const fetchData = async () => {
+
     try {
       dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
         const employeeData = data.payload.attendanceRecords;
         setItems(prevItems => [...prevItems, ...employeeData]);
       })
-     
-      
-      
-      
+
+
+
+
     } catch (error) {
       // Handle error
     }
-  
+
   };
   useEffect(() => {
-    
+
     fetchData()
-      
+
   }, [page])
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
-    console.log(entries); // Check intersection entries in the console
-    if (entries[0].isIntersecting) {
-      console.log("Load more triggered"); // Debug load more action
-      handlerFatchMore();
-    }
-  },
-  { threshold: 1 }
+        console.log(entries); // Check intersection entries in the console
+        if (entries[0].isIntersecting) {
+          console.log("Load more triggered"); // Debug load more action
+          handlerFatchMore();
+        }
+      },
+      { threshold: 1 }
 
     );
-  
+
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
     }
-  
+
     return () => {
       if (observerTarget.current) {
         observer.unobserve(observerTarget.current);
@@ -140,18 +141,18 @@ export const AttendenceDashboardList = () => {
       const employeeData = data.payload.attendanceRecords;
       setItems(employeeData);
     })
-    
-   
+
+
   }, [filter])
   const handlerFatchMore = () => {
-   
+
     setPage(prevPage => prevPage + 1);
-   
-  
-   
-   
+
+
+
+
   };
- 
+
 
 
   const formatDate = (date: any) => {
@@ -196,6 +197,20 @@ export const AttendenceDashboardList = () => {
     return '';
   };
 
+
+
+  // open image
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
+
+  const handleImageClick = (imageSrc: any) => {
+    setSelectedImage(imageSrc);
+    setIsImageOpen(true);
+  };
+
+  const handleCloseImage = () => {
+    setIsImageOpen(false);
+  };
 
   return (
     <div className="px-[40px] pt-[32px]">
@@ -294,7 +309,7 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-    
+
       <div className='py-6 mb-24 overflow-auto'>
         {/* TABLE STARTS HERE */}
         <table className="w-full">
@@ -306,6 +321,7 @@ export const AttendenceDashboardList = () => {
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
+              <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photos</td>
             </tr>
             {items && items.map((element: any, index: number) => {
               const punchesList = [...(element.punches)];
@@ -313,10 +329,13 @@ export const AttendenceDashboardList = () => {
                 return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
               })
               const latestPunches = sortedPunches[0];
+
+
+
               return <>
                 <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
-                  <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
+                  <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                   <td className='py-4 px-5'>
@@ -337,6 +356,28 @@ export const AttendenceDashboardList = () => {
                       </span>}
                   </td>
                   <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                  {/* photo open */}
+
+                  <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>
+                    {latestPunches?.status === "approved" && latestPunches.approvedImage && (
+                      <div className="flex gap-[10px] cursor-pointer">
+                        <div>
+                          <p
+                            className='text-[12px] leading-4 font-medium text-[#283093] underline'
+                            onClick={() => handleImageClick(latestPunches.approvedImage)}
+                          >
+                            Open Photo
+                          </p>
+                        </div>
+                        <div >
+                          <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
+                        </div>
+                      </div>
+                    )}
+
+
+                  </td>
+
                 </tr>
                 {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                   return <tr key={element._id + element.punchIn}>
@@ -362,20 +403,37 @@ export const AttendenceDashboardList = () => {
                         </span>}
                     </td>
                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+
+
+
                   </tr>
                 })}
               </>
             })}
           </tbody>
+          {isImageOpen && (
+            <div className="absolute top-[20rem] left-0 right-0 m-auto flex justify-center">
+              <img
+                src={selectedImage}
+                alt="Approved"
+                className="modal-image"
+              />
+              <button
+                className="close-button absolute right-[32rem] p-[10px]"
+                onClick={handleCloseImage}
+              >
+                <img src={close} alt="" className="h-[25px] w-[25px] " />
+              </button>
+            </div>
+          )}
           {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
-              <img src={LoaderGif} className='w-6 h-6' alt="" />
-            </div> : ""}
+            <img src={LoaderGif} className='w-6 h-6' alt="" />
+          </div> : ""}
           <div ref={observerTarget}></div>
         </table>
         {/* TABLE ENDS HERE */}
       </div>
 
-      
       <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
           <button

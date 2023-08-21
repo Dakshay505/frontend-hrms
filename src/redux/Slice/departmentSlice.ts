@@ -75,6 +75,7 @@ export const getDepartmentByParentAsync: any = createAsyncThunk(
     }
   }
 );
+
 export const getjobProfileBySubDepartmentNameAsync: any = createAsyncThunk(
   "getjobProfileBySubDepartmentName",
   async (data) => {
