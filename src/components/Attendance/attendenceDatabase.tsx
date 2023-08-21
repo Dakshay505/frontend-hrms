@@ -109,29 +109,8 @@ export const AttendenceDtabase = () => {
    
     setPage(prevPage => prevPage + 1);
    
+  };
   
-    
-    /*dispatch(getAllAttandenceAsync(requestData));
-    if(allAttandenceList && allAttandenceList.length>0){
-    setItems(prevItems => [...prevItems, ...allAttandenceList]);
-    }
-    console.log(allAttandenceList)
-    console.log(allAttandenceCount)
-    */
-   
-  };
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight ) {
-      return;
-    }
-    console.log("hii")
-    handlerFatchMore()
-    
-  };
   return (
     <div className="px-10 pt-8">
       <div className="flex flex-col flex-start">
