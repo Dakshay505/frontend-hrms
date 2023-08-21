@@ -109,6 +109,7 @@ export const AttendenceDtabase = () => {
   };
   const groupAttendanceList = useSelector((state: any) => state.attandence.groupAttendance)
   useEffect(() => {
+    dispatch(getGroupAttendanceAsync())
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
