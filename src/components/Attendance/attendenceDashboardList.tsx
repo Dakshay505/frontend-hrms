@@ -55,8 +55,7 @@ export const AttendenceDashboardList = () => {
     jobProfileName: "",
     date: "",
     nextDate: "",
-    page: 1
-
+   page:1
   });
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
@@ -69,7 +68,8 @@ export const AttendenceDashboardList = () => {
     const day = String(currentDate.getDate()).padStart(2, '0');
     setFilter({
       ...filter,
-      date: `${year}-${month}-${day}`
+      date: `${year}-${month}-${day}`,
+      page:page
     })
   }, [date])
   useEffect(() => {
@@ -80,9 +80,13 @@ export const AttendenceDashboardList = () => {
   const fetchData = async () => {
 
     try {
-      dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      
+      dispatch(getAllAttandenceAsync({ filter, page })).then((data: any) => {
+        
         const employeeData = data.payload.attendanceRecords;
+        if(employeeData.length>0){
         setItems(prevItems => [...prevItems, ...employeeData]);
+        }
       })
 
 
@@ -94,6 +98,7 @@ export const AttendenceDashboardList = () => {
 
   };
   useEffect(() => {
+  
 
     fetchData()
 
@@ -147,10 +152,9 @@ export const AttendenceDashboardList = () => {
   const handlerFatchMore = () => {
 
     setPage(prevPage => prevPage + 1);
-
-
-
-
+    
+    
+  
   };
 
 
@@ -411,25 +415,26 @@ export const AttendenceDashboardList = () => {
               </>
             })}
           </tbody>
+          
+          {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+            <img src={LoaderGif} className='w-6 h-6' alt="" />
+          </div> : ""}
+          <div ref={observerTarget}></div>
           {isImageOpen && (
-              <div className="absolute top-[31rem] left-0 right-0 m-auto flex justify-center">
+              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
                 <img
                   src={selectedImage}
                   alt="Approved"
                   className="h-[20rem]"
                 />
                 <button
-                  className="close-button absolute top-[-1rem] right-[37rem] p-[10px]"
+                  className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
                   onClick={handleCloseImage}
                 >
-                  <img src={close} alt="" className="h-[25px] w-[25px] " />
+                  <img src={close} alt="" className="h-[25px] w-[25px] bg-white rounded-full " />
                 </button>
               </div>
             )}
-          {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
-            <img src={LoaderGif} className='w-6 h-6' alt="" />
-          </div> : ""}
-          <div ref={observerTarget}></div>
         </table>
         {/* TABLE ENDS HERE */}
       </div>
