@@ -105,9 +105,7 @@ export const AttendenceDtabase = () => {
 
 
   const handlerFatchMore = () => {
-    setPage(prevPage => prevPage + 1);
-
-   
+    setPage(prevPage => prevPage + 1);   
   };
   
 
