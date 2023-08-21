@@ -412,20 +412,20 @@ export const AttendenceDashboardList = () => {
             })}
           </tbody>
           {isImageOpen && (
-            <div className="absolute top-[20rem] left-0 right-0 m-auto flex justify-center">
-              <img
-                src={selectedImage}
-                alt="Approved"
-                className="modal-image"
-              />
-              <button
-                className="close-button absolute right-[32rem] p-[10px]"
-                onClick={handleCloseImage}
-              >
-                <img src={close} alt="" className="h-[25px] w-[25px] " />
-              </button>
-            </div>
-          )}
+              <div className="absolute top-[31rem] left-0 right-0 m-auto flex justify-center">
+                <img
+                  src={selectedImage}
+                  alt="Approved"
+                  className="h-[20rem]"
+                />
+                <button
+                  className="close-button absolute top-[-1rem] right-[37rem] p-[10px]"
+                  onClick={handleCloseImage}
+                >
+                  <img src={close} alt="" className="h-[25px] w-[25px] " />
+                </button>
+              </div>
+            )}
           {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
             <img src={LoaderGif} className='w-6 h-6' alt="" />
           </div> : ""}

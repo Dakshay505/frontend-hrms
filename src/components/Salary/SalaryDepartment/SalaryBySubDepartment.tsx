@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
-
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import CaretLeft from "../../../assets/CaretLeft.svg"
@@ -11,7 +10,7 @@ import CaretRight from "../../../assets/CaretRight1.svg"
 
 import LoaderGif from "../../../assets/loadergif.gif";
 
-
+ 
 // getDepartmentByParentAsync
 function SalaryDepartment() {
   const location = useLocation();
@@ -108,9 +107,6 @@ function SalaryDepartment() {
     }
     return '';
   };
-
-
-
 
   const loaderStatus = useSelector((state: any) => state.salary.status);
 
