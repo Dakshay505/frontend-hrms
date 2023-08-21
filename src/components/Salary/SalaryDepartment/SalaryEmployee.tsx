@@ -1,19 +1,67 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployeeSalaryAsync } from "../../../redux/Slice/SalarySlice";
+import LoaderGif from "../../../assets/loadergif.gif";
 
-// getDepartmentByParentAsync
 function SalaryEmployee() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [jobProfile, setJobProfile] = useState(location.state?.jobProfile);
-  console.log("jobProfile in employee",jobProfile);
+  console.log("jobProfile in employee", jobProfile);
   const employees = useSelector((state: any) => state.salary.salaryOfEmployee);
   console.log(employees);
+ 
+  // pagination
+  const limit = 50;
+  const [page, setPage] = useState(1);
+  const observerTarget = useRef(null);
   useEffect(() => {
-    dispatch(getEmployeeSalaryAsync(jobProfile));
-  }, []);
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const requestData = {
+      date: `${year}-${month}-${day}`,
+      page: page, // Use the incremented page
+      limit: limit,
+      jobProfileName: jobProfile,
+
+    };
+    if (page === 0) {
+      return
+    }
+    dispatch(getEmployeeSalaryAsync(requestData));
+    setJobProfile("")
+  }, [page]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          handlerFatchMore();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget]);
+  const handlerFatchMore = () => {
+    console.log("hi",page)
+    setPage(prevPage => prevPage + 1);
+    console.log("hi2",page)
+
+  };
+  const loaderStatus = useSelector((state: any) => state.salary.status);
 
   return (
     <div className="px-10 py-8">
@@ -44,6 +92,13 @@ function SalaryEmployee() {
                 Basic Salary
               </td>
             </tr>
+            {loaderStatus === "loading" ? (
+              <div className="flex  justify-center  w-full">
+                <img src={LoaderGif} className="w-10 h-12" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
             {employees &&
               employees.map((element: any, index: number) => {
                 function formatDateToCustomString(date: any) {
@@ -93,6 +148,7 @@ function SalaryEmployee() {
                 );
               })}
           </tbody>
+          <div ref={observerTarget}></div>
         </table>
       </div>
       {/* TABLE ENDS HERE */}
