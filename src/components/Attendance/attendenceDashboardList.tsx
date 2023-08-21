@@ -3,7 +3,7 @@ import glass from "../../assets/MagnifyingGlass.png";
 import GreenCheck from '../../assets/GreenCheck.svg';
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
-import { useEffect } from "react";
+import { useEffect,useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
@@ -44,6 +44,8 @@ export const AttendenceDashboardList = () => {
 
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState('');
+ 
+  const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   const [filter, setFilter] = useState({
@@ -51,23 +53,13 @@ export const AttendenceDashboardList = () => {
     groupName: "",
     jobProfileName: "",
     date: "",
-    nextDate: ""
+    nextDate: "",
+    page:1
+   
   });
+  const [page, setPage] = useState(1);
+  const [items, setItems] = useState<any[]>([]); 
 
-  useEffect(() => {
-    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      const employeeData = data.payload.attendanceRecords;
-      const arr: any = [];
-      if (employeeData) {
-        for (let i = 0; i < employeeData.length; i++) {
-          arr.push(employeeData[i].employeeId.name)
-        }
-        setFetchedSuggestions(arr.filter((item: any, index: any) => arr.indexOf(item) === index))
-      }
-    });
-    dispatch(getAllGroupsAsync())
-    dispatch(getAllJobProfileAsync())
-  }, [])
 
   useEffect(() => {
     const currentDate = new Date(date);
@@ -79,20 +71,56 @@ export const AttendenceDashboardList = () => {
       date: `${year}-${month}-${day}`
     })
   }, [date])
+   useEffect(()=>{
+     dispatch(getAllGroupsAsync())
+    dispatch(getAllJobProfileAsync())
 
-  useEffect(() => {
-    if (nextDate) {
-      const currentDate = new Date(nextDate);
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
-      setFilter({
-        ...filter,
-        nextDate: `${year}-${month}-${day}`
+   },[])
+   const fetchData = async () => {
+    
+    try {
+      dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+        const employeeData = data.payload.attendanceRecords;
+        setItems(prevItems => [...prevItems, ...employeeData]);
       })
+     
+      
+      
+      
+    } catch (error) {
+      // Handle error
     }
-  }, [nextDate])
+  
+  };
+  useEffect(() => {
+    
+    fetchData()
+      
+  }, [page])
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+    console.log(entries); // Check intersection entries in the console
+    if (entries[0].isIntersecting) {
+      console.log("Load more triggered"); // Debug load more action
+      handlerFatchMore();
+    }
+  },
+  { threshold: 1 }
 
+    );
+  
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+  
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget]);
   const [dateRange, setDateRange] = useState<any>([])
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -108,8 +136,22 @@ export const AttendenceDashboardList = () => {
       }
     }
     getDateRange(filter.date, filter.nextDate)
-    dispatch(getAllAttandenceAsync(filter))
+    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      const employeeData = data.payload.attendanceRecords;
+      setItems(employeeData);
+    })
+    
+   
   }, [filter])
+  const handlerFatchMore = () => {
+   
+    setPage(prevPage => prevPage + 1);
+   
+  
+   
+   
+  };
+ 
 
 
   const formatDate = (date: any) => {
@@ -252,9 +294,7 @@ export const AttendenceDashboardList = () => {
           </div>
         </div>
       </div>
-      {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
-              <img src={LoaderGif} className='w-6 h-6' alt="" />
-            </div> : ""}
+    
       <div className='py-6 mb-24 overflow-auto'>
         {/* TABLE STARTS HERE */}
         <table className="w-full">
@@ -267,7 +307,7 @@ export const AttendenceDashboardList = () => {
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
               <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
             </tr>
-            {allAttandenceList && allAttandenceList.map((element: any, index: number) => {
+            {items && items.map((element: any, index: number) => {
               const punchesList = [...(element.punches)];
               const sortedPunches = punchesList.sort((a: any, b: any) => {
                 return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
@@ -327,6 +367,10 @@ export const AttendenceDashboardList = () => {
               </>
             })}
           </tbody>
+          {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
+              <img src={LoaderGif} className='w-6 h-6' alt="" />
+            </div> : ""}
+          <div ref={observerTarget}></div>
         </table>
         {/* TABLE ENDS HERE */}
       </div>

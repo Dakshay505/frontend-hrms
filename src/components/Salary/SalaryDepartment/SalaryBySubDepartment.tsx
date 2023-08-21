@@ -3,10 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
+
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import CaretLeft from "../../../assets/CaretLeft.svg"
 import CaretRight from "../../../assets/CaretRight1.svg"
+
+import LoaderGif from "../../../assets/loadergif.gif";
+
 
 // getDepartmentByParentAsync
 function SalaryDepartment() {
@@ -19,7 +23,6 @@ function SalaryDepartment() {
   const subDepartmentList = useSelector(
     (state: any) => state.salary.salaryOfSubDepartment
   );
-  console.log(parentDepartment);
   useEffect(() => {
     dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
   }, []);
@@ -30,6 +33,7 @@ function SalaryDepartment() {
     navigate("/salary-jobProfile-department", { state: { steel: parentDepartment } });
     setParentDepartment("")
   };
+
 
   // date range
   const [date, setDate] = useState<any>(new Date());
@@ -106,6 +110,9 @@ function SalaryDepartment() {
 
 
 
+  const loaderStatus = useSelector((state: any) => state.salary.status);
+
+
   return (
     <div className="px-10 py-8">
       <div>
@@ -115,7 +122,9 @@ function SalaryDepartment() {
       <div className="py-6 mb-24 overflow-auto">
         <table className="z-0  table-fixed">
           <tbody>
-            <tr className="bg-[#ECEDFE] cursor-default">
+
+            <tr className="bg-[#ECEDFE] cursor-pointer">
+
 
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Sub Department
@@ -145,6 +154,14 @@ function SalaryDepartment() {
                 Total Salary Of Employee
               </td>
             </tr>
+            {loaderStatus === "loading" ? (
+              <div className="flex  justify-center  w-full">
+                <img src={LoaderGif} className="w-10 h-12" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
+
             {subDepartmentList &&
               subDepartmentList.map((element: any, index: number) => {
                 return (
@@ -153,12 +170,13 @@ function SalaryDepartment() {
                     onClick={() => {
                       handlerSelectedSubDepartment(element);
                     }}
+                    className="cursor-pointer"
                   >
 
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
                     </td>
-                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                    <td className="py-4 px-5 cursor-pointer text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                       {element.numberOfJobProfiles}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">

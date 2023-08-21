@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
 import Calendar from "react-calendar";
@@ -12,9 +11,9 @@ function SalaryJobProfilebyDepartment() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [parentDepartment, setParentDepartment] = useState(
-    location.state?.parentDepartment
+    location.state?.steel
   );
-
+  console.log("parent", parentDepartment)
   const subDepartmentList = useSelector(
     (state: any) => state.salary.salaryOfSubDepartment
   );
@@ -25,9 +24,10 @@ function SalaryJobProfilebyDepartment() {
   }, []);
   const navigate = useNavigate();
   const handlerSelectedSubDepartment = (element: any) => {
-    dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
-    // navigate("/salary-jobProfile-department");
-    console.log(element.departmentName);
+    console.log("element selected", element);
+    // dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
+    navigate("/salary-Employee", { state: { jobProfile: element } });
+    setParentDepartment("")
   };
 
 
@@ -122,7 +122,7 @@ function SalaryJobProfilebyDepartment() {
       <div className="py-6 mb-24 overflow-auto">
         <table className="z-0  table-fixed">
           <tbody>
-            <tr className="bg-[#ECEDFE] cursor-default">
+            <tr className="bg-[#ECEDFE] cursor-pointer">
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Job Profiles
               </td>
@@ -153,9 +153,10 @@ function SalaryJobProfilebyDepartment() {
                 return department.salaryData.map(
                   (jobProfile: any, subIndex: any) => (
                     <tr
+                      className="cursor-pointer"
                       key={`${index}-${subIndex}`}
                       onClick={() => {
-                        handlerSelectedSubDepartment(department);
+                        handlerSelectedSubDepartment(jobProfile.jobProfilesName);
                       }}
                     >
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
@@ -168,9 +169,7 @@ function SalaryJobProfilebyDepartment() {
                         {(jobProfile.employeePendingHours).toFixed(2)}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                        {jobProfile.employeeTotalHours -
-                          (jobProfile.employeePendingHours +
-                            jobProfile.employeeWorkingHours).toFixed(2)}
+                        {(jobProfile.employeeTotalHours -(jobProfile.employeePendingHours +jobProfile.employeeWorkingHours)).toFixed(2)}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                         {jobProfile.employeeWorkingHours}
@@ -248,3 +247,4 @@ function SalaryJobProfilebyDepartment() {
 }
 
 export default SalaryJobProfilebyDepartment;
+// as

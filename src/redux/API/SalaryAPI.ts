@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   getAllGroupSalaryApiPath,
+  getEmployeeSalaryApiPath,
   getSalaryBySubDepartmentApiPath,
   getSingleGroupSalaryApiPath,
 } from "../../APIRoutes";
@@ -47,10 +48,22 @@ export const getSingleGroupSalary = async (sendData: any) => {
 };
 
 export const getSalaryBySubDepartment = async (sendData: any) => {
-  const filterDatta = convertToQueryString({departmentName:sendData});
+  const filterDatta = convertToQueryString({ departmentName: sendData });
   try {
     const { data } = await axios.get(
       `${getSalaryBySubDepartmentApiPath}?${filterDatta}`,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error: any) {
+    console.log(error);
+  }
+};
+export const getEmployeeSalary = async (sendData: any) => {
+  const filterDatta = convertToQueryString({ date: sendData.date, page: sendData.page, limit: sendData.limit, jobProfileName: sendData.jobProfileName });
+  try {
+    const { data } = await axios.get(
+      `${getEmployeeSalaryApiPath}?${filterDatta}`,
       { withCredentials: true }
     );
     return data;

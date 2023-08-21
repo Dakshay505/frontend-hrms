@@ -1,5 +1,5 @@
 import axios from "axios";
-import { addDepartmentApiPath, addParentDepartmentApiPath, getAllDepartmentApiPath, getAllParentDepartmentApiPath, getDepartmentByParentApiPath, getSalaryBySubDepartmentApiPath, getjobProfileBySubDepartmentNameApiPath } from "../../APIRoutes";
+import { addDepartmentApiPath, addParentDepartmentApiPath, getAllDepartmentApiPath, getAllParentDepartmentApiPath, getDepartmentByParentApiPath, getSalaryBySubDepartmentApiPath } from "../../APIRoutes";
 
 // CREATE
 export const createDepartment = async (department: any) => {
