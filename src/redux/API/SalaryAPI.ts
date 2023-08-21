@@ -25,7 +25,8 @@ export const getAllGroupSalary = async (sendData: any) => {
     const { data } = await axios.get(
       `${getAllGroupSalaryApiPath}?${filterDatta}`,
       { withCredentials: true }
-    );
+      );
+      console.log(data)
     return data;
   } catch (error: any) {
     console.log(error);

@@ -51,9 +51,12 @@ export const getDepartmentByParent = async (Data:any) => {
     console.log(err.response.data);
   }
 };
+
 export const getjobProfileBySubDepartmentName = async (Data:any) => {
   try {
+    console.log("Dataaaaa", Data)
     const { data } = await axios.get(`${getSalaryBySubDepartmentApiPath}?departmentName=${Data}`, {withCredentials: true});
+    console.log(data)
     return data;
   } catch (err: any) {
     console.log(err.response.data);

@@ -374,6 +374,8 @@ export const AttendenceDashboardList = () => {
         </table>
         {/* TABLE ENDS HERE */}
       </div>
+
+      
       <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
           <button
