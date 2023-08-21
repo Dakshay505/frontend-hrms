@@ -14,13 +14,16 @@ function SalaryEmployee() {
  
   // pagination
   const limit = 20;
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const observerTarget = useRef(null);
   const [items, setItems] = useState<any[]>([]);
   const fetchData = async () => {
     
     
     try {
+      if(page==0){
+        return
+      }
       const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -33,12 +36,15 @@ function SalaryEmployee() {
       jobProfileName: jobProfile,
 
     };
+    console.log(requestData)
       //dispatch(getEmployeeSalaryAsync(requestData))
       dispatch(getEmployeeSalaryAsync(requestData)).then((data: any) => {
         const employeeData = data.payload.attendanceRecords;
         console.log(data)
         console.log(employeeData)
+        if(employeeData.length>0){
         setItems(prevItems => [...prevItems, ...employeeData]);
+        }
       })
      
       
