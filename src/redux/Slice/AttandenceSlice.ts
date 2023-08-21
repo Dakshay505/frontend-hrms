@@ -62,6 +62,7 @@ export const getGroupAttendanceAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getGroupAttendance();
+      console.log(response)
       return response;
     } catch (error: any) {
       console.log(error.message);

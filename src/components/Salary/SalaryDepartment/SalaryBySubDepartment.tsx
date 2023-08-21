@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getjobProfileBySubDepartmentNameAsync } from "../../../redux/Slice/departmentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSalaryBySubDepartmentAsync } from "../../../redux/Slice/SalarySlice";
+import LoaderGif from "../../../assets/loadergif.gif";
 
 // getDepartmentByParentAsync
 function SalaryDepartment() {
@@ -15,16 +16,17 @@ function SalaryDepartment() {
   const subDepartmentList = useSelector(
     (state: any) => state.salary.salaryOfSubDepartment
   );
-  console.log(parentDepartment);
   useEffect(() => {
     dispatch(getSalaryBySubDepartmentAsync(parentDepartment));
   }, []);
   const navigate = useNavigate();
   const handlerSelectedSubDepartment = (element: any) => {
     dispatch(getjobProfileBySubDepartmentNameAsync(element.departmentName));
-    navigate("/salary-jobProfile-department",{ state: { steel: parentDepartment }});
-    console.log("element.departmentName",element.departmentName);
+    navigate("/salary-jobProfile-department", { state: { steel: parentDepartment } });
+    setParentDepartment("")
   };
+  const loaderStatus = useSelector((state: any) => state.salary.status);
+
   return (
     <div className="px-10 py-8">
       <div>
@@ -35,7 +37,7 @@ function SalaryDepartment() {
         <table className="z-0  table-fixed">
           <tbody>
             <tr className="bg-[#ECEDFE] cursor-pointer">
-              
+
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Sub Department
               </td>
@@ -64,6 +66,14 @@ function SalaryDepartment() {
                 Total Salary Of Employee
               </td>
             </tr>
+            {loaderStatus === "loading" ? (
+              <div className="flex  justify-center  w-full">
+                <img src={LoaderGif} className="w-10 h-12" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
+
             {subDepartmentList &&
               subDepartmentList.map((element: any, index: number) => {
                 return (
@@ -74,7 +84,7 @@ function SalaryDepartment() {
                     }}
                     className="cursor-pointer"
                   >
-                   
+
                     <td className="hover:underline hover:font-bold py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid cursor-pointer border-[#EBEBEB]">
                       {element.departmentName}
                     </td>
@@ -101,7 +111,7 @@ function SalaryDepartment() {
                         .reduce(
                           (acc: any, job: any) =>
                             acc +
-                            (job.employeeTotalHours - (job.employeePendingHours+job.employeeWorkingHours)),
+                            (job.employeeTotalHours - (job.employeePendingHours + job.employeeWorkingHours)),
                           0
                         )
                         .toFixed(2)}

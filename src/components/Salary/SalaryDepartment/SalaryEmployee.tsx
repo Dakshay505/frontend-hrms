@@ -13,11 +13,15 @@ function SalaryEmployee() {
   console.log(employees);
  
   // pagination
-  const limit = 50;
+  const limit = 20;
   const [page, setPage] = useState(1);
   const observerTarget = useRef(null);
-  useEffect(() => {
-    const date = new Date();
+  const [items, setItems] = useState<any[]>([]);
+  const fetchData = async () => {
+    
+    
+    try {
+      const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -29,11 +33,25 @@ function SalaryEmployee() {
       jobProfileName: jobProfile,
 
     };
-    if (page === 0) {
-      return
+      //dispatch(getEmployeeSalaryAsync(requestData))
+      dispatch(getEmployeeSalaryAsync(requestData)).then((data: any) => {
+        const employeeData = data.payload.attendanceRecords;
+        console.log(data)
+        console.log(employeeData)
+        setItems(prevItems => [...prevItems, ...employeeData]);
+      })
+     
+      
+      
+      
+    } catch (error) {
+      // Handle error
     }
-    dispatch(getEmployeeSalaryAsync(requestData));
-    setJobProfile("")
+  
+  };
+  useEffect(() => {
+    fetchData()
+    
   }, [page]);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,10 +74,9 @@ function SalaryEmployee() {
     };
   }, [observerTarget]);
   const handlerFatchMore = () => {
-    console.log("hi",page)
+    
     setPage(prevPage => prevPage + 1);
-    console.log("hi2",page)
-
+   
   };
   const loaderStatus = useSelector((state: any) => state.salary.status);
 
@@ -92,15 +109,9 @@ function SalaryEmployee() {
                 Basic Salary
               </td>
             </tr>
-            {loaderStatus === "loading" ? (
-              <div className="flex  justify-center  w-full">
-                <img src={LoaderGif} className="w-10 h-12" alt="" />
-              </div>
-            ) : (
-              ""
-            )}
-            {employees &&
-              employees.map((element: any, index: number) => {
+            
+            {items &&
+              items.map((element: any, index: number) => {
                 function formatDateToCustomString(date: any) {
                   const options = {
                     weekday: "short",
@@ -148,6 +159,15 @@ function SalaryEmployee() {
                 );
               })}
           </tbody>
+          
+          {loaderStatus === "loading" ? (
+              <div className="flex  justify-center  w-full">
+                <img src={LoaderGif} className="w-10 h-12" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
+          
           <div ref={observerTarget}></div>
         </table>
       </div>

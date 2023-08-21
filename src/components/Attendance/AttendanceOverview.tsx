@@ -19,6 +19,12 @@ const AttendanceOverview = () => {
     dispatch(getSingleGroupAttendanceAsync({ groupName: data.groupName }))
     navigate('/single-group-attendance', { state: { additionalData: data.groupName } })
   }
+  const totalPresent = groupAttendanceList.reduce((acc: any, group: any) => acc + group.present, 0);
+  const totalEmployees = groupAttendanceList.reduce((acc: any, group: any) => acc + group.totalEmployeesInGroup, 0);
+  const totalAbsent = totalEmployees - totalPresent;
+  console.log("totalEmployees:", totalEmployees)
+  console.log("totalPresent:", totalPresent)
+  console.log("totalAbsent:", totalAbsent)
   return (
     <div className="pt-8 px-10">
       <div>
