@@ -16,58 +16,58 @@ function SalaryEmployee() {
   );
 
 
-  const [jobProfile, setJobProfile] = useState(location.state?.jobProfile);
+  const jobProfile = location.state?.jobProfile
   console.log("jobProfile in employee", jobProfile);
   const employees = useSelector((state: any) => state.salary.salaryOfEmployee);
   console.log(employees);
- 
+
   // pagination
   const limit = 20;
   const [page, setPage] = useState(0);
   const observerTarget = useRef(null);
   const [items, setItems] = useState<any[]>([]);
   const fetchData = async () => {
-    
-    
+
+
     try {
-      if(page==0){
+      if (page == 0) {
         return
       }
       const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-   
-    const requestData = {
-      date: `${year}-${month}-${day}`,
-      page: page, // Use the incremented page
-      limit: limit,
-      jobProfileName: jobProfile,
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
 
-    };
-    console.log(requestData)
+      const requestData = {
+        date: `${year}-${month}-${day}`,
+        page: page, // Use the incremented page
+        limit: limit,
+        jobProfileName: jobProfile,
+
+      };
+      console.log(requestData)
       //dispatch(getEmployeeSalaryAsync(requestData))
 
-     
+
       dispatch(getEmployeeSalaryAsync(requestData, filter)).then((data: any) => {
         const employeeData = data.payload.attendanceRecords;
         console.log(data)
         console.log(employeeData)
-        if(employeeData.length>0){
-        setItems(prevItems => [...prevItems, ...employeeData]);
+        if (employeeData.length > 0) {
+          setItems(prevItems => [...prevItems, ...employeeData]);
         }
         setParentDepartment("")
 
       })
-      
+
     } catch (error) {
       // Handle error
     }
-  
+
   };
   useEffect(() => {
     fetchData()
-    
+
   }, [page]);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,90 +90,90 @@ function SalaryEmployee() {
     };
   }, [observerTarget]);
   const handlerFatchMore = () => {
-    
+
     setPage(prevPage => prevPage + 1);
-   
+
   };
   const loaderStatus = useSelector((state: any) => state.salary.status);
 
 
 
 
-    // date range
-    const [date, setDate] = useState<any>(new Date());
-    const [nextDate, setnextDate] = useState<any>();
-    const [showCalender, setShowCalender] = useState(false);
-    const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
-  
-    const [filter, setFilter] = useState({
-      name: "",
-      groupName: "",
-      jobProfileName: "",
-      date: "",
-      nextDate: "",
-      departmentName:parentDepartment,
-    });
-  
-   
-  
-    useEffect(() => {
-      const currentDate = new Date(date);
+  // date range
+  const [date, setDate] = useState<any>(new Date());
+  const [nextDate, setnextDate] = useState<any>();
+  const [showCalender, setShowCalender] = useState(false);
+  const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
+
+  const [filter, setFilter] = useState({
+    name: "",
+    groupName: "",
+    jobProfileName: "",
+    date: "",
+    nextDate: "",
+    departmentName: parentDepartment,
+  });
+
+
+
+  useEffect(() => {
+    const currentDate = new Date(date);
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    setFilter({
+      ...filter,
+      date: `${year}-${month}-${day}`
+    })
+  }, [date])
+
+  useEffect(() => {
+    if (nextDate) {
+      const currentDate = new Date(nextDate);
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const day = String(currentDate.getDate()).padStart(2, '0');
       setFilter({
         ...filter,
-        date: `${year}-${month}-${day}`
+        nextDate: `${year}-${month}-${day}`
       })
-    }, [date])
-  
-    useEffect(() => {
+    }
+  }, [nextDate])
+
+  const [dateRange, setDateRange] = useState<any>([])
+  useEffect(() => {
+    function getDateRange(startDate: any, endDate: any) {
       if (nextDate) {
-        const currentDate = new Date(nextDate);
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        setFilter({
-          ...filter,
-          nextDate: `${year}-${month}-${day}`
-        })
-      }
-    }, [nextDate])
-  
-    const [dateRange, setDateRange] = useState<any>([])
-    useEffect(() => {
-      function getDateRange(startDate: any, endDate: any) {
-        if (nextDate) {
-          const result = [];
-          const currentDate = new Date(startDate);
-          const finalDate = new Date(endDate);
-          while (currentDate <= finalDate) {
-            result.push(currentDate.toISOString().slice(0, 10));
-            currentDate.setDate(currentDate.getDate() + 1);
-          }
-          setDateRange([...result])
+        const result = [];
+        const currentDate = new Date(startDate);
+        const finalDate = new Date(endDate);
+        while (currentDate <= finalDate) {
+          result.push(currentDate.toISOString().slice(0, 10));
+          currentDate.setDate(currentDate.getDate() + 1);
         }
+        setDateRange([...result])
       }
-      getDateRange(filter.date, filter.nextDate)
-      dispatch(getEmployeeSalaryAsync(filter))
-    }, [filter])
-  
-  
-    const formatDate = (date: any) => {
-      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-    };
-  
-    const tileClassName = ({ date }: any) => {
-      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-      const formattedDate = localDate.toISOString().split('T')[0];
-      if (dateRange.includes(formattedDate)) {
-        return 'bg-[#ECEDFE] text-[#FFFFFF]';
-      }
-      return '';
-    };
-  
-  
-  
+    }
+    getDateRange(filter.date, filter.nextDate)
+    dispatch(getEmployeeSalaryAsync(filter))
+  }, [filter])
+
+
+  const formatDate = (date: any) => {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
+  const tileClassName = ({ date }: any) => {
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const formattedDate = localDate.toISOString().split('T')[0];
+    if (dateRange.includes(formattedDate)) {
+      return 'bg-[#ECEDFE] text-[#FFFFFF]';
+    }
+    return '';
+  };
+
+
+
 
 
   return (
@@ -205,7 +205,7 @@ function SalaryEmployee() {
                 Basic Salary
               </td>
             </tr>
-            
+
             {items &&
               items.map((element: any, index: number) => {
                 function formatDateToCustomString(date: any) {
@@ -255,15 +255,15 @@ function SalaryEmployee() {
                 );
               })}
           </tbody>
-          
+
           {loaderStatus === "loading" ? (
-              <div className="flex  justify-center  w-full">
-                <img src={LoaderGif} className="w-10 h-12" alt="" />
-              </div>
-            ) : (
-              ""
-            )}
-          
+            <div className="flex  justify-center  w-full">
+              <img src={LoaderGif} className="w-10 h-12" alt="" />
+            </div>
+          ) : (
+            ""
+          )}
+
           <div ref={observerTarget}></div>
         </table>
       </div>

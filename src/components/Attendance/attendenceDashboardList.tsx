@@ -19,8 +19,6 @@ import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
 import close from "../../assets/x1.png"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
-
-  const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
@@ -48,14 +46,14 @@ export const AttendenceDashboardList = () => {
 
   const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
-  const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+
   const [filter, setFilter] = useState({
     name: "",
     groupName: "",
     jobProfileName: "",
     date: "",
     nextDate: "",
-   page:1
+    page: 1
   });
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
@@ -69,7 +67,7 @@ export const AttendenceDashboardList = () => {
     setFilter({
       ...filter,
       date: `${year}-${month}-${day}`,
-      page:page
+      page: page
     })
   }, [date])
   useEffect(() => {
@@ -80,12 +78,25 @@ export const AttendenceDashboardList = () => {
   const fetchData = async () => {
 
     try {
-      
+
       dispatch(getAllAttandenceAsync({ filter, page })).then((data: any) => {
-        
+
         const employeeData = data.payload.attendanceRecords;
-        if(employeeData.length>0){
-        setItems(prevItems => [...prevItems, ...employeeData]);
+
+        const arr: any = [];
+
+        if (employeeData.length > 0) {
+
+          setItems(prevItems => [...prevItems, ...employeeData]);
+
+          for (let i = 0; i < employeeData.length; i++) {
+
+            arr.push(employeeData[i].employeeId.name)
+
+          }
+
+
+
         }
       })
 
@@ -98,7 +109,7 @@ export const AttendenceDashboardList = () => {
 
   };
   useEffect(() => {
-  
+
 
     fetchData()
 
@@ -152,9 +163,9 @@ export const AttendenceDashboardList = () => {
   const handlerFatchMore = () => {
 
     setPage(prevPage => prevPage + 1);
-    
-    
-  
+
+
+
   };
 
 
@@ -172,7 +183,7 @@ export const AttendenceDashboardList = () => {
         ...filter,
         name: event.target.value
       })
-      getSuggestions(event.target.value);
+
     }
     else {
       setLabelVisible(true);
@@ -181,16 +192,11 @@ export const AttendenceDashboardList = () => {
         ...filter,
         name: event.target.value
       })
-      setSuggestions([]);
+
     }
   };
 
-  const getSuggestions = (inputValue: any) => {
-    const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-      suggestion?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-    setSuggestions(filteredSuggestions);
-  };
+
 
   const tileClassName = ({ date }: any) => {
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -415,26 +421,26 @@ export const AttendenceDashboardList = () => {
               </>
             })}
           </tbody>
-          
+
           {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
             <img src={LoaderGif} className='w-6 h-6' alt="" />
           </div> : ""}
           <div ref={observerTarget}></div>
           {isImageOpen && (
-              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-                <img
-                  src={selectedImage}
-                  alt="Approved"
-                  className="h-[20rem]"
-                />
-                <button
-                  className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
-                  onClick={handleCloseImage}
-                >
-                  <img src={close} alt="" className="h-[25px] w-[25px] bg-white rounded-full " />
-                </button>
-              </div>
-            )}
+            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+              <img
+                src={selectedImage}
+                alt="Approved"
+                className="h-[20rem]"
+              />
+              <button
+                className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
+                onClick={handleCloseImage}
+              >
+                <img src={close} alt="" className="h-[25px] w-[25px] bg-white rounded-full " />
+              </button>
+            </div>
+          )}
         </table>
         {/* TABLE ENDS HERE */}
       </div>

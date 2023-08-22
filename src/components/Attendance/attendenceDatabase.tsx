@@ -74,7 +74,7 @@ export const AttendenceDtabase = () => {
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0)
-
+  console.log(total)
   const observerTarget = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
