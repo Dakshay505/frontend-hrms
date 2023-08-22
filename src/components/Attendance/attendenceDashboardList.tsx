@@ -19,8 +19,6 @@ import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
 import close from "../../assets/x1.png"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
-
-  const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords);
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
 
@@ -48,7 +46,7 @@ export const AttendenceDashboardList = () => {
 
   const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
-  const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+  
   const [filter, setFilter] = useState({
     name: "",
     groupName: "",
@@ -69,7 +67,7 @@ export const AttendenceDashboardList = () => {
     setFilter({
       ...filter,
       date: `${year}-${month}-${day}`,
-      page:page
+      page:1
     })
   }, [date])
   useEffect(() => {
@@ -81,11 +79,26 @@ export const AttendenceDashboardList = () => {
 
     try {
       
-      dispatch(getAllAttandenceAsync({ filter, page })).then((data: any) => {
+      filter.page=page
+      
+      dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
         
         const employeeData = data.payload.attendanceRecords;
+
+        const arr: any = [];
+
         if(employeeData.length>0){
+
         setItems(prevItems => [...prevItems, ...employeeData]);
+
+        for (let i = 0; i < employeeData.length; i++) {
+
+          arr.push(employeeData[i].employeeId.name)
+
+        }
+
+     
+0
         }
       })
 
@@ -142,6 +155,7 @@ export const AttendenceDashboardList = () => {
       }
     }
     getDateRange(filter.date, filter.nextDate)
+    filter.page=1
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       setItems(employeeData);
@@ -172,7 +186,7 @@ export const AttendenceDashboardList = () => {
         ...filter,
         name: event.target.value
       })
-      getSuggestions(event.target.value);
+     
     }
     else {
       setLabelVisible(true);
@@ -181,16 +195,11 @@ export const AttendenceDashboardList = () => {
         ...filter,
         name: event.target.value
       })
-      setSuggestions([]);
+      
     }
   };
 
-  const getSuggestions = (inputValue: any) => {
-    const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
-      suggestion?.toLowerCase().includes(inputValue.toLowerCase())
-    );
-    setSuggestions(filteredSuggestions);
-  };
+  
 
   const tileClassName = ({ date }: any) => {
     const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
