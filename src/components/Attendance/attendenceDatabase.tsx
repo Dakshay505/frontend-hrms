@@ -9,94 +9,93 @@ import { useEffect, useState, useRef } from "react";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
-import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
+import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 
-import close from "../../assets/x1.png"
+import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 export const AttendenceDtabase = () => {
   function convertToQueryString(data: any) {
-    let queryStr = '';
+    let queryStr = "";
     for (let key in data) {
-      if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
-        if (queryStr !== '') {
-          queryStr += '&';
+      if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
+        if (queryStr !== "") {
+          queryStr += "&";
         }
-        queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+        queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(
+          data[key]
+        )}`;
       }
     }
     return queryStr;
   }
   const getAllAttandence = async (sendData: any) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const filterDatta = convertToQueryString(sendData);
-      const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
-        withCredentials: true,
-      });
-      console.log(data)
+      const { data } = await axios.get(
+        `${getAllAttandenceApiPath}?${filterDatta}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
 
-      setItems(prevItems => [...prevItems, ...data.attendanceRecords]);
+      setItems((prevItems) => [...prevItems, ...data.attendanceRecords]);
       const numberOfEmployee = parseInt(data.numberOfEmployee) || 0;
 
-      setTotal(prevTotal => prevTotal + numberOfEmployee);
+      setTotal((prevTotal) => prevTotal + numberOfEmployee);
 
-      setIsLoading(false);
+      // setIsLoading(false);
     } catch (err: any) {
       console.log(err.response.data);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
   const [isImageOpen, setIsImageOpen] = useState(false);
 
-  const [selectedImage, setSelectedImage] = useState('');
-
- 
+  const [selectedImage, setSelectedImage] = useState("");
 
   const handleImageClick = (imageSrc: any) => {
-
     setSelectedImage(imageSrc);
 
     setIsImageOpen(true);
-
   };
 
- 
-
   const handleCloseImage = () => {
-
     setIsImageOpen(false);
-
   };
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
-  const [total, setTotal] = useState(0)
-  console.log(total)
+  const [total, setTotal] = useState(0);
+  console.log(total);
   const observerTarget = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          handlerFatchMore();
-        }
-      },
-      { threshold: 1 }
-    );
+  // const [isLoading, setIsLoading] = useState(false);
+  const loaderStatus = useSelector((state: any) => state.attandence.status);
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         handlerFatchMore();
+  //       }
+  //     },
+  //     { threshold: 1 }
+  //   );
 
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [observerTarget]);
+  //   if (observerTarget.current) {
+  //     observer.observe(observerTarget.current);
+  //   }
+
+  //   return () => {
+  //     if (observerTarget.current) {
+  //       observer.unobserve(observerTarget.current);
+  //     }
+  //   };
+  // }, [observerTarget]);
 
   const handleRowClick = (index: number) => {
     const isExpanded = showTableRow.includes(index);
@@ -109,7 +108,7 @@ export const AttendenceDtabase = () => {
     }
   };
   const limit = 2000;
-  const [page, setPage] = useState(0);
+  // const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
     const year = date.getFullYear();
@@ -121,30 +120,33 @@ export const AttendenceDtabase = () => {
       page: 1, // Use the incremented page
       limit: limit,
     };
-    if (page === 0) {
-      return
-    }
-    getAllAttandence(requestData)
-  }, [page]);
+    // if (page === 0) {
+    //   return;
+    // }
+    getAllAttandence(requestData);
+  }, []);
 
+  // const handlerFatchMore = () => {
+  //   setPage((prevPage) => prevPage + 1);
+  // };
 
-  const handlerFatchMore = () => {
+  const groupAttendanceList = useSelector(
+    (state: any) => state.attandence.groupAttendance
+  );
 
-    setPage(prevPage => prevPage + 1);
-
-  };
-  
-
-  const groupAttendanceList = useSelector((state: any) => state.attandence.groupAttendance)
-  
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getGroupAttendanceAsync())
-  }, [])
-  const totalPresent = groupAttendanceList.reduce((acc: any, group: any) => acc + group.present, 0);
-  const totalEmployees = groupAttendanceList.reduce((acc: any, group: any) => acc + group.totalEmployeesInGroup, 0);
+    dispatch(getGroupAttendanceAsync());
+  }, []);
+  const totalPresent = groupAttendanceList.reduce(
+    (acc: any, group: any) => acc + group.present,
+    0
+  );
+  const totalEmployees = groupAttendanceList.reduce(
+    (acc: any, group: any) => acc + group.totalEmployeesInGroup,
+    0
+  );
   const totalAbsent = totalEmployees - totalPresent;
   return (
     <div className="px-10 pt-8">
@@ -221,7 +223,6 @@ export const AttendenceDtabase = () => {
           {/* TABLE STARTS HERE */}
 
           <table className="w-full">
-
             <tbody>
               <tr className="bg-[#ECEDFE] cursor-default">
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -291,17 +292,17 @@ export const AttendenceDtabase = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchIn
                             ? new Date(latestPunches.punchIn).toLocaleString(
-                              "en-US",
-                              { timeStyle: "short" }
-                            )
+                                "en-US",
+                                { timeStyle: "short" }
+                              )
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
                             ? new Date(latestPunches.punchOut).toLocaleString(
-                              "en-US",
-                              { timeStyle: "short" }
-                            )
+                                "en-US",
+                                { timeStyle: "short" }
+                              )
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5">
@@ -347,43 +348,33 @@ export const AttendenceDtabase = () => {
                             ? latestPunches.approvedBy?.name
                             : "-"}
                         </td>
-                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                          {latestPunches?.status === "approved" &&
+                            latestPunches.approvedImage && (
+                              <div className="flex gap-[10px] cursor-pointer">
+                                <div>
+                                  <p
+                                    className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                    onClick={() =>
+                                      handleImageClick(
+                                        latestPunches.approvedImage
+                                      )
+                                    }
+                                  >
+                                    Open
+                                  </p>
+                                </div>
 
-{latestPunches?.status === "approved" && latestPunches.approvedImage && (
-
-  <div className="flex gap-[10px] cursor-pointer">
-
-    <div>
-
-      <p
-
-        className='text-[12px] leading-4 font-medium text-[#283093] underline'
-
-        onClick={() => handleImageClick(latestPunches.approvedImage)}
-
-      >
-
-        Open
-
-      </p>
-
-    </div>
-
-    <div >
-
-      <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
-
-    </div>
-
-  </div>
-
-)}
-
-
-
-
-
-        </td>
+                                <div>
+                                  <img
+                                    src={ArrowSqureOut}
+                                    className="w-[14px] h-[14px]"
+                                    alt="arrowsqureout"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                        </td>
                       </tr>
                       {showTableRow.includes(index) &&
                         sortedPunches &&
@@ -399,17 +390,17 @@ export const AttendenceDtabase = () => {
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                 {element.punchIn
                                   ? new Date(element.punchIn).toLocaleString(
-                                    "en-US",
-                                    { timeStyle: "short" }
-                                  )
+                                      "en-US",
+                                      { timeStyle: "short" }
+                                    )
                                   : "Not Avilable"}
                               </td>
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                 {element.punchOut
                                   ? new Date(element.punchOut).toLocaleString(
-                                    "en-US",
-                                    { timeStyle: "short" }
-                                  )
+                                      "en-US",
+                                      { timeStyle: "short" }
+                                    )
                                   : "Not Avilable"}
                               </td>
                               <td className="py-4 px-5">
@@ -455,44 +446,33 @@ export const AttendenceDtabase = () => {
                                   ? latestPunches.approvedBy?.name
                                   : "-"}
                               </td>
-                              <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                                {element?.status === "approved" &&
+                                  element.approvedImage && (
+                                    <div className="flex gap-[10px] cursor-pointer">
+                                      <div>
+                                        <p
+                                          className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                          onClick={() =>
+                                            handleImageClick(
+                                              element.approvedImage
+                                            )
+                                          }
+                                        >
+                                          Open
+                                        </p>
+                                      </div>
 
-{element?.status === "approved" && element.approvedImage && (
-
-  <div className="flex gap-[10px] cursor-pointer">
-
-    <div>
-
-      <p
-
-        className='text-[12px] leading-4 font-medium text-[#283093] underline'
-
-        onClick={() => handleImageClick(element.approvedImage)}
-
-      >
-
-        Open
-
-      </p>
-
-    </div>
-
-    <div >
-
-      <img src={ArrowSqureOut} className='w-[14px] h-[14px]' alt="arrowsqureout" />
-
-    </div>
-
-  </div>
-
-)}
-
-
-
-
-
-        </td>
-                             
+                                      <div>
+                                        <img
+                                          src={ArrowSqureOut}
+                                          className="w-[14px] h-[14px]"
+                                          alt="arrowsqureout"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+                              </td>
                             </tr>
                           );
                         })}
@@ -500,31 +480,31 @@ export const AttendenceDtabase = () => {
                   );
                 })}
             </tbody>
-            {isLoading || page === 0 ? (
+            {loaderStatus === "loading" ? (
               <div className="flex justify-center w-full">
                 <img src={LoaderGif} className="w-6 h-6" alt="" />
               </div>
-            ) : ""}
+            ) : (
+              ""
+            )}
             <div ref={observerTarget}></div>
 
             {isImageOpen && (
               <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-                <img
-                  src={selectedImage}
-                  alt="Approved"
-                  className="h-[20rem]"
-                />
+                <img src={selectedImage} alt="Approved" className="h-[20rem]" />
                 <button
                   className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
                   onClick={handleCloseImage}
                 >
-                  <img src={close} alt="" className="h-[25px] w-[25px] bg-white rounded-full " />
+                  <img
+                    src={close}
+                    alt=""
+                    className="h-[25px] w-[25px] bg-white rounded-full "
+                  />
                 </button>
               </div>
             )}
-
           </table>
-
 
           {/* TABLE ENDS HERE */}
         </div>
