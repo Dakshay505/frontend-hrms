@@ -28,6 +28,7 @@ function SalaryDepartment() {
   const navigate = useNavigate();
   
   const handlerSelectedSubDepartment = (element: any) => {
+    console.log(element)
     dispatch(getjobProfileBySubDepartmentNameAsync(filter));
     navigate("/salary-jobProfile-department", { state: { steel: parentDepartment } });
     setParentDepartment("")
