@@ -53,7 +53,8 @@ export const AttendenceDashboardList = () => {
     jobProfileName: "",
     date: "",
     nextDate: "",
-    page: 1
+    page: 1,
+    limit: 2000
   });
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
@@ -67,7 +68,7 @@ export const AttendenceDashboardList = () => {
     setFilter({
       ...filter,
       date: `${year}-${month}-${day}`,
-      page: page
+      page: 1,
     })
   }, [date])
   useEffect(() => {
@@ -79,7 +80,9 @@ export const AttendenceDashboardList = () => {
 
     try {
 
-      dispatch(getAllAttandenceAsync({ filter, page })).then((data: any) => {
+      filter.page = 1
+
+      dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
 
         const employeeData = data.payload.attendanceRecords;
 
@@ -96,7 +99,7 @@ export const AttendenceDashboardList = () => {
           }
 
 
-
+          0
         }
       })
 
@@ -153,6 +156,7 @@ export const AttendenceDashboardList = () => {
       }
     }
     getDateRange(filter.date, filter.nextDate)
+    filter.page = 1
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       setItems(employeeData);

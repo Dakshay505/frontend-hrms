@@ -108,7 +108,7 @@ export const AttendenceDtabase = () => {
       setShowTableRow([...showTableRow, index]);
     }
   };
-  const limit = 20;
+  const limit = 2000;
   const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
@@ -118,7 +118,7 @@ export const AttendenceDtabase = () => {
 
     const requestData = {
       date: `${year}-${month}-${day}`,
-      page: page, // Use the incremented page
+      page: 1, // Use the incremented page
       limit: limit,
     };
     if (page === 0) {
