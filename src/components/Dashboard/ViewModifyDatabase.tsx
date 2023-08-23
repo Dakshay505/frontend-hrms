@@ -158,9 +158,8 @@ const ViewModifyDatabase = () => {
             setPage(i + 1);
             setPagiArrIncludes([i]);
           }}
-          className={`${
-            pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
-          } rounded-full px-3 cursor-pointer`}
+          className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
+            } rounded-full px-3 cursor-pointer`}
           key={i}
         >
           {i + 1}
@@ -530,7 +529,18 @@ const ViewModifyDatabase = () => {
                   {" "}
                   <img src={CaretLeft} alt="" />{" "}
                 </div>
-                {pagination()}
+                {pagination().map((element: any, index) => {
+                  if (pagiArrIncludes.includes(index) && element) {
+                    return <div key={index} className="flex">
+                      {filter.page > 2 ? "..." : ""}
+                      {filter.page === 1 ? "" : pagination()[index - 1]}
+                      {pagination()[index]}
+                      {pagination()[index + 1]}
+                      {filter.page === 1 ? pagination()[index + 2] : ""}
+                      {filter.page >= totalPage - 1 ? "" : "..."}
+                    </div>
+                  }
+                })}
                 <div
                   onClick={() => {
                     if (page !== totalPage) {
