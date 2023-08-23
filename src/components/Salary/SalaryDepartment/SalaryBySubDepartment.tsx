@@ -205,28 +205,18 @@ function SalaryDepartment() {
                     </td>
 
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.salaryData.reduce(
-                        (acc: any, job: any) => acc + job.employeeWorkingHours,
-                        0
-                      )}
+                      {element.salaryData
+                      .reduce((acc: any, job: any) => acc + job.employeeWorkingHours,0).toFixed(2)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.salaryData.reduce(
-                        (acc: any, job: any) => acc + job.employeeTotalEarning,
-                        0
-                      )}
+                      {element.salaryData
+                        .reduce((acc: number, job: any) =>acc + job.employeeTotalEarning,0).toFixed(2)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.salaryData.reduce(
-                        (acc: any, job: any) => acc + job.employeeTotalHours,
-                        0
-                      )}
+                      {element.salaryData.reduce((acc: any, job: any) => acc + job.employeeTotalHours,0)}
                     </td>
                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                      {element.salaryData.reduce(
-                        (acc: any, job: any) => acc + job.totalSalaryOfEmployee,
-                        0
-                      )}
+                      {element.salaryData.reduce((acc: any, job: any) => acc + job.totalSalaryOfEmployee,0)}
                     </td>
                   </tr>
                 );

@@ -177,10 +177,10 @@ function SalaryJobProfilebyDepartment() {
                           ).toFixed(2)}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                          {jobProfile.employeeWorkingHours}
+                          {jobProfile.employeeWorkingHours.toFixed(2)}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                          {jobProfile.employeeTotalEarning}
+                          {jobProfile.employeeTotalEarning.toFixed(2)}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                           {jobProfile.employeeTotalHours || "-"}
