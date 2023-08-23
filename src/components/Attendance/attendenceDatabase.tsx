@@ -108,7 +108,7 @@ export const AttendenceDtabase = () => {
       setShowTableRow([...showTableRow, index]);
     }
   };
-  const limit = 20;
+  const limit = 2000;
   const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
