@@ -10,6 +10,7 @@ import {
 } from "../../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
+  getAllGroupsCountEmployeeAsync,
   getSingleGroupAsync,
 } from "../../redux/Slice/GroupSlice";
 import { useNavigate } from "react-router-dom";
@@ -89,10 +90,12 @@ const ViewModifyDatabase = () => {
   const departmentList = useSelector(
     (state: any) => state.department.department
   );
+
   const parentDepartmentList = useSelector(
     (state: any) => state.department.parentdepartment
   );
   const groupList = useSelector((state: any) => state.group.groups);
+  const groupCount = useSelector((state: any) => state.group.employeeCount);
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
@@ -122,6 +125,7 @@ const ViewModifyDatabase = () => {
       setFetchedSuggestions(arr);
     });
     dispatch(getAllGroupsAsync());
+    dispatch(getAllGroupsCountEmployeeAsync());
     dispatch(getAllJobProfileAsync());
     dispatch(getAllDepartmentAsync());
     dispatch(getAllParentDepartmentAsync());
@@ -134,7 +138,8 @@ const ViewModifyDatabase = () => {
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
   };
   const handleGroupTableRowClick = (data: any) => {
-    const groupId = { groupId: data._id };
+    console.log(data.groupId)
+    const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
   };
@@ -567,11 +572,11 @@ const ViewModifyDatabase = () => {
                       Group Name
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Description
+                    Number of Employee
                     </td>
                   </tr>
-                  {groupList &&
-                    groupList.map((element: any, index: number) => {
+                  {groupCount &&
+                    groupCount.map((element: any, index: number) => {
                       return (
                         <tr
                           key={index}
@@ -587,8 +592,8 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  border-b border-solid border-[#EBEBEB]">
-                            {element.description
-                              ? element.description
+                            {element.employeeCount
+                              ? element.employeeCount
                               : "Not Avilable"}
                           </td>
                         </tr>

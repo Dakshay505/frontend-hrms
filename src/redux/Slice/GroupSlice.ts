@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createGroup, getAllGroups, getSingleGroup, updateGroup } from '../API/GroupAPI';
+import { createGroup, getAllGroups, getAllGroupsCountEmployee, getSingleGroup, updateGroup } from '../API/GroupAPI';
 
 const initialState = {
     groups: [],
     status: 'idle',
-    group:{}
+    group:{},
+    employeeCount:{}
 };
 
 // CREATE
@@ -53,6 +54,17 @@ export const getSingleGroupAsync: any = createAsyncThunk(
         }
     }
 );
+export const getAllGroupsCountEmployeeAsync: any = createAsyncThunk(
+    'getAllGroupsCountEmployee',
+    async () => {
+        try {
+            const response: any = await getAllGroupsCountEmployee();
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+    }
+);
 
 export const GroupSlice = createSlice({
     name: 'group',
@@ -87,6 +99,13 @@ export const GroupSlice = createSlice({
             .addCase(getSingleGroupAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
                 state.group =  action.payload.groupData;
+            })
+            .addCase(getAllGroupsCountEmployeeAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getAllGroupsCountEmployeeAsync.fulfilled, function (state: any, action: any) {
+                state.status = 'idle';
+                state.employeeCount =  action.payload.responseData;
             })
 
     },
