@@ -16,6 +16,7 @@ export const getGroupApiPath = `${apiPath}/api/v1/group`;
 export const updateGroupApiPath = `${apiPath}/api/v1/group`;
 export const getSingleGroupApiPath = `${apiPath}/api/v1/group/getSingleGroup`;
 export const getEmployeesCountGroupApiPath = `${apiPath}/api/v1/group/getEmployeeGroup`;
+export const deleteGroupApiPath = `${apiPath}/api/v1/group/delete`;
 
 // EMPLOYEE API
 

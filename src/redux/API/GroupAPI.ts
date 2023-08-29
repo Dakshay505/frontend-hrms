@@ -5,6 +5,7 @@ import {
   getGroupApiPath,
   getSingleGroupApiPath,
   updateGroupApiPath,
+  deleteGroupApiPath
 } from "../../APIRoutes";
 
 // CREATE
@@ -47,7 +48,7 @@ export const getSingleGroup = async (groupId: any) => {
 export const updateGroup = async (groupData: any) => {
   try {
     console.log("groupData", groupData);
-    const { data } = await axios.patch(`${updateGroupApiPath}/${groupData.groupId}`,groupData.data,
+    const { data } = await axios.patch(`${updateGroupApiPath}/${groupData.groupId}`, groupData.data,
       { withCredentials: true }
     );
     return data;
@@ -64,4 +65,23 @@ export const getAllGroupsCountEmployee = async () => {
   } catch (err: any) {
     console.log(err.response.data);
   }
+
 };
+//delete
+export const deleteGroup = async (groupName: any) => {
+  try {
+    console.log("grrrroppppon deletegrop", groupName);
+    const { data } = await axios.delete(`${deleteGroupApiPath}`, {
+      data: { groupName },
+      withCredentials: true
+    }
+
+    );
+    return data;
+
+  }
+  catch (err: any) {
+    console.log(err.response.data);
+
+  }
+}
