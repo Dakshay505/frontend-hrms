@@ -1,7 +1,7 @@
-export const apiPath = `http://localhost:5050`;
+// export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
-// export const apiPath = `https://chawlacomponents.com`;
+export const apiPath = `https://chawlacomponents.com`;
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
@@ -15,6 +15,7 @@ export const createGroupApiPath = `${apiPath}/api/v1/group/add`;
 export const getGroupApiPath = `${apiPath}/api/v1/group`;
 export const updateGroupApiPath = `${apiPath}/api/v1/group`;
 export const getSingleGroupApiPath = `${apiPath}/api/v1/group/getSingleGroup`;
+export const getEmployeesCountGroupApiPath = `${apiPath}/api/v1/group/getEmployeeGroup`;
 
 // EMPLOYEE API
 

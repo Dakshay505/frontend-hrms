@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   createGroupApiPath,
+  getEmployeesCountGroupApiPath,
   getGroupApiPath,
   getSingleGroupApiPath,
   updateGroupApiPath,
@@ -52,5 +53,15 @@ export const updateGroup = async (groupData: any) => {
     return data;
   } catch (error: any) {
     console.log(error.response.data);
+  }
+};
+export const getAllGroupsCountEmployee = async () => {
+  try {
+    const { data } = await axios.get(`${getEmployeesCountGroupApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
   }
 };
