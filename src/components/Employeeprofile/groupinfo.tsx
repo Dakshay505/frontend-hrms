@@ -3,18 +3,56 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleGroupAsync, updateGroupAsync } from '../../redux/Slice/GroupSlice';
+import { getSingleGroupAsync, updateGroupAsync, deleteGroupAsync } from '../../redux/Slice/GroupSlice';
+import deleteIcon from "../../assets/Trash.svg"
+import { useNavigate } from "react-router-dom";
 
 export const GroupInfo = () => {
     const dispatch = useDispatch();
     const groups = useSelector((state: any) => state.group.group)
-    
+    const navigate = useNavigate();
     const [groupId, setGroupId] = useState("")
     const [showInputBoxGroupName, setShowInputBoxGroupName] = useState(false);
     const [inputBoxGroupNameValue, setInputBoxGroupNameValue] = useState<any>("");
     const [showInputBoxGroupDescription, setShowInputBoxGroupDescription] = useState(false);
     const [inputBoxGroupDescriptionValue, setInputBoxGroupDescriptionValue] = useState<any>("");
+    const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
+    const handleDeleteClick = () => {
+        setConfirmationOpen(true);
+    };
+    const handleCancel = () => {
+        setConfirmationOpen(false);
+    };
+    console.log("groupssssss", groups.groupName)
+    const handleConfirm = () => {
+        dispatch(deleteGroupAsync(groups.groupName));
+        setConfirmationOpen(false);
+        navigate('/view-modify-database')
+    };
+    const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
+        return isOpen ? (
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                    <p className="text-lg font-semibold mb-4">Are you sure you want to delete?</p>
+                    <div className="flex justify-end">
+                        <button
+                            className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
+                            onClick={onCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                            onClick={onConfirm}
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    };
     useEffect(() => {
         setGroupId(groups._id);
         setInputBoxGroupNameValue(groups.groupName)
@@ -28,9 +66,9 @@ export const GroupInfo = () => {
                 onSubmit={handleSubmit((data) => {
                     console.log(data);
                     const sendData = { groupId: groupId, data: data }
-                        dispatch(updateGroupAsync(sendData)).then(() => {
-                            dispatch(getSingleGroupAsync({ groupId: groupId }));
-                        });
+                    dispatch(updateGroupAsync(sendData)).then(() => {
+                        dispatch(getSingleGroupAsync({ groupId: groupId }));
+                    });
                     setShowInputBoxGroupName(false);
                     setShowInputBoxGroupDescription(false);
                 })}
@@ -110,6 +148,24 @@ export const GroupInfo = () => {
                             </div>
                         </div>}
                 </div>
+                <div className='flex flex-row m-3'>
+                    {/* <img src={deleteIcon} alt='delete' onClick={handleDeleteClick} />
+                    <h2 className='text-sm font-medium ml-3  text-[red]' >Delete</h2> */}
+                    <button
+                        className="flex  border py-2 px-5 mx-[-12px] my-5 border-red-500 items-center text-[red] text-sm font-medium "
+                        onClick={handleDeleteClick}
+                    >
+                        <img src={deleteIcon} alt="delete" className="mr-1" />
+                        Delete
+                    </button>
+                    <DeleteConfirmationDialog
+                        isOpen={isConfirmationOpen}
+                        onCancel={handleCancel}
+                        onConfirm={handleConfirm}
+                    />
+                </div>
+
+
             </form>
         </div>
     )
