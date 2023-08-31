@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createGroup, getAllGroups, getAllGroupsCountEmployee, getSingleGroup, updateGroup } from '../API/GroupAPI';
+import { createGroup, getAllGroups, getAllGroupsCountEmployee, getSingleGroup, updateGroup, deleteGroup } from '../API/GroupAPI';
 
 const initialState = {
     groups: [],
     status: 'idle',
-    group:{},
-    employeeCount:{}
+    group: {},
+    employeeCount: {}
 };
 
 // CREATE
@@ -65,6 +65,18 @@ export const getAllGroupsCountEmployeeAsync: any = createAsyncThunk(
         }
     }
 );
+export const deleteGroupAsync: any = createAsyncThunk(
+    'deleteGroup',
+    async (groupName) => {
+        try {
+            const response: any = await deleteGroup(groupName);
+            return response;
+        } catch (error: any) {
+            console.log(error.message);
+        }
+
+    }
+)
 
 export const GroupSlice = createSlice({
     name: 'group',
@@ -85,7 +97,7 @@ export const GroupSlice = createSlice({
             })
             .addCase(getAllGroupsAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.groups =  action.payload.docs;
+                state.groups = action.payload.docs;
             })
             .addCase(updateGroupAsync.pending, (state) => {
                 state.status = 'loading';
@@ -98,18 +110,17 @@ export const GroupSlice = createSlice({
             })
             .addCase(getSingleGroupAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.group =  action.payload.groupData;
+                state.group = action.payload.groupData;
             })
             .addCase(getAllGroupsCountEmployeeAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(getAllGroupsCountEmployeeAsync.fulfilled, function (state: any, action: any) {
                 state.status = 'idle';
-                state.employeeCount =  action.payload.responseData;
+                state.employeeCount = action.payload.responseData;
             })
 
     },
 });
 
 export default GroupSlice.reducer;
-    
