@@ -36,9 +36,9 @@ const ViewModifyDatabase = () => {
   const [totalPage, setTotalPage] = useState(1);
 
   const [filter, setFilter] = useState({
-    name: "",
-    groupName: "",
-    jobProfileName: "",
+    name: localStorage.getItem("name") || "",
+    groupName: localStorage.getItem("groupName") || "",
+    jobProfileName: localStorage.getItem("jobProfileName") || "",
     page: 1,
     limit: 20,
   });
@@ -47,6 +47,8 @@ const ViewModifyDatabase = () => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
       const arr = [];
+      localStorage.setItem("groupName", filter.groupName);
+      localStorage.setItem("jobProfileName", filter.jobProfileName);
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -65,8 +67,21 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter]);
+  }, [filter.groupName, filter.jobProfileName,filter.name]);
+  
+  // clearLocalStorageOnUnload
+  useEffect(() => {
+    const clearLocalStorageOnUnload = () => {
+      localStorage.removeItem("groupName");
+      localStorage.removeItem("jobProfileName");
+    };
 
+    window.addEventListener("beforeunload", clearLocalStorageOnUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", clearLocalStorageOnUnload);
+    };
+  }, []);
   // PAGINATION =
   useEffect(() => {
     setTotalPage(Math.ceil(count / filter.limit));
@@ -138,7 +153,7 @@ const ViewModifyDatabase = () => {
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
   };
   const handleGroupTableRowClick = (data: any) => {
-    console.log(data.groupId)
+    console.log(data.groupId);
     const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
@@ -163,8 +178,9 @@ const ViewModifyDatabase = () => {
             setPage(i + 1);
             setPagiArrIncludes([i]);
           }}
-          className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
-            } rounded-full px-3 cursor-pointer`}
+          className={`${
+            pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
+          } rounded-full px-3 cursor-pointer`}
           key={i}
         >
           {i + 1}
@@ -536,14 +552,16 @@ const ViewModifyDatabase = () => {
                 </div>
                 {pagination().map((element: any, index) => {
                   if (pagiArrIncludes.includes(index) && element) {
-                    return <div key={index} className="flex">
-                      {filter.page > 2 ? "..." : ""}
-                      {filter.page === 1 ? "" : pagination()[index - 1]}
-                      {pagination()[index]}
-                      {pagination()[index + 1]}
-                      {filter.page === 1 ? pagination()[index + 2] : ""}
-                      {filter.page >= totalPage - 1 ? "" : "..."}
-                    </div>
+                    return (
+                      <div key={index} className="flex">
+                        {filter.page > 2 ? "..." : ""}
+                        {filter.page === 1 ? "" : pagination()[index - 1]}
+                        {pagination()[index]}
+                        {pagination()[index + 1]}
+                        {filter.page === 1 ? pagination()[index + 2] : ""}
+                        {filter.page >= totalPage - 1 ? "" : "..."}
+                      </div>
+                    );
                   }
                 })}
                 <div
@@ -572,7 +590,7 @@ const ViewModifyDatabase = () => {
                       Group Name
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Number of Employee
+                      Number of Employee
                     </td>
                   </tr>
                   {groupCount &&
