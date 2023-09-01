@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAdminLoginAsync, getLoggedInUserDataAsync } from '../redux/Slice/loginSlice';
 import eye from "../assets/Eye.png"
 import signin from "../assets/SignIn.png"
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import XCircle from "../assets/XCircle.svg"
 import LoaderGif from '../assets/loadergif.gif'
 import toast from 'react-hot-toast';
@@ -115,14 +115,19 @@ export function Login() {
                                     </div>
                                 </button>
                                 
-                                <Link to="/prd" className='flex justify-center items-center  h-[52px] rounded-lg hover:bg-[#28319196] bg-[#283093] py-4 px-5'>
+                                <div 
+                                onClick={()=>{
+                                    window.location.replace("https://chawlacomponents.com/prd")
+                                    // window.location.replace("http://localhost:5050/prd")
+                                }}
+                                className='flex justify-center items-center  h-[52px] rounded-lg hover:bg-[#28319196] bg-[#283093] py-4 px-5'>
                                     {/* <div>
                                         <img src={signin} className='w-5 h-5' alt="" />
                                     </div> */}
                                     <div>
                                         <p className='px-2 text-[16px] leading-6 font-medium text-[#FBFBFC]'>Production</p>
                                     </div>
-                                </Link>
+                                </div>
                             </div>
                             {loaderStatus === "loading" ? <div className='flex w-full'>
                                 <img src={LoaderGif} className='w-6 h-6' alt="" />
