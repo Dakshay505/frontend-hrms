@@ -24,7 +24,6 @@ export const GroupInfo = () => {
     const handleCancel = () => {
         setConfirmationOpen(false);
     };
-    console.log("groupssssss", groups.groupName)
     const handleConfirm = () => {
         dispatch(deleteGroupAsync(groups.groupName));
         setConfirmationOpen(false);
