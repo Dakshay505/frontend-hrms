@@ -59,7 +59,7 @@ const Picture = () => {
                             </div>
                         </div>
                         <p className="text-center text-[18px] leading-6 font-semibold text-[#2E2E2E]">
-                            {singleEmployee.name}
+                            {singleEmployee && singleEmployee.name}
                         </p>
                     </div>
                     <div>

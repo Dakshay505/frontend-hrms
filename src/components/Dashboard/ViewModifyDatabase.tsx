@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import BluePlus from "../../assets/BluePlus.png";
-import deleteIcon from "../../assets/Trash.svg";
 import greyPlus from "../../assets/gretyPlus.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,10 +25,15 @@ import LoaderGif from "../../assets/loadergif.gif";
 import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight1 from "../../assets/CaretRight1.svg";
 import {
+  deleteDepartmentAsync,
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
 import userIcon from "../../assets/UsersThree.svg";
+import deleteIcon from "../../assets/Trash.svg";
+import toast from "react-hot-toast";
+import mongoose from 'mongoose';
+
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
@@ -67,8 +71,8 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName,filter.name]);
-  
+  }, [filter.groupName, filter.jobProfileName, filter.name]);
+
   // clearLocalStorageOnUnload
   useEffect(() => {
     const clearLocalStorageOnUnload = () => {
@@ -217,8 +221,6 @@ const ViewModifyDatabase = () => {
     setAssignDepartment(true);
     const name = element.jobProfileName;
     setAssignedName(name);
-    // console.log("element", element.jobProfileName);
-    // console.log("state name:- ", assignedName);
   };
   const assigningDepartment = () => {
     setAssignDepartment(false);
@@ -249,6 +251,71 @@ const ViewModifyDatabase = () => {
   const handleDepartmentChange = (event: any) => {
     setSelectedDepartment(event.target.value);
   };
+  // delete department
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
+
+  const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
+    return isOpen ? (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded shadow-md">
+          <p className="text-lg font-semibold mb-4">
+            Are you sure you want to delete?
+          </p>
+          <div className="flex justify-end">
+            <button
+              className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+              onClick={onConfirm}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    ) : null;
+  };
+  interface Department {
+    departmentName: string;
+    _id: mongoose.Types.ObjectId;
+  }
+  const [departmentToDelete, setDepartmentToDelete] =
+    useState<Department | null>(null);
+  const handleDeleteClick = (element: Department) => {
+    setConfirmationOpen(true);
+    console.log(element, "element to delete");
+    setDepartmentToDelete(element);
+  };
+
+  const handleCancel = () => {
+    setConfirmationOpen(false);
+  };
+
+  const handleConfirm = () => {
+    if (departmentToDelete) {
+      const departmentId = departmentToDelete._id;
+      dispatch(deleteDepartmentAsync(departmentId))
+        .then((res: any) => {
+          if (res.payload.success) {
+            toast.success(res.payload.message);
+            dispatch(getAllDepartmentAsync());
+          } else {
+            toast.error(res.payload.message);
+          }
+          navigate("/view-modify-database");
+        })
+        .catch((error: any) => {
+          toast.error(error);
+        });
+      console.log("hi3", departmentId);
+    }
+    setConfirmationOpen(false);
+  };
+
   return (
     <div className="mx-10">
       <div className="flex justify-between pt-8">
@@ -732,6 +799,9 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Parent Department
                     </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Edit
+                    </td>
                   </tr>
                   {departmentList &&
                     departmentList.map((element: any, index: number) => {
@@ -757,6 +827,24 @@ const ViewModifyDatabase = () => {
                             {element.parentDepartmentId.departmentName
                               ? element.parentDepartmentId.departmentName
                               : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                            <button
+                              className="flex py-2 px-5 mx-[-12px] my-5  items-center text-sm font-medium "
+                              onClick={() => handleDeleteClick(element)}
+                            >
+                              <img
+                                src={deleteIcon}
+                                alt="delete"
+                                className="mr-2"
+                              />
+                              Delete
+                            </button>
+                            <DeleteConfirmationDialog
+                              isOpen={isConfirmationOpen}
+                              onCancel={handleCancel}
+                              onConfirm={handleConfirm}
+                            />
                           </td>
                         </tr>
                       );
