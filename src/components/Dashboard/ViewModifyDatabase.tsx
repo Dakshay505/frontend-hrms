@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import BluePlus from "../../assets/BluePlus.png";
 import greyPlus from "../../assets/gretyPlus.svg";
 import { Link } from "react-router-dom";
@@ -32,7 +32,7 @@ import {
 import userIcon from "../../assets/UsersThree.svg";
 import deleteIcon from "../../assets/Trash.svg";
 import toast from "react-hot-toast";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -118,6 +118,16 @@ const ViewModifyDatabase = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
+  // sorting api data for AscendingOrder
+  const sortDataJobProfile = () => {
+    const sortedData = [...jobProfileList];
+    sortedData.sort((a, b) => a.jobProfileName.localeCompare(b.jobProfileName));
+    return sortedData;
+  };
+  const sortedJobProfiles = useMemo(() => {
+    return sortDataJobProfile();
+  }, [jobProfileList]);
+
   const [path, setPath] = useState("/addemployee");
   const [databaseValue, setDatabaseValue] = useState("Employees");
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
@@ -705,14 +715,14 @@ const ViewModifyDatabase = () => {
                       Description
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Number Of Employee
+                      Number Of Employee
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Type
                     </td>
                   </tr>
-                  {jobProfileList &&
-                    jobProfileList.map((element: any, index: number) => {
+                  {sortedJobProfiles &&
+                    sortedJobProfiles.map((element: any, index: number) => {
                       return (
                         <tr
                           key={index}
@@ -769,7 +779,9 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.numberOfEmployees ? element.numberOfEmployees : "Not Avilable"}
+                            {element.numberOfEmployees
+                              ? element.numberOfEmployees
+                              : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]">
                             {element.employmentType
