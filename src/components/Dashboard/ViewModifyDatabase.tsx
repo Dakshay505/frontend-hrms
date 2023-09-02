@@ -705,7 +705,7 @@ const ViewModifyDatabase = () => {
                       Description
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Job Rank
+                    Number Of Employee
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Type
@@ -769,7 +769,7 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.jobRank ? element.jobRank : "Not Avilable"}
+                            {element.numberOfEmployees ? element.numberOfEmployees : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]">
                             {element.employmentType
