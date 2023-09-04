@@ -11,15 +11,20 @@ import {
   getQrAssign,
   updatePassword,
   newPassword,
-  salaryLog
+  salaryLog,
+  EmployeeBarCodes
 } from "../API/EmployeeAPI";
 
 const initialState = {
   employees: [],
-  singleEmployee: {}, 
+  Baremployees: [],
+  singleEmployee: {},
   qrAssign: {},
   salaryLogSingleEmployee: [],
   status: "idle",
+  error: null,
+
+
 };
 
 // CREATE
@@ -37,14 +42,14 @@ export const createEmployeeAsync: any = createAsyncThunk(
 
 // READ
 export const getAllEmployeeAsync: any = createAsyncThunk(
-    'getallemployees',
-    async (data) => {
-        try {
-            const response: any = await getAllEmployee(data);
-            return response;
-        } catch (error: any) {
-            console.log(error.message);
-        }
+  'getallemployees',
+  async (data) => {
+    try {
+      const response: any = await getAllEmployee(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
   }
 
 );
@@ -110,14 +115,14 @@ export const addDocumentsAsync: any = createAsyncThunk(
   }
 );
 export const addImageAsync: any = createAsyncThunk("addImage",
- async (data) => {
-  try {
-    const response: any = await addImage(data);
-    return response;
-  } catch (error: any) {
-    console.log(error.message);
-  }
-});
+  async (data) => {
+    try {
+      const response: any = await addImage(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  });
 export const getEmployeeImageAsync: any = createAsyncThunk(
   "getEmployeeImage",
   async (data) => {
@@ -137,7 +142,7 @@ export const getQrAssignAsync: any = createAsyncThunk(
     try {
       const response = await getQrAssign(data);
       return response;
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.message);
     }
   }
@@ -167,7 +172,23 @@ export const newPasswordAsync: any = createAsyncThunk(
     }
   }
 );
-  
+
+
+
+// Barcode
+export const EmployeeBarCodesAsync: any = createAsyncThunk(
+  'EmployeeBarCodesAsync',
+
+  async () => {
+    try {
+      const response: any = await EmployeeBarCodes();
+      console.log("heyy", response)
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
 
 export const EmployeeSlice = createSlice({
   name: "employee",
@@ -238,21 +259,21 @@ export const EmployeeSlice = createSlice({
         getEmployeeImageAsync.fulfilled,
         function (state: any, action: any) {
           state.status = "idle";
-          state.singleEmployee = {...state.singleEmployee,profileId:action.payload.employee};
+          state.singleEmployee = { ...state.singleEmployee, profileId: action.payload.employee };
         })
       .addCase(salaryLogAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(salaryLogAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.salaryLogSingleEmployee =  action.payload.salaryLog;
+        state.salaryLogSingleEmployee = action.payload.salaryLog;
       })
       .addCase(getQrAssignAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(getQrAssignAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.qrAssign =  action.payload.data;
+        state.qrAssign = action.payload.data;
       }).addCase(updatePasswordAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -264,6 +285,15 @@ export const EmployeeSlice = createSlice({
       })
       .addCase(newPasswordAsync.fulfilled, (state) => {
         state.status = 'idle';
+      })
+      .addCase(EmployeeBarCodesAsync.pending, (state) => {
+        state.status = "idle";
+        state.error = null;
+      })
+      .addCase(EmployeeBarCodesAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        // console.log(action.payload.data.employeeBarCodes )
+        state.Baremployees = action.payload.data.employeeBarCodes;
       })
   },
 });

@@ -111,3 +111,7 @@ export const deleteDepartmentApiPath = `${apiPath}/api/v1/department/delete`;
 // new Salary
 export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`;
 export const getEmployeeSalaryApiPath = `${apiPath}/api/v1/attendance`;
+
+// employeeBarcode
+export const getEmployeeBarcodeApiPath=`${apiPath}/api/v1/employee/employeeBarCode`
+
