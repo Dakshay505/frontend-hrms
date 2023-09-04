@@ -11,6 +11,7 @@ import {
   updatePasswordApiPath,
   uploadDocumentApiPath,
   uploadImageApiPath,
+  getEmployeeBarcodeApiPath
 } from "../../APIRoutes";
 
 // CREATE
@@ -174,5 +175,18 @@ try {
     return err.response.data
   }
 };
+ 
 
-
+// employeeBarcode
+export const EmployeeBarCodes = async () => {
+  try {
+    const response = await axios.get(`${getEmployeeBarcodeApiPath}`, {
+      withCredentials:true,
+    });
+    console.log("hello i am api ",response)
+    // const data = await response.data();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

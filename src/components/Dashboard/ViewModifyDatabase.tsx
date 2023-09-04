@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
   getEmployeeImageAsync,
+  EmployeeBarCodesAsync
 } from "../../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
@@ -105,6 +106,7 @@ const ViewModifyDatabase = () => {
     (state: any) => state.employee.employees
   );
 
+
   const loaderStatus = useSelector((state: any) => state.employee.status);
   const departmentList = useSelector(
     (state: any) => state.department.department
@@ -148,7 +150,23 @@ const ViewModifyDatabase = () => {
     dispatch(getAllJobProfileAsync());
     dispatch(getAllDepartmentAsync());
     dispatch(getAllParentDepartmentAsync());
+    dispatch(EmployeeBarCodesAsync());
   }, []);
+
+
+  // employee barcode
+
+  const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
+  const BarcodeStore: any = {}
+  console.log("jjsjsjsssksk", EmployeeBarcode)
+  EmployeeBarcode.forEach((e: any) => {
+
+    const code = e.employeeCode;
+    BarcodeStore[code] = {
+      ...e
+    }
+  });
+
 
   const navigate = useNavigate();
   const handleTableRowClick = (data: any) => {
@@ -182,9 +200,8 @@ const ViewModifyDatabase = () => {
             setPage(i + 1);
             setPagiArrIncludes([i]);
           }}
-          className={`${
-            pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
-          } rounded-full px-3 cursor-pointer`}
+          className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
+            } rounded-full px-3 cursor-pointer`}
           key={i}
         >
           {i + 1}
@@ -315,6 +332,8 @@ const ViewModifyDatabase = () => {
     }
     setConfirmationOpen(false);
   };
+
+
 
   return (
     <div className="mx-10">
@@ -593,9 +612,14 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.leaveTaken ? element.leaveTaken : 0}
                           </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <img src={element.currentBarCode} alt="barcode" />
-                          </td>
+                          {BarcodeStore[element.employeeCode] &&
+                            BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                  {element + " ,"}
+                                </td>
+                            ))
+
+                          }
                         </tr>
                       );
                     })}
@@ -705,7 +729,7 @@ const ViewModifyDatabase = () => {
                       Description
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Number Of Employee
+                      Number Of Employee
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Type
