@@ -20,6 +20,8 @@ export const JobProfileInfo = () => {
   const [jobProfileId, setJobProfileId] = useState("");
   const [showInputBoxJobProfileName, setShowInputBoxJobProfileName] =
     useState(false);
+    const [showInputBoxSupervisor, setShowInputBoxSupervisor] =
+    useState(false);
   const [inputBoxJobProfileNameValue, setInputBoxJobProfileNameValue] =
     useState<any>("");
   const [
@@ -30,11 +32,17 @@ export const JobProfileInfo = () => {
     inputBoxJobProfileDescriptionValue,
     setInputBoxJobProfileDescriptionValue,
   ] = useState<any>("");
+  const [
+    inputBoxSupervisor,
+    setInputBoxSupervisor,
+  ] = useState<any>("");
+
 
   useEffect(() => {
     setJobProfileId(JobProfile._id);
     setInputBoxJobProfileNameValue(JobProfile.jobProfileName);
     setInputBoxJobProfileDescriptionValue(JobProfile.jobDescription);
+    setInputBoxSupervisor(JobProfile.isSupervisor)
   }, [JobProfile]);
 
   const { register, handleSubmit } = useForm();
@@ -93,11 +101,14 @@ export const JobProfileInfo = () => {
       <form
         onSubmit={handleSubmit((data) => {
           const sendData = { jobProfileId: jobProfileId, data: data };
+          console.log(data)
           dispatch(updateJobProfileAsync(sendData)).then(() => {
             dispatch(getSingleJobProfileAsync({ jobProfileId: jobProfileId }));
           });
+          setShowInputBoxSupervisor(false);
           setShowInputBoxJobProfileName(false);
           setShowInputBoxJobProfileDescription(false);
+         
         })}
       >
         <div>
@@ -199,6 +210,58 @@ export const JobProfileInfo = () => {
                       setInputBoxJobProfileDescriptionValue(event.target.value)
                     }
                     type="text"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+          {!showInputBoxSupervisor && (
+            <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 Supervisor Status
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                   setShowInputBoxSupervisor(
+                      !showInputBoxSupervisor
+                    );
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {JobProfile.isSupervisor?"True":"False"}
+                </p>
+              </div>
+            </div>
+          )}
+          {showInputBoxSupervisor&& (
+            <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   SuperVisor Status
+                  </p>
+                </div>
+                <div>
+                  <input
+                    {...register("isSupervisor", {})}
+                    className="text-[12px] leading-5 font-normal focus:outline-none"
+                    defaultChecked={inputBoxSupervisor}
+                    
+                    type="checkbox"
                   />
                 </div>
               </div>

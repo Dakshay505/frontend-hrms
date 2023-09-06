@@ -72,7 +72,7 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name]);
+  }, [filter.groupName, filter.jobProfileName, filter.name,filter.page]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
