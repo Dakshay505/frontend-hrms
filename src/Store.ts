@@ -10,7 +10,7 @@ import TrainingReducer from "./redux/Slice/TrainingSlice";
 import SalaryReducer from "./redux/Slice/SalarySlice";
 import notificationSlice from "./redux/Slice/notificationSlice";
 import departmentSlice from "./redux/Slice/departmentSlice";
-
+import ShopSlice from "./redux/Slice/ShopSlice";
 export const store = configureStore({
   reducer: {
     employee: employeeReducer,
@@ -24,6 +24,7 @@ export const store = configureStore({
     salary: SalaryReducer,
     notification: notificationSlice,
     department: departmentSlice,
+    Shop:ShopSlice,
   },
 });
 

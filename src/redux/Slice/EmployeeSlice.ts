@@ -182,7 +182,7 @@ export const EmployeeBarCodesAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await EmployeeBarCodes();
-      console.log("heyy", response)
+      // console.log("heyy", response)
       return response;
     } catch (error: any) {
       console.log(error.message);

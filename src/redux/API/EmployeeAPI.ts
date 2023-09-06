@@ -183,7 +183,7 @@ export const EmployeeBarCodes = async () => {
     const response = await axios.get(`${getEmployeeBarcodeApiPath}`, {
       withCredentials:true,
     });
-    console.log("hello i am api ",response)
+    // console.log("hello i am api ",response)
     // const data = await response.data();
     return response;
   } catch (error) {
