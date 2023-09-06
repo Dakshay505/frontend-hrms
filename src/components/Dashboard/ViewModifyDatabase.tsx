@@ -34,6 +34,7 @@ import userIcon from "../../assets/UsersThree.svg";
 import deleteIcon from "../../assets/Trash.svg";
 import toast from "react-hot-toast";
 import mongoose from 'mongoose';
+import { allShopAsync } from "../../redux/Slice/ShopSlice";
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -151,14 +152,16 @@ const ViewModifyDatabase = () => {
     dispatch(getAllDepartmentAsync());
     dispatch(getAllParentDepartmentAsync());
     dispatch(EmployeeBarCodesAsync());
+    dispatch(allShopAsync())
   }, []);
 
 
-  // employee barcode
+  const shopss = useSelector((state:any)=> state.Shop.shop)
+  // console.log("shoepeeee",shopss)
 
   const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
   const BarcodeStore: any = {}
-  console.log("jjsjsjsssksk", EmployeeBarcode)
+  // console.log("jjsjsjsssksk", EmployeeBarcode)
   EmployeeBarcode.forEach((e: any) => {
 
     const code = e.employeeCode;
@@ -365,6 +368,9 @@ const ViewModifyDatabase = () => {
                 if (selectedValue === "Parent Department") {
                   setPath("/add-department");
                 }
+                if (selectedValue === "Shop") {
+                  setPath("/Shop");
+                }
               }}
             >
               <select
@@ -376,12 +382,13 @@ const ViewModifyDatabase = () => {
                 <option>Job Profiles</option>
                 <option>Department</option>
                 <option>Parent Department</option>
+                <option>Shop</option>
               </select>
             </form>
           </div>
         </div>
         <div className="flex gap-6">
-          {databaseValue !== "Employees" && (
+          {databaseValue !== "Employees" && databaseValue !== "Shop" && (
             <Link to="/update-hierarchy">
               <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
                 <img src={Pencil} className="w-4" alt="" />
@@ -614,9 +621,9 @@ const ViewModifyDatabase = () => {
                           </td>
                           {BarcodeStore[element.employeeCode] &&
                             BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
-                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                  {element + " ,"}
-                                </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {element + " ,"}
+                              </td>
                             ))
 
                           }
@@ -876,6 +883,7 @@ const ViewModifyDatabase = () => {
                 </tbody>
               </table>
             )}
+
             {databaseValue === "Parent Department" && (
               <table className="w-full">
                 <tbody>
@@ -908,6 +916,48 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
                             {element.description
                               ? element.description
+                              : "Not Avilable"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            )}
+
+            {/* table for shop */}
+            {databaseValue === "Shop" && (
+              <table className="w-full">
+                <tbody>
+                  <tr className="bg-[#ECEDFE] cursor-default">
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      ID
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Shop Name
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Supervisor Job Profile
+                    </td>
+                  </tr>
+                  {shopss &&
+                    shopss.map((element: any, index: number) => {
+                      return (
+                        <tr
+                          key={index}
+                          className="hover:bg-[#FAFAFA] cursor-default"
+                        >
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                            {index + 1}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
+                            {element.shopName
+                              ? element.shopName
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
+                            {element.jobProfile.jobProfileName
+                              ? element.jobProfile.jobProfileName
                               : "Not Avilable"}
                           </td>
                         </tr>
