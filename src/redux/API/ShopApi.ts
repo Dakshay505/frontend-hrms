@@ -1,12 +1,12 @@
 import axios from "axios";
-import { addShopApiPath, getAllShopApiPath } from './../../APIRoutes';
+import { addShopApiPath, getAllShopApiPath, updateShopApiPath, getSingleShopApiPath } from './../../APIRoutes';
 
 
-export const addShop = async (addShop:any) => {
+export const addShop = async (addShop: any) => {
     try {
-        console.log("avjcowsowsowsjows",addShop)
-        const response = await axios.post(`${addShopApiPath}`, addShop,{
-            withCredentials:true
+        console.log("avjcowsowsowsjows", addShop)
+        const response = await axios.post(`${addShopApiPath}`, addShop, {
+            withCredentials: true
         });
         return response.data;
     } catch (error) {
@@ -16,8 +16,8 @@ export const addShop = async (addShop:any) => {
 
 export const allShop = async () => {
     try {
-        const response = await axios.get(`${getAllShopApiPath}`,{
-            withCredentials:true
+        const response = await axios.get(`${getAllShopApiPath}`, {
+            withCredentials: true
         });
         return response.data;
     } catch (error) {
@@ -25,3 +25,28 @@ export const allShop = async () => {
     }
 };
 
+export const updateShopApi = async (ShopData: any) => {
+    try {
+        console.log("groupData", ShopData.shopId);
+        const id = ShopData.shopId
+        const { data } = await axios.patch(`${updateShopApiPath}/${id}`, ShopData.data,
+            { withCredentials: true }
+        );
+        return data;
+    } catch (error: any) {
+        console.log(error.response.data);
+    }
+};
+
+
+export const getSingleShop = async (id: any) => {
+    try {
+        const { data } = await axios.get(
+            `${getSingleShopApiPath}/${id}`,
+            { withCredentials: true }
+        );
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+};

@@ -34,7 +34,7 @@ import userIcon from "../../assets/UsersThree.svg";
 import deleteIcon from "../../assets/Trash.svg";
 import toast from "react-hot-toast";
 import mongoose from 'mongoose';
-import { allShopAsync } from "../../redux/Slice/ShopSlice";
+import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -73,7 +73,7 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name,filter.page]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -156,7 +156,7 @@ const ViewModifyDatabase = () => {
   }, []);
 
 
-  const shopss = useSelector((state:any)=> state.Shop.shop)
+  const shopss = useSelector((state: any) => state.Shop.shop)
   // console.log("shoepeeee",shopss)
 
   const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
@@ -182,6 +182,14 @@ const ViewModifyDatabase = () => {
     const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
+  };
+
+
+  const handleShopTableRowClick = (data: any) => {
+    console.log(data.shopId);
+    const shopId = { shopId: data._id };
+    dispatch(getSingleShopAsync(shopId));
+    navigate(`/edit-shop`, { state: { data: data } });
   };
   const handleJobprofileTableRowClick = (data: any) => {
     const jobProfileId = { jobProfileId: data._id };
@@ -619,14 +627,19 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.leaveTaken ? element.leaveTaken : 0}
                           </td>
-                          {BarcodeStore[element.employeeCode] &&
-                            BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                {element + " ,"}
-                              </td>
-                            ))
+                          <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            <div className="flex gap-[10px]">
+                              {BarcodeStore[element.employeeCode] &&
+                                BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
+                                  <div>
 
-                          }
+                                    {element + " ,"}
+                                  </div>
+                                ))
+
+                              }
+                            </div>
+                          </td>
                         </tr>
                       );
                     })}
@@ -946,6 +959,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
+                          onClick={() => handleShopTableRowClick(element)}
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}

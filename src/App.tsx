@@ -72,6 +72,7 @@ import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryBySubDe
 import SalaryJobProfilebyDepartment from "./components/Salary/SalaryDepartment/SalaryJobProfilebyDepartment";
 import SalaryEmployee from "./components/Salary/SalaryDepartment/SalaryEmployee";
 import { Shop } from "./components/Dashboard/Shop";
+import { EditShop } from "./components/Dashboard/EditShop";
 
 const router = createBrowserRouter([
   {
@@ -574,6 +575,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <Shop/>
+        </Aside>
+      </ProductedRoute>
+    ),
+  }, 
+  {
+    path: "/edit-shop",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <EditShop/>
         </Aside>
       </ProductedRoute>
     ),

@@ -8,7 +8,7 @@ import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 export const Shop = () => {
 
     const dispatch = useDispatch();
-    const [parentShopValue, setParentShopValue] = useState("");
+    const [, setParentShopValue] = useState("");
 
     const AddShop = useSelector((state: any) => state.Shop);
     console.log(AddShop)
@@ -51,7 +51,7 @@ export const Shop = () => {
     console.log("hiiii", alljobprofile)
 
 
-
+ 
 
     return (
         <div className="mx-10">
