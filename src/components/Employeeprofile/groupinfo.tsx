@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSingleGroupAsync, updateGroupAsync, deleteGroupAsync } from '../../redux/Slice/GroupSlice';
 import deleteIcon from "../../assets/Trash.svg"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";                        
 
 export const GroupInfo = () => {
     const dispatch = useDispatch();

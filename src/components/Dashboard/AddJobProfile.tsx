@@ -47,7 +47,7 @@ const AddJobProfile = () => {
     <div className="mx-10 w-[688px]">
       <div className="pt-8 ">
         <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Job Profile</h1>
-        
+
       </div>
       <div className="mt-10">
         <form onSubmit={handleSubmit((data: any) => {
@@ -67,15 +67,18 @@ const AddJobProfile = () => {
             <div className='flex flex-col gap-3'>
               <div className="flex flex-row">
                 <p className='text-sm font-normal text-[#1C1C1C] mr-12'>Job Profile Name</p>
-                <input  {...register('isSupervisor', {})} defaultChecked={false} type="checkbox"/>
-                <p className="text-sm">Is this Supervisor?</p>
+                <div className="flex gap-[8px]">
+
+                  <input  {...register('isSupervisor', {})} defaultChecked={false} type="checkbox" />
+                  <p className="text-sm">Is this Supervisor?</p>
+                </div>
               </div>
               <div>
                 <input
                   {...register('jobProfileName', {
                     required: 'Job Profile Name is required',
                     validate: validateJobProfileName,
-                    
+
                   })}
                   type="text"
                   className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'

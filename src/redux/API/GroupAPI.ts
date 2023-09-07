@@ -75,7 +75,6 @@ export const deleteGroup = async (groupName: any) => {
       data: { groupName },
       withCredentials: true
     }
-
     );
     return data;
 
