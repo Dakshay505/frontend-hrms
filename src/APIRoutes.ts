@@ -72,11 +72,11 @@ export const updateAcceptedGatePassApiPath = `${apiPath}/api/v1/leave/approvegat
 export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`;
 
 // attendance
-export const updateAttendanceApiPath = `${apiPath}/api/v1/attendance/updateAttendance`;
-export const getAllAttandenceApiPath = `${apiPath}/api/v1/attendance`;
-export const getMyAttandenceApiPath = `${apiPath}/api/v1/attendance/myAttendance`;
-export const getStaffAttendanceApiPath = `${apiPath}/api/v1/attendance/staffAttendance`;
-export const getGroupAttendanceApiPath = `${apiPath}/api/v1/attendance/groupPresent`;
+export const updateAttendanceApiPath = `${apiPath}/api/v2/attendance/updateAttendance`;
+export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
+export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
+export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
+export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPresent`;
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`;
