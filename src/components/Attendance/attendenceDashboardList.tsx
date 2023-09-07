@@ -400,7 +400,7 @@ export const AttendenceDashboardList = () => {
                           : "Not Avilable"}
                       </td>
                       <td className="py-4 px-5">
-                        {latestPunches?.status === "approved" && (
+                        {element?.status === "approved" && (
                           <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
                             <img
                               src={GreenCheck}
@@ -412,7 +412,7 @@ export const AttendenceDashboardList = () => {
                             </span>
                           </span>
                         )}
-                        {latestPunches?.status === "rejected" && (
+                        {element?.status === "rejected" && (
                           <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
                             <img
                               src={RedX}
@@ -424,7 +424,7 @@ export const AttendenceDashboardList = () => {
                             </span>
                           </span>
                         )}
-                        {latestPunches.status === "pending" && (
+                        {element.status === "pending" && (
                           <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
                             <img
                               src={SpinnerGap}
@@ -438,22 +438,22 @@ export const AttendenceDashboardList = () => {
                         )}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {latestPunches.approvedBy?.name
-                          ? latestPunches.approvedBy?.name
+                        {element.approvedBy?.name
+                          ? element.approvedBy?.name
                           : "-"}
                       </td>
                       {/* photo open */}
 
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {latestPunches?.status === "approved" &&
-                          latestPunches.approvedImage && (
+                        {element?.status === "approved" &&
+                         element.approvedImage && (
                             <div className="flex gap-[10px] cursor-pointer">
                               <div>
                                 <p
                                   className="text-[12px] leading-4 font-medium text-[#283093] underline"
                                   onClick={() =>
                                     handleImageClick(
-                                      latestPunches.approvedImage
+                                      element.approvedImage
                                     )
                                   }
                                 >
@@ -498,49 +498,8 @@ export const AttendenceDashboardList = () => {
                                   )
                                 : "Not Avilable"}
                             </td>
-                            <td className="py-4 px-5">
-                              {element.status === "approved" && (
-                                <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
-                                  <img
-                                    src={GreenCheck}
-                                    className="h-[10px] w-[10px]"
-                                    alt="check"
-                                  />
-                                  <span className="text-sm font-normal text-[#186A3B]">
-                                    Approved
-                                  </span>
-                                </span>
-                              )}
-                              {element.status === "rejected" && (
-                                <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
-                                  <img
-                                    src={RedX}
-                                    className="h-[10px] w-[10px]"
-                                    alt="check"
-                                  />
-                                  <span className="text-sm font-normal text-[#8A2626]">
-                                    Rejected
-                                  </span>
-                                </span>
-                              )}
-                              {element.status === "pending" && (
-                                <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                                  <img
-                                    src={SpinnerGap}
-                                    className="h-[10px] w-[10px]"
-                                    alt="check"
-                                  />
-                                  <span className="text-sm font-normal text-[#945D2D]">
-                                    Pending
-                                  </span>
-                                </span>
-                              )}
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                              {latestPunches.approvedBy?.name
-                                ? latestPunches.approvedBy?.name
-                                : "-"}
-                            </td>
+                            
+                           
                           </tr>
                         );
                       })}

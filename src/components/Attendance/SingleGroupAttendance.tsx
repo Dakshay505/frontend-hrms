@@ -285,23 +285,23 @@ const SingleGroupAttendance = () => {
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                     <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
                                     <td className='py-4 px-5'>
-                                        {latestPunches?.status === "approved" &&
+                                        {element?.status === "approved" &&
                                             <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                 <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                 <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
                                             </span>}
-                                        {latestPunches?.status === "rejected" &&
+                                        {element?.status === "rejected" &&
                                             <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                 <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                 <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
                                             </span>}
-                                        {(latestPunches.status === "pending") &&
+                                        {(element.status === "pending") &&
                                             <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                 <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                 <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                             </span>}
                                     </td>
-                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? element.approvedBy?.name : "-"}</td>
                                 </tr>
                                 {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                     return <tr key={element._id + element.punchIn}>
