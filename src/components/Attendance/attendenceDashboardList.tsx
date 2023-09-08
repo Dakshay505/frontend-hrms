@@ -77,6 +77,24 @@ export const AttendenceDashboardList = () => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
   }, []);
+  const changetime=(createdAtDate:any)=>{
+    console.log(createdAtDate)
+    const date=new Date(createdAtDate)
+    const hours = date.getUTCHours(); // Get the hours in UTC
+    const minutes = date.getUTCMinutes();
+    const period = hours >= 12 ? "PM" : "AM";
+
+// Convert to 12-hour format
+const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+    
+    
+  
+  
+    return formattedTime;
+}
   // const fetchData = async () => {
   //   try {
   //     filter.page = 1;
@@ -385,18 +403,12 @@ export const AttendenceDashboardList = () => {
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchIn
-                          ? new Date(latestPunches.punchIn).toLocaleString(
-                              "en-US",
-                              { timeStyle: "short" }
-                            )
+                          ? changetime(latestPunches.punchIn)
                           : "Not Avilable"}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchOut
-                          ? new Date(latestPunches.punchOut).toLocaleString(
-                              "en-US",
-                              { timeStyle: "short" }
-                            )
+                          ?changetime(latestPunches.punchOut)
                           : "Not Avilable"}
                       </td>
                       <td className="py-4 px-5">
@@ -484,18 +496,12 @@ export const AttendenceDashboardList = () => {
                             </td>
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
-                                ? new Date(element.punchIn).toLocaleString(
-                                    "en-US",
-                                    { timeStyle: "short" }
-                                  )
+                                ? changetime(element.punchIn)
                                 : "Not Avilable"}
                             </td>
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchOut
-                                ? new Date(element.punchOut).toLocaleString(
-                                    "en-US",
-                                    { timeStyle: "short" }
-                                  )
+                                ? changetime(latestPunches.punchOut)
                                 : "Not Avilable"}
                             </td>
                             

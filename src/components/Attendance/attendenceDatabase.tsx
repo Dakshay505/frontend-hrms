@@ -10,7 +10,7 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
-
+import moment from "moment-timezone";
 import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
@@ -67,6 +67,24 @@ export const AttendenceDtabase = () => {
   const handleCloseImage = () => {
     setIsImageOpen(false);
   };
+  const changetime=(createdAtDate:any)=>{
+    console.log(createdAtDate)
+    const date=new Date(createdAtDate)
+    const hours = date.getUTCHours(); // Get the hours in UTC
+    const minutes = date.getUTCMinutes();
+    const period = hours >= 12 ? "PM" : "AM";
+
+// Convert to 12-hour format
+const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+    
+    
+  
+  
+    return formattedTime;
+}
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
@@ -291,18 +309,12 @@ export const AttendenceDtabase = () => {
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchIn
-                            ? new Date(latestPunches.punchIn).toLocaleString(
-                                "en-US",
-                                { timeStyle: "short" }
-                              )
+                            ?changetime(latestPunches.punchIn)
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
-                            ? new Date(latestPunches.punchOut).toLocaleString(
-                                "en-US",
-                                { timeStyle: "short" }
-                              )
+                            ? changetime(latestPunches.punchOut)
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5">
@@ -389,18 +401,12 @@ export const AttendenceDtabase = () => {
                               </td>
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                 {element.punchIn
-                                  ? new Date(element.punchIn).toLocaleString(
-                                      "en-US",
-                                      { timeStyle: "short" }
-                                    )
+                                  ? changetime(element.punchIn)
                                   : "Not Avilable"}
                               </td>
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                 {element.punchOut
-                                  ? new Date(element.punchOut).toLocaleString(
-                                      "en-US",
-                                      { timeStyle: "short" }
-                                    )
+                                  ? changetime(element.punchOut)
                                   : "Not Avilable"}
                               </td>
                          
