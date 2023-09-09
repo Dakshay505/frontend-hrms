@@ -10,7 +10,6 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
-import moment from "moment-timezone";
 import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
@@ -276,6 +275,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                     );
                   });
                   const latestPunches = sortedPunches[0];
+                  //console.log("djsgdhgedgh",element)
                   return (
                     <>
                       <tr
