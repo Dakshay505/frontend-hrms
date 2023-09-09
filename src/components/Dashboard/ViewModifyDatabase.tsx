@@ -52,6 +52,7 @@ const ViewModifyDatabase = () => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
+      //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
       localStorage.setItem("groupName", filter.groupName);
       localStorage.setItem("jobProfileName", filter.jobProfileName);
@@ -589,9 +590,13 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                     Number of  Barcode
+                    </td>
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
+                      
                       return (
                         <tr
                           key={index}
@@ -626,6 +631,9 @@ const ViewModifyDatabase = () => {
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.leaveTaken ? element.leaveTaken : 0}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            <img src={element.currentBarCode} alt="barcode" />
                           </td>
                           <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <div className="flex gap-[10px]">
