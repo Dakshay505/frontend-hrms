@@ -30,6 +30,7 @@ export const AttendenceDashboardList = () => {
   const [nextDate, setnextDate] = useState<any>();
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
+  const [status,Setstatus]=useState("")
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -162,9 +163,17 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     filter.page = 1;
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
-      setItems(employeeData);
+      if(status===""){
+        setItems(employeeData);
+        
+      }
+      else{
+      const filteredItems = employeeData.filter((element:any) => element.status === status);
+      setItems(filteredItems)
+      }
+      
     });
-  }, [filter]);
+  }, [filter,status]);
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
@@ -176,6 +185,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       year: "numeric",
     });
   };
+ 
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -285,6 +295,21 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                       </option>
                     );
                   })}
+              </select>
+            </div>
+            <div>
+              <select
+                onChange={(event) => {
+                  Setstatus(event.target.value)
+                }}
+                value={status}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+              >
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                
               </select>
             </div>
           </div>
@@ -501,7 +526,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                             </td>
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchOut
-                                ? changetime(latestPunches.punchOut)
+                                ? changetime(element.punchOut)
                                 : "Not Avilable"}
                             </td>
                             
