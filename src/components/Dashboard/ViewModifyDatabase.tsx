@@ -585,18 +585,18 @@ const ViewModifyDatabase = () => {
                       Employement Status
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Leaves Taken
+                      Aadhar No.
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                     Number of  Barcode
+                      Number of  Barcode
                     </td>
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
-                      
+
                       return (
                         <tr
                           key={index}
@@ -630,7 +630,7 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.leaveTaken ? element.leaveTaken : 0}
+                            {element.aadharNumber ? element.aadharNumber : 0}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />

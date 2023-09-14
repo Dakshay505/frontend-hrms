@@ -90,8 +90,11 @@ const AddEmployee = () => {
 
     // phone number validation
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [aadharNumber, setAadharNumber] = useState('');
+
     const [otp, setOtp] = useState<any>()
     const [isValid, setIsValid] = useState(false);
+    const [isValidAadhar, setIsValidAadhar] = useState(false);
 
     const handlePhoneNumberChange = (e: any) => {
         const inputPhoneNumber = e.target.value;
@@ -101,6 +104,15 @@ const AddEmployee = () => {
         const phoneRegex = /^\d{10,11}$/;
 
         setIsValid(phoneRegex.test(inputPhoneNumber));
+    };
+    const handleAadharNumberChange = (e: any) => {
+        const inputAadhar = e.target.value;
+        if (inputAadhar.length <= 12) {
+            setAadharNumber(inputAadhar);
+        }
+        const Regex = /^\d{12,13}$/;
+
+        setIsValidAadhar(Regex.test(inputAadhar));
     };
 
 
@@ -336,6 +348,29 @@ const AddEmployee = () => {
                                         className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
                                     />
                                 </div>
+                            </div>
+                        </div>
+                        <div className='flex gap-10'>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Aadhar Number</p>
+                                </div>
+                                <div onChange={handleAadharNumberChange}>
+                                    <input
+                                        type="number"
+                                        value={aadharNumber}
+                                        {...register('aadharNumber', { required: "Aadhar No. required" })}
+                                        pattern={'^\d{12,13}$'}
+                                        required
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                                {aadharNumber.length > 0 && !isValidAadhar && (
+                                    <p className='text-red-500'>Aadhar number is invalid!</p>
+                                )}
+                                {isValidAadhar && (
+                                    <p className='text-green-500'>Aadhar number is valid!</p>
+                                )}
                             </div>
                         </div>
 
