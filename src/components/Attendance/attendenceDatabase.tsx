@@ -69,8 +69,8 @@ export const AttendenceDtabase = () => {
   const changetime=(createdAtDate:any)=>{
     console.log(createdAtDate)
     const date=new Date(createdAtDate)
-    const hours = date.getUTCHours(); // Get the hours in UTC
-    const minutes = date.getUTCMinutes();
+    const hours = date.getHours(); // Get the hours in UTC
+    const minutes = date.getMinutes();
     const period = hours >= 12 ? "PM" : "AM";
 
 // Convert to 12-hour format
@@ -156,10 +156,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
   }, []);
-  const totalPresent = groupAttendanceList.reduce(
-    (acc: any, group: any) => acc + group.present,
-    0
-  );
+  const totalPresent = items?.length
   const totalEmployees = groupAttendanceList.reduce(
     (acc: any, group: any) => acc + group.totalEmployeesInGroup,
     0

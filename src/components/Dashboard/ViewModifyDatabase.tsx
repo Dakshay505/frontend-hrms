@@ -104,11 +104,9 @@ const ViewModifyDatabase = () => {
   const [suggestions, setSuggestions] = useState<any>([]);
 
   const dispatch = useDispatch();
-  const employeeDetailList = useSelector(
-    (state: any) => state.employee.employees
-  );
-
-
+  const employeeDetailList = useSelector((state: any) => state.employee.employees);
+  // const [items, setItems] = useState<any[]>([]);
+  // setItems(employeeDetailList)
   const loaderStatus = useSelector((state: any) => state.employee.status);
   const departmentList = useSelector(
     (state: any) => state.department.department
@@ -308,6 +306,12 @@ const ViewModifyDatabase = () => {
       </div>
     ) : null;
   };
+  // const handlerAadhar = () => {
+  //   if (items.length > 1) {
+  //     const filteredItems = items.filter((element: any) => element.aadharNumber !== 0);
+  //     setItems(filteredItems)
+  //   }
+  // }
   interface Department {
     departmentName: string;
     _id: mongoose.Types.ObjectId;
@@ -584,19 +588,21 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Status
                     </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Leaves Taken
+                    <td
+                      className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      {/* <p onClick={() => handlerAadhar}> Aadhar No.</p> */}
+                      Aadhar No.
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                     Number of  Barcode
+                      Number of  Barcode
                     </td>
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
-                      
+
                       return (
                         <tr
                           key={index}
@@ -630,7 +636,7 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.leaveTaken ? element.leaveTaken : 0}
+                            {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />

@@ -11,12 +11,16 @@ import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
+
+
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
+import check from "../../assets/Check.svg";
+import plus from "../../assets/Plus.png"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
@@ -30,6 +34,7 @@ export const AttendenceDashboardList = () => {
   const [nextDate, setnextDate] = useState<any>();
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
+  const [status,Setstatus]=useState("")
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -95,6 +100,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
   
     return formattedTime;
 }
+
   // const fetchData = async () => {
   //   try {
   //     filter.page = 1;
@@ -162,9 +168,17 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     filter.page = 1;
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
-      setItems(employeeData);
+      if(status===""){
+        setItems(employeeData);
+        
+      }
+      else{
+      const filteredItems = employeeData.filter((element:any) => element.status === status);
+      setItems(filteredItems)
+      }
+      
     });
-  }, [filter]);
+  }, [filter,status]);
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
@@ -176,6 +190,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       year: "numeric",
     });
   };
+ 
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -225,6 +240,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
         <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
           Attendance Database
         </p>
+       
       </div>
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
@@ -287,6 +303,21 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                   })}
               </select>
             </div>
+            <div>
+              <select
+                onChange={(event) => {
+                  Setstatus(event.target.value)
+                }}
+                value={status}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+              >
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                
+              </select>
+            </div>
           </div>
           <div>
             <div className="relative">
@@ -332,6 +363,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
           </div>
         </div>
       </div>
+    
 
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
@@ -501,7 +533,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                             </td>
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchOut
-                                ? changetime(latestPunches.punchOut)
+                                ? changetime(element.punchOut)
                                 : "Not Avilable"}
                             </td>
                             

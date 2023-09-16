@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
+import { addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
 
 // READ
 export const getStaffAttendance = async () => {
@@ -78,6 +78,40 @@ export const getGroupAttendance = async () => {
 export const updateAttendance = async (updateData: any) => {
   try {
     const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+
+export const addPunches = async (Data: any) => {
+  try {
+   
+    const { data } = await axios.post(`${addpuchApiPath}/${Data.id}`, Data, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const editPunches = async (Data: any) => {
+  try {
+   
+    const { data } = await axios.patch(`${editpuchApiPath}/${Data.id}`, Data, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const deletePunches = async (Data: any) => {
+  try {
+   
+    const { data } = await axios.delete(`${deletepuchApiPath}/${Data.id}?date=${Data.date}`,{
       withCredentials: true,
     });
     return data;
