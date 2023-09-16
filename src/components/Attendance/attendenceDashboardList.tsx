@@ -11,12 +11,16 @@ import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
+
+
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
+import check from "../../assets/Check.svg";
+import plus from "../../assets/Plus.png"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
@@ -96,6 +100,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
   
     return formattedTime;
 }
+
   // const fetchData = async () => {
   //   try {
   //     filter.page = 1;
@@ -235,6 +240,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
         <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
           Attendance Database
         </p>
+       
       </div>
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
@@ -357,6 +363,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
           </div>
         </div>
       </div>
+    
 
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}

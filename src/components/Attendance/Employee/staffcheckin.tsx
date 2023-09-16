@@ -13,6 +13,7 @@ import { getAllAttandenceAsync } from "../../../redux/Slice/AttandenceSlice";
 export const StaffCheckin = () => {
     const dispatch = useDispatch();
     const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords); 
+    //console.log(allAttandenceList)
     const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
     //const [allAttandenceList1, setAllAttandenceList1] = useState([]);
 

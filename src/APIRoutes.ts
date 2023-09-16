@@ -1,7 +1,10 @@
 export const apiPath = `http://localhost:5050`;
 //export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
-// export const apiPath = `https://chawlacomponents.com`;
+
+//export const apiPath = `https://chawlacomponents.com`;
+
+
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
@@ -77,6 +80,9 @@ export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
 export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPresent`;
+export const addpuchApiPath=`${apiPath}/api/v2/attendance/addPunches`
+export const deletepuchApiPath=`${apiPath}/api/v2/attendance/deletePunches`
+export const editpuchApiPath=`${apiPath}/api/v2/attendance/updatePunches`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`;
