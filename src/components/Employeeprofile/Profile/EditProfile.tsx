@@ -58,6 +58,9 @@ const EditProfile = () => {
 
   const [showInputBoxGender, setShowInputBoxGender] = useState(false);
   const [inputBoxGenderValue, setInputBoxGenderValue] = useState<any>("");
+  // addhar
+  const [showInputBoxAadhar, setShowInputBoxAadhar] = useState(false);
+  const [inputBoxAadharValue, setInputBoxAadharValue] = useState<any>("");
 
   const [showInputBoxSalary, setShowInputBoxSalary] = useState(false);
   const [inputBoxSalaryValue, setInputBoxSalaryValue] = useState<any>("");
@@ -87,6 +90,7 @@ const EditProfile = () => {
     setInputBoxEmailValue(singleEmployee.email);
     setInputBoxContactNumberValue(singleEmployee.contactNumber);
     setInputBoxGenderValue(singleEmployee.gender);
+    setInputBoxAadharValue(singleEmployee.aadharNumber);
     setInputBoxSalaryValue(singleEmployee.salary);
     setInputBoxLunchTimeValue(singleEmployee.lunchTime);
     setInputBoxWorkingDaysValue(singleEmployee.workingDays);
@@ -156,6 +160,7 @@ const EditProfile = () => {
           setShowInputBoxPassword(false);
           setShowInputBoxContactNumber(false);
           setShowInputBoxGender(false);
+          setShowInputBoxAadhar(false);
           setShowInputBoxSalary(false);
           setShowInputBoxLunchTime(false);
           setShowInputBoxWorkingDays(false);
@@ -752,6 +757,58 @@ const EditProfile = () => {
                     value={inputBoxGenderValue}
                     onChange={(event) =>
                       setInputBoxGenderValue(event.target.value)
+                    }
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+          {!showInputBoxAadhar && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                  Aadhar Number
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setShowInputBoxAadhar(!showInputBoxAadhar);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.aadharNumber}
+                </p>
+              </div>
+            </div>
+          )}
+          {showInputBoxAadhar && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   Aadhar Number
+                  </p>
+                </div>
+                <div>
+                  <input
+                    {...register("aadharNumber", { required: true })}
+                    className="text-[12px] leading-5 font-normal focus:outline-none"
+                    value={inputBoxAadharValue}
+                    onChange={(event) =>
+                      setInputBoxAadharValue(event.target.value)
                     }
                     type="text"
                   />
