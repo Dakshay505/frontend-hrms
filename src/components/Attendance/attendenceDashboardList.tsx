@@ -36,7 +36,7 @@ export const AttendenceDashboardList = () => {
   const [nextDate, setnextDate] = useState<any>();
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
-  const [status,Setstatus]=useState("")
+  const [status, Setstatus] = useState("")
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -84,24 +84,24 @@ export const AttendenceDashboardList = () => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
   }, []);
-  const changetime=(createdAtDate:any)=>{
+  const changetime = (createdAtDate: any) => {
     console.log(createdAtDate)
-    const date=new Date(createdAtDate)
+    const date = new Date(createdAtDate)
     const hours = date.getUTCHours(); // Get the hours in UTC
     const minutes = date.getUTCMinutes();
     const period = hours >= 12 ? "PM" : "AM";
 
-// Convert to 12-hour format
-const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
-const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    // Convert to 12-hour format
+    const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-    
-    
-  
-  
+    const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+
+
+
+
     return formattedTime;
-}
+  }
 
   // const fetchData = async () => {
   //   try {
@@ -170,17 +170,17 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     filter.page = 1;
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
-      if(status===""){
+      if (status === "") {
         setItems(employeeData);
-        
+
       }
-      else{
-      const filteredItems = employeeData.filter((element:any) => element.status === status);
-      setItems(filteredItems)
+      else {
+        const filteredItems = employeeData.filter((element: any) => element.status === status);
+        setItems(filteredItems)
       }
-      
+
     });
-  }, [filter,status]);
+  }, [filter, status]);
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
@@ -192,7 +192,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       year: "numeric",
     });
   };
- 
+
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -243,7 +243,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     const employeeId = { employeeId: data.employeeId._id };
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-    console.log("hello",data)
+    console.log("hello", data)
   };
 
 
@@ -254,7 +254,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
         <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
           Attendance Database
         </p>
-       
+
       </div>
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
@@ -329,7 +329,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                 <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
-                
+
               </select>
             </div>
           </div>
@@ -377,7 +377,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
           </div>
         </div>
       </div>
-    
+
 
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
@@ -424,7 +424,6 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                       className="hover:bg-[#FAFAFA]"
                       onClick={() => {
                         handleRowClick(index);
-                        handleTableRowClick(element)
                       }}
                     >
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -432,7 +431,9 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                           ? latestPunches.punchIn.slice(0, 10)
                           : "Not Avilable"}
                       </td>
-                      <td className="flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                      <td onClick={() => {
+                        handleTableRowClick(element)
+                      }} className="flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
                         {element.employeeId?.name
                           ? element.employeeId?.name
                           : "Not Avilable"}{" "}
@@ -455,7 +456,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchOut
-                          ?changetime(latestPunches.punchOut)
+                          ? changetime(latestPunches.punchOut)
                           : "Not Avilable"}
                       </td>
                       <td className="py-4 px-5">
@@ -505,7 +506,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
 
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                         {element?.status === "approved" &&
-                         element.approvedImage && (
+                          element.approvedImage && (
                             <div className="flex gap-[10px] cursor-pointer">
                               <div>
                                 <p
@@ -551,8 +552,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                                 ? changetime(element.punchOut)
                                 : "Not Avilable"}
                             </td>
-                            
-                           
+
+
                           </tr>
                         );
                       })}
@@ -629,9 +630,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
               setShowCalender(!showCalender);
             }}
             className="text-sm font-medium text-[#283093] cursor-pointer"
-          >{`${formatDate(date)} - ${
-            nextDate ? formatDate(nextDate) : formatDate(date)
-          }`}</p>
+          >{`${formatDate(date)} - ${nextDate ? formatDate(nextDate) : formatDate(date)
+            }`}</p>
           <button
             onClick={() => {
               const nextDate = new Date(date);

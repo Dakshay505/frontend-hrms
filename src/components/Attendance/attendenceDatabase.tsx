@@ -300,7 +300,6 @@ export const AttendenceDtabase = () => {
                         className="hover:bg-[#FAFAFA]"
                         onClick={() => {
                           handleRowClick(index);
-                          handleTableRowClick(element)
                         }}
                       >
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -308,7 +307,11 @@ export const AttendenceDtabase = () => {
                             ? latestPunches.punchIn.slice(0, 10)
                             : "Not Avilable"}
                         </td>
-                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                        <td 
+                           onClick={() => {
+                            handleTableRowClick(element)
+                          }}
+                        className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
                           {element.employeeId?.name
                             ? element.employeeId?.name
                             : "Not Avilable"}{" "}
