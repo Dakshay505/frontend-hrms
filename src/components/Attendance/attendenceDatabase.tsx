@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDtabase = () => {
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   function convertToQueryString(data: any) {
     let queryStr = "";
     for (let key in data) {
@@ -126,8 +128,8 @@ export const AttendenceDtabase = () => {
   };
 
 
-
   const limit = 2000;
+
   // const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
@@ -137,14 +139,15 @@ export const AttendenceDtabase = () => {
 
     const requestData = {
       date: `${year}-${month}-${day}`,
-      page: 1, // Use the incremented page
+      page: page, // Use the incremented page
       limit: limit,
     };
+    //console.log(requestData)
     // if (page === 0) {
     //   return;
     // }
     getAllAttandence(requestData);
-  }, []);
+  }, [page]);
 
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
