@@ -367,7 +367,7 @@ export const EmployeeProfile = () => {
                  <div className="flex gap-[5px]">
                  
                  
-                   <span className="text-[22px]  font-bold text-[#3b404f]">Add Details</span>
+                   <span className="text-[16px]  font-bold text-[#3b404f]">Add Details</span>
                    <div onClick={handleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                 <img src={check} className="w-[12px] h-[12px]" alt="plus" />
                 <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
@@ -375,11 +375,12 @@ export const EmployeeProfile = () => {
              
               
                  </div>
-                 <img src={close} alt="" className="w-[36px] h-[36px] -mt-9 -mr-10" onClick={()=>setShowAddPopup(false)} />
-                 
+                 <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 '>
+                 <img src={close} alt="" className="w-[36px] h-[36px] " onClick={()=>setShowAddPopup(false)} />
+                 </div>
                </div>
                
-               <div className="flex h-[445px] w-[540px] flex-col items-start gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+               <div className="flex justify-items-center items-center h-[445px] w-[540px] flex-col  gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                     <div className="flex flex-col gap-[7px]">
                       <span className="text-[#2A3143]">Employee Name</span>
                       <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -428,32 +429,22 @@ export const EmployeeProfile = () => {
           {popup && ( 
          
          <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
-           <div className="bg-white flex flex-col gap-[30px] w-[150px] h-[150px] p-6 rounded-lg">
-          
-             
-             
-             <div className="flex h-[100px] w-[100px] flex-col items-start  rounded-lg border-[1px] p-2 border-[#CFD3D4]">
-                  
-             
-             <div onClick={handleEditPopUp}  className="flex gap-[5px]  items-center px-[15px] h-9 w-[80px] bg-white border-[1px]  border-[#CFD3D4] ">
-              
-              <p className="text-sm font-medium tracking-[0.25px] ">Update Record</p>
-            </div>
-            <div onClick={handleDeletePop}  className="flex gap-[5px] items-center px-[15px] h-9 w-[80px] bg-white border-[1px]  border-[#CFD3D4] ">
-              
-              <p className="text-sm font-medium  tracking-[0.25px] ">Delete</p>
-            </div>
-
-
-                </div>
-
-
-            
-            
-           </div>
-         </div>
-   
-
+                        <div onClick={() => {
+                            setPopUp(false);
+                        }} className='border-[1px] absolute right-[39%] top-[45%] rounded-full border-black'>
+                            <img src={X} alt="image" className=' cursor-pointer' />
+                        </div>
+                        <div className=" flex flex-col gap-[30px] w-[150px] h-[150px] p-6 rounded-lg">
+                            <div className="flex h-[15rem] w-[15rem] flex-col items-center justify-center rounded-lg border-[1px] bg-white p-2 ">
+                                <div onClick={handleEditPopUp} className="cursor-pointer flex gap-[5px]  items-center">
+                                    <p className="text-sm font-medium tracking-[0.25px] ">Update</p>
+                                </div>
+                                <div onClick={handleDeletePop} className="cursor-pointer flex gap-[5px] items-center px-[15px] h-9 w-[80px] ">
+                                    <p className="text-sm font-medium  tracking-[0.25px] ">Delete</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         
        
       )}
@@ -491,17 +482,19 @@ export const EmployeeProfile = () => {
                <div className="flex gap-[5px]">
                
                
-                 <span className="text-[22px]  font-bold text-[#3b404f]">Update Details</span>
+                 <span className="text-[16px]  font-bold text-[#3b404f]">Update Details</span>
                  <div onClick={editHandleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
               <img src={check} className="w-[12px] h-[12px]" alt="plus" />
               <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
             </div>
             
                </div>
-               <img src={close} alt="" className="w-[36px] h-[36px] -mt-10 -mr-10 " onClick={()=>setUpdatePopup(false)} />
+               <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 '>
+               <img src={close} alt="" className="w-[36px] h-[36px] " onClick={()=>setUpdatePopup(false)} />
+               </div>
              </div>
              
-             <div className="flex h-[445px] w-[540px] flex-col items-start gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+             <div className="flex h-[445px] w-[540px] flex-col justify-items-center items-center gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                   <div className="flex flex-col gap-[7px]">
                     <span className="text-[#2A3143]">Employee Name</span>
                     <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
