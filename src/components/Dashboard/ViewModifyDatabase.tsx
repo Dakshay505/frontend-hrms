@@ -167,7 +167,7 @@ const ViewModifyDatabase = () => {
     BarcodeStore[code] = {
       ...e
     }
-  }); 
+  });
 
 
   const navigate = useNavigate();
@@ -348,6 +348,11 @@ const ViewModifyDatabase = () => {
     }
     setConfirmationOpen(false);
   };
+
+
+
+ 
+
 
 
 
@@ -589,8 +594,8 @@ const ViewModifyDatabase = () => {
                       Employement Status
                     </td>
                     <td
-                      className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      {/* <p onClick={() => handlerAadhar}> Aadhar No.</p> */}
+                      className="py-4 px-5 text-sm cursor-pointer font-medium text-[#2E2E2E] whitespace-nowrap"
+                    >
                       Aadhar No.
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -636,7 +641,7 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
+                            {element.aadharNumber ? element.aadharNumber : '0'}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />
