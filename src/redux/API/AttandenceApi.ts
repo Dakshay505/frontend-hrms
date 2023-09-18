@@ -111,7 +111,7 @@ export const editPunches = async (Data: any) => {
 export const deletePunches = async (Data: any) => {
   try {
    
-    const { data } = await axios.delete(`${deletepuchApiPath}/${Data.id}?date=${Data.date}`,{
+    const { data } = await axios.delete(`${deletepuchApiPath}/${Data.id}?punchsId=${Data.punchsId}`,{
       withCredentials: true,
     });
     return data;

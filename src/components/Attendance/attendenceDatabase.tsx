@@ -16,6 +16,8 @@ import { getAllAttandenceApiPath } from "../../APIRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 export const AttendenceDtabase = () => {
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   function convertToQueryString(data: any) {
     let queryStr = "";
     for (let key in data) {
@@ -124,7 +126,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       setShowTableRow([...showTableRow, index]);
     }
   };
-  const limit = 2000;
+  const limit = 20;
   // const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
@@ -134,14 +136,15 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
 
     const requestData = {
       date: `${year}-${month}-${day}`,
-      page: 1, // Use the incremented page
+      page: page, // Use the incremented page
       limit: limit,
     };
+    //console.log(requestData)
     // if (page === 0) {
     //   return;
     // }
     getAllAttandence(requestData);
-  }, []);
+  }, [page]);
 
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
