@@ -39,6 +39,8 @@ export const EmployeeProfile = () => {
     const [PuchIn,setPunchIn]=useState("")
     const [PunchOut,setPunchOut]=useState("")
     const [updatePopUp,setUpdatePopup]=useState(false)
+    const [dated,setDated]=useState("")
+    const [deleteId,setDeleteId]=useState("")
     
 
     function formatDate(date: any) {
@@ -79,7 +81,7 @@ export const EmployeeProfile = () => {
                     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
                 })
             })
-            setAdditionalData("");
+            //setAdditionalData("");
         } 
     }, [])
     const refresh=()=>{
@@ -101,7 +103,7 @@ export const EmployeeProfile = () => {
                     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
                 })
             })
-            setAdditionalData("");
+            ///setAdditionalData("");
         } 
     }
 
@@ -127,8 +129,17 @@ export const EmployeeProfile = () => {
     ]
 
     const [showTableRow, setShowTableRow] = useState<any>([]);
+    
     const [popup,setPopUp]=useState(false)
     const [deletePopup,setDeletePopup]=useState(false)
+    const handlePopup=(d:any,dId:any)=>{
+        console.log("fjhfjhgfjhf",d)
+        setDated(d)
+        setDeleteId(dId)
+        setPopUp(true)
+
+    }
+   
    const handleDeletePop=()=>{
     setPopUp(false)
     setDeletePopup(true)
@@ -146,12 +157,32 @@ export const EmployeeProfile = () => {
             setShowTableRow([...showTableRow, index])
         }
     }
-    const handleDeleteSumbit=(Date:any)=>{
+    const changetime=(createdAtDate:any)=>{
+        console.log(createdAtDate)
+        const date=new Date(createdAtDate)
+        const hours = date.getUTCHours(); // Get the hours in UTC
+        const minutes = date.getUTCMinutes();
+        const period = hours >= 12 ? "PM" : "AM";
+    
+    // Convert to 12-hour format
+    const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+    const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+        
+        
+      
+      
+        return formattedTime;
+    }
+    const handleDeleteSumbit=()=>{
         setDeletePopup(false)
-        const data={"date":Date,"id":singleEmployee._id}
+        const data={"punchsId":deleteId,"id":singleEmployee._id}
+        console.log(data)
  
         dispatch(deletePunchAsync(data)).then((res: any) => {
-            if (res.payload.success) {
+            console.log("Response",res)
+            if (res.type==="deletePunchAsync/fulfilled") {
                toast.success("Punch delete sucessfully")
                refresh()
                
@@ -159,6 +190,7 @@ export const EmployeeProfile = () => {
                 
             } else {
                 toast.error(res.payload.message)
+                refresh()
                
             }
            
@@ -190,10 +222,11 @@ export const EmployeeProfile = () => {
 
   })
    }
-   const editHandleSumbit=(Date:any)=>{
+   const editHandleSumbit=()=>{
+    //console.log("hjhjhjbbnb",Date)
     
     setUpdatePopup(false)
-    const data={"date":Date,"punchIn":PuchIn!==""?`${Date}T${PuchIn}`:null,"punchOut":PunchOut!==""?`${Date}T${PunchOut}`:null,"id":singleEmployee._id}
+    const data={"date":dated,"punchIn":PuchIn!==""?`${dated}T${PuchIn}`:null,"punchOut":PunchOut!==""?`${dated}T${PunchOut}`:null,"id":singleEmployee._id}
     console.log(data)
   // console.log(singleEmployee._id)
   
@@ -438,11 +471,14 @@ export const EmployeeProfile = () => {
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                console.log("ghghgh",element.status)
+                               
                                const punchesList = [...(element.punches)];
+                               
                                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                                     return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                                 })
                                 const latestPunches = sortedPunches[0];
+                                //console.log("kjkjkjk",latestPunches)
                                 if(element.employeeId.employeeCode === singleEmployee.employeeCode){
                                     return <>
                                       {updatePopUp && ( 
@@ -456,7 +492,7 @@ export const EmployeeProfile = () => {
                
                
                  <span className="text-[22px]  font-bold text-[#3b404f]">Update Details</span>
-                 <div onClick={()=>editHandleSumbit((latestPunches.punchIn).slice(0, 10))}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
+                 <div onClick={editHandleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
               <img src={check} className="w-[12px] h-[12px]" alt="plus" />
               <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
             </div>
@@ -479,7 +515,7 @@ export const EmployeeProfile = () => {
               <div className="flex flex-col gap-[10px]">
                     <span className="text-[#2A3143]">Date</span>
                     <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                      <input value={(latestPunches.punchIn).slice(0, 10)}    type="date" placeholder="e.g.Steel" className="focus:outline-none" readOnly />
+                      <input value={dated}    type="date" placeholder="e.g.Steel" className="focus:outline-none" readOnly />
 
                     </div>
               </div>
@@ -527,7 +563,7 @@ export const EmployeeProfile = () => {
                 
                 <p className="text-sm font-medium text-[#000000] tracking-[0.25px] mr-6">Cancel</p>
               </div>
-             <div onClick={()=>handleDeleteSumbit((latestPunches.punchIn).slice(0, 10))}  className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#BB0F0F1F] rounded-lg">
+             <div onClick={handleDeleteSumbit}  className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#BB0F0F1F] rounded-lg">
                 <img src={del} className="w-[12px] h-[12px]" alt="plus" />
                 <p className="text-sm font-medium text-[#F23A3A] tracking-[0.25px] mr-6">Yes,Delete</p>
               </div>
@@ -544,34 +580,39 @@ export const EmployeeProfile = () => {
 
         
        
-      )}
+                                       )}
                                     <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
                                         <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                         <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? changetime(latestPunches.punchIn) : "Not Avilable"}</td>
+                                        <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? changetime(latestPunches.punchOut)  : "Not Avilable"}</td>
                                         <td className='py-4 px-5'>
                                         
                                             {element?.status === "approved" &&
                                                 <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                        
                                                 </span>}
                                             {element?.status === "rejected" &&
                                                 <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                        
                                                 </span>}
                                             {(element.status === "pending") &&
                                                 <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                 </span>}
                                                 {(element.status==="added Manually by administrator") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        <img onClick={()=>setPopUp(true)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                        <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                         
                                                     </span>}
                                         </td>
