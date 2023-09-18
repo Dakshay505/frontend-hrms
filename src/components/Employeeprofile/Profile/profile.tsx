@@ -199,6 +199,10 @@ export const EmployeeProfile = () => {
 
     }
   const handleSumbit=()=>{
+    if (PuchIn === "") {
+        toast.error("PunchIn is required")
+        return
+    } else{
     
   setShowAddPopup(false)
  const data={"date":date,"punchIn":PuchIn!==""?`${date}T${PuchIn}`:null,"punchOut":PunchOut!==""?`${date}T${PunchOut}`:null,"id":singleEmployee._id}
@@ -221,9 +225,14 @@ export const EmployeeProfile = () => {
    
 
   })
+    }
    }
    const editHandleSumbit=()=>{
     //console.log("hjhjhjbbnb",Date)
+    if (PuchIn === "") {
+        toast.error("PunchIn is required")
+    }
+    else{
     
     setUpdatePopup(false)
     const data={"date":dated,"punchIn":PuchIn!==""?`${dated}T${PuchIn}`:null,"punchOut":PunchOut!==""?`${dated}T${PunchOut}`:null,"id":singleEmployee._id}
@@ -246,6 +255,7 @@ export const EmployeeProfile = () => {
      
   
     })
+}
      }
 
   const [showQrRow, setShowQrRow] = useState<any>([]);
