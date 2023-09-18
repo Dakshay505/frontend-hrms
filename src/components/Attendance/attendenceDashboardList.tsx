@@ -19,8 +19,8 @@ import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
-import check from "../../assets/Check.svg";
-import plus from "../../assets/Plus.png"
+// import check from "../../assets/Check.svg";
+// import plus from "../../assets/Plus.png"
 import { useNavigate } from "react-router-dom";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDashboardList = () => {

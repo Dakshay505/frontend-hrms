@@ -65,7 +65,7 @@ export const getGroupAttendanceAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getGroupAttendance();
-      console.log(response)
+      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -100,8 +100,8 @@ export const updateAttendanceAsync: any = createAsyncThunk(
 export const addPunchAsync: any = createAsyncThunk(
   "addPunchAsync",
   async (data) => {
-    console.log(data)
-    
+    console.log(data);
+
     try {
       const response: any = await addPunches(data);
       return response;
@@ -113,8 +113,8 @@ export const addPunchAsync: any = createAsyncThunk(
 export const editPunchAsync: any = createAsyncThunk(
   "editPunchAsync",
   async (data) => {
-    console.log(data)
-    
+    console.log(data);
+
     try {
       const response: any = await editPunches(data);
       return response;
@@ -126,8 +126,8 @@ export const editPunchAsync: any = createAsyncThunk(
 export const deletePunchAsync: any = createAsyncThunk(
   "deletePunchAsync",
   async (data) => {
-    console.log(data)
-    
+    console.log(data);
+
     try {
       const response: any = await deletePunches(data);
       return response;
@@ -136,7 +136,6 @@ export const deletePunchAsync: any = createAsyncThunk(
     }
   }
 );
-
 
 export const AttandenceSlice = createSlice({
   name: "attandence",
@@ -204,35 +203,21 @@ export const AttandenceSlice = createSlice({
       .addCase(addPunchAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        addPunchAsync.fulfilled,
-        function (state: any, action: any) {
-          state.status = "idle";
-          
-        }
-      )
+      .addCase(addPunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      })
       .addCase(editPunchAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        editPunchAsync.fulfilled,
-        function (state: any, action: any) {
-          state.status = "idle";
-          
-        }
-      )
+      .addCase(editPunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      })
       .addCase(deletePunchAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        deletePunchAsync.fulfilled,
-        function (state: any, action: any) {
-          state.status = "idle";
-          
-        }
-      );
-      
-      
+      .addCase(deletePunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      });
   },
 });
 
