@@ -21,6 +21,8 @@ import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import check from "../../assets/Check.svg";
 import plus from "../../assets/Plus.png"
+import { useNavigate } from "react-router-dom";
+import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
@@ -234,6 +236,18 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     setIsImageOpen(false);
   };
 
+
+
+  const navigate = useNavigate();
+  const handleTableRowClick = (data: any) => {
+    const employeeId = { employeeId: data.employeeId._id };
+    dispatch(getEmployeeImageAsync(employeeId));
+    navigate(`/employee-profile`, { state: { additionalData: employeeId } });
+    console.log("hello",data)
+  };
+
+
+
   return (
     <div className="px-[40px] pt-[32px]">
       <div className="flex w-[688px] items-start gap-[291px]">
@@ -410,6 +424,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                       className="hover:bg-[#FAFAFA]"
                       onClick={() => {
                         handleRowClick(index);
+                        handleTableRowClick(element)
                       }}
                     >
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
