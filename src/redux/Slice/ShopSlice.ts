@@ -1,6 +1,6 @@
 // shopSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addShop, allShop, updateShopApi, getSingleShop } from '../API/ShopApi';
+import { addShop, allShop, updateShopApi, getSingleShop, deleteShop } from '../API/ShopApi';
 
 const initialState = {
   shop: [],
@@ -46,9 +46,23 @@ export const getSingleShopAsync: any = createAsyncThunk(
       return response;
     } catch (error: any) {
       console.log(error.message);
-    }
+    } 
   }
 );
+
+export const deleteShopAsync: any = createAsyncThunk(
+  'deleteShop',
+  async (data) => {
+      try {
+          const response: any = await deleteShop(data);
+          return response;
+      } catch (error: any) {
+          console.log(error.message);
+      }
+
+  }
+)
+
 
 const shopSlice = createSlice({
   name: 'shop',

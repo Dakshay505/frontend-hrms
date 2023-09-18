@@ -126,3 +126,4 @@ export const getAllShopApiPath=`${apiPath}/api/v1/shop`
 export const addShopApiPath=`${apiPath}/api/v1/shop/add`
 export const getSingleShopApiPath=`${apiPath}/api/v1/shop`
 export const updateShopApiPath=`${apiPath}/api/v1/shop`
+export const deleteShopApiPath=`${apiPath}/api/v1/shop`

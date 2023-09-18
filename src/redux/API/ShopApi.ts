@@ -1,5 +1,5 @@
 import axios from "axios";
-import { addShopApiPath, getAllShopApiPath, updateShopApiPath, getSingleShopApiPath } from './../../APIRoutes';
+import { addShopApiPath, getAllShopApiPath, updateShopApiPath, getSingleShopApiPath, deleteShopApiPath } from './../../APIRoutes';
 
 
 export const addShop = async (addShop: any) => {
@@ -44,6 +44,22 @@ export const getSingleShop = async (id: any) => {
         const { data } = await axios.get(
             `${getSingleShopApiPath}/${id}`,
             { withCredentials: true }
+        );
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const deleteShop = async (id: any) => {
+    try {
+        const { data } = await axios.delete(
+            `${deleteShopApiPath}/${id}`,
+
+            {
+                data: { id },
+                withCredentials: true
+            }
         );
         return data;
     } catch (error) {
