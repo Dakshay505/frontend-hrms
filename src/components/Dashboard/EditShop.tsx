@@ -3,16 +3,20 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateShopAsync, getSingleShopAsync } from '../../redux/Slice/ShopSlice';
-import { useLocation } from 'react-router-dom';
+import { updateShopAsync, getSingleShopAsync, deleteShopAsync } from '../../redux/Slice/ShopSlice';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
+import deleteIcon from "../../assets/Trash.svg"
 
 export const EditShop = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [showInputBoxShopName, setShowInputBoxShopName] = useState(false);
     const [inputBoxShopNameValue, setInputBoxShopNameValue] = useState<any>("");
-    const [showInputBoxGroupDescription, setShowInputBoxGroupDescription] = useState(false);
-    const [, setInputBoxGroupDescriptionValue] = useState<any>("");
+    const [showInputBoxShopDescription, setShowInputBoxShopDescription] = useState(false);
+    const [, setInputBoxShopDescriptionValue] = useState<any>("");
+    const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
 
     const location = useLocation();
@@ -29,6 +33,48 @@ export const EditShop = () => {
 
 
     const { register, handleSubmit } = useForm();
+
+// delete
+    const handleDeleteClick = () => { 
+        setConfirmationOpen(true);
+    };
+
+    const handleCancel = () => {
+        setConfirmationOpen(false);
+    };
+    const handleConfirm = () => {
+        dispatch(deleteShopAsync(data._id));
+        setConfirmationOpen(false);
+        navigate('/view-modify-database')
+    };
+
+    const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
+        return isOpen ? (
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                    <p className="text-lg font-semibold mb-4">Are you sure you want to delete?</p>
+                    <div className="flex justify-end">
+                        <button
+                            className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
+                            onClick={onCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                            onClick={onConfirm}
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    };
+
+
+
+
     return (
         <div className="px-10 py-8">
             <form
@@ -39,11 +85,11 @@ export const EditShop = () => {
                         dispatch(getSingleShopAsync(data._id));
                     });
                     setShowInputBoxShopName(false);
-                    setShowInputBoxGroupDescription(false);
+                    setShowInputBoxShopDescription(false);
                 })}
             >
                 <div>
-                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Group Information</h1>
+                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Shop Information</h1>
                 </div>
                 <div className="flex flex-col gap-3 mt-10">
                     {!showInputBoxShopName &&
@@ -81,12 +127,12 @@ export const EditShop = () => {
                                 </button>
                             </div>
                         </div>}
-                    {!showInputBoxGroupDescription &&
+                    {!showInputBoxShopDescription &&
                         <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                             <div className="flex items-center gap-3">
                                 <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Job Profile</p>
                                 <img src={edit} onClick={() => {
-                                    setShowInputBoxGroupDescription(!showInputBoxGroupDescription);
+                                    setShowInputBoxShopDescription(!showInputBoxShopDescription);
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
@@ -94,7 +140,7 @@ export const EditShop = () => {
                                 }</p>
                             </div>
                         </div >}
-                    {showInputBoxGroupDescription &&
+                    {showInputBoxShopDescription &&
                         <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                             <div className="flex flex-col">
                                 <div className="flex gap-[15px]">
@@ -103,7 +149,7 @@ export const EditShop = () => {
 
                                 <select
                                     {...register('jobProfileName', { required: "Employment Type required" })}
-                                    onChange={(event) => setInputBoxGroupDescriptionValue(event.target.value)}
+                                    onChange={(event) => setInputBoxShopDescriptionValue(event.target.value)}
                                     className='border border-solid mt-[15px] outline-none border-[#DEDEDE] rounded  px-3 h-[30px] w-[324px] text-[#666666]'>
 
                                     {alljobprofile.map((option: any, index: any) => (
@@ -126,6 +172,22 @@ export const EditShop = () => {
                                 </button>
                             </div>
                         </div>}
+                </div> 
+                <div className='flex flex-row m-3'>
+                    {/* <img src={deleteIcon} alt='delete' onClick={handleDeleteClick} />
+                    <h2 className='text-sm font-medium ml-3  text-[red]' >Delete</h2> */}
+                    <button
+                        className="flex  border py-2 px-5 mx-[-12px] my-5 border-red-500 items-center text-[red] text-sm font-medium "
+                        onClick={handleDeleteClick}
+                    >
+                        <img src={deleteIcon} alt="delete" className="mr-1" />
+                        Delete
+                    </button>
+                    <DeleteConfirmationDialog
+                        isOpen={isConfirmationOpen}
+                        onCancel={handleCancel}
+                        onConfirm={handleConfirm}
+                    />
                 </div>
 
 

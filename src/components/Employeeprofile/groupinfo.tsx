@@ -166,6 +166,6 @@ export const GroupInfo = () => {
 
 
             </form>
-        </div>
+        </div> 
     )
 }

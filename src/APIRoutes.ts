@@ -1,7 +1,11 @@
 //export const apiPath = `http://localhost:5050`;
 //export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
+
 export const apiPath = `https://chawlacomponents.com`;
+
+
+
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
 // JOB PROFILE API
@@ -123,3 +127,4 @@ export const getAllShopApiPath=`${apiPath}/api/v1/shop`
 export const addShopApiPath=`${apiPath}/api/v1/shop/add`
 export const getSingleShopApiPath=`${apiPath}/api/v1/shop`
 export const updateShopApiPath=`${apiPath}/api/v1/shop`
+export const deleteShopApiPath=`${apiPath}/api/v1/shop`
