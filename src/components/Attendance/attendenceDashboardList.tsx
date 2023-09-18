@@ -19,14 +19,15 @@ import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
-import check from "../../assets/Check.svg";
-import plus from "../../assets/Plus.png"
+import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
+
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
+  const departmentList=useSelector((state:any)=>state.department.department)
 
   const loaderStatus = useSelector((state: any) => state.attandence.status);
 
@@ -81,6 +82,8 @@ export const AttendenceDashboardList = () => {
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
+    dispatch(getAllDepartmentAsync())
+    
   }, []);
   const changetime=(createdAtDate:any)=>{
     console.log(createdAtDate)
@@ -301,6 +304,21 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                       </option>
                     );
                   })}
+              </select>
+            </div>
+            <div>
+              <select
+                onChange={(event) => {
+                  Setstatus(event.target.value)
+                }}
+                value={status}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+              >
+                <option value="">All Department</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                
               </select>
             </div>
             <div>
