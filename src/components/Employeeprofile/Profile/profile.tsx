@@ -132,10 +132,13 @@ export const EmployeeProfile = () => {
     
     const [popup,setPopUp]=useState(false)
     const [deletePopup,setDeletePopup]=useState(false)
-    const handlePopup=(d:any,dId:any)=>{
-        console.log("fjhfjhgfjhf",d)
+    const handlePopup=(d:any,element:any)=>{
+        console.log("fjhfjhgfjhf",element)
         setDated(d)
-        setDeleteId(dId)
+        setDeleteId(element._id)
+        setPunchIn(changetime24HourFormat(element.punchIn))
+        setPunchOut(changetime24HourFormat(element.punchOut))
+        //console.log(PunchOut)
         setPopUp(true)
 
     }
@@ -148,6 +151,20 @@ export const EmployeeProfile = () => {
     setPopUp(false)
     setUpdatePopup(true)
    }
+   const changetime24HourFormat = (createdAtDate:any) => {
+    const date = new Date(createdAtDate);
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+
+    // Format hours with leading zero if less than 10
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+    const formattedTime = `${formattedHours}:${formattedMinutes}`;
+    
+    return formattedTime;
+};
+
     const handleRowClick = (index: number) => {
         const isExpanded = showTableRow.includes(index)
         if (isExpanded) {
@@ -378,14 +395,14 @@ export const EmployeeProfile = () => {
                  
                  
                    <span className="text-[16px]  font-bold text-[#3b404f]">Add Details</span>
-                   <div onClick={handleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
+                   <div onClick={handleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg cursor-pointer">
                 <img src={check} className="w-[12px] h-[12px]" alt="plus" />
                 <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
               </div>
              
               
                  </div>
-                 <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 '>
+                 <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 cursor-pointer'>
                  <img src={close} alt="" className="w-[36px] h-[36px] " onClick={()=>setShowAddPopup(false)} />
                  </div>
                </div>
@@ -441,7 +458,7 @@ export const EmployeeProfile = () => {
          <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
                         <div onClick={() => {
                             setPopUp(false);
-                        }} className='border-[1px] absolute right-[39%] top-[45%] rounded-full border-black'>
+                        }} className='border-[1px] cursor-pointer absolute right-[39%] top-[45%] rounded-full border-black'>
                             <img src={X} alt="image" className=' cursor-pointer' />
                         </div>
                         <div className=" flex flex-col gap-[30px] w-[150px] h-[150px] p-6 rounded-lg">
@@ -484,7 +501,7 @@ export const EmployeeProfile = () => {
                                     return <>
                                       {updatePopUp && ( 
          
-         <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
+         <div className="fixed inset-0  flex z-50 items-center justify-center  bg-opacity-80 rounded-md">
            <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[520px] p-6 rounded-lg">
           
              <div className="flex justify-between">
@@ -493,13 +510,13 @@ export const EmployeeProfile = () => {
                
                
                  <span className="text-[16px]  font-bold text-[#3b404f]">Update Details</span>
-                 <div onClick={editHandleSumbit}  className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
+                 <div onClick={editHandleSumbit}  className="flex cursor-pointer gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
               <img src={check} className="w-[12px] h-[12px]" alt="plus" />
               <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
             </div>
             
                </div>
-               <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 '>
+               <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 cursor-pointer '>
                <img src={close} alt="" className="w-[36px] h-[36px] " onClick={()=>setUpdatePopup(false)} />
                </div>
              </div>
@@ -566,7 +583,7 @@ export const EmployeeProfile = () => {
                 
                 <p className="text-sm font-medium text-[#000000] tracking-[0.25px] mr-6">Cancel</p>
               </div>
-             <div onClick={handleDeleteSumbit}  className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#BB0F0F1F] rounded-lg">
+             <div onClick={handleDeleteSumbit}  className="flex gap-[5px] cursor-pointer items-center px-[15px] h-10 w-25 bg-[#BB0F0F1F] rounded-lg">
                 <img src={del} className="w-[12px] h-[12px]" alt="plus" />
                 <p className="text-sm font-medium text-[#F23A3A] tracking-[0.25px] mr-6">Yes,Delete</p>
               </div>
@@ -595,27 +612,27 @@ export const EmployeeProfile = () => {
                                                 <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                         
                                                 </span>}
                                             {element?.status === "rejected" &&
                                                 <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                         
                                                 </span>}
                                             {(element.status === "pending") &&
                                                 <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                     <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                     <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                    <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                 </span>}
                                                 {(element.status==="added Manually by administrator") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches._id)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
+                                                        <img onClick={()=>handlePopup((latestPunches.punchIn).slice(0, 10),latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus"/>
                                                         
                                                     </span>}
                                         </td>
@@ -625,8 +642,8 @@ export const EmployeeProfile = () => {
                                         return <tr key={element._id + element.punchIn}>
                                             <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                             <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? changetime(element.punchIn) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? changetime(element.punchOut): "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
                                                
                                                 {element.status === "approved" &&
