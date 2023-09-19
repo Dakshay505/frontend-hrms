@@ -303,10 +303,7 @@ export const AttendenceDtabase = () => {
                       <tr
                         key={element._id + latestPunches.punchIn}
                         className="hover:bg-[#FAFAFA]"
-                        onClick={() => {
-                          handleRowClick(index);
-                         
-                        }}
+                       
                       >
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchIn
@@ -320,13 +317,16 @@ export const AttendenceDtabase = () => {
                        
                         
                       </td>
-                        <td onClick={()=>handleTableRowClick(element)} className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
-                          {element.employeeId?.name
+                        <td  className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
+                          <p onClick={()=>handleTableRowClick(element)}>{element.employeeId?.name
                             ? element.employeeId?.name
-                            : "Not Avilable"}{" "}
+                            : "Not Avilable"}{" "}</p>
                           {sortedPunches.slice(1).length > 0 ? (
                             <img
-                              src={
+                            onClick={() => {
+                              handleRowClick(index);
+                             
+                            }} src={
                                 showTableRow.includes(index)
                                   ? CaretUp
                                   : CaretDown
