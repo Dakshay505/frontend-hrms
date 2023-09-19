@@ -11,6 +11,7 @@ import {
   updatePasswordApiPath,
   uploadDocumentApiPath,
   uploadImageApiPath,
+  getEmployeeBarcodeApiPath
 } from "../../APIRoutes";
 
 // CREATE
@@ -41,21 +42,26 @@ export const updateEmployee = async (employeeData: any) => {
   }
 };
 
-function convertToQueryString(data: any) {
-  let queryStr = "";
+function convertToQueryString(data:any) {
+  let queryStr = '';
   for (let key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
-      if (queryStr !== "") {
-        queryStr += "&";
+    if (data.hasOwnProperty(key) && data[key] !== null) {
+      const encodedKey = encodeURIComponent(key);
+      const encodedValue = encodeURIComponent(data[key]);
+      if (queryStr !== '') {
+        queryStr += '&';
       }
-      queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
+      queryStr += `${encodedKey}=${encodedValue}`;
     }
   }
   return queryStr;
 }
+
 export const getAllEmployee = async (sendData: any) => {
   try {
+    //console.log("hii",sendData)
     const queryStr = convertToQueryString(sendData);
+    console.log(`${getEmployeeApiPath}?${queryStr}`)
     const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
       withCredentials: true,
     });
@@ -174,5 +180,18 @@ try {
     return err.response.data
   }
 };
+ 
 
-
+// employeeBarcode
+export const EmployeeBarCodes = async () => {
+  try {
+    const response = await axios.get(`${getEmployeeBarcodeApiPath}`, {
+      withCredentials:true,
+    });
+    // console.log("hello i am api ",response)
+    // const data = await response.data();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

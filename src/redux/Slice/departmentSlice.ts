@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createDepartment,
   createParnetDepartment,
+  deleteDepartment,
   getAllDepartment,
   getDepartmentByParent,
   getParentAllDepartment,
@@ -12,7 +13,7 @@ const initialState = {
   department: [],
   parentdepartment: [],
   myDepartment: [],
-  departmentJobProfile:[],
+  departmentJobProfile: [],
   status: "idle",
 };
 
@@ -75,11 +76,23 @@ export const getDepartmentByParentAsync: any = createAsyncThunk(
     }
   }
 );
+
 export const getjobProfileBySubDepartmentNameAsync: any = createAsyncThunk(
   "getjobProfileBySubDepartmentName",
   async (data) => {
     try {
       const response: any = await getjobProfileBySubDepartmentName(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const deleteDepartmentAsync: any = createAsyncThunk(
+  "deleteDepartment",
+  async (data) => {
+    try {
+      const response: any = await deleteDepartment(data);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -144,7 +157,13 @@ export const departmentSlice = createSlice({
           state.status = "idle";
           state.departmentJobProfile = action.payload.jobProfile;
         }
-      );
+      )
+      .addCase(deleteDepartmentAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteDepartmentAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      });
   },
 });
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   addJobProfileDepartmentApiPath,
   createJobProfileApiPath,
+  deleteJobProfileApiPath,
   deleteJobProfileDepartmentApiPath,
   getJobProfileApiPath,
   getSingleJobProfileApiPath,
@@ -24,7 +25,6 @@ export const createJobProfiles = async (jobProfileData: any) => {
 
 export const getSingleJobProfile = async (JobprofileId: any) => {
   try {
-    // console.log("id", JobprofileId.departmentId);
     const { data } = await axios.get(
       `${getSingleJobProfileApiPath}/${JobprofileId.jobProfileId}`,
       { withCredentials: true }
@@ -48,7 +48,6 @@ export const getAllJobProfiles = async () => {
 };
 export const updateJobProfile = async (jobprofileData: any) => {
   try {
-    console.log("jobProfileData", jobprofileData);
     const { data } = await axios.patch(
       `${updateJobProfileApiPath}/${jobprofileData.jobProfileId}`,
       jobprofileData.data,
@@ -73,8 +72,19 @@ export const updateJobProfileDepartment = async (Data: any) => {
 };
 export const deleteDepartmentToJobProfile = async (Data: any) => {
   try {
-    console.log(Data);
-    const { data } = await axios.delete(`${deleteJobProfileDepartmentApiPath}`,{data:Data});
+    // console.log(Data);
+    const { data } = await axios.delete(
+      `${deleteJobProfileDepartmentApiPath}`,
+      { data: Data }
+    );
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const deleteJobProfile = async (id: any) => {
+  try {
+    const { data } = await axios.delete(`${deleteJobProfileApiPath}/${id}`);
     return data;
   } catch (error: any) {
     console.log(error.response.data);

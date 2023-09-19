@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createJobProfiles,
   deleteDepartmentToJobProfile,
+  deleteJobProfile,
   getAllJobProfiles,
   getSingleJobProfile,
   updateJobProfile,
@@ -31,7 +32,6 @@ export const getSingleJobProfileAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await getSingleJobProfile(data);
-      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -43,7 +43,6 @@ export const updateJobProfileAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await updateJobProfile(data);
-      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -55,7 +54,6 @@ export const updateJobProfileDepartmentAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await updateJobProfileDepartment(data);
-      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -67,7 +65,6 @@ export const deleteDepartmentToJobProfileAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await deleteDepartmentToJobProfile(data);
-      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -81,6 +78,17 @@ export const getAllJobProfileAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getAllJobProfiles();
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const deleteJobProfileAsync: any = createAsyncThunk(
+  "deleteJobProfile",
+  async (id) => {
+    try {
+      const response: any = await deleteJobProfile(id);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -117,7 +125,6 @@ export const JobProfileSlice = createSlice({
         getSingleJobProfileAsync.fulfilled,
         (state: any, action: any) => {
           state.status = "idle";
-          console.log("get", action.payload.jobProfileData);
           state.jobProfileData = action.payload.jobProfileData;
         }
       )
@@ -144,7 +151,13 @@ export const JobProfileSlice = createSlice({
         function (state: any) {
           state.status = "idle";
         }
-      );
+      )
+      .addCase(deleteJobProfileAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteJobProfileAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      });
   },
 });
 

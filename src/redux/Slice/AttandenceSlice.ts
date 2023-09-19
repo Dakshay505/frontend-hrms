@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  addPunches,
+  deletePunches,
+  editPunches,
   getAllAttandence,
   getGroupAttendance,
   getMyAttandence,
@@ -62,6 +65,7 @@ export const getGroupAttendanceAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getGroupAttendance();
+      console.log(response);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -86,6 +90,46 @@ export const updateAttendanceAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response: any = await updateAttendance(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+
+export const addPunchAsync: any = createAsyncThunk(
+  "addPunchAsync",
+  async (data) => {
+    console.log(data);
+
+    try {
+      const response: any = await addPunches(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const editPunchAsync: any = createAsyncThunk(
+  "editPunchAsync",
+  async (data) => {
+    console.log(data);
+
+    try {
+      const response: any = await editPunches(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const deletePunchAsync: any = createAsyncThunk(
+  "deletePunchAsync",
+  async (data) => {
+    console.log(data);
+
+    try {
+      const response: any = await deletePunches(data);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -155,7 +199,25 @@ export const AttandenceSlice = createSlice({
           state.status = "idle";
           state.singleGroupAttendance = action.payload.attendanceRecords;
         }
-      );
+      )
+      .addCase(addPunchAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addPunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      })
+      .addCase(editPunchAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(editPunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      })
+      .addCase(deletePunchAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deletePunchAsync.fulfilled, function (state: any) {
+        state.status = "idle";
+      });
   },
 });
 

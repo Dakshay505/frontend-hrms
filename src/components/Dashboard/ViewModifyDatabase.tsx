@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import BluePlus from "../../assets/BluePlus.png";
-import deleteIcon from "../../assets/Trash.svg";
 import greyPlus from "../../assets/gretyPlus.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
   getEmployeeImageAsync,
+  EmployeeBarCodesAsync
 } from "../../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
+  getAllGroupsCountEmployeeAsync,
   getSingleGroupAsync,
 } from "../../redux/Slice/GroupSlice";
 import { useNavigate } from "react-router-dom";
@@ -25,19 +26,25 @@ import LoaderGif from "../../assets/loadergif.gif";
 import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight1 from "../../assets/CaretRight1.svg";
 import {
+  deleteDepartmentAsync,
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
 import userIcon from "../../assets/UsersThree.svg";
+import deleteIcon from "../../assets/Trash.svg";
+import toast from "react-hot-toast";
+import mongoose from 'mongoose';
+import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
+
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
   const [filter, setFilter] = useState({
-    name: "",
-    groupName: "",
-    jobProfileName: "",
+    name: localStorage.getItem("name") || "",
+    groupName: localStorage.getItem("groupName") || "",
+    jobProfileName: localStorage.getItem("jobProfileName") || "",
     page: 1,
     limit: 20,
   });
@@ -45,7 +52,10 @@ const ViewModifyDatabase = () => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
+      //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
+      localStorage.setItem("groupName", filter.groupName);
+      localStorage.setItem("jobProfileName", filter.jobProfileName);
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -64,8 +74,21 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page]);
 
+  // clearLocalStorageOnUnload
+  useEffect(() => {
+    const clearLocalStorageOnUnload = () => {
+      localStorage.removeItem("groupName");
+      localStorage.removeItem("jobProfileName");
+    };
+
+    window.addEventListener("beforeunload", clearLocalStorageOnUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", clearLocalStorageOnUnload);
+    };
+  }, []);
   // PAGINATION =
   useEffect(() => {
     setTotalPage(Math.ceil(count / filter.limit));
@@ -81,18 +104,19 @@ const ViewModifyDatabase = () => {
   const [suggestions, setSuggestions] = useState<any>([]);
 
   const dispatch = useDispatch();
-  const employeeDetailList = useSelector(
-    (state: any) => state.employee.employees
-  );
-
+  const employeeDetailList = useSelector((state: any) => state.employee.employees);
+  // const [items, setItems] = useState<any[]>([]);
+  // setItems(employeeDetailList)
   const loaderStatus = useSelector((state: any) => state.employee.status);
   const departmentList = useSelector(
     (state: any) => state.department.department
   );
+
   const parentDepartmentList = useSelector(
     (state: any) => state.department.parentdepartment
   );
   const groupList = useSelector((state: any) => state.group.groups);
+  const groupCount = useSelector((state: any) => state.group.employeeCount);
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
@@ -122,10 +146,29 @@ const ViewModifyDatabase = () => {
       setFetchedSuggestions(arr);
     });
     dispatch(getAllGroupsAsync());
+    dispatch(getAllGroupsCountEmployeeAsync());
     dispatch(getAllJobProfileAsync());
     dispatch(getAllDepartmentAsync());
     dispatch(getAllParentDepartmentAsync());
+    dispatch(EmployeeBarCodesAsync());
+    dispatch(allShopAsync())
   }, []);
+
+
+  const shopss = useSelector((state: any) => state.Shop.shop)
+  // console.log("shoepeeee",shopss)
+
+  const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
+  const BarcodeStore: any = {}
+  // console.log("jjsjsjsssksk", EmployeeBarcode)
+  EmployeeBarcode.forEach((e: any) => {
+
+    const code = e.employeeCode;
+    BarcodeStore[code] = {
+      ...e
+    }
+  });
+
 
   const navigate = useNavigate();
   const handleTableRowClick = (data: any) => {
@@ -134,9 +177,18 @@ const ViewModifyDatabase = () => {
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
   };
   const handleGroupTableRowClick = (data: any) => {
-    const groupId = { groupId: data._id };
+    console.log(data.groupId);
+    const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
+  };
+
+
+  const handleShopTableRowClick = (data: any) => {
+    console.log(data.shopId);
+    const shopId = { shopId: data._id };
+    dispatch(getSingleShopAsync(shopId));
+    navigate(`/edit-shop`, { state: { data: data } });
   };
   const handleJobprofileTableRowClick = (data: any) => {
     const jobProfileId = { jobProfileId: data._id };
@@ -158,9 +210,8 @@ const ViewModifyDatabase = () => {
             setPage(i + 1);
             setPagiArrIncludes([i]);
           }}
-          className={`${
-            pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
-          } rounded-full px-3 cursor-pointer`}
+          className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
+            } rounded-full px-3 cursor-pointer`}
           key={i}
         >
           {i + 1}
@@ -197,8 +248,6 @@ const ViewModifyDatabase = () => {
     setAssignDepartment(true);
     const name = element.jobProfileName;
     setAssignedName(name);
-    // console.log("element", element.jobProfileName);
-    // console.log("state name:- ", assignedName);
   };
   const assigningDepartment = () => {
     setAssignDepartment(false);
@@ -229,6 +278,84 @@ const ViewModifyDatabase = () => {
   const handleDepartmentChange = (event: any) => {
     setSelectedDepartment(event.target.value);
   };
+  // delete department
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
+
+  const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
+    return isOpen ? (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded shadow-md">
+          <p className="text-lg font-semibold mb-4">
+            Are you sure you want to delete?
+          </p>
+          <div className="flex justify-end">
+            <button
+              className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+              onClick={onConfirm}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    ) : null;
+  };
+  // const handlerAadhar = () => {
+  //   if (items.length > 1) {
+  //     const filteredItems = items.filter((element: any) => element.aadharNumber !== 0);
+  //     setItems(filteredItems)
+  //   }
+  // }
+  interface Department {
+    departmentName: string;
+    _id: mongoose.Types.ObjectId;
+  }
+  const [departmentToDelete, setDepartmentToDelete] =
+    useState<Department | null>(null);
+  const handleDeleteClick = (element: Department) => {
+    setConfirmationOpen(true);
+    console.log(element, "element to delete");
+    setDepartmentToDelete(element);
+  };
+
+  const handleCancel = () => {
+    setConfirmationOpen(false);
+  };
+
+  const handleConfirm = () => {
+    if (departmentToDelete) {
+      const departmentId = departmentToDelete._id;
+      dispatch(deleteDepartmentAsync(departmentId))
+        .then((res: any) => {
+          if (res.payload.success) {
+            toast.success(res.payload.message);
+            dispatch(getAllDepartmentAsync());
+          } else {
+            toast.error(res.payload.message);
+          }
+          navigate("/view-modify-database");
+        })
+        .catch((error: any) => {
+          toast.error(error);
+        });
+      console.log("hi3", departmentId);
+    }
+    setConfirmationOpen(false);
+  };
+
+
+
+ 
+
+
+
+
   return (
     <div className="mx-10">
       <div className="flex justify-between pt-8">
@@ -259,6 +386,9 @@ const ViewModifyDatabase = () => {
                 if (selectedValue === "Parent Department") {
                   setPath("/add-department");
                 }
+                if (selectedValue === "Shop") {
+                  setPath("/Shop");
+                }
               }}
             >
               <select
@@ -270,12 +400,13 @@ const ViewModifyDatabase = () => {
                 <option>Job Profiles</option>
                 <option>Department</option>
                 <option>Parent Department</option>
+                <option>Shop</option>
               </select>
             </form>
           </div>
         </div>
         <div className="flex gap-6">
-          {databaseValue !== "Employees" && (
+          {databaseValue !== "Employees" && databaseValue !== "Shop" && (
             <Link to="/update-hierarchy">
               <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
                 <img src={Pencil} className="w-4" alt="" />
@@ -462,15 +593,21 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Status
                     </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Leaves Taken
+                    <td
+                      className="py-4 px-5 text-sm cursor-pointer font-medium text-[#2E2E2E] whitespace-nowrap"
+                    >
+                      Aadhar No.
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Number of  Barcode
+                    </td>
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
+
                       return (
                         <tr
                           key={index}
@@ -504,10 +641,23 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.leaveTaken ? element.leaveTaken : 0}
+                            {element.aadharNumber ? element.aadharNumber : '0'}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />
+                          </td>
+                          <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            <div className="flex gap-[10px]">
+                              {BarcodeStore[element.employeeCode] &&
+                                BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
+                                  <div>
+
+                                    {element + " ,"}
+                                  </div>
+                                ))
+
+                              }
+                            </div>
                           </td>
                         </tr>
                       );
@@ -530,7 +680,20 @@ const ViewModifyDatabase = () => {
                   {" "}
                   <img src={CaretLeft} alt="" />{" "}
                 </div>
-                {pagination()}
+                {pagination().map((element: any, index) => {
+                  if (pagiArrIncludes.includes(index) && element) {
+                    return (
+                      <div key={index} className="flex">
+                        {filter.page > 2 ? "..." : ""}
+                        {filter.page === 1 ? "" : pagination()[index - 1]}
+                        {pagination()[index]}
+                        {pagination()[index + 1]}
+                        {filter.page === 1 ? pagination()[index + 2] : ""}
+                        {filter.page >= totalPage - 1 ? "" : "..."}
+                      </div>
+                    );
+                  }
+                })}
                 <div
                   onClick={() => {
                     if (page !== totalPage) {
@@ -557,11 +720,11 @@ const ViewModifyDatabase = () => {
                       Group Name
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Description
+                      Number of Employee
                     </td>
                   </tr>
-                  {groupList &&
-                    groupList.map((element: any, index: number) => {
+                  {groupCount &&
+                    groupCount.map((element: any, index: number) => {
                       return (
                         <tr
                           key={index}
@@ -577,8 +740,8 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  border-b border-solid border-[#EBEBEB]">
-                            {element.description
-                              ? element.description
+                            {element.employeeCount
+                              ? element.employeeCount
                               : "Not Avilable"}
                           </td>
                         </tr>
@@ -605,7 +768,7 @@ const ViewModifyDatabase = () => {
                       Description
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Job Rank
+                      Number Of Employee
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Type
@@ -669,7 +832,7 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.jobRank ? element.jobRank : "Not Avilable"}
+                            {element.numberOfEmployees ? element.numberOfEmployees : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]">
                             {element.employmentType
@@ -699,6 +862,9 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Parent Department
                     </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Edit
+                    </td>
                   </tr>
                   {departmentList &&
                     departmentList.map((element: any, index: number) => {
@@ -725,12 +891,31 @@ const ViewModifyDatabase = () => {
                               ? element.parentDepartmentId.departmentName
                               : "Not Avilable"}
                           </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                            <button
+                              className="flex py-2 px-5 mx-[-12px] my-5  items-center text-sm font-medium "
+                              onClick={() => handleDeleteClick(element)}
+                            >
+                              <img
+                                src={deleteIcon}
+                                alt="delete"
+                                className="mr-2"
+                              />
+                              Delete
+                            </button>
+                            <DeleteConfirmationDialog
+                              isOpen={isConfirmationOpen}
+                              onCancel={handleCancel}
+                              onConfirm={handleConfirm}
+                            />
+                          </td>
                         </tr>
                       );
                     })}
                 </tbody>
               </table>
             )}
+
             {databaseValue === "Parent Department" && (
               <table className="w-full">
                 <tbody>
@@ -763,6 +948,49 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
                             {element.description
                               ? element.description
+                              : "Not Avilable"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            )}
+
+            {/* table for shop */}
+            {databaseValue === "Shop" && (
+              <table className="w-full">
+                <tbody>
+                  <tr className="bg-[#ECEDFE] cursor-default">
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      ID
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Shop Name
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Supervisor Job Profile
+                    </td>
+                  </tr>
+                  {shopss &&
+                    shopss.map((element: any, index: number) => {
+                      return (
+                        <tr
+                          key={index}
+                          className="hover:bg-[#FAFAFA] cursor-default"
+                          onClick={() => handleShopTableRowClick(element)}
+                        >
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
+                            {index + 1}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
+                            {element.shopName
+                              ? element.shopName
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
+                            {element.jobProfile.jobProfileName
+                              ? element.jobProfile.jobProfileName
                               : "Not Avilable"}
                           </td>
                         </tr>

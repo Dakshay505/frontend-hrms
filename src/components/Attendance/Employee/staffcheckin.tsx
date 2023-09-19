@@ -1,39 +1,40 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import right from "../../../assets/r-arrow.png";
 import up from "../../../assets/arrow-up.png";
-import bag from "../../../assets/Briefcase.png"
+//import bag from "../../../assets/Briefcase.png"
 import { Link } from "react-router-dom";
-import approve from "../../../assets/Check.png"
-import deny from "../../../assets/X.png";
+//import approve from "../../../assets/Check.png"
+//import deny from "../../../assets/X.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAttandenceAsync, updateAttendanceAsync } from "../../../redux/Slice/AttandenceSlice";
-import LoaderGif from '../../../assets/loadergif.gif'
+import { getAllAttandenceAsync } from "../../../redux/Slice/AttandenceSlice";
+//import LoaderGif from '../../../assets/loadergif.gif'
 
 
 export const StaffCheckin = () => {
     const dispatch = useDispatch();
     const allAttandenceList = useSelector((state: any) => state.attandence.allAttandence.attendanceRecords); 
+    //console.log(allAttandenceList)
     const allAbsentEmployees = useSelector((state: any) => state.attandence.allAttandence.excludedEmployees);
-    const [allAttandenceList1, setAllAttandenceList1] = useState([]);
+    //const [allAttandenceList1, setAllAttandenceList1] = useState([]);
 
-    const loaderStatus = useSelector((state: any) => state.attandence.status)
+   // const loaderStatus = useSelector((state: any) => state.attandence.status)
 
-    useEffect(() => {
-        let arr1: any = [];
-        let index1: number = 0;
-        allAttandenceList && allAttandenceList.forEach((element: any) => {
-            arr1 = [...arr1, { ...element }];
-            const arr = (element.punches).filter((element: any) => element.status === "pending")
-            if (arr.length === 0) {
-                arr1.splice(index1, 1)
-                setAllAttandenceList1(arr1)
-            } else {
-                arr1[index1].punches = arr;
-                setAllAttandenceList1(arr1)
-                index1++;
-            }
-        })
-    }, [allAttandenceList])
+    //useEffect(() => {
+        //let arr1: any = [];
+        //let index1: number = 0;
+        //allAttandenceList && allAttandenceList.forEach((element: any) => {
+            //arr1 = [...arr1, { ...element }];
+            //const arr = (element.punches).filter((element: any) => element.status === "pending")
+            //if (arr.length === 0) {
+                //arr1.splice(index1, 1)
+                //setAllAttandenceList1(arr1)
+            //} else {
+                //arr1[index1].punches = arr;
+                //setAllAttandenceList1(arr1)
+                //index1++;
+            //}
+       // })
+    //}, [allAttandenceList])
     useEffect(() => {
         const date = new Date();
         const year = date.getFullYear();
@@ -93,7 +94,7 @@ export const StaffCheckin = () => {
                     </p>
                 </div>
             </div>
-            <div className="flex flex-col py-[48px]  flex-start gap-8 self-stretch">
+            {/*<div className="flex flex-col py-[48px]  flex-start gap-8 self-stretch">
                 <div className="text-[#2E2E2E] text-2xl font-inter font-bold leading-8">
                     Daily Staff Check-in
                 </div>
@@ -154,7 +155,7 @@ export const StaffCheckin = () => {
                     </div>
                 })
                 }
-            </div>
+            </div>*/}
         </div>
 
 

@@ -68,6 +68,24 @@ export const Employeeattendence = () => {
     }, [nextDate])
 
     const [dateRange, setDateRange] = useState<any>([])
+    const changetime=(createdAtDate:any)=>{
+        console.log(createdAtDate)
+        const date=new Date(createdAtDate)
+        const hours = date.getUTCHours(); // Get the hours in UTC
+        const minutes = date.getUTCMinutes();
+        const period = hours >= 12 ? "PM" : "AM";
+    
+    // Convert to 12-hour format
+    const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+    const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+        
+        
+      
+      
+        return formattedTime;
+    }
 
     useEffect(() => {
         function getDateRange(startDate: any, endDate: any) {
@@ -268,50 +286,34 @@ export const Employeeattendence = () => {
                                     return <>
                                         <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }}>
                                             <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" />: ""}</td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? new Date(latestPunches.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? new Date(latestPunches.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? changetime(latestPunches.punchIn) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchOut ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
-                                                {latestPunches?.status === "approved" &&
+                                                {element?.status === "approved" &&
                                                     <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
                                                     </span>}
-                                                {latestPunches?.status === "rejected" &&
+                                                {element?.status === "rejected" &&
                                                     <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
                                                     </span>}
-                                                {(latestPunches.status === "pending") &&
+                                                {(element.status === "pending") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                     </span>}
                                             </td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? element.approvedBy?.name : "-"}</td>
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>
                                                 <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
-                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? new Date(element.punchIn).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? new Date(element.punchOut).toLocaleString("en-US", { timeStyle: "short" }) : "Not Avilable"}</td>
-                                                <td className='py-4 px-5'>
-                                                    {element.status === "approved" &&
-                                                        <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
-                                                            <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
-                                                            <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                                        </span>}
-                                                    {element.status === "rejected" &&
-                                                        <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
-                                                            <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
-                                                            <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                        </span>}
-                                                    {(element.status === "pending") &&
-                                                        <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
-                                                            <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
-                                                            <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                        </span>}
-                                                </td>
-                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? changetime(element.punchIn) : "Not Avilable"}</td>
+                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? changetime(element.punchOut) : "Not Avilable"}</td>
+                                                
+                                               
                                             </tr>
                                         })}
                                     </>
