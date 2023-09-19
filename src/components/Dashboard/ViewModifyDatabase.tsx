@@ -47,7 +47,9 @@ const ViewModifyDatabase = () => {
     jobProfileName: localStorage.getItem("jobProfileName") || "",
     page: 1,
     limit: 20,
+    aadhar:"0"
   });
+  
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
@@ -74,7 +76,7 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page,filter.aadhar]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -478,6 +480,29 @@ const ViewModifyDatabase = () => {
                   })}
               </select>
             </div>
+            <div>
+              <select
+                onChange={(event) => {
+                  setFilter({
+                      ...filter,
+                      aadhar: event.target.value,
+                  });
+              }}
+                value={filter.aadhar}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+              >
+                <option value="0">Aadhar Default</option>
+                <option value="1">
+                      Employee with aadhar card
+                      </option>
+                      <option value="-1">
+                      Employee without aadhar card
+                      </option>
+                
+              </select>
+              
+             
+            </div>
           </div>
           <div>
             <div className="relative">
@@ -589,9 +614,10 @@ const ViewModifyDatabase = () => {
                       Employement Status
                     </td>
                     <td
-                      className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      className="flex flex-row py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       {/* <p onClick={() => handlerAadhar}> Aadhar No.</p> */}
                       Aadhar No.
+                      
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
