@@ -126,6 +126,8 @@ export const AttendenceDtabase = () => {
   
 
   };
+  
+
 
 
   const limit = 2000;
@@ -263,6 +265,9 @@ export const AttendenceDtabase = () => {
                   Date
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Employee Code
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Name
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -300,6 +305,7 @@ export const AttendenceDtabase = () => {
                         className="hover:bg-[#FAFAFA]"
                         onClick={() => {
                           handleRowClick(index);
+                         
                         }}
                       >
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -307,11 +313,14 @@ export const AttendenceDtabase = () => {
                             ? latestPunches.punchIn.slice(0, 10)
                             : "Not Avilable"}
                         </td>
-                        <td 
-                           onClick={() => {
-                            handleTableRowClick(element)
-                          }}
-                        className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.employeeId?.employeeCode
+                          ? element.employeeId.employeeCode
+                          : "Not Avilable"}{" "}
+                       
+                        
+                      </td>
+                        <td onClick={()=>handleTableRowClick(element)} className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
                           {element.employeeId?.name
                             ? element.employeeId?.name
                             : "Not Avilable"}{" "}
@@ -375,6 +384,18 @@ export const AttendenceDtabase = () => {
                               </span>
                             </span>
                           )}
+                          {element.status === "added Manually by administrator" && (
+                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#2c2c6d]">
+                              Manual
+                            </span>
+                          </span>
+                        )}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element.approvedBy?.name
