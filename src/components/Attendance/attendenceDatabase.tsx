@@ -3,7 +3,7 @@ import up from "../../assets/arrow-up.png";
 import GreenCheck from "../../assets/GreenCheck.svg";
 import RedX from "../../assets/RedX.svg";
 import SpinnerGap from "../../assets/SpinnerGap.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../attndence.css";
 import { useEffect, useState, useRef } from "react";
 import CaretDown from "../../assets/CaretDown11.svg";
@@ -15,9 +15,10 @@ import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDtabase = () => {
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
+  // const [page, setPage] = useState(1);
+  // const [totalPage, setTotalPage] = useState(1);
   function convertToQueryString(data: any) {
     let queryStr = "";
     for (let key in data) {
@@ -42,9 +43,8 @@ export const AttendenceDtabase = () => {
           withCredentials: true,
         }
       );
-      console.log(data);
-
       setItems(data.attendanceRecords);
+      console.log("all atendence",data.attendanceRecords);
       const numberOfEmployee = parseInt(data.numberOfEmployee) || 0;
 
       setTotal((prevTotal) => prevTotal + numberOfEmployee);
@@ -55,37 +55,34 @@ export const AttendenceDtabase = () => {
       // setIsLoading(false);
     }
   };
+
+
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState("");
 
   const handleImageClick = (imageSrc: any) => {
     setSelectedImage(imageSrc);
-
     setIsImageOpen(true);
   };
 
   const handleCloseImage = () => {
     setIsImageOpen(false);
   };
-  const changetime=(createdAtDate:any)=>{
-    console.log(createdAtDate)
-    const date=new Date(createdAtDate)
+  const changetime = (createdAtDate: any) => {
+    // console.log(createdAtDate)
+    const date = new Date(createdAtDate)
     const hours = date.getHours(); // Get the hours in UTC
     const minutes = date.getMinutes();
     const period = hours >= 12 ? "PM" : "AM";
 
-// Convert to 12-hour format
-const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
-const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    // Convert to 12-hour format
+    const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-    
-    
-  
-  
+    const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     return formattedTime;
-}
+  }
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
@@ -125,8 +122,16 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     } else {
       setShowTableRow([...showTableRow, index]);
     }
+
+  
+
   };
-  const limit = 20;
+  
+
+
+
+  const limit = 2000;
+
   // const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
@@ -136,7 +141,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
 
     const requestData = {
       date: `${year}-${month}-${day}`,
-      page: page, // Use the incremented page
+      page: 1, // Use the incremented page
       limit: limit,
     };
     //console.log(requestData)
@@ -144,7 +149,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     //   return;
     // }
     getAllAttandence(requestData);
-  }, [page]);
+  }, []);
 
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
@@ -153,6 +158,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
   const groupAttendanceList = useSelector(
     (state: any) => state.attandence.groupAttendance
   );
+
+
 
   const dispatch = useDispatch();
 
@@ -165,6 +172,18 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     0
   );
   const totalAbsent = totalEmployees - totalPresent;
+
+
+
+  const navigate = useNavigate();
+  const handleTableRowClick = (data: any) => {
+    const employeeId = { employeeId: data.employeeId._id };
+    dispatch(getEmployeeImageAsync(employeeId));
+    navigate(`/employee-profile`, { state: { additionalData: employeeId } });
+    console.log("hello",data)
+  };
+
+
   return (
     <div className="px-10 pt-8">
       <div className="flex flex-col flex-start">
@@ -241,9 +260,12 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
 
           <table className="w-full">
             <tbody>
-              <tr className="bg-[#ECEDFE] cursor-default">
+              <tr className="bg-[#ECEDFE] cursor-default" >
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Date
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Employee Code
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Name
@@ -283,6 +305,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                         className="hover:bg-[#FAFAFA]"
                         onClick={() => {
                           handleRowClick(index);
+                         
                         }}
                       >
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -290,7 +313,14 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                             ? latestPunches.punchIn.slice(0, 10)
                             : "Not Avilable"}
                         </td>
-                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.employeeId?.employeeCode
+                          ? element.employeeId.employeeCode
+                          : "Not Avilable"}{" "}
+                       
+                        
+                      </td>
+                        <td onClick={()=>handleTableRowClick(element)} className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
                           {element.employeeId?.name
                             ? element.employeeId?.name
                             : "Not Avilable"}{" "}
@@ -309,7 +339,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchIn
-                            ?changetime(latestPunches.punchIn)
+                            ? changetime(latestPunches.punchIn)
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -354,6 +384,18 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                               </span>
                             </span>
                           )}
+                          {element.status === "added Manually by administrator" && (
+                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#2c2c6d]">
+                              Manual
+                            </span>
+                          </span>
+                        )}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element.approvedBy?.name
@@ -409,8 +451,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                                   ? changetime(element.punchOut)
                                   : "Not Avilable"}
                               </td>
-                         
-                            
+
+
                             </tr>
                           );
                         })}

@@ -11,6 +11,8 @@ import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
+import { useNavigate } from "react-router-dom";
+import up from "../../assets/arrow-up.png";
 
 
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
@@ -20,15 +22,27 @@ import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
+import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
+  const employeeList = useSelector((state: any) => state.employee.employees);
+  const totalEmployees=employeeList.length;
+  const sortedgroupList=[...groupList].sort((a: any, b: any) =>
+  a.groupName.localeCompare(b.groupName
+    )
+);
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
   const departmentList=useSelector((state:any)=>state.department.department)
-
+  const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+  a.departmentName.localeCompare(b.departmentName)
+);
+const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
+  a.jobProfileName.localeCompare(b.jobProfileName)
+);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
 
   const [date, setDate] = useState<any>(new Date());
@@ -58,8 +72,9 @@ export const AttendenceDashboardList = () => {
 
   const [filter, setFilter] = useState({
     name: "",
-    groupName: "",
-    jobProfileName: "",
+    groupName: localStorage.getItem("groupName")||"",
+    jobProfileName:localStorage.getItem("jobProfileName")||"",
+    departmentName:localStorage.getItem("departmentName")||"",
     date: "",
     nextDate: "",
     page: 1,
@@ -67,6 +82,7 @@ export const AttendenceDashboardList = () => {
   });
   // const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
+ 
 
   useEffect(() => {
     const currentDate = new Date(date);
@@ -82,11 +98,12 @@ export const AttendenceDashboardList = () => {
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
-    dispatch(getAllDepartmentAsync())
+    dispatch(getAllDepartmentAsync());
+   
     
   }, []);
   const changetime=(createdAtDate:any)=>{
-    console.log(createdAtDate)
+    //console.log(createdAtDate)
     const date=new Date(createdAtDate)
     const hours = date.getUTCHours(); // Get the hours in UTC
     const minutes = date.getUTCMinutes();
@@ -167,8 +184,12 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
         setDateRange([...result]);
       }
     }
+    localStorage.setItem("departmentName",filter.departmentName)
+    localStorage.setItem("jobProfileName",filter.jobProfileName)
+    localStorage.setItem("groupName",filter.groupName)
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
+    dispatch(getAllEmployeeAsync(filter))
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if(status===""){
@@ -193,7 +214,14 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
       year: "numeric",
     });
   };
- 
+  const navigate = useNavigate();
+
+  const handleTableRowClick = (data: any) => {
+    const employeeId = { employeeId: data.employeeId._id };
+    dispatch(getEmployeeImageAsync(employeeId));
+    navigate(`/employee-profile`, { state: { additionalData: employeeId } });
+    console.log("hello",data)
+  };
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -239,12 +267,53 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
 
   return (
     <div className="px-[40px] pt-[32px]">
-      <div className="flex w-[688px] items-start gap-[291px]">
-        <p className="text-neutral-n-600 text-2xl font-inter font-bold leading-8">
+       <div className="flex flex-col flex-start">
+        <div className=" flex justify-between item-center max-w-[688px]">
+          <div className="text-2xl font-bold text-[#2E2E2E]">
           Attendance Database
-        </p>
-       
+          </div>
+          
+        </div>
+        <div className="flex flex-start pt-4 gap-6">
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {items.length}
+              </span>
+              <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+              Present
+            </p>
+          </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {totalEmployees-items.length}
+              </span>
+              <img
+                src={up}
+                alt=""
+                className="h-[16px] w-[16px] rotate-180 ms-1"
+              />
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+              Absent
+            </p>
+          </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {totalEmployees}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+              Total
+            </p>
+          </div>
+        </div>
       </div>
+      
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
           <div className="flex gap-4">
@@ -267,8 +336,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
                 <option value="All Groups">All Groups</option>
-                {groupList &&
-                  groupList.map((element: any, index: number) => {
+                {sortedgroupList &&
+                  sortedgroupList.map((element: any, index: number) => {
                     return (
                       <option key={index} value={element.groupName}>
                         {element.groupName}
@@ -296,8 +365,8 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
                 <option value="All Job Profiles">All Job Profiles</option>
-                {jobProfileList &&
-                  jobProfileList.map((element: any, index: number) => {
+                {sortedjobProfileList &&
+                  sortedjobProfileList.map((element: any, index: number) => {
                     return (
                       <option key={index} value={element.jobProfileName}>
                         {element.jobProfileName}
@@ -308,16 +377,30 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
             </div>
             <div>
               <select
-                onChange={(event) => {
-                  Setstatus(event.target.value)
+                 onChange={(event) => {
+                  if (event.target.value === "") {
+                    setFilter({
+                      ...filter,
+                      departmentName: "",
+                    });
+                  } else {
+                    setFilter({
+                      ...filter,
+                      departmentName: event.target.value,
+                    });
+                  }
                 }}
-                value={status}
+                value={filter.departmentName}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
                 <option value="">All Department</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
+                {sortedDepartmentList && sortedDepartmentList.map((element:any,index:any)=>{return(
+                   <option key={index} value={element.departmentName}>{element.departmentName} 
+                    </option>
+                )
+})
+               
+                }
                 
               </select>
             </div>
@@ -330,9 +413,11 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
                 <option value="">All Status</option>
-                <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
+                <option value="added Manually by administrator">Manual</option>
+                <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+              
                 
               </select>
             </div>
@@ -392,6 +477,9 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                 Date
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Employee Code
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Name
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -420,6 +508,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                   );
                 });
                 const latestPunches = sortedPunches[0];
+                
 
                 return (
                   <>
@@ -435,7 +524,15 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                           ? latestPunches.punchIn.slice(0, 10)
                           : "Not Avilable"}
                       </td>
-                      <td className="flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.employeeId?.employeeCode
+                          ? element.employeeId.employeeCode
+                          : "Not Avilable"}{" "}
+                       
+                        
+                      </td>
+                      
+                      <td onClick={()=>handleTableRowClick(element)} className="flex gap-1 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
                         {element.employeeId?.name
                           ? element.employeeId?.name
                           : "Not Avilable"}{" "}
@@ -495,6 +592,18 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                             />
                             <span className="text-sm font-normal text-[#945D2D]">
                               Pending
+                            </span>
+                          </span>
+                        )}
+                        {element.status === "added Manually by administrator" && (
+                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#2c2c6d]">
+                              Manual
                             </span>
                           </span>
                         )}

@@ -167,7 +167,7 @@ const ViewModifyDatabase = () => {
     BarcodeStore[code] = {
       ...e
     }
-  });
+  }); 
 
 
   const navigate = useNavigate();
