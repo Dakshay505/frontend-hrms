@@ -314,7 +314,7 @@ const ViewModifyDatabase = () => {
   // }
   interface Department {
     departmentName: string;
-    _id: mongoose.Types.ObjectId;
+    _id: mongoose.Types.ObjectId; 
   }
   const [departmentToDelete, setDepartmentToDelete] =
     useState<Department | null>(null);

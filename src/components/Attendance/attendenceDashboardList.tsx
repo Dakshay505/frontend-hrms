@@ -11,16 +11,12 @@ import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
-
-
 import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
-// import check from "../../assets/Check.svg";
-// import plus from "../../assets/Plus.png"
 import { useNavigate } from "react-router-dom";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDashboardList = () => {
@@ -94,64 +90,10 @@ export const AttendenceDashboardList = () => {
     // Convert to 12-hour format
     const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
     const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-
-
-
-
     return formattedTime;
   }
 
-  // const fetchData = async () => {
-  //   try {
-  //     filter.page = 1;
-
-  //     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-  //       const employeeData = data.payload.attendanceRecords;
-
-  //       const arr: any = [];
-
-  //       if (employeeData.length > 0) {
-  //         setItems((prevItems) => [...prevItems, ...employeeData]);
-
-  //         for (let i = 0; i < employeeData.length; i++) {
-  //           arr.push(employeeData[i].employeeId.name);
-  //         }
-
-  //         0;
-  //       }
-  //     });
-  //   } catch (error) {
-  //     // Handle error
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchData();
-  // }, [page]);
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       console.log(entries); // Check intersection entries in the console
-  //       if (entries[0].isIntersecting) {
-  //         console.log("Load more triggered"); // Debug load more action
-  //         handlerFatchMore();
-  //       }
-  //     },
-  //     { threshold: 1 }
-  //   );
-
-  //   if (observerTarget.current) {
-  //     observer.observe(observerTarget.current);
-  //   }
-
-  //   return () => {
-  //     if (observerTarget.current) {
-  //       observer.unobserve(observerTarget.current);
-  //     }
-  //   };
-  // }, [observerTarget]);
   const [dateRange, setDateRange] = useState<any>([]);
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
