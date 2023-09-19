@@ -8,6 +8,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import deleteIcon from "../../assets/Trash.svg"
 
+
+
+
 export const EditShop = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -174,8 +177,7 @@ export const EditShop = () => {
                         </div>}
                 </div> 
                 <div className='flex flex-row m-3'>
-                    {/* <img src={deleteIcon} alt='delete' onClick={handleDeleteClick} />
-                    <h2 className='text-sm font-medium ml-3  text-[red]' >Delete</h2> */}
+                   
                     <button
                         className="flex  border py-2 px-5 mx-[-12px] my-5 border-red-500 items-center text-[red] text-sm font-medium "
                         onClick={handleDeleteClick}
