@@ -515,9 +515,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                     <tr
                       key={element._id + latestPunches.punchIn}
                       className="hover:bg-[#FAFAFA]"
-                      onClick={() => {
-                        handleRowClick(index);
-                      }}
+                      
                     >
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchIn
@@ -532,12 +530,14 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                         
                       </td>
                       
-                      <td onClick={()=>handleTableRowClick(element)} className="flex gap-1 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
-                        {element.employeeId?.name
+                      <td  className="flex gap-1 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
+                        <p onClick={()=>handleTableRowClick(element)}>{element.employeeId?.name
                           ? element.employeeId?.name
-                          : "Not Avilable"}{" "}
+                          : "Not Avilable"}{" "}</p>
                         {sortedPunches.slice(1).length > 0 ? (
-                          <img
+                          <img onClick={() => {
+                            handleRowClick(index);
+                          }}
                             src={
                               showTableRow.includes(index) ? CaretUp : CaretDown
                             }
