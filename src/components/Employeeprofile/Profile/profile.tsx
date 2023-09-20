@@ -64,7 +64,7 @@ export const EmployeeProfile = () => {
 
     useEffect(() => {
         const nextDate = new Date();
-        const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData !== "") {
@@ -86,7 +86,7 @@ export const EmployeeProfile = () => {
     }, [])
     const refresh = () => {
         const nextDate = new Date();
-        const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData !== "") {
@@ -496,10 +496,10 @@ export const EmployeeProfile = () => {
                                     return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                                 })
                                 const latestPunches = sortedPunches[0];
-                                const firstPunches=sortedPunches[sortedPunches.length-1];
+                                const firstPunches = sortedPunches[sortedPunches.length - 1];
                                 //console.log("jjjjj",firstPunches)
 
-                                
+
                                 if (element.employeeId.employeeCode === singleEmployee.employeeCode) {
                                     return <>
                                         {updatePopUp && (
@@ -608,16 +608,16 @@ export const EmployeeProfile = () => {
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                             <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                                             {showTableRow.includes(index)
-                                                            ? latestPunches.punchIn
-                                                           ? changetime(latestPunches.punchIn)
-                                                      : "Not Available"
-                                                      : firstPunches.punchIn
-                                                     ? changetime(firstPunches.punchIn)
-                                                      : "Not Available"}
-                                             </td>
+                                                {showTableRow.includes(index)
+                                                    ? latestPunches.punchIn
+                                                        ? changetime(latestPunches.punchIn)
+                                                        : "Not Available"
+                                                    : firstPunches.punchIn
+                                                        ? changetime(firstPunches.punchIn)
+                                                        : "Not Available"}
+                                            </td>
 
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches?.punchOut  ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches?.punchOut ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
 
                                                 {element?.status === "approved" &&
