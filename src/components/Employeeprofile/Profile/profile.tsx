@@ -41,6 +41,7 @@ export const EmployeeProfile = () => {
     const [updatePopUp, setUpdatePopup] = useState(false)
     const [dated, setDated] = useState("")
     const [deleteId, setDeleteId] = useState("")
+    const [punchOutDate,setPunchOutDate]=useState("")
 
 
     function formatDate(date: any) {
@@ -64,7 +65,7 @@ export const EmployeeProfile = () => {
 
     useEffect(() => {
         const nextDate = new Date();
-        const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData !== "") {
@@ -138,6 +139,7 @@ export const EmployeeProfile = () => {
         setDeleteId(element._id)
         setPunchIn(changetime24HourFormat(element.punchIn))
         setPunchOut(changetime24HourFormat(element.punchOut))
+        setPunchOutDate(element.punchOut.slice(0,10))
         //console.log(PunchOut)
         setPopUp(true)
 
@@ -222,7 +224,7 @@ export const EmployeeProfile = () => {
         } else {
 
             setShowAddPopup(false)
-            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${date}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
             console.log(data)
             // console.log(singleEmployee._id)
 
@@ -252,7 +254,7 @@ export const EmployeeProfile = () => {
         else {
 
             setUpdatePopup(false)
-            const data = { "date": dated, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${dated}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": dated, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
             console.log(data)
             // console.log(singleEmployee._id)
 
@@ -387,7 +389,7 @@ export const EmployeeProfile = () => {
                 {showAddPopup && (
 
                     <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
-                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[520px] p-6 rounded-lg">
+                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[590px] p-6 rounded-lg">
 
                             <div className="flex justify-between">
 
@@ -407,7 +409,7 @@ export const EmployeeProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex justify-items-center items-center h-[445px] w-[540px] flex-col  gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                            <div className="flex justify-items-center items-center h-[495px] w-[540px] flex-col  gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                 <div className="flex flex-col gap-[7px]">
                                     <span className="text-[#2A3143]">Employee Name</span>
                                     <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -432,6 +434,14 @@ export const EmployeeProfile = () => {
 
                                     </div>
                                 </div>
+                                <div className="flex flex-col gap-[10px]">
+                                    <span className="text-[#2A3143]">PuchOut Date</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                                    </div>
+                                </div>
+                                
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">PuchOut Time</span>
                                     <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -505,7 +515,7 @@ export const EmployeeProfile = () => {
                                         {updatePopUp && (
 
                                             <div className="fixed inset-0  flex z-50 items-center justify-center  bg-opacity-80 rounded-md">
-                                                <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[520px] p-6 rounded-lg">
+                                                <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[590px] p-6 rounded-lg">
 
                                                     <div className="flex justify-between">
 
@@ -524,7 +534,7 @@ export const EmployeeProfile = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex h-[445px] w-[540px] flex-col justify-items-center items-center gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                                                    <div className="flex h-[495px] w-[540px] flex-col justify-items-center items-center gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                                         <div className="flex flex-col gap-[7px]">
                                                             <span className="text-[#2A3143]">Employee Name</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -549,6 +559,13 @@ export const EmployeeProfile = () => {
 
                                                             </div>
                                                         </div>
+                                                        <div className="flex flex-col gap-[10px]">
+                                    <span className="text-[#2A3143]">PuchOut Date</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                                    </div>
+                                </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Time</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -648,7 +665,9 @@ export const EmployeeProfile = () => {
 
                                                     </span>}
                                             </td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{latestPunches.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.approvedBy?.name
+                            ? element.approvedBy?.name
+                            : "-"}</td>
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>
