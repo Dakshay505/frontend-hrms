@@ -1,10 +1,10 @@
 
 // export const apiPath = `http://localhost:5050`;
 
-//export const apiPath = ``;
+// export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 
-export const apiPath = `https://chawlacomponents.com`;
+ export const apiPath = `https://chawlacomponents.com`;
 
 
 
@@ -86,6 +86,7 @@ export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPres
 export const addpuchApiPath=`${apiPath}/api/v2/attendance/addPunches`
 export const deletepuchApiPath=`${apiPath}/api/v2/attendance/deletePunches`
 export const editpuchApiPath=`${apiPath}/api/v2/attendance/updatePunches`
+export const ShopDropdownApiPath=`${apiPath}/api/v2/attendance/shopFilter`
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`;

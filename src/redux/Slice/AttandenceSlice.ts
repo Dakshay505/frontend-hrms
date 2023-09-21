@@ -1,8 +1,10 @@
+import { departmentSlice } from './departmentSlice';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addPunches,
   deletePunches,
   editPunches,
+  fetchAttendanceData,
   getAllAttandence,
   getGroupAttendance,
   getMyAttandence,
@@ -18,6 +20,11 @@ const initialState = {
   groupAttendance: [],
   singleGroupAttendance: [],
   status: "idle",
+  attendanceData: [],
+  loading: false,
+  error: null,
+  attandence:[],
+
 };
 
 // READ GET ALL ATTANDENCE
@@ -137,6 +144,21 @@ export const deletePunchAsync: any = createAsyncThunk(
   }
 );
 
+
+export const fetchAttendance: any = createAsyncThunk(
+  'fetchAttendence',
+  async (params) => {
+    try {
+      const response: any = await fetchAttendanceData(params);
+      console.log("API response:", response); 
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+
 export const AttandenceSlice = createSlice({
   name: "attandence",
   initialState,
@@ -217,6 +239,22 @@ export const AttandenceSlice = createSlice({
       })
       .addCase(deletePunchAsync.fulfilled, function (state: any) {
         state.status = "idle";
+      })
+
+      .addCase(fetchAttendance.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAttendance.fulfilled, (state: any, action) => {
+        state.loading = false;
+        console.log("payload", action.payload.attendance);
+        console.log(state.attandence)
+        state.attandence= action.payload.attandence; 
+      })
+      
+      .addCase(fetchAttendance.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

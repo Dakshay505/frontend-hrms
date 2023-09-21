@@ -42,9 +42,7 @@ export const Shop = () => {
 
 
     useEffect(() => {
-
         dispatch(getAllJobProfileAsync)
-
     }, [])
 
     const alljobprofile = useSelector((state: any) => state.jobProfile.jobProfiles)

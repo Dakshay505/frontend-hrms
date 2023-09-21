@@ -73,7 +73,7 @@ export default function aside(props: Props) {
     <div className="flex flex-col">
       {/* nav */}
       <nav className="flex items-center fixed bg-[#FFFFFF] z-10 justify-between px-5 flex-row border w-full h-[74px]">
-        
+
         <Link to='/'>
           <div className="flex items-center justify-center space-x-2 w-[196px]">
             <img src={logo} alt="logo" className="w-[32px]" />
@@ -83,10 +83,26 @@ export default function aside(props: Props) {
 
         <div className="flex items-center  gap-[16px]">
           {loggedInUserData.employee && (loggedInUserData?.employee.jobProfileId.jobProfileName)?.toLowerCase() === "hr" &&
-          <Link to="/emphome" className="bg-[#ECEDFE] py-3 px-4 text-sm font-medium rounded-lg text-[#283093] cursor-pointer">
-            <h1>Switch as Employee</h1>
-          </Link>
-           }
+            <Link to="/emphome" className="bg-[#ECEDFE] py-3 px-4 text-sm font-medium rounded-lg text-[#283093] cursor-pointer">
+              <h1>Switch as Employee</h1>
+            </Link>
+          }
+
+
+          <div
+            onClick={() => {
+              window.location.replace("https://chawlacomponents.com/prd")
+              // window.location.replace("http://localhost:5050/prd")
+            }}
+            className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
+           
+            <div>
+              <p className='px-2 text-[16px] leading-6 font-medium text-white hover:text-black'>Production</p>
+            </div>
+          </div>
+
+
+
           <Link to='/show-notifications'>
             <div>
               <img src={notification} alt="notification" className="w-[24px]" />
@@ -100,7 +116,7 @@ export default function aside(props: Props) {
       {/* aside */}
 
       <div className="">
-      {showSidebar ? (
+        {showSidebar ? (
           <button
             className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
             onClick={() => setShowSidebar(!showSidebar)}
@@ -137,16 +153,16 @@ export default function aside(props: Props) {
             ))}
           </div>
           <div className="px-6">
-          <Link to="/">
-            <div className="flex items-center justify-center">
-              <button onClick={() => {
-                dispatch(logoutUserAsync());
-              }} 
-              className= " flex items-center justify-center border-primary-blue border-[1.5px] w-[208px] h-11 px-5 py-4 rounded-lg text-primary-blue text-[16px] leading-6 font-medium">
-                Logout
-              </button>
-            </div>
-          </Link>
+            <Link to="/">
+              <div className="flex items-center justify-center">
+                <button onClick={() => {
+                  dispatch(logoutUserAsync());
+                }}
+                  className=" flex items-center justify-center border-primary-blue border-[1.5px] w-[208px] h-11 px-5 py-4 rounded-lg text-primary-blue text-[16px] leading-6 font-medium">
+                  Logout
+                </button>
+              </div>
+            </Link>
           </div>
         </aside>
         {/* Your Content here */}

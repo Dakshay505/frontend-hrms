@@ -1,5 +1,5 @@
 import axios from "axios";
-import { addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
+import { ShopDropdownApiPath, addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
 
 // READ
 export const getStaffAttendance = async () => {
@@ -28,6 +28,7 @@ function convertToQueryString(data: any) {
 export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
+    console.log(`${getAllAttandenceApiPath}?${filterDatta}`)
     const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
       withCredentials: true,
     });
@@ -119,3 +120,22 @@ export const deletePunches = async (Data: any) => {
     console.log(err.response.data);
   }
 };
+
+
+
+
+
+export const fetchAttendanceData = async (shopName:any) => {
+  try {
+    console.log(shopName)
+    const {data} = await axios.post(`${ShopDropdownApiPath}`,{"shopName":shopName}, {
+      withCredentials: true,
+    })
+    console.log("i am api",data)
+    return data;
+  } 
+  catch (error) {
+    throw error
+  }
+};
+

@@ -5,28 +5,19 @@ import RedX from "../../assets/RedX.svg";
 import SpinnerGap from "../../assets/SpinnerGap.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "../../attndence.css";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
-import CaretLeft from "../../assets/CaretLeft.svg";
-import CaretRight1 from "../../assets/CaretRight1.svg";
-
-
 import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import {   getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
-
-
-
-
 export const AttendenceDtabase = () => {
-  // const [page, setPage] = useState(1);
-  // const [totalPage, setTotalPage] = useState(1);
+
   function convertToQueryString(data: any) {
     let queryStr = "";
     for (let key in data) {
@@ -52,7 +43,7 @@ export const AttendenceDtabase = () => {
         }
       );
       setItems(data.attendanceRecords);
-      console.log("all atendence", data.attendanceRecords);
+      console.log("all atendence",data.attendanceRecords);
       const numberOfEmployee = parseInt(data.numberOfEmployee) || 0;
 
       setTotal((prevTotal) => prevTotal + numberOfEmployee);
@@ -131,15 +122,16 @@ export const AttendenceDtabase = () => {
       setShowTableRow([...showTableRow, index]);
     }
 
-
+  
 
   };
+  
 
 
-  // pgintaion
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const limit = 20 
+
+  const limit = 2000;
+
+  // const [page, setPage] = useState(0);
   useEffect(() => {
     const date = new Date();
     const year = date.getFullYear();
@@ -148,21 +140,19 @@ export const AttendenceDtabase = () => {
 
     const requestData = {
       date: `${year}-${month}-${day}`,
-      page: 1, 
+      page: 1, // Use the incremented page
       limit: limit,
     };
-
+    //console.log(requestData)
+    // if (page === 0) {
+    //   return;
+    // }
     getAllAttandence(requestData);
   }, []);
 
-  const handlePageChange = (page: any) => {
-    setCurrentPage(page);
-  };
-
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  const dataToDisplay = items.slice(startIndex, endIndex);
+  // const handlerFatchMore = () => {
+  //   setPage((prevPage) => prevPage + 1);
+  // };
 
   const groupAttendanceList = useSelector(
     (state: any) => state.attandence.groupAttendance
@@ -189,10 +179,13 @@ export const AttendenceDtabase = () => {
     const employeeId = { employeeId: data.employeeId._id };
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-    console.log("hello", data)
+    console.log("hello",data)
   };
 
 
+
+
+  
   return (
     <div className="px-10 pt-8">
       <div className="flex flex-col flex-start">
@@ -268,200 +261,232 @@ export const AttendenceDtabase = () => {
           {/* TABLE STARTS HERE */}
 
           <table className="w-full">
-
             <tbody>
-              {dataToDisplay.map((element, index) => {
-                const punchesList = [...element.punches];
-                const sortedPunches = punchesList.sort((a: any, b: any) => {
-                  return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
-                });
-                const latestPunches = sortedPunches[0];
+              <tr className="bg-[#ECEDFE] cursor-default" >
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Date
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Employee Code
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Name
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Punch In
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Punch Out
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Status
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Marked By{" "}
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Photo
+                </td>
+              </tr>
 
-                return (
-                  <React.Fragment key={element._id + latestPunches.punchIn}>
-                    <tr
-                      className="hover:bg-[#FAFAFA]"
-                      onClick={() => {
-                        handleRowClick(index);
-                      }}
-                    >
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchIn
-                          ? latestPunches.punchIn.slice(0, 10)
-                          : "Not Available"}
-                      </td>
-                      <td
-                        onClick={() => {
-                          handleTableRowClick(element);
-                        }}
-                        className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer"
+              {items &&
+                items.map((element: any, index: number) => {
+                  const punchesList = [...element.punches];
+                  const sortedPunches = punchesList.sort((a: any, b: any) => {
+                    return (
+                      new Date(b.punchIn).getTime() -
+                      new Date(a.punchIn).getTime()
+                    );
+                  });
+                  const latestPunches = sortedPunches[0];
+                  //console.log("djsgdhgedgh",element)
+                  return (
+                    <>
+                      <tr
+                        key={element._id + latestPunches.punchIn}
+                        className="hover:bg-[#FAFAFA]"
+                       
                       >
-                        {element.employeeId?.name
-                          ? element.employeeId?.name
-                          : "Not Available"}{" "}
-                        {sortedPunches.slice(1).length > 0 ? (
-                          <img
-                            src={showTableRow.includes(index) ? CaretUp : CaretDown}
-                            alt=""
-                          />
-                        ) : (
-                          ""
-                        )}
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {latestPunches.punchIn
+                            ? latestPunches.punchIn.slice(0, 10)
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.employeeId?.employeeCode
+                          ? element.employeeId.employeeCode
+                          : "Not Avilable"}{" "}
+                       
+                        
                       </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchIn
-                          ? changetime(latestPunches.punchIn)
-                          : "Not Available"}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchOut
-                          ? changetime(latestPunches.punchOut)
-                          : "Not Available"}
-                      </td>
-                      <td className="py-4 px-5">
-                        {/* Status rendering */}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element.approvedBy?.name ? element.approvedBy?.name : "-"}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" && element.approvedImage && (
-                          <div className="flex gap-[10px] cursor-pointer">
-                            <div>
-                              <p
-                                className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                onClick={() => handleImageClick(element.approvedImage)}
-                              >
-                                Open
-                              </p>
-                            </div>
-                            <div>
+                        <td  className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
+                          <p onClick={()=>handleTableRowClick(element)}>{element.employeeId?.name
+                            ? element.employeeId?.name
+                            : "Not Avilable"}{" "}</p>
+                          {sortedPunches.slice(1).length > 0 ? (
+                            <img
+                            onClick={() => {
+                              handleRowClick(index);
+                             
+                            }} src={
+                                showTableRow.includes(index)
+                                  ? CaretUp
+                                  : CaretDown
+                              }
+                              alt=""
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {latestPunches.punchIn
+                            ? changetime(latestPunches.punchIn)
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {latestPunches.punchOut
+                            ? changetime(latestPunches.punchOut)
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5">
+                          {element?.status === "approved" && (
+                            <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
                               <img
-                                src={ArrowSqureOut}
-                                className="w-[14px] h-[14px]"
-                                alt="arrowsqureout"
+                                src={GreenCheck}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
                               />
-                            </div>
-                          </div>
+                              <span className="text-sm font-normal text-[#186A3B]">
+                                Approved
+                              </span>
+                            </span>
+                          )}
+                          {element?.status === "rejected" && (
+                            <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={RedX}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#8A2626]">
+                                Rejected
+                              </span>
+                            </span>
+                          )}
+                          {element.status === "pending" && (
+                            <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={SpinnerGap}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#945D2D]">
+                                Pending
+                              </span>
+                            </span>
+                          )}
+                          {element.status === "added Manually by administrator" && (
+                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#2c2c6d]">
+                              Manual
+                            </span>
+                          </span>
                         )}
-                      </td>
-                    </tr>
-                    {showTableRow.includes(index) &&
-                      sortedPunches &&
-                      sortedPunches.slice(1).map((element: any) => {
-                        return (
-                          <tr key={element._id + element.punchIn}>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchIn
-                                ? changetime(element.punchIn)
-                                : "Not Available"}
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchOut
-                                ? changetime(element.punchOut)
-                                : "Not Available"}
-                            </td>
-                            <td>
-                              {/* Status rendering */}
-                            </td>
-                            <td>
-                              {/* Approved By rendering */}
-                            </td>
-                            <td>
-                              {/* Image rendering */}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                          {element.approvedBy?.name
+                            ? element.approvedBy?.name
+                            : "-"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                          {element?.status === "approved" &&
+                            element.approvedImage && (
+                              <div className="flex gap-[10px] cursor-pointer">
+                                <div>
+                                  <p
+                                    className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                    onClick={() =>
+                                      handleImageClick(
+                                        element.approvedImage
+                                      )
+                                    }
+                                  >
+                                    Open
+                                  </p>
+                                </div>
 
-            {
-              loaderStatus === "loading" ? (
-                <div className="flex justify-center w-full">
-                  <img src={LoaderGif} className="w-6 h-6" alt="" />
-                </div>
-              ) : (
-                ""
-              )
-            }
+                                <div>
+                                  <img
+                                    src={ArrowSqureOut}
+                                    className="w-[14px] h-[14px]"
+                                    alt="arrowsqureout"
+                                  />
+                                </div>
+                              </div>
+                            )}
+                        </td>
+                      </tr>
+                      {showTableRow.includes(index) &&
+                        sortedPunches &&
+                        sortedPunches.slice(1).map((element: any) => {
+                          return (
+                            <tr key={element._id + element.punchIn}>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {element.punchIn
+                                  ? changetime(element.punchIn)
+                                  : "Not Avilable"}
+                              </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {element.punchOut
+                                  ? changetime(element.punchOut)
+                                  : "Not Avilable"}
+                              </td>
+
+
+                            </tr>
+                          );
+                        })}
+                    </>
+                  );
+                })}
+            </tbody>
+            {loaderStatus === "loading" ? (
+              <div className="flex justify-center w-full">
+                <img src={LoaderGif} className="w-6 h-6" alt="" />
+              </div>
+            ) : (
+              ""
+            )}
             <div ref={observerTarget}></div>
 
-            {
-              isImageOpen && (
-                <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-                  <img src={selectedImage} alt="Approved" className="h-[20rem]" />
-                  <button
-                    className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
-                    onClick={handleCloseImage}
-                  >
-                    <img
-                      src={close}
-                      alt=""
-                      className="h-[25px] w-[25px] bg-white rounded-full "
-                    />
-                  </button>
-                </div>
-              )
-            }
+            {isImageOpen && (
+              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+                <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                <button
+                  className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
+                  onClick={handleCloseImage}
+                >
+                  <img
+                    src={close}
+                    alt=""
+                    className="h-[25px] w-[25px] bg-white rounded-full "
+                  />
+                </button>
+              </div>
+            )}
           </table>
-
-          {/* Pagination starts */}
-          <div className="flex pb-10 gap-[10px] justify-center">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <img src={CaretLeft} alt="" className="" />
-            </button>
-            {Array.from({
-              length: Math.ceil(items.length / itemsPerPage),
-            }).map((_, index) => {
-              if (
-                (index < 2 && currentPage < 4) ||
-                (index >= currentPage - 2 && index <= currentPage + 1) ||
-                (index >= Math.ceil(items.length / itemsPerPage) - 3)
-              ) {
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={`${currentPage === index + 1 ? 'bg-gray-200 text-black border rounded-full' : ''
-                      } px-4 py-2 rounded-full`}
-                  >
-                    {index + 1}
-                  </button>
-                );
-              }
-              if (
-                (index === 2 && currentPage < 4) ||
-                (index === Math.ceil(items.length / itemsPerPage) - 4)
-              ) {
-                return (
-                  <span key={index} className="text-gray-500">
-                    ...
-                  </span>
-                );
-              }
-              return null;
-            })}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === Math.ceil(items.length / itemsPerPage)}
-            >
-              <img src={CaretRight1} alt="" className="" />
-            </button>
-          </div>
-
-
 
           {/* TABLE ENDS HERE */}
         </div>
