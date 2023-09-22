@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import up from "../../assets/arrow-up.png";
 
 
-import { getAllAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getAllAttandenceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
@@ -23,6 +23,7 @@ import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
 import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
+import { allShopAsync } from "../../redux/Slice/ShopSlice";
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
@@ -69,12 +70,13 @@ const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
 
   const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
+  const [shopName,setShopName]=useState("")
 
   const [filter, setFilter] = useState({
     name: "",
     groupName: localStorage.getItem("groupName")||"",
     jobProfileName:localStorage.getItem("jobProfileName")||"",
-    departmentName:localStorage.getItem("departmentName")||"",
+
     date: "",
     nextDate: "",
     page: 1,
@@ -82,6 +84,7 @@ const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
   });
   // const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
+  const shoplist=useSelector((state:any)=>state.Shop.shop)
  
 
   useEffect(() => {
@@ -99,6 +102,7 @@ const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
     dispatch(getAllDepartmentAsync());
+    dispatch(allShopAsync())
    
     
   }, []);
@@ -170,6 +174,31 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
   //     }
   //   };
   // }, [observerTarget]);
+  useEffect(()=>{
+    if(shopName===""){
+      return
+    }
+    const currentDate = new Date();
+  
+
+  const formattedDate = currentDate.toISOString().slice(0, 10);
+
+    const sendData = {
+      shopName: shopName,
+      date: formattedDate 
+    };
+  
+  dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
+    console.log("hiii",data.payload)
+    const employeeData = data.payload.attendance;
+    
+    
+    setItems(employeeData)
+    
+    
+  });
+
+  },[shopName])
   const [dateRange, setDateRange] = useState<any>([]);
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -184,7 +213,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
         setDateRange([...result]);
       }
     }
-    localStorage.setItem("departmentName",filter.departmentName)
+   
     localStorage.setItem("jobProfileName",filter.jobProfileName)
     localStorage.setItem("groupName",filter.groupName)
     getDateRange(filter.date, filter.nextDate);
@@ -379,23 +408,17 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
               <select
                  onChange={(event) => {
                   if (event.target.value === "") {
-                    setFilter({
-                      ...filter,
-                      departmentName: "",
-                    });
+                    setShopName("")
                   } else {
-                    setFilter({
-                      ...filter,
-                      departmentName: event.target.value,
-                    });
+                    setShopName(event.target.value)
                   }
                 }}
-                value={filter.departmentName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+                value={shopName}
+                className="border border-solid border-[#201f1f] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
-                <option value="">All Department</option>
-                {sortedDepartmentList && sortedDepartmentList.map((element:any,index:any)=>{return(
-                   <option key={index} value={element.departmentName}>{element.departmentName} 
+                <option value="">All Shop</option>
+                {shoplist && shoplist.map((element:any,index:any)=>{return(
+                   <option key={index} value={element.shopName}>{element.shopName} 
                     </option>
                 )
 })
@@ -508,6 +531,7 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                   );
                 });
                 const latestPunches = sortedPunches[0];
+                const firstPunches=sortedPunches[sortedPunches.length-1]
                 
 
                 return (
@@ -549,9 +573,13 @@ const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
                         )}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchIn
-                          ? changetime(latestPunches.punchIn)
-                          : "Not Avilable"}
+                      {showTableRow.includes(index)
+                                                            ? latestPunches.punchIn
+                                                           ? changetime(latestPunches.punchIn)
+                                                      : "Not Available"
+                                                      : firstPunches.punchIn
+                                                     ? changetime(firstPunches.punchIn)
+                                                      : "Not Available"}
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchOut

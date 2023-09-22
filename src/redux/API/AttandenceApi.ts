@@ -1,5 +1,5 @@
 import axios from "axios";
-import { addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, updateAttendanceApiPath } from "../../APIRoutes";
+import { addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, shopFiterAttendancePath, updateAttendanceApiPath } from "../../APIRoutes";
 
 // READ
 export const getStaffAttendance = async () => {
@@ -37,6 +37,22 @@ export const getAllAttandence = async (sendData: any) => {
     console.log(err.response.data);
   }
 };
+
+
+export const getShopFilterAttendance = async (sendData: any) => {
+  try {
+    console.log(`${shopFiterAttendancePath}?date=${sendData.date}`);
+    const { data } = await axios.get(`${shopFiterAttendancePath}?date=${sendData.date}`, {
+      data: { shopName: sendData.shopName }, 
+      withCredentials: true,
+    });
+    return data;
+  } catch (err:any) {
+    console.error(err.response.data);
+    throw err; 
+}
+}
+
 
 export const getSingleGroupAttendance = async (sendData: any) => {
   try {

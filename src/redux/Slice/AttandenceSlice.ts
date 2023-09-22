@@ -6,6 +6,7 @@ import {
   getAllAttandence,
   getGroupAttendance,
   getMyAttandence,
+  getShopFilterAttendance,
   getSingleGroupAttendance,
   getStaffAttendance,
   updateAttendance,
@@ -27,6 +28,18 @@ export const getAllAttandenceAsync: any = createAsyncThunk(
     try {
       console.log("data", data);
       const response: any = await getAllAttandence(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const getShopFilterAttandenceAsync: any = createAsyncThunk(
+  "getShopFilterAttandenceAsync",
+  async (data) => {
+    try {
+      console.log("data", data);
+      const response: any = await getShopFilterAttendance(data);
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -217,7 +230,17 @@ export const AttandenceSlice = createSlice({
       })
       .addCase(deletePunchAsync.fulfilled, function (state: any) {
         state.status = "idle";
-      });
+      })
+      .addCase(getShopFilterAttandenceAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getShopFilterAttandenceAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.allAttandence = action.payload;
+        }
+      );
   },
 });
 

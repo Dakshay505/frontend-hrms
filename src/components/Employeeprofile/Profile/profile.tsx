@@ -177,7 +177,7 @@ export const EmployeeProfile = () => {
         }
     }
     const changetime = (createdAtDate: any) => {
-        console.log(createdAtDate)
+       // console.log(createdAtDate)
         const date = new Date(createdAtDate)
         const hours = date.getUTCHours(); // Get the hours in UTC
         const minutes = date.getUTCMinutes();
@@ -201,7 +201,7 @@ export const EmployeeProfile = () => {
 
         dispatch(deletePunchAsync(data)).then((res: any) => {
             console.log("Response", res)
-            if (res.type === "deletePunchAsync/fulfilled") {
+            if (res.payload.success) {
                 toast.success("Punch delete sucessfully")
                 refresh()
 
@@ -498,7 +498,7 @@ export const EmployeeProfile = () => {
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
-                                console.log("ghghgh", element.status)
+                                //console.log("ghghgh", element.status)
 
                                 const punchesList = [...(element.punches)];
 

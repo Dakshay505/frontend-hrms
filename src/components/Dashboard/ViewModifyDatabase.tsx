@@ -107,6 +107,7 @@ const ViewModifyDatabase = () => {
 
   const dispatch = useDispatch();
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
+
   // const [items, setItems] = useState<any[]>([]);
   // setItems(employeeDetailList)
   const loaderStatus = useSelector((state: any) => state.employee.status);
