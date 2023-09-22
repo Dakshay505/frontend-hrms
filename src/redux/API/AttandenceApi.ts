@@ -1,5 +1,15 @@
 import axios from "axios";
-import { addpuchApiPath, deletepuchApiPath, editpuchApiPath, getAllAttandenceApiPath, getGroupAttendanceApiPath, getMyAttandenceApiPath, getStaffAttendanceApiPath, shopFiterAttendancePath, updateAttendanceApiPath } from "../../APIRoutes";
+import {
+  addpuchApiPath,
+  deletepuchApiPath,
+  editpuchApiPath,
+  getAllAttandenceApiPath,
+  getGroupAttendanceApiPath,
+  getMyAttandenceApiPath,
+  getStaffAttendanceApiPath,
+  shopFiterAttendancePath,
+  updateAttendanceApiPath,
+} from "../../APIRoutes";
 
 // READ
 export const getStaffAttendance = async () => {
@@ -14,11 +24,11 @@ export const getStaffAttendance = async () => {
 };
 // post
 function convertToQueryString(data: any) {
-  let queryStr = '';
+  let queryStr = "";
   for (let key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== '' && data[key] !== null) {
-      if (queryStr !== '') {
-        queryStr += '&';
+    if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
+      if (queryStr !== "") {
+        queryStr += "&";
       }
       queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`;
     }
@@ -28,38 +38,44 @@ function convertToQueryString(data: any) {
 export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    console.log(`${getAllAttandenceApiPath}?${filterDatta}`)
-    const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
-      withCredentials: true,
-    });
+    console.log(`${getAllAttandenceApiPath}?${filterDatta}`);
+    const { data } = await axios.get(
+      `${getAllAttandenceApiPath}?${filterDatta}`,
+      {
+        withCredentials: true,
+      }
+    );
     return data;
   } catch (err: any) {
     console.log(err.response.data);
   }
 };
 
-
 export const getShopFilterAttendance = async (sendData: any) => {
   try {
-    console.log(`${shopFiterAttendancePath}?date=${sendData.date}`);
-    const { data } = await axios.get(`${shopFiterAttendancePath}?date=${sendData.date}`, {
-      data: { shopName: sendData.shopName }, 
-      withCredentials: true,
-    });
+    const { data } = await axios.get(
+      `${shopFiterAttendancePath}?date=${sendData.date}&shopName=${sendData.shopName}&limit=500`,
+      {
+        withCredentials: true,
+      }
+    );
+    console.log("shopFiterAttendance", data)
     return data;
-  } catch (err:any) {
+  } catch (err: any) {
     console.error(err.response.data);
-    throw err; 
-}
-}
-
+    throw err;
+  }
+};
 
 export const getSingleGroupAttendance = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    const { data } = await axios.get(`${getAllAttandenceApiPath}?${filterDatta}`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.get(
+      `${getAllAttandenceApiPath}?${filterDatta}`,
+      {
+        withCredentials: true,
+      }
+    );
     return data;
   } catch (err: any) {
     console.log(err.response.data);
@@ -69,9 +85,12 @@ export const getSingleGroupAttendance = async (sendData: any) => {
 export const getMyAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    const { data } = await axios.get(`${getMyAttandenceApiPath}?${filterDatta}`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.get(
+      `${getMyAttandenceApiPath}?${filterDatta}`,
+      {
+        withCredentials: true,
+      }
+    );
     return data;
   } catch (err: any) {
     console.log(err.response.data);
@@ -90,13 +109,16 @@ export const getGroupAttendance = async () => {
   }
 };
 
-
 // UPDATE Attendance
 export const updateAttendance = async (updateData: any) => {
   try {
-    const { data } = await axios.patch(`${updateAttendanceApiPath}`, updateData, {
-      withCredentials: true,
-    });
+    const { data } = await axios.patch(
+      `${updateAttendanceApiPath}`,
+      updateData,
+      {
+        withCredentials: true,
+      }
+    );
     return data;
   } catch (err: any) {
     console.log(err.response.data);
@@ -105,7 +127,6 @@ export const updateAttendance = async (updateData: any) => {
 
 export const addPunches = async (Data: any) => {
   try {
-   
     const { data } = await axios.post(`${addpuchApiPath}/${Data.id}`, Data, {
       withCredentials: true,
     });
@@ -116,7 +137,6 @@ export const addPunches = async (Data: any) => {
 };
 export const editPunches = async (Data: any) => {
   try {
-   
     const { data } = await axios.patch(`${editpuchApiPath}/${Data.id}`, Data, {
       withCredentials: true,
     });
@@ -127,10 +147,12 @@ export const editPunches = async (Data: any) => {
 };
 export const deletePunches = async (Data: any) => {
   try {
-   
-    const { data } = await axios.delete(`${deletepuchApiPath}/${Data.id}?punchsId=${Data.punchsId}`,{
-      withCredentials: true,
-    });
+    const { data } = await axios.delete(
+      `${deletepuchApiPath}/${Data.id}?punchsId=${Data.punchsId}`,
+      {
+        withCredentials: true,
+      }
+    );
     return data;
   } catch (err: any) {
     console.log(err.response.data);

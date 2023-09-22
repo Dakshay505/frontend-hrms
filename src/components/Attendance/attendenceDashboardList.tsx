@@ -37,10 +37,11 @@ export const AttendenceDashboardList = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  const departmentList=useSelector((state:any)=>state.department.department)
-  const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
-  a.departmentName.localeCompare(b.departmentName)
-);
+  // const departmentList=useSelector((state:any)=>state.department.department)
+//   const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+//   a.departmentName.localeCompare(b.departmentName)
+// );
+
 const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
   a.jobProfileName.localeCompare(b.jobProfileName)
 );
