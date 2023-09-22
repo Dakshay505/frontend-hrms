@@ -104,7 +104,7 @@ export function Login() {
                             <p className='text-xs font-medium text-[#E23F3F]'>{errorMessage}</p>
                         </div>}
 
-                        <div className='mt-8 flex items-center gap-5'>
+                        <div className='mt-8 flex  items-center gap-5'>
                             <div className='flex gap-5'>
                                 <button type='submit' className='flex justify-center items-center w-[125px] h-[52px] rounded-lg hover:bg-[#28319196] bg-[#283093] py-4 px-5'>
                                     <div>
@@ -114,20 +114,8 @@ export function Login() {
                                         <p className='px-2 text-[16px] leading-6 font-medium text-[#FBFBFC]'>Login</p>
                                     </div>
                                 </button>
-                                
-                                <div 
-                                onClick={()=>{
-                                    window.location.replace("https://chawlacomponents.com/prd")
-                                    // window.location.replace("http://localhost:5050/prd")
-                                }}
-                                className='flex justify-center items-center  h-[52px] rounded-lg hover:bg-[#28319196] bg-[#283093] py-4 px-5'>
-                                    {/* <div>
-                                        <img src={signin} className='w-5 h-5' alt="" />
-                                    </div> */}
-                                    <div>
-                                        <p className='px-2 text-[16px] leading-6 font-medium text-[#FBFBFC]'>Production</p>
-                                    </div>
-                                </div>
+
+                             
                             </div>
                             {loaderStatus === "loading" ? <div className='flex w-full'>
                                 <img src={LoaderGif} className='w-6 h-6' alt="" />

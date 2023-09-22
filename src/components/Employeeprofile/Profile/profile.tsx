@@ -87,7 +87,7 @@ export const EmployeeProfile = () => {
     }, [])
     const refresh = () => {
         const nextDate = new Date();
-        const date = new Date(nextDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData !== "") {
@@ -506,10 +506,7 @@ export const EmployeeProfile = () => {
                                     return new Date(b.punchIn).getTime() - new Date(a.punchIn).getTime();
                                 })
                                 const latestPunches = sortedPunches[0];
-                                const firstPunches=sortedPunches[sortedPunches.length-1];
-                                //console.log("jjjjj",firstPunches)
-
-                                
+                                const firstPunches = sortedPunches[sortedPunches.length - 1];
                                 if (element.employeeId.employeeCode === singleEmployee.employeeCode) {
                                     return <>
                                         {updatePopUp && (
@@ -636,7 +633,6 @@ export const EmployeeProfile = () => {
 
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches?.punchOut  ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
-
                                                 {element?.status === "approved" &&
                                                     <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
