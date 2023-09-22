@@ -44,7 +44,7 @@ export const AttendenceDtabase = () => {
         }
       );
       setItems(data.attendanceRecords);
-      console.log("all atendence",data.attendanceRecords);
+      console.log("all atendence", data.attendanceRecords);
       const numberOfEmployee = parseInt(data.numberOfEmployee) || 0;
 
       setTotal((prevTotal) => prevTotal + numberOfEmployee);
@@ -91,6 +91,7 @@ export const AttendenceDtabase = () => {
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
+  console.log(loaderStatus)
 
   // useEffect(() => {
   //   const observer = new IntersectionObserver(
@@ -122,14 +123,7 @@ export const AttendenceDtabase = () => {
     } else {
       setShowTableRow([...showTableRow, index]);
     }
-
-  
-
   };
-  
-
-
-
   const limit = 2000;
 
   // const [page, setPage] = useState(0);
@@ -167,6 +161,7 @@ export const AttendenceDtabase = () => {
     dispatch(getGroupAttendanceAsync());
   }, []);
   const totalPresent = items?.length
+  console.log(totalPresent)
   const totalEmployees = groupAttendanceList.reduce(
     (acc: any, group: any) => acc + group.totalEmployeesInGroup,
     0
@@ -180,9 +175,20 @@ export const AttendenceDtabase = () => {
     const employeeId = { employeeId: data.employeeId._id };
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-    console.log("hello",data)
+    console.log("hello", data)
   };
 
+  let pendingCount = 0;
+  let approvedCount = 0;
+  
+  for (const entry of items) {
+    if (entry.status === "pending") {
+      pendingCount++;
+    } else if (entry.status === "approved") {
+      approvedCount++;
+    }
+  }
+  
 
   return (
     <div className="px-10 pt-8">
@@ -205,37 +211,38 @@ export const AttendenceDtabase = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalPresent}
+                {approvedCount}
               </span>
-              <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
+              {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Present
+              Approved
+
             </p>
           </div>
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalAbsent}
+                {pendingCount}
               </span>
-              <img
+              {/* <img
                 src={up}
                 alt=""
                 className="h-[16px] w-[16px] rotate-180 ms-1"
-              />
+              /> */}
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Absent
+              Pending
             </p>
           </div>
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalEmployees}
+                {totalPresent}
               </span>
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Total
+              Total Present
             </p>
           </div>
         </div>
@@ -297,13 +304,13 @@ export const AttendenceDtabase = () => {
                     );
                   });
                   const latestPunches = sortedPunches[0];
-                  const firstPunches=sortedPunches[sortedPunches.length-1]
+                  const firstPunches = sortedPunches[sortedPunches.length - 1]
                   return (
                     <>
                       <tr
                         key={element._id + latestPunches.punchIn}
                         className="hover:bg-[#FAFAFA]"
-                       
+
                       >
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchIn
@@ -311,22 +318,22 @@ export const AttendenceDtabase = () => {
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                        {element.employeeId?.employeeCode
-                          ? element.employeeId.employeeCode
-                          : "Not Avilable"}{" "}
-                       
-                        
-                      </td>
-                        <td  className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
-                          <p onClick={()=>handleTableRowClick(element)}>{element.employeeId?.name
+                          {element.employeeId?.employeeCode
+                            ? element.employeeId.employeeCode
+                            : "Not Avilable"}{" "}
+
+
+                        </td>
+                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
+                          <p onClick={() => handleTableRowClick(element)}>{element.employeeId?.name
                             ? element.employeeId?.name
                             : "Not Avilable"}{" "}</p>
                           {sortedPunches.slice(1).length > 0 ? (
                             <img
-                            onClick={() => {
-                              handleRowClick(index);
-                             
-                            }} src={
+                              onClick={() => {
+                                handleRowClick(index);
+
+                              }} src={
                                 showTableRow.includes(index)
                                   ? CaretUp
                                   : CaretDown
@@ -338,13 +345,13 @@ export const AttendenceDtabase = () => {
                           )}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {showTableRow.includes(index)
-                                                            ? latestPunches.punchIn
-                                                           ? changetime(latestPunches.punchIn)
-                                                      : "Not Available"
-                                                      : firstPunches.punchIn
-                                                     ? changetime(firstPunches.punchIn)
-                                                      : "Not Available"}
+                          {showTableRow.includes(index)
+                            ? latestPunches.punchIn
+                              ? changetime(latestPunches.punchIn)
+                              : "Not Available"
+                            : firstPunches.punchIn
+                              ? changetime(firstPunches.punchIn)
+                              : "Not Available"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
@@ -389,17 +396,17 @@ export const AttendenceDtabase = () => {
                             </span>
                           )}
                           {element.status === "added Manually by administrator" && (
-                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={SpinnerGap}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#2c2c6d]">
-                              Manual
+                            <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={SpinnerGap}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#2c2c6d]">
+                                Manual
+                              </span>
                             </span>
-                          </span>
-                        )}
+                          )}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element.approvedBy?.name
