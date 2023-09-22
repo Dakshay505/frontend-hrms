@@ -297,7 +297,7 @@ export const AttendenceDtabase = () => {
                     );
                   });
                   const latestPunches = sortedPunches[0];
-                  //console.log("djsgdhgedgh",element)
+                  const firstPunches=sortedPunches[sortedPunches.length-1]
                   return (
                     <>
                       <tr
@@ -338,9 +338,13 @@ export const AttendenceDtabase = () => {
                           )}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                          {latestPunches.punchIn
-                            ? changetime(latestPunches.punchIn)
-                            : "Not Avilable"}
+                        {showTableRow.includes(index)
+                                                            ? latestPunches.punchIn
+                                                           ? changetime(latestPunches.punchIn)
+                                                      : "Not Available"
+                                                      : firstPunches.punchIn
+                                                     ? changetime(firstPunches.punchIn)
+                                                      : "Not Available"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
