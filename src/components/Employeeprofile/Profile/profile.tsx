@@ -41,8 +41,8 @@ export const EmployeeProfile = () => {
     const [updatePopUp, setUpdatePopup] = useState(false)
     const [dated, setDated] = useState("")
     const [deleteId, setDeleteId] = useState("")
-    const [punchOutDate,setPunchOutDate]=useState("")
-
+    const [punchOutDate, setPunchOutDate] = useState("")
+    const [updateDate, setUpdateDate] = useState("")
 
     function formatDate(date: any) {
         const year = date.getFullYear();
@@ -133,13 +133,14 @@ export const EmployeeProfile = () => {
 
     const [popup, setPopUp] = useState(false)
     const [deletePopup, setDeletePopup] = useState(false)
-    const handlePopup = (d: any, element: any) => {
+    const handlePopup = (d: any, element: any, updateDate: any) => {
         console.log("fjhfjhgfjhf", element)
         setDated(d)
         setDeleteId(element._id)
+        setUpdateDate(updateDate)
         setPunchIn(changetime24HourFormat(element.punchIn))
         setPunchOut(changetime24HourFormat(element.punchOut))
-        setPunchOutDate(element.punchOut.slice(0,10))
+        setPunchOutDate(element.punchOut.slice(0, 10))
         //console.log(PunchOut)
         setPopUp(true)
 
@@ -177,7 +178,7 @@ export const EmployeeProfile = () => {
         }
     }
     const changetime = (createdAtDate: any) => {
-       // console.log(createdAtDate)
+        // console.log(createdAtDate)
         const date = new Date(createdAtDate)
         const hours = date.getUTCHours(); // Get the hours in UTC
         const minutes = date.getUTCMinutes();
@@ -254,7 +255,7 @@ export const EmployeeProfile = () => {
         else {
 
             setUpdatePopup(false)
-            const data = { "date": dated, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
             console.log(data)
             // console.log(singleEmployee._id)
 
@@ -441,7 +442,7 @@ export const EmployeeProfile = () => {
 
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">PuchOut Time</span>
                                     <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -557,12 +558,12 @@ export const EmployeeProfile = () => {
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
-                                    <span className="text-[#2A3143]">PuchOut Date</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
+                                                            <span className="text-[#2A3143]">PuchOut Date</span>
+                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                                <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
-                                    </div>
-                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Time</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -622,48 +623,48 @@ export const EmployeeProfile = () => {
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                             <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
-                                             {showTableRow.includes(index)
-                                                            ? latestPunches.punchIn
-                                                           ? changetime(latestPunches.punchIn)
-                                                      : "Not Available"
-                                                      : firstPunches.punchIn
-                                                     ? changetime(firstPunches.punchIn)
-                                                      : "Not Available"}
-                                             </td>
+                                                {showTableRow.includes(index)
+                                                    ? latestPunches.punchIn
+                                                        ? changetime(latestPunches.punchIn)
+                                                        : "Not Available"
+                                                    : firstPunches.punchIn
+                                                        ? changetime(firstPunches.punchIn)
+                                                        : "Not Available"}
+                                            </td>
 
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches?.punchOut  ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches?.punchOut ? changetime(latestPunches.punchOut) : "Not Avilable"}</td>
                                             <td className='py-4 px-5'>
                                                 {element?.status === "approved" &&
                                                     <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
 
                                                     </span>}
                                                 {element?.status === "rejected" &&
                                                     <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
 
                                                     </span>}
                                                 {(element.status === "pending") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                     </span>}
                                                 {(element.status === "added Manually by administrator") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
 
                                                     </span>}
                                             </td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.approvedBy?.name
-                            ? element.approvedBy?.name
-                            : "-"}</td>
+                                                ? element.approvedBy?.name
+                                                : "-"}</td>
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>
