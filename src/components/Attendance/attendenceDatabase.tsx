@@ -1,5 +1,5 @@
 import right from "../../assets/r-arrow.png";
-import up from "../../assets/arrow-up.png";
+// import up from "../../assets/arrow-up.png";
 import GreenCheck from "../../assets/GreenCheck.svg";
 import RedX from "../../assets/RedX.svg";
 import SpinnerGap from "../../assets/SpinnerGap.svg";
@@ -149,9 +149,9 @@ export const AttendenceDtabase = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
 
-  const groupAttendanceList = useSelector(
-    (state: any) => state.attandence.groupAttendance
-  );
+  // const groupAttendanceList = useSelector(
+  //   (state: any) => state.attandence.groupAttendance
+  // );
 
 
 
@@ -162,11 +162,11 @@ export const AttendenceDtabase = () => {
   }, []);
   const totalPresent = items?.length
   console.log(totalPresent)
-  const totalEmployees = groupAttendanceList.reduce(
-    (acc: any, group: any) => acc + group.totalEmployeesInGroup,
-    0
-  );
-  const totalAbsent = totalEmployees - totalPresent;
+  // const totalEmployees = groupAttendanceList.reduce(
+  //   (acc: any, group: any) => acc + group.totalEmployeesInGroup,
+  //   0
+  // );
+  // const totalAbsent = totalEmployees - totalPresent;
 
 
 
