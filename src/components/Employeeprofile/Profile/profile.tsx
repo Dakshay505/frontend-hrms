@@ -255,12 +255,13 @@ export const EmployeeProfile = () => {
         }
     }
     const editHandleSumbit = () => {
-        //console.log("hjhjhjbbnb",Date)
         if (PuchIn === "") {
             toast.error("PunchIn is required")
         }
+        else if (punchOutDate === "") {
+            toast.error("Punchout Date is required")
+        }
         else {
-
             setUpdatePopup(false)
             const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
             console.log(data)
