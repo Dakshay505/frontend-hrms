@@ -39,7 +39,12 @@ export const Shop = () => {
             setValue("ShopName", inputShopName.replace(/^\d/, ""));
         }
     };
-
+    const handleShopCodeChange = (e: any) => {
+        const inputShopCode = e.target.value;
+    
+        setValue("shopCode", inputShopCode);
+        
+    };
 
     useEffect(() => {
 
@@ -84,6 +89,18 @@ export const Shop = () => {
                                     type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
                                     onChange={handleShopNameChange} />
                                 {errors.ShopName && <p className="text-red-500">{errors.ShopName.message}</p>}
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-3'>
+                            <div>
+                                <p className='text-sm font-normal text-[#1C1C1C]'>Shop Code</p>
+                            </div>
+                            <div>
+                                <input
+                                    {...register('shopCode', { required: "Shop Code is required", validate: validateShopName })}
+                                    type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
+                                    onChange={handleShopCodeChange} />
+                                {errors.ShopCode && <p className="text-red-500">{errors.ShopCode.message}</p>}
                             </div>
                         </div>
                         <div className='flex flex-col gap-3'>
