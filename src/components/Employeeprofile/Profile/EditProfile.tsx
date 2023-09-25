@@ -50,6 +50,10 @@ const EditProfile = () => {
   const [showInputBoxPassword, setShowInputBoxPassword] = useState(false);
   const [inputBoxPasswordValue, setInputBoxPasswordValue] = useState<any>("");
   const [showPassword, setShowPassword] = useState(false);
+  const [inputBoxPFValue, setInputBoxPFValue] = useState<any>("");
+  const [PFValue, setPFValue] = useState(false);
+  const [inputBoxESIValue, setInputBoxESIValue] = useState<any>("");
+  const [ESIValue, setESIValue] = useState(false);
 
   const [showInputBoxContactNumber, setShowInputBoxContactNumber] =
     useState(false);
@@ -113,6 +117,8 @@ const EditProfile = () => {
       accountNumber:singleEmployee.bankDetails?.accountNumber,
       IFSC_Code:singleEmployee.bankDetails?.IFSC_Code
     })
+    setInputBoxPFValue(singleEmployee.PF_UAN_Number)
+    setInputBoxESIValue(singleEmployee.ESI_ID)
   }, [singleEmployee]);
 
   // OTP VERIFICATION
@@ -186,6 +192,9 @@ const EditProfile = () => {
           setShowInputBoxOverTime(false);
           setInputBankDeatils(false)
           setShowInputBoxPancard(false)
+         setPFValue(false)
+         setESIValue(false)
+          
         })}
       >
         <div className="flex flex-col gap-3">
@@ -850,6 +859,120 @@ const EditProfile = () => {
                                     
                                     
                                 )}
+
+                </div>
+                
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+           {!PFValue && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 PF Number
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setPFValue(!PFValue);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.PF_UAN_Number}
+                </p>
+              </div>
+            </div>
+          )}
+          {PFValue && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   PF Number
+                  </p>
+                </div>
+                <div>
+                  <input
+                   {...register("PF_UAN_Number", { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={inputBoxPFValue}
+                   onChange={(event) => {
+                    
+                       setInputBoxPFValue(event.target.value);
+                    
+                   }}
+                   type="text"
+                   />
+                   
+
+                </div>
+                
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+          {!ESIValue && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 ESI ID
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setESIValue(!ESIValue);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.ESI_ID}
+                </p>
+              </div>
+            </div>
+          )}
+          {ESIValue && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   ESI ID
+                  </p>
+                </div>
+                <div>
+                  <input
+                   {...register("ESI_ID", { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={inputBoxESIValue}
+                   onChange={(event) => {
+                    
+                       setInputBoxESIValue(event.target.value);
+                    
+                   }}
+                   type="text"
+                   />
+                   
 
                 </div>
                 
