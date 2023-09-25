@@ -1223,9 +1223,9 @@ const EditProfile = () => {
           {InputBankDeatils && (
             <>
              <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
-              <div className="flex flex-col">
-                <div className="flex gap-3">
-                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+              <div className="flex flex-col ">
+                <div className="flex gap-2">
+                  <p className="text-lg font-bold text-[#000000] tracking-[0.25px] ml-20 mt-1">
                     Save Bank Details
                   </p>
                 </div>
