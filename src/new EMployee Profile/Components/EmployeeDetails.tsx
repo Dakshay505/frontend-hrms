@@ -36,15 +36,7 @@ export const EmployeeDetails = () => {
     const [showInputBoxLunchTime, setShowInputBoxLunchTime] = useState(false);
     const [inputBoxLunchTimeValue, setInputBoxLunchTimeValue] = useState<any>("");
 
-    const [showInputBoxWorkingDays, setShowInputBoxWorkingDays] = useState(false);
-    const [inputBoxWorkingDaysValue, setInputBoxWorkingDaysValue] =
-        useState<any>("");
 
-
-    const [showInputBoxWorkingHours, setShowInputBoxWorkingHours] =
-        useState(false);
-    const [inputBoxWorkingHoursValue, setInputBoxWorkingHoursValue] =
-        useState<any>("");
 
     const [showInputBoxOverTime, setShowInputBoxOverTime] = useState(false);
     const [inputBoxOverTimeValue, setInputBoxOverTimeValue] =
@@ -57,8 +49,6 @@ export const EmployeeDetails = () => {
         setInputBoxJobProfileValue(singleEmployee.jobProfileId?.jobProfileName);
         setInputBoxSalaryValue(singleEmployee.salary);
         setInputBoxLunchTimeValue(singleEmployee.lunchTime);
-        setInputBoxWorkingDaysValue(singleEmployee.workingDays);
-        setInputBoxWorkingHoursValue(singleEmployee.workingHours);
         setInputBoxOverTimeValue(singleEmployee.overTime);
 
 
@@ -91,8 +81,6 @@ export const EmployeeDetails = () => {
                 setShowInputBoxJobProfile(false);
                 setShowInputBoxSalary(false);
                 setShowInputBoxLunchTime(false);
-                setShowInputBoxWorkingDays(false);
-                setShowInputBoxWorkingHours(false);
                 setShowInputBoxOverTime(false);
 
 
@@ -259,99 +247,6 @@ export const EmployeeDetails = () => {
                                         <option value="2">2 Hour</option>
                                         <option value="2.5">2.5 Hour</option>
                                     </select>
-                                </div>
-                            </div>
-
-                        </div>
-                    )}
-
-
-
-                    {!showInputBoxWorkingDays && (
-                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-                            <div className="flex items-center gap-3">
-                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-                                    Working Days
-                                </p>
-
-                            </div>
-                            <div onClick={() => {
-                                setShowInputBoxWorkingDays(!showInputBoxWorkingDays);
-                            }}>
-                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.workingDays} days per Week
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                    {showInputBoxWorkingDays && (
-                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-                            <div className="flex flex-col">
-                                <div className="flex gap-3">
-                                    <p className="text-sm font-semibold  tracking-[0.25px]">
-                                        Working Days
-                                    </p>
-                                </div>
-                                <div>
-                                    <select
-                                        {...register("workingDays", { required: true })}
-                                        className="text-[12px] leading-5 font-normal pe-5 focus:outline-none"
-                                        value={inputBoxWorkingDaysValue}
-                                        onChange={(event) =>
-                                            setInputBoxWorkingDaysValue(event.target.value)
-                                        }
-                                    >
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                    )}
-
-
-
-                    {!showInputBoxWorkingHours && (
-                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-                            <div className="flex items-center gap-3">
-                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-                                    Working Hours
-                                </p>
-
-                            </div>
-                            <div onClick={() => {
-                                setShowInputBoxWorkingHours(!showInputBoxWorkingHours);
-                            }}>
-                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.workingHours} Hours per day
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                    {showInputBoxWorkingHours && (
-                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-                            <div className="flex flex-col">
-                                <div className="flex gap-3">
-                                    <p className="text-sm font-semibold  tracking-[0.25px]">
-                                        Working Hours
-                                    </p>
-                                </div>
-                                <div>
-                                    <input
-                                        {...register("workingHours", { required: true })}
-                                        className="text-[12px] leading-5 font-normal focus:outline-none"
-                                        value={inputBoxWorkingHoursValue}
-                                        onChange={(event) =>
-                                            setInputBoxWorkingHoursValue(event.target.value)
-                                        }
-                                        type="number"
-                                    />
                                 </div>
                             </div>
 
