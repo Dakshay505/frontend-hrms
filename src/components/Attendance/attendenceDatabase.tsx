@@ -241,7 +241,7 @@ export const AttendenceDtabase = () => {
                 {totalPresent}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Total Present
             </p>
           </div>

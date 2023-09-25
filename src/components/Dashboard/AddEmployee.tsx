@@ -24,6 +24,7 @@ const AddEmployee = () => {
     const [showOtp, setShowOtp] = useState(false);
     const [otpCheck, setOtpCheck] = useState<any>(false);
     const [otpSent, setOtpSent] = useState<any>("");
+    const [Salarymode,setSalarymode]=useState<any>("");
     const [otpVerified, setOtpVerified] = useState<any>("");
     const [overTimeReqValues, setOverTimeReqValues] = useState<any>({
         salary: "",
@@ -38,7 +39,12 @@ const AddEmployee = () => {
         setValue,
         formState: { errors },
     }: any = useForm()
-
+    const [bankdetails, setBankDetail] = useState({
+        bankName:"",
+        branch:"",
+        accountNumber:"",
+        IFSC_Code:""
+      });
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const groupList = useSelector((state: any) => state.group.groups);
 
@@ -91,6 +97,7 @@ const AddEmployee = () => {
     // phone number validation
     const [phoneNumber, setPhoneNumber] = useState('');
     const [aadharNumber, setAadharNumber] = useState('');
+    const [pancardNumber,setPancardNumber]=useState('')
 
     const [otp, setOtp] = useState<any>()
     const [isValid, setIsValid] = useState(false);
@@ -198,11 +205,13 @@ const AddEmployee = () => {
                             data = {
                                 ...data,
                                 overTime: true,
+                                bankDetails:bankdetails
                             };
                         } else {
                             data = {
                                 ...data,
                                 overTime: false,
+                                bankDetails:bankdetails
                             };
                         }
                         console.log(data);
@@ -290,6 +299,7 @@ const AddEmployee = () => {
                                     <select
                                         {...register('jobProfileName', { required: "Job Profile required" })}
                                         className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'
+                                        
                                         onChange={handleJobProfileChange}>
                                         <option value="JobProfile">Job Profiles</option>
                                         {jobProfileList && jobProfileList.map((element: any, index: number) => {
@@ -306,6 +316,7 @@ const AddEmployee = () => {
                                     <select
                                         {...register('groupName', { required: "Group Name required" })}
                                         className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'>
+                                        
                                         <option value="Group">Group</option>
                                         {groupList && groupList.map((element: any, index: number) => {
                                             return <option value={element.groupName} key={index}>{element.groupName}</option>
@@ -372,7 +383,150 @@ const AddEmployee = () => {
                                     <p className='text-green-500'>Aadhar number is valid!</p>
                                 )}
                             </div>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>PanCard Number</p>
+                                </div>
+                                <div  onChange={(event:any)=>setPancardNumber(event.target.value)}>
+                                    <input
+                                       
+                                        type="text"
+                                        value={pancardNumber}
+                                        {...register('PAN_Number', { required: "PanCard No. required" })}
+                                       
+                                       
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                               
+                            </div>
                         </div>
+                        <div className='flex gap-10'>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Salary Mode</p>
+                                </div>
+                                <select 
+                                {...register('salaryMode', { required: "Salary Mode required" })}
+                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'>
+                                        
+                                    <option 
+                                         value="Salary Mode">Select Salary Mode</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="bank">Bank</option>
+                                </select>
+                            </div>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Gender</p>
+                                </div>
+                                <select 
+                                {...register('gender', { required: "Gender required" })}
+                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2 focus:outline-none'>
+                                        
+                                    <option value="Select Gender">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="">Pefer not to say</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className='flex gap-10'>
+                            <h1 className='text-lg font-bold'>Bank Details</h1>
+                            </div>
+                            <div className='flex gap-10'>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Bank Name</p>
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                            
+                                              setBankDetail({
+                                                ...bankdetails,
+                                                bankName: event.target.value,
+                                              });
+                                            
+                                          }}
+                                          value={bankdetails.bankName}
+                                        
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                                
+                            </div>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Bank Account Number</p>
+                                </div>
+                                <div>
+                                    <input
+                                        onChange={(event) => {
+                                          
+                                              setBankDetail({
+                                                ...bankdetails,
+                                                accountNumber: event.target.value,
+                                              });
+                                            
+                                          }}
+                                          value={bankdetails.accountNumber}
+                                        type="number"                                        
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div className='flex gap-10'>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Bank Branch</p>
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                          
+                                              setBankDetail({
+                                                ...bankdetails,
+                                                branch: event.target.value,
+                                              });
+                                            
+                                          }}
+                                          value={bankdetails.branch}
+                                        
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                                
+                            </div>
+                            <div className='flex flex-col gap-3'>
+                                <div>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>IFSC Code</p>
+                                </div>
+                                <div>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                          
+                                            setBankDetail({
+                                              ...bankdetails,
+                                              IFSC_Code: event.target.value,
+                                            });
+                                          
+                                        }}
+                                        value={bankdetails.IFSC_Code}
+                                        
+                                        className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
+                                    />
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
 
                         {/* FIXED SALARY EMPLOYEE */}
                         {employementTypeValue === "Fixed Salary Employee" ?
