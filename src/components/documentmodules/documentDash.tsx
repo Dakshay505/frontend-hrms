@@ -103,6 +103,7 @@ export const DocumentDash = () => {
     <div className="flex max-w-[768px] px-4 pt-8 flex-col items-start self-stretch">
       <div className="flex px-10  w-[100%] justify-between gap-[50px] items-start self-stretch">
 
+
         <div className="flex py-[24px] px-[48px] h-[176px] w-auto flex-col justify-center gap-[16px] rounded-xl border border-solid border-primary-bg">
 
           <div className="text-primary-blue text-lg font-inter font-medium">

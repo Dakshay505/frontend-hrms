@@ -140,8 +140,8 @@ export const EmployeeProfile = () => {
         setUpdateDate(updateDate)
         setPunchIn(changetime24HourFormat(element?.punchIn))
         setPunchOut(changetime24HourFormat(element?.punchOut))
-        if(element?.punchOut!==null && element?.punchOut!==undefined){
-        setPunchOutDate(element.punchOut.slice(0, 10))
+        if (element?.punchOut !== null && element?.punchOut !== undefined) {
+            setPunchOutDate(element.punchOut.slice(0, 10))
         }
         //console.log(PunchOut)
         setPopUp(true)
@@ -157,20 +157,20 @@ export const EmployeeProfile = () => {
         setUpdatePopup(true)
     }
     const changetime24HourFormat = (createdAtDate: any) => {
-        if(createdAtDate!==null){
-        const date = new Date(createdAtDate);
-        const hours = date.getUTCHours();
-        const minutes = date.getUTCMinutes();
+        if (createdAtDate !== null) {
+            const date = new Date(createdAtDate);
+            const hours = date.getUTCHours();
+            const minutes = date.getUTCMinutes();
 
-        // Format hours with leading zero if less than 10
-        const formattedHours = hours < 10 ? `0${hours}` : hours;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+            // Format hours with leading zero if less than 10
+            const formattedHours = hours < 10 ? `0${hours}` : hours;
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-        const formattedTime = `${formattedHours}:${formattedMinutes}`;
+            const formattedTime = `${formattedHours}:${formattedMinutes}`;
 
-        return formattedTime;
+            return formattedTime;
         }
-        else{
+        else {
             return "";
         }
     };
@@ -185,7 +185,7 @@ export const EmployeeProfile = () => {
         }
     }
     const changetime = (createdAtDate: any) => {
-        
+
         const date = new Date(createdAtDate)
         const hours = date.getUTCHours(); // Get the hours in UTC
         const minutes = date.getUTCMinutes();
@@ -367,7 +367,9 @@ export const EmployeeProfile = () => {
             <div className='my-10'>
                 <div className='flex gap-3 items-center'>
                     <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Documents</h1>
-                    <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                    <Link to="/viewdocuments">
+                        <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                    </Link>
                 </div>
                 <div className='mt-6 pb-6 overflow-auto'>
                     <div className='flex gap-5'>
