@@ -53,6 +53,12 @@ const navItems: NavItem[] = [
     icon: training,
     Link: "/traning-dashboard",
   },
+  // {
+  //   id: "New Employee Profile",
+  //   name: "New Employee Profile",
+  //   icon: training,
+  //   Link: "/new-profile-employee",
+  // },
 ];
 
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;

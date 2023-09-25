@@ -1,13 +1,12 @@
-import del from "../../../assets/TrashSimple11.svg"
-import del1 from "../../../assets/TrashSimple.svg"
-import EditPicture from "../../../assets/EditPicture.svg";
-import EditProfile from './EditProfile';
+import del from "../assets/TrashSimple11.svg"
+import del1 from "../assets/TrashSimple.svg"
+import EditPicture from "../assets/EditPicture.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react"
-import { addImageAsync, deleteEmployeeAsync, getSingleEmployeeAsync } from "../../../redux/Slice/EmployeeSlice";
+import { addImageAsync, deleteEmployeeAsync, getSingleEmployeeAsync } from "../redux/Slice/EmployeeSlice";
 import { useNavigate } from "react-router-dom";
 
-const Picture = () => {
+const NewPicture = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
@@ -97,9 +96,8 @@ const Picture = () => {
                 </div>
             </div>
 
-            <EditProfile />
         </div>
     )
 }
 
-export default Picture
+export default NewPicture

@@ -24,7 +24,7 @@ const AddEmployee = () => {
     const [showOtp, setShowOtp] = useState(false);
     const [otpCheck, setOtpCheck] = useState<any>(false);
     const [otpSent, setOtpSent] = useState<any>("");
-    const [Salarymode,setSalarymode]=useState<any>("");
+    // const [Salarymode,setSalarymode]=useState<any>("");
     const [otpVerified, setOtpVerified] = useState<any>("");
     const [overTimeReqValues, setOverTimeReqValues] = useState<any>({
         salary: "",
@@ -568,7 +568,7 @@ const AddEmployee = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='flex gap-10'>
+                                {/* <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Working Days</p>
@@ -614,7 +614,7 @@ const AddEmployee = () => {
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
