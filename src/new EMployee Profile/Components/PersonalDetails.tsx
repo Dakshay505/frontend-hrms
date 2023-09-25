@@ -19,9 +19,9 @@ export const PersonalDetails = () => {
     (state: any) => state.employee.singleEmployee
   );
   console.log(singleEmployee)
-  const jobProfileList = useSelector(
-    (state: any) => state.jobProfile.jobProfiles
-  );
+  // const jobProfileList = useSelector(
+  //   (state: any) => state.jobProfile.jobProfiles
+  // );
   const groupList = useSelector((state: any) => state.group.groups);
   console.log(groupList)
 

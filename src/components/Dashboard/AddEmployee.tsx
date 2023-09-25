@@ -24,7 +24,7 @@ const AddEmployee = () => {
     const [showOtp, setShowOtp] = useState(false);
     const [otpCheck, setOtpCheck] = useState<any>(false);
     const [otpSent, setOtpSent] = useState<any>("");
-    const [Salarymode,setSalarymode]=useState<any>("");
+    // const [Salarymode,setSalarymode]=useState<any>("");
     const [otpVerified, setOtpVerified] = useState<any>("");
     const [overTimeReqValues, setOverTimeReqValues] = useState<any>({
         salary: "",

@@ -147,8 +147,8 @@ export const AttendenceDashboardList = () => {
     if (shopName === "") {
       return
     }
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().slice(0, 10);
+    // const currentDate = new Date();
+    // const formattedDate = currentDate.toISOString().slice(0, 10);
     let sendData={}
     console.log("datedddd",filter.nextDate)
        

@@ -71,18 +71,24 @@ const EditProfile = () => {
 
   const [showInputBoxLunchTime, setShowInputBoxLunchTime] = useState(false);
   const [inputBoxLunchTimeValue, setInputBoxLunchTimeValue] = useState<any>("");
-  
+
+ 
   // const [showInputBoxWorkingDays, setShowInputBoxWorkingDays] = useState(false);
   // const [inputBoxWorkingDaysValue, setInputBoxWorkingDaysValue] =
   //   useState<any>("");
-  
+
   // const [showInputBoxWorkingHours, setShowInputBoxWorkingHours] =
   //   useState(false);
   // const [inputBoxWorkingHoursValue, setInputBoxWorkingHoursValue] =
   //   useState<any>("");
+
   
   const [showInputBoxPancard, setShowInputBoxPancard] = useState(false);
   const [pancardNumber, setPancardNumber] = useState('')
+
+    
+  const [pancardNumber,setPancardNumber]=useState('')
+
   const [showInputBoxOverTime, setShowInputBoxOverTime] = useState(false);
   const [isValidAadhar, setIsValidAadhar] = useState(false);
   const [inputBoxOverTimeValue, setInputBoxOverTimeValue] =
