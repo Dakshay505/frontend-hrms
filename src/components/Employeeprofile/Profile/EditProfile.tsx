@@ -50,6 +50,10 @@ const EditProfile = () => {
   const [showInputBoxPassword, setShowInputBoxPassword] = useState(false);
   const [inputBoxPasswordValue, setInputBoxPasswordValue] = useState<any>("");
   const [showPassword, setShowPassword] = useState(false);
+  const [inputBoxPFValue, setInputBoxPFValue] = useState<any>("");
+  const [PFValue, setPFValue] = useState(false);
+  const [inputBoxESIValue, setInputBoxESIValue] = useState<any>("");
+  const [ESIValue, setESIValue] = useState(false);
 
   const [showInputBoxContactNumber, setShowInputBoxContactNumber] =
     useState(false);
@@ -66,8 +70,9 @@ const EditProfile = () => {
   const [inputBoxSalaryValue, setInputBoxSalaryValue] = useState<any>("");
 
   const [showInputBoxLunchTime, setShowInputBoxLunchTime] = useState(false);
+  const [showInputBoxPancard,setShowInputBoxPancard]=useState(false);
   const [inputBoxLunchTimeValue, setInputBoxLunchTimeValue] = useState<any>("");
-
+ 
   const [showInputBoxWorkingDays, setShowInputBoxWorkingDays] = useState(false);
   const [inputBoxWorkingDaysValue, setInputBoxWorkingDaysValue] =
     useState<any>("");
@@ -76,11 +81,20 @@ const EditProfile = () => {
     useState(false);
   const [inputBoxWorkingHoursValue, setInputBoxWorkingHoursValue] =
     useState<any>("");
-
+    
+  const [pancardNumber,setPancardNumber]=useState('')
   const [showInputBoxOverTime, setShowInputBoxOverTime] = useState(false);
+  const [isValidAadhar, setIsValidAadhar] = useState(false);
   const [inputBoxOverTimeValue, setInputBoxOverTimeValue] =
     useState<any>(false);
-
+    const [InputBankDeatils, setInputBankDeatils] =
+    useState<any>(false);
+  const [bankdetails, setBankDetail] = useState({
+      bankName:"",
+      branch:"",
+      accountNumber:"",
+      IFSC_Code:""
+    });
   useEffect(() => {
     setEmployeeId(singleEmployee._id);
     setInputBoxNameValue(singleEmployee.name);
@@ -96,6 +110,15 @@ const EditProfile = () => {
     setInputBoxWorkingDaysValue(singleEmployee.workingDays);
     setInputBoxWorkingHoursValue(singleEmployee.workingHours);
     setInputBoxOverTimeValue(singleEmployee.overTime);
+    setPancardNumber(singleEmployee.PAN_Number)
+    setBankDetail({
+      bankName:singleEmployee.bankDetails?.bankName,
+      branch:singleEmployee.bankDetails?.branch,
+      accountNumber:singleEmployee.bankDetails?.accountNumber,
+      IFSC_Code:singleEmployee.bankDetails?.IFSC_Code
+    })
+    setInputBoxPFValue(singleEmployee.PF_UAN_Number)
+    setInputBoxESIValue(singleEmployee.ESI_ID)
   }, [singleEmployee]);
 
   // OTP VERIFICATION
@@ -143,6 +166,7 @@ const EditProfile = () => {
           } else if (overTime === "No") {
             data = { ...data, overTime: false };
           }
+          
           const sendData = { employeeId: employeeId, data: data };
           dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
             if (res.payload.success) {
@@ -166,6 +190,11 @@ const EditProfile = () => {
           setShowInputBoxWorkingDays(false);
           setShowInputBoxWorkingHours(false);
           setShowInputBoxOverTime(false);
+          setInputBankDeatils(false)
+          setShowInputBoxPancard(false)
+         setPFValue(false)
+         setESIValue(false)
+          
         })}
       >
         <div className="flex flex-col gap-3">
@@ -751,15 +780,20 @@ const EditProfile = () => {
                   </p>
                 </div>
                 <div>
-                  <input
+                  
+                  <select
                     {...register("gender", { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
+                    defaultValue={inputBoxGenderValue}
                     value={inputBoxGenderValue}
                     onChange={(event) =>
                       setInputBoxGenderValue(event.target.value)
                     }
-                    type="text"
-                  />
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="">Pefer not to say</option>
+                  </select>
                 </div>
               </div>
               <div className="flex justify-center items-center">
@@ -804,15 +838,204 @@ const EditProfile = () => {
                 </div>
                 <div>
                   <input
-                    {...register("aadharNumber", { required: true })}
-                    className="text-[12px] leading-5 font-normal focus:outline-none"
-                    value={inputBoxAadharValue}
-                    onChange={(event) =>
-                      setInputBoxAadharValue(event.target.value)
-                    }
-                    type="text"
-                  />
+                   {...register("aadharNumber", { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={inputBoxAadharValue}
+                   onChange={(event) => {
+                     if (event.target.value.toString().length <= 12) {
+                       setInputBoxAadharValue(event.target.value);
+                     }
+                     const Regex = /^\d{12,13}$/;
+                     setIsValidAadhar(Regex.test(event.target.value));
+                   }}
+                   type="text"
+                   />
+                   {register("aadharNumber").toString().length > 0 && !isValidAadhar && (
+                                  <p className='text-red-500'>Aadhar number is invalid!</p>
+                                   
+                                )}
+                                {isValidAadhar  && (
+                                   <p className='text-green-500'>Aadhar number is valid!</p>
+                                    
+                                    
+                                )}
+
                 </div>
+                
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+           {!PFValue && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 PF Number
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setPFValue(!PFValue);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.PF_UAN_Number}
+                </p>
+              </div>
+            </div>
+          )}
+          {PFValue && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   PF Number
+                  </p>
+                </div>
+                <div>
+                  <input
+                   {...register("PF_UAN_Number", { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={inputBoxPFValue}
+                   onChange={(event) => {
+                    
+                       setInputBoxPFValue(event.target.value);
+                    
+                   }}
+                   type="text"
+                   />
+                   
+
+                </div>
+                
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+          {!ESIValue && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 ESI ID
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setESIValue(!ESIValue);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.ESI_ID}
+                </p>
+              </div>
+            </div>
+          )}
+          {ESIValue && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   ESI ID
+                  </p>
+                </div>
+                <div>
+                  <input
+                   {...register("ESI_ID", { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={inputBoxESIValue}
+                   onChange={(event) => {
+                    
+                       setInputBoxESIValue(event.target.value);
+                    
+                   }}
+                   type="text"
+                   />
+                   
+
+                </div>
+                
+              </div>
+              <div className="flex justify-center items-center">
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+          )}
+           {!showInputBoxPancard && (
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                 Pan Card Number
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setShowInputBoxPancard(!showInputBoxPancard);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.PAN_Number}
+                </p>
+              </div>
+            </div>
+          )}
+          {showInputBoxPancard && (
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                   PanCard Number
+                  </p>
+                </div>
+                <div>
+                  <input
+                   {...register('PAN_Number', { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={pancardNumber}
+                   onChange={(event) => {
+                   
+                     if (event.target.value.toString().length <= 10) {
+                       setPancardNumber(event.target.value);
+                     }
+                     
+                     
+                   }}
+                   type="text"
+                   />
+                   
+
+                </div>
+                
               </div>
               <div className="flex justify-center items-center">
                 <button
@@ -1102,6 +1325,156 @@ const EditProfile = () => {
                 </button>
               </div>
             </div>
+          )}
+          {!InputBankDeatils && (
+            
+            <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+              <div className="flex items-center gap-3">
+                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                  Bank Details
+                </p>
+                <img
+                  src={edit}
+                  onClick={() => {
+                    setInputBankDeatils(!InputBankDeatils);
+                  }}
+                  className="w-3 h-3"
+                  alt=""
+                />
+              </div>
+              <div>
+              </div>
+            </div>
+          )}
+          {InputBankDeatils && (
+            <>
+             <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col ">
+                <div className="flex gap-2">
+                  <p className="text-lg font-bold text-[#000000] tracking-[0.25px] ml-20 mt-1">
+                    Save Bank Details
+                  </p>
+                </div>
+               
+              </div>
+              <div className="flex justify-center items-center" >
+                <button
+                  className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                  type="submit"
+                >
+                  <img src={check} className="w-4 h-4" alt="" />
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+              <div className="flex flex-col">
+                <div className="flex gap-3">
+                  <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                    Bank Name
+                  </p>
+                </div>
+                <div>
+                <input
+                   {...register('bankName', { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={bankdetails.bankName}
+                   onChange={(event) => {
+                   
+                    setBankDetail({
+                      ...bankdetails,
+                      bankName: event.target.value,
+                    });
+                  
+                     
+                   }}
+                   type="text"
+                   />
+                   
+                 
+                </div>
+              </div>
+              
+            </div>
+            <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+            <div className="flex flex-col">
+              <div className="flex gap-3">
+                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                  Bank Account Number
+                </p>
+              </div>
+              <div>
+              <input
+                   {...register('accountNumber', { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={bankdetails.accountNumber}
+                   onChange={(event) => {
+                   
+                    setBankDetail({
+                      ...bankdetails,
+                      accountNumber: event.target.value,
+                    });
+                     
+                   }}
+                   type="Number"
+                   />
+              </div>
+            </div>
+            
+          </div>
+          <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+            <div className="flex flex-col">
+              <div className="flex gap-3">
+                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                  Bank Branch
+                </p>
+              </div>
+              <div>
+              <input
+                   {...register('branch', { required: true })}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={bankdetails.branch}
+                   onChange={(event) => {
+                   
+                    setBankDetail({
+                      ...bankdetails,
+                      branch: event.target.value,
+                    });
+                     
+                   }}
+                   type="text"
+                   />
+              </div>
+            </div>
+           
+          </div>
+          <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+            <div className="flex flex-col">
+              <div className="flex gap-3">
+                <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">
+                  Bank IFSC CODE
+                </p>
+              </div>
+              <div>
+              <input
+                   {...register('IFSC_Code')}
+                   className="text-[12px] leading-5 font-normal focus:outline-none"
+                   value={bankdetails.IFSC_Code}
+                   onChange={(event) => {
+                   
+                    setBankDetail({
+                      ...bankdetails,
+                      IFSC_Code: event.target.value,
+                    });
+                     setShowInputBoxPancard(!showInputBoxPancard);
+                     
+                   }}
+                   type="text"
+                   />
+              </div>
+            </div>
+           
+          </div>
+          </>
           )}
 
           <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">

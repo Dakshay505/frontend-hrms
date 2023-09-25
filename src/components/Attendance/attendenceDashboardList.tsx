@@ -74,7 +74,7 @@ export const AttendenceDashboardList = () => {
     name: "",
     groupName: localStorage.getItem("groupName") || "",
     jobProfileName: localStorage.getItem("jobProfileName") || "",
-    shopName: "",
+    
     date: "",
     nextDate: "",
     page: 1,
@@ -119,6 +119,7 @@ export const AttendenceDashboardList = () => {
   const [shopName, setShopName] = useState("");
 
   const handleShopChange = (event: any) => {
+    
     const selectedValue = event.target.value;
     setSelectedShop(selectedValue);
 
@@ -130,15 +131,33 @@ export const AttendenceDashboardList = () => {
   };
 
   useEffect(() => {
+    function getDateRange(startDate: any, endDate: any) {
+      if (nextDate) {
+        const result = [];
+        const currentDate = new Date(startDate);
+        const finalDate = new Date(endDate);
+        while (currentDate <= finalDate) {
+          result.push(currentDate.toISOString().slice(0, 10));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        setDateRange([...result]);
+      }
+    }
+    getDateRange(filter.date, filter.nextDate);
     if (shopName === "") {
       return
     }
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().slice(0, 10);
-    const sendData = {
+    let sendData={}
+    console.log("datedddd",filter.nextDate)
+       
+        sendData= {
       shopName: shopName,
-      date: formattedDate
-    };
+      date: filter.date,
+      nextDate:filter.nextDate
+    
+  }
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       console.log("hiii", data.payload)
@@ -161,7 +180,7 @@ export const AttendenceDashboardList = () => {
         setDateRange([...result]);
       }
     }
-
+   setShopName("")
     localStorage.setItem("jobProfileName", filter.jobProfileName)
     localStorage.setItem("groupName", filter.groupName)
     getDateRange(filter.date, filter.nextDate);

@@ -138,9 +138,11 @@ export const EmployeeProfile = () => {
         setDated(d)
         setDeleteId(element._id)
         setUpdateDate(updateDate)
-        setPunchIn(changetime24HourFormat(element.punchIn))
-        setPunchOut(changetime24HourFormat(element.punchOut))
+        setPunchIn(changetime24HourFormat(element?.punchIn))
+        setPunchOut(changetime24HourFormat(element?.punchOut))
+        if(element?.punchOut!==null && element?.punchOut!==undefined){
         setPunchOutDate(element.punchOut.slice(0, 10))
+        }
         //console.log(PunchOut)
         setPopUp(true)
 
@@ -155,6 +157,7 @@ export const EmployeeProfile = () => {
         setUpdatePopup(true)
     }
     const changetime24HourFormat = (createdAtDate: any) => {
+        if(createdAtDate!==null){
         const date = new Date(createdAtDate);
         const hours = date.getUTCHours();
         const minutes = date.getUTCMinutes();
@@ -166,6 +169,10 @@ export const EmployeeProfile = () => {
         const formattedTime = `${formattedHours}:${formattedMinutes}`;
 
         return formattedTime;
+        }
+        else{
+            return "";
+        }
     };
 
     const handleRowClick = (index: number) => {
