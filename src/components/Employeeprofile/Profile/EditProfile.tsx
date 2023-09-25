@@ -101,8 +101,8 @@ const EditProfile = () => {
     setInputBoxEmployeeCodeValue(singleEmployee.employeeCode);
     setInputBoxJobProfileValue(singleEmployee.jobProfileId?.jobProfileName);
     setInputBoxGroupValue(singleEmployee.groupId?.groupName);
-    setInputBoxEmailValue(singleEmployee.email);
     setInputBoxContactNumberValue(singleEmployee.contactNumber);
+    setInputBoxEmailValue(singleEmployee.email);
     setInputBoxGenderValue(singleEmployee.gender);
     setInputBoxAadharValue(singleEmployee.aadharNumber);
     setInputBoxSalaryValue(singleEmployee.salary);
@@ -180,9 +180,9 @@ const EditProfile = () => {
           setShowInputBoxEmployeeCode(false);
           setShowInputBoxJobProfile(false);
           setShowInputBoxGroup(false);
-          setShowInputBoxEmail(false);
           setShowInputBoxPassword(false);
           setShowInputBoxContactNumber(false);
+          setShowInputBoxEmail(false);
           setShowInputBoxGender(false);
           setShowInputBoxAadhar(false);
           setShowInputBoxSalary(false);
@@ -1157,6 +1157,8 @@ const EditProfile = () => {
               </div>
             </div>
           )}
+
+
           {!showInputBoxWorkingDays && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">
@@ -1216,6 +1218,7 @@ const EditProfile = () => {
               </div>
             </div>
           )}
+
           {!showInputBoxWorkingHours && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">
