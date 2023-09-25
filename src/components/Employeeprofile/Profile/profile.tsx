@@ -185,7 +185,7 @@ export const EmployeeProfile = () => {
         }
     }
     const changetime = (createdAtDate: any) => {
-        // console.log(createdAtDate)
+        
         const date = new Date(createdAtDate)
         const hours = date.getUTCHours(); // Get the hours in UTC
         const minutes = date.getUTCMinutes();

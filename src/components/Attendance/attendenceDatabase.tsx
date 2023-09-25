@@ -70,16 +70,14 @@ export const AttendenceDtabase = () => {
     setIsImageOpen(false);
   };
   const changetime = (createdAtDate: any) => {
-    // console.log(createdAtDate)
+    //console.log(createdAtDate)
     const date = new Date(createdAtDate)
-    const hours = date.getHours(); // Get the hours in UTC
-    const minutes = date.getMinutes();
+    const hours = date.getUTCHours(); // Get the hours in UTC
+    const minutes = date.getUTCMinutes();
     const period = hours >= 12 ? "PM" : "AM";
 
-    // Convert to 12-hour format
     const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
     const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     return formattedTime;
   }
