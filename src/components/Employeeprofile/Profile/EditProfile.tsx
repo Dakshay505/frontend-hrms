@@ -87,7 +87,6 @@ const EditProfile = () => {
   const [pancardNumber, setPancardNumber] = useState('')
 
     
-  const [pancardNumber,setPancardNumber]=useState('')
 
   const [showInputBoxOverTime, setShowInputBoxOverTime] = useState(false);
   const [isValidAadhar, setIsValidAadhar] = useState(false);
