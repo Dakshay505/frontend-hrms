@@ -73,6 +73,7 @@ import SalaryJobProfilebyDepartment from "./components/Salary/SalaryDepartment/S
 import SalaryEmployee from "./components/Salary/SalaryDepartment/SalaryEmployee";
 import { Shop } from "./components/Dashboard/Shop";
 import { EditShop } from "./components/Dashboard/EditShop";
+import { NewProfile } from "./new EMployee Profile/NewProfile";
 
 const router = createBrowserRouter([
   {
@@ -379,6 +380,16 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/new-profile-employee",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <NewProfile/>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
     path: "/requesting-document",
     element: (
       <ProductedRoute>
@@ -589,6 +600,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   }, 
+ 
   {
     path: "*",
     element: (
