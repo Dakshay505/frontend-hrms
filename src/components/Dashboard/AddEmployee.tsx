@@ -568,7 +568,7 @@ const AddEmployee = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div className='flex gap-10'>
+                                <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
                                             <p className='text-sm font-normal text-[#1C1C1C]'>Working Days</p>
@@ -614,7 +614,7 @@ const AddEmployee = () => {
                                             </select>
                                         </div>
                                     </div>
-                                </div> */}
+                                </div> 
                                 <div className='flex gap-10'>
                                     <div className='flex flex-col gap-3'>
                                         <div>
