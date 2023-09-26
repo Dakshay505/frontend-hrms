@@ -43,6 +43,11 @@ export const EmployeeProfile = () => {
     const [deleteId, setDeleteId] = useState("")
     const [punchOutDate, setPunchOutDate] = useState("")
     const [updateDate, setUpdateDate] = useState("")
+    const [remark,Setremark]=useState("")
+    const handleCloseImage = () => {
+        setIsImageOpen(false);
+      };
+    
 
     function formatDate(date: any) {
         const year = date.getFullYear();
@@ -229,10 +234,16 @@ export const EmployeeProfile = () => {
         if (PuchIn === "") {
             toast.error("PunchIn is required")
             return
-        } else {
+        }
+        else if(remark===""){
+            toast.error("Remarks is required")
+            return
+
+        } 
+        else {
 
             setShowAddPopup(false)
-            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null,remarks:remark, "id": singleEmployee._id }
             console.log(data)
             // console.log(singleEmployee._id)
 
@@ -244,6 +255,7 @@ export const EmployeeProfile = () => {
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
+                    Setremark("")
 
                 } else {
                     toast.error(res.payload.message)
@@ -261,9 +273,14 @@ export const EmployeeProfile = () => {
         else if (punchOutDate === "") {
             toast.error("Punchout Date is required")
         }
+        else if(remark===""){
+            toast.error("Remarks is required")
+            return
+
+        } 
         else {
             setUpdatePopup(false)
-            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id,remarks:remark}
             console.log(data)
             // console.log(singleEmployee._id)
 
@@ -274,6 +291,7 @@ export const EmployeeProfile = () => {
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
+                    Setremark("")
                     refresh()
                 } else {
                     toast.error(res.payload.message)
@@ -288,6 +306,14 @@ export const EmployeeProfile = () => {
 
     const [showQrRow, setShowQrRow] = useState<any>([]);
     const [maxDate, setMaxDate] = useState('');
+    const [isImageOpen, setIsImageOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState("");
+  
+    const handleImageClick = (imageSrc: any) => {
+      setSelectedImage(imageSrc);
+      setIsImageOpen(true);
+    };
+  
 
     useEffect(() => {
         // Get the current date in YYYY-MM-DD format
@@ -400,7 +426,7 @@ export const EmployeeProfile = () => {
                 {showAddPopup && (
 
                     <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
-                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[590px] p-6 rounded-lg">
+                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
 
                             <div className="flex justify-between">
 
@@ -420,10 +446,10 @@ export const EmployeeProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="flex justify-items-center items-center h-[495px] w-[540px] flex-col  gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                            <div className="flex justify-items-center items-center h-[530px] w-[520px] flex-col  gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                 <div className="flex flex-col gap-[7px]">
                                     <span className="text-[#2A3143]">Employee Name</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
 
                                     </div>
@@ -433,21 +459,21 @@ export const EmployeeProfile = () => {
                                 </div>
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">Date</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={date} onChange={(event) => setDate(event.target.value)} max={maxDate} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">PuchIn Time</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={PuchIn} onChange={(event) => setPunchIn(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">PuchOut Date</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                     </div>
@@ -455,8 +481,15 @@ export const EmployeeProfile = () => {
 
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">PuchOut Time</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-[10px] mb-6">
+                                    <span className="text-[#2A3143]">Remark</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <input value={remark} onChange={(event) => Setremark(event.target.value)} type="text" className="focus:outline-none" required />
 
                                     </div>
                                 </div>
@@ -506,7 +539,8 @@ export const EmployeeProfile = () => {
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch In</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
-                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photo</td>
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                 //console.log("ghghgh", element.status)
@@ -522,8 +556,8 @@ export const EmployeeProfile = () => {
                                     return <>
                                         {updatePopUp && (
 
-                                            <div className="fixed inset-0  flex z-50 items-center justify-center  bg-opacity-80 rounded-md">
-                                                <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[590px] p-6 rounded-lg">
+<div className="fixed inset-0  flex z-50 items-center justify-center bg-opacity-100 rounded-md">
+<div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
 
                                                     <div className="flex justify-between">
 
@@ -542,10 +576,10 @@ export const EmployeeProfile = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex h-[495px] w-[540px] flex-col justify-items-center items-center gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                                                    <div className="flex h-[530px] w-[540px] flex-col justify-items-center items-center gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                                         <div className="flex flex-col gap-[7px]">
                                                             <span className="text-[#2A3143]">Employee Name</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
 
                                                             </div>
@@ -555,32 +589,39 @@ export const EmployeeProfile = () => {
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">Date</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={dated} type="date" placeholder="e.g.Steel" className="focus:outline-none" readOnly />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchIn Time</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={PuchIn} onChange={(event) => setPunchIn(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Date</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Time</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                                             </div>
                                                         </div>
+                                                        <div className="flex flex-col gap-[10px] mb-6">
+                                    <span className="text-[#2A3143]">Remark</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <input value={remark} onChange={(event) => Setremark(event.target.value)} type="text" className="focus:outline-none" required />
+
+                                    </div>
+                                </div>
 
 
                                                     </div>
@@ -675,6 +716,32 @@ export const EmployeeProfile = () => {
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.approvedBy?.name
                                                 ? element.approvedBy?.name
                                                 : "-"}</td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        {element?.status === "approved" &&
+                          element.approvedImage && (
+                            <div className="flex gap-[10px] cursor-pointer">
+                              <div>
+                                <p
+                                  className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                  onClick={() =>
+                                    handleImageClick(
+                                      element.approvedImage
+                                    )
+                                  }
+                                >
+                                  Open Photo
+                                </p>
+                              </div>
+                              <div>
+                                <img
+                                  src={ArrowSqureOut}
+                                  className="w-[14px] h-[14px]"
+                                  alt="arrowsqureout"
+                                />
+                              </div>
+                            </div>
+                          )}
+                      </td>    
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>
@@ -712,6 +779,21 @@ export const EmployeeProfile = () => {
                                     </>
                                 }
                             })}
+                             {isImageOpen && (
+            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+              <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+              <button
+                className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
+                onClick={handleCloseImage}
+              >
+                <img
+                  src={close}
+                  alt=""
+                  className="h-[25px] w-[25px] bg-white rounded-full "
+                />
+              </button>
+            </div>
+          )}
                         </tbody>
                     </table>
                 </div>

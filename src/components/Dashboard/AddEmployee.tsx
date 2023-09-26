@@ -370,7 +370,7 @@ const AddEmployee = () => {
                                     <input
                                         type="number"
                                         value={aadharNumber}
-                                        {...register('aadharNumber', { required: "Aadhar No. required" })}
+                                        {...register('aadharNumber')}
                                         pattern={'^\d{12,13}$'}
                                         required
                                         className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'
@@ -392,7 +392,7 @@ const AddEmployee = () => {
                                        
                                         type="text"
                                         value={pancardNumber}
-                                        {...register('PAN_Number', { required: "PanCard No. required" })}
+                                        {...register('PAN_Number')}
                                        
                                        
                                         className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px] focus:outline-none'

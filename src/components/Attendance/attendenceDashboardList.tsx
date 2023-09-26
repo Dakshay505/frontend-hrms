@@ -50,6 +50,7 @@ export const AttendenceDashboardList = () => {
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
+  const [loading,Setloading]=useState(false)
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -181,6 +182,7 @@ export const AttendenceDashboardList = () => {
       }
     }
    setShopName("")
+   Setloading(true)
     localStorage.setItem("jobProfileName", filter.jobProfileName)
     localStorage.setItem("groupName", filter.groupName)
     localStorage.setItem("departmentName", filter.departmentName)
@@ -192,10 +194,12 @@ export const AttendenceDashboardList = () => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
         setItems(employeeData);
+        Setloading(false)
       }
       else {
         const filteredItems = employeeData.filter((element: any) => element.status === status);
         setItems(filteredItems)
+        Setloading(false)
       }
     });
   }, [filter, status]);
@@ -301,7 +305,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {items.length}
+                    {loading?0:items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
                 </div>
@@ -312,7 +316,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {totalEmployees - items.length}
+                    {loading?0:totalEmployees - items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
                 </div>
@@ -323,7 +327,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {totalEmployees}
+                    {loading?0:totalEmployees}
                   </span>
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
@@ -537,7 +541,7 @@ export const AttendenceDashboardList = () => {
                 Marked By{" "}
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                All Shops{" "}
+               Shop
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Photos
@@ -666,8 +670,8 @@ export const AttendenceDashboardList = () => {
                       </td>
 
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" && selectedShop !== "All Shop" && (
-                          <div>{selectedShop}</div>
+                        {element?.status === "approved"  && (
+                          <div>{selectedShop !== "All Shop"?selectedShop:"-"}</div>
                         )}
                       </td>
 
