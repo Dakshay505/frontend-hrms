@@ -73,14 +73,14 @@ const EditProfile = () => {
   const [showInputBoxPancard,setShowInputBoxPancard]=useState(false);
   const [inputBoxLunchTimeValue, setInputBoxLunchTimeValue] = useState<any>("");
  
-  // const [showInputBoxWorkingDays, setShowInputBoxWorkingDays] = useState(false);
-  // const [inputBoxWorkingDaysValue, setInputBoxWorkingDaysValue] =
-  //   useState<any>("");
+  const [showInputBoxWorkingDays, setShowInputBoxWorkingDays] = useState(false);
+  const [inputBoxWorkingDaysValue, setInputBoxWorkingDaysValue] =
+    useState<any>("");
 
-  // const [showInputBoxWorkingHours, setShowInputBoxWorkingHours] =
-  //   useState(false);
-  // const [inputBoxWorkingHoursValue, setInputBoxWorkingHoursValue] =
-  //   useState<any>("");
+  const [showInputBoxWorkingHours, setShowInputBoxWorkingHours] =
+    useState(false);
+  const [inputBoxWorkingHoursValue, setInputBoxWorkingHoursValue] =
+    useState<any>("");
     
   const [pancardNumber,setPancardNumber]=useState('')
   const [showInputBoxOverTime, setShowInputBoxOverTime] = useState(false);
@@ -107,8 +107,8 @@ const EditProfile = () => {
     setInputBoxAadharValue(singleEmployee.aadharNumber);
     setInputBoxSalaryValue(singleEmployee.salary);
     setInputBoxLunchTimeValue(singleEmployee.lunchTime);
-    // setInputBoxWorkingDaysValue(singleEmployee.workingDays);
-    // setInputBoxWorkingHoursValue(singleEmployee.workingHours);
+    setInputBoxWorkingDaysValue(singleEmployee.workingDays);
+    setInputBoxWorkingHoursValue(singleEmployee.workingHours);
     setInputBoxOverTimeValue(singleEmployee.overTime);
     setPancardNumber(singleEmployee.PAN_Number)
     setBankDetail({
@@ -187,8 +187,8 @@ const EditProfile = () => {
           setShowInputBoxAadhar(false);
           setShowInputBoxSalary(false);
           setShowInputBoxLunchTime(false);
-          // setShowInputBoxWorkingDays(false);
-          // setShowInputBoxWorkingHours(false);
+          setShowInputBoxWorkingDays(false);
+          setShowInputBoxWorkingHours(false);
           setShowInputBoxOverTime(false);
           setInputBankDeatils(false)
           setShowInputBoxPancard(false)
@@ -1159,7 +1159,7 @@ const EditProfile = () => {
           )}
 
 
-          {/* {!showInputBoxWorkingDays && (
+         {!showInputBoxWorkingDays && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">
                 <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
@@ -1270,7 +1270,7 @@ const EditProfile = () => {
                 </button>
               </div>
             </div>
-          )} */}
+          )} 
           {!showInputBoxOverTime && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">
