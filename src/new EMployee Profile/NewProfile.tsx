@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
-import NewPicture from './newEmployeePicture'
-import { EmployeeDetails } from './Components/EmployeeDetails';
-import { PersonalDetails } from './Components/PersonalDetails';
-import { BankDetails } from './Components/BankDetails';
+import NewPicture from './Components/newEmployeePicture'
+import { EmployeeDetails } from './Components/navButtons/EmployeeDetails';
+import { PersonalDetails } from './Components/navButtons/PersonalDetails';
+import { BankDetails } from './Components/navButtons/BankDetails';
 import SalaryLog from '../components/Employeeprofile/Profile/SalaryLog';
 import { useDispatch, useSelector } from 'react-redux';
 import ArrowSqureOut from '../assets/ArrowSquareOut.svg'
-
 import X from "../assets/X.svg";
 import { getQrAssignAsync, salaryLogAsync } from '../redux/Slice/EmployeeSlice';
-import ArrowSqureOutBlack from '../assets/ArrowSquareOutBlack.svg'
-import DocumentFrame from '../assets/documentFrame.svg'
 import { EmployeeAttendance } from './Components/EmployeeAttendance';
+import { EmployeeDocuments } from './Components/navButtons/Documents/EmployeeDocuments';
+
 export const NewProfile = () => {
     const dispatch = useDispatch();
 
@@ -51,29 +50,6 @@ export const NewProfile = () => {
     }, [singleEmployee])
 
 
-    // documents
-    const documentList = [
-        {
-            documentName: "Resume.pdf"
-        },
-        {
-            documentName: "Resume.pdf"
-        },
-        {
-            documentName: "Resume.pdf"
-        },
-        {
-            documentName: "Resume.pdf"
-        },
-        {
-            documentName: "Resume.pdf"
-        },
-        {
-            documentName: "Resume.pdf"
-        },
-    ]
-
-
     return (
         <div className='px-[40px] pb-[50px] pt-[32px]'>
             <div className='flex gap-[31px]'>
@@ -107,6 +83,16 @@ export const NewProfile = () => {
                         >
                             Bank Detail
                         </button>
+                        
+                        <button
+                            className={`p-2 ${activeTab === 'documents'
+                                ? 'text-[#283093] underline font-medium'
+                                : 'text-black'
+                                }`}
+                            onClick={() => toggleTab('documents')}
+                        >
+                          Documents
+                        </button>
                     </div>
 
 
@@ -122,13 +108,15 @@ export const NewProfile = () => {
                         {activeTab === 'bank' && (
                             <div className="p-[16px]"><BankDetails /></div>
                         )}
+
+                        {activeTab === 'documents' && (
+                            <div className="p-[16px]"><EmployeeDocuments/></div>
+                        )}
                     </div>
 
                 </div>
             </div>
             <SalaryLog />
-
-
 
             {/* QR Assigning Logs STARTS HERE */}
             {qrAssign && qrAssign.length > 0 && <div className='mt-10'>
@@ -174,24 +162,7 @@ export const NewProfile = () => {
             {/* QR Assigning Logs ENDS HERE */}
 
 
-            {/* DOCUMENT CODE STARTS HERE */}
-            <div className='my-10'>
-                <div className='flex gap-3 items-center'>
-                    <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Documents</h1>
-                    <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
-                </div>
-                <div className='mt-6 pb-6 overflow-auto'>
-                    <div className='flex gap-5'>
-                        {documentList && documentList.map((element: any, index: any) => {
-                            return <div key={index} className='min-w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
-                                <img src={DocumentFrame} className='w-full' alt="" />
-                                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.documentName}</p>
-                            </div>
-                        })}
-                    </div>
-                </div>
-            </div>
-            {/* DOCUMENT CODE ENDS HERE */}
+
 
             <EmployeeAttendance/>
         </div>

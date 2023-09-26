@@ -1,5 +1,4 @@
-import check from "../../assets/Check.png"
-import WarningCircle from "../../assets/WarningCircle.svg";
+import check from "../../../assets/Check.png"
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,8 @@ import {
   getSingleEmployeeAsync,
 
   updateEmployeeAsync,
-} from "../../redux/Slice/EmployeeSlice";
+} from "../../../redux/Slice/EmployeeSlice";
+import { Otp } from "../otp";
 
 
 
@@ -85,22 +85,7 @@ export const PersonalDetails = () => {
       </div>
 
       <div className="flex flex-col gap-[16px]">
-        <div className="flex gap-[10px] items-center bg-[#FCECEC] rounded-lg p-4">
-          <div>
-            <img src={WarningCircle} className="w-[20px] h-[20px]" alt="" />
-          </div>
-          <div>
-            <p className="text-sm leading-4 font-medium text-[#8A2626]">
-              Contact number is not verified!{" "}
-              <span
-
-                className="underline underline-offset-2 cursor-pointer"
-              >
-                Verify Now
-              </span>
-            </p>
-          </div>
-        </div>
+     <Otp/>
 
 
 

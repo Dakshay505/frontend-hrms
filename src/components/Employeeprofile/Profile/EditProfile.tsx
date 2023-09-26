@@ -99,7 +99,7 @@ const EditProfile = () => {
     branch: "",
     accountNumber: "",
     IFSC_Code: ""
-  });
+  }); 
   useEffect(() => {
     setEmployeeId(singleEmployee._id);
     setInputBoxNameValue(singleEmployee.name);
@@ -1412,6 +1412,8 @@ const EditProfile = () => {
                 </div>
 
               </div>
+
+
               <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                 <div className="flex flex-col">
                   <div className="flex gap-3">
@@ -1438,6 +1440,8 @@ const EditProfile = () => {
                 </div>
 
               </div>
+
+
               <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                 <div className="flex flex-col">
                   <div className="flex gap-3">
@@ -1464,6 +1468,8 @@ const EditProfile = () => {
                 </div>
 
               </div>
+
+              
               <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
                 <div className="flex flex-col">
                   <div className="flex gap-3">

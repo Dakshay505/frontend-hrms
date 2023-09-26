@@ -76,7 +76,7 @@ export const EmpViewdoc = () => {
             </div>
           </div>
         </div>
-      </form>
+      </form> 
     </div>
   );
 };

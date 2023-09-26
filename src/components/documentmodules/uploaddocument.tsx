@@ -131,7 +131,7 @@ export const Uploaddocument = () => {
                                 {selectedFile ? (
                                     <div className="flex items-center justify-center border border-dashed border-[#DEDEDE] bg-[#FAFAFA] w-[300px] h-14 rounded-sm">
                                         <span className="text-[12px] leading-5 font-normal text-[#666666]">{selectedFile.name}</span>
-                                        <button onClick={handleFileReset}>
+                                         <button onClick={handleFileReset}>
                                             <img src={X} />
                                         </button>
                                     </div>

@@ -190,16 +190,10 @@ export const EmployeeProfile = () => {
         const hours = date.getUTCHours(); // Get the hours in UTC
         const minutes = date.getUTCMinutes();
         const period = hours >= 12 ? "PM" : "AM";
-
         // Convert to 12-hour format
         const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
         const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-
-
-
-
         return formattedTime;
     }
     const handleDeleteSumbit = () => {
@@ -212,18 +206,11 @@ export const EmployeeProfile = () => {
             if (res.payload.success) {
                 toast.success("Punch delete sucessfully")
                 refresh()
-
-
-
             } else {
                 toast.error(res.payload.message)
                 refresh()
-
             }
-
-
         })
-
     }
     const handleSumbit = () => {
         if (PuchIn === "") {
@@ -240,17 +227,12 @@ export const EmployeeProfile = () => {
                 if (res.payload.success) {
                     toast.success("Punch add sucessfully")
                     refresh()
-
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
-
                 } else {
                     toast.error(res.payload.message)
-
                 }
-
-
             })
         }
     }
@@ -290,10 +272,7 @@ export const EmployeeProfile = () => {
     const [maxDate, setMaxDate] = useState('');
 
     useEffect(() => {
-        // Get the current date in YYYY-MM-DD format
         const currentDate = new Date().toISOString().split('T')[0];
-
-        // Set the maxDate state to the current date
         setMaxDate(currentDate);
     }, []);
 
