@@ -35,10 +35,10 @@ export const AttendenceDashboardList = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  // const departmentList=useSelector((state:any)=>state.department.department)
-  //   const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
-  //   a.departmentName.localeCompare(b.departmentName)
-  // );
+  const departmentList=useSelector((state:any)=>state.department.department)
+    const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+    a.departmentName.localeCompare(b.departmentName)
+  );
 
   const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
     a.jobProfileName.localeCompare(b.jobProfileName)
@@ -74,7 +74,7 @@ export const AttendenceDashboardList = () => {
     name: "",
     groupName: localStorage.getItem("groupName") || "",
     jobProfileName: localStorage.getItem("jobProfileName") || "",
-    
+    departmentName:localStorage.getItem("departmentName") || "",
     date: "",
     nextDate: "",
     page: 1,
@@ -183,6 +183,8 @@ export const AttendenceDashboardList = () => {
    setShopName("")
     localStorage.setItem("jobProfileName", filter.jobProfileName)
     localStorage.setItem("groupName", filter.groupName)
+    localStorage.setItem("departmentName", filter.departmentName)
+     
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     dispatch(getAllEmployeeAsync(filter))
@@ -337,7 +339,7 @@ export const AttendenceDashboardList = () => {
 
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <div>
               <select
                 onChange={(event) => {
@@ -354,7 +356,7 @@ export const AttendenceDashboardList = () => {
                   }
                 }}
                 value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 w-[280px] text-sm font-medium text-[#2E2E2E] min-w-[160px] px-2 focus:outline-none"
               >
                 <option value="All Groups">All Groups</option>
                 {sortedgroupList &&
@@ -396,7 +398,35 @@ export const AttendenceDashboardList = () => {
                   })}
               </select>
             </div>
-
+            <div>
+              <select
+                onChange={(event) => {
+                  if (event.target.value === "All Department") {
+                    setFilter({
+                      ...filter,
+                      departmentName: "",
+                    });
+                  } else {
+                    setFilter({
+                      ...filter,
+                      departmentName: event.target.value,
+                    });
+                  }
+                }}
+                value={filter.departmentName}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              >
+                <option value="All Department">All Department</option>
+                {sortedDepartmentList &&
+                 sortedDepartmentList.map((element: any, index: number) => {
+                    return (
+                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
+                        {element.departmentName}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
             <div>
               <select
                 onChange={handleShopChange}
@@ -432,7 +462,13 @@ export const AttendenceDashboardList = () => {
             </div>
           </div>
           <div>
-            <div className="relative">
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div className="relative mt-4">
               {isLabelVisible && (
                 <div className="absolute top-[10px] left-6">
                   <label
@@ -472,9 +508,6 @@ export const AttendenceDashboardList = () => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      </div>
 
 
       <div className="py-6 mb-24 overflow-auto">
