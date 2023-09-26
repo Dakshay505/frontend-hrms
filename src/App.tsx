@@ -74,6 +74,7 @@ import SalaryEmployee from "./components/Salary/SalaryDepartment/SalaryEmployee"
 import { Shop } from "./components/Dashboard/Shop";
 import { EditShop } from "./components/Dashboard/EditShop";
 import { NewProfile } from "./new EMployee Profile/NewProfile";
+import AddWorkDay from "./components/Dashboard/AddWorkday";
 
 const router = createBrowserRouter([
   {
@@ -118,6 +119,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <AddGroup />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/add-workday",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <AddWorkDay/>
         </Aside>
       </ProductedRoute>
     ),

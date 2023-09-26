@@ -35,10 +35,10 @@ export const AttendenceDashboardList = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  // const departmentList=useSelector((state:any)=>state.department.department)
-  //   const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
-  //   a.departmentName.localeCompare(b.departmentName)
-  // );
+  const departmentList=useSelector((state:any)=>state.department.department)
+    const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+    a.departmentName.localeCompare(b.departmentName)
+  );
 
   const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
     a.jobProfileName.localeCompare(b.jobProfileName)
@@ -50,6 +50,7 @@ export const AttendenceDashboardList = () => {
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
+  const [loading,Setloading]=useState(false)
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -74,7 +75,7 @@ export const AttendenceDashboardList = () => {
     name: "",
     groupName: localStorage.getItem("groupName") || "",
     jobProfileName: localStorage.getItem("jobProfileName") || "",
-    
+    departmentName:localStorage.getItem("departmentName") || "",
     date: "",
     nextDate: "",
     page: 1,
@@ -181,8 +182,11 @@ export const AttendenceDashboardList = () => {
       }
     }
    setShopName("")
+   Setloading(true)
     localStorage.setItem("jobProfileName", filter.jobProfileName)
     localStorage.setItem("groupName", filter.groupName)
+    localStorage.setItem("departmentName", filter.departmentName)
+     
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     dispatch(getAllEmployeeAsync(filter))
@@ -190,10 +194,12 @@ export const AttendenceDashboardList = () => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
         setItems(employeeData);
+        Setloading(false)
       }
       else {
         const filteredItems = employeeData.filter((element: any) => element.status === status);
         setItems(filteredItems)
+        Setloading(false)
       }
     });
   }, [filter, status]);
@@ -299,7 +305,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {items.length}
+                    {loading?0:items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
                 </div>
@@ -310,7 +316,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {totalEmployees - items.length}
+                    {loading?0:totalEmployees - items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
                 </div>
@@ -321,7 +327,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {totalEmployees}
+                    {loading?0:totalEmployees}
                   </span>
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
@@ -337,7 +343,7 @@ export const AttendenceDashboardList = () => {
 
       <div className=" flex pt-6 justify-between items-center self-stretch ">
         <div className="flex gap-5">
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <div>
               <select
                 onChange={(event) => {
@@ -354,7 +360,7 @@ export const AttendenceDashboardList = () => {
                   }
                 }}
                 value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 w-[280px] text-sm font-medium text-[#2E2E2E] min-w-[160px] px-2 focus:outline-none"
               >
                 <option value="All Groups">All Groups</option>
                 {sortedgroupList &&
@@ -396,7 +402,35 @@ export const AttendenceDashboardList = () => {
                   })}
               </select>
             </div>
-
+            <div>
+              <select
+                onChange={(event) => {
+                  if (event.target.value === "All Department") {
+                    setFilter({
+                      ...filter,
+                      departmentName: "",
+                    });
+                  } else {
+                    setFilter({
+                      ...filter,
+                      departmentName: event.target.value,
+                    });
+                  }
+                }}
+                value={filter.departmentName}
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              >
+                <option value="All Department">All Department</option>
+                {sortedDepartmentList &&
+                 sortedDepartmentList.map((element: any, index: number) => {
+                    return (
+                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
+                        {element.departmentName}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
             <div>
               <select
                 onChange={handleShopChange}
@@ -432,7 +466,13 @@ export const AttendenceDashboardList = () => {
             </div>
           </div>
           <div>
-            <div className="relative">
+            
+          </div>
+          
+        </div>
+        
+      </div>
+      <div className="relative mt-4">
               {isLabelVisible && (
                 <div className="absolute top-[10px] left-6">
                   <label
@@ -472,9 +512,6 @@ export const AttendenceDashboardList = () => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-      </div>
 
 
       <div className="py-6 mb-24 overflow-auto">
@@ -504,7 +541,7 @@ export const AttendenceDashboardList = () => {
                 Marked By{" "}
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                All Shops{" "}
+               Shop
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Photos
@@ -633,8 +670,8 @@ export const AttendenceDashboardList = () => {
                       </td>
 
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" && selectedShop !== "All Shop" && (
-                          <div>{selectedShop}</div>
+                        {element?.status === "approved"  && (
+                          <div>{selectedShop !== "All Shop"?selectedShop:"-"}</div>
                         )}
                       </td>
 
