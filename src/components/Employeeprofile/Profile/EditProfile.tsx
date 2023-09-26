@@ -90,6 +90,7 @@ const EditProfile = () => {
     const [InputBankDeatils, setInputBankDeatils] =
     useState<any>(false);
   const [bankdetails, setBankDetail] = useState({
+
       bankName:"",
       branch:"",
       accountNumber:"",
@@ -1365,6 +1366,7 @@ const EditProfile = () => {
                   <img src={check} className="w-4 h-4" alt="" />
                 </button>
               </div>
+
             </div>
             <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
               <div className="flex flex-col">
@@ -1391,8 +1393,10 @@ const EditProfile = () => {
                    />
                    
                  
+
                 </div>
               </div>
+
               
             </div>
             <div className="flex justify-between p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">

@@ -242,12 +242,14 @@ export const EmployeeAttendance = () => {
     return (
         <div> {/* Attendance Starts here */}
             <div className='py-8'>
-                <div className='flex gap-3 items-center'>
-                    <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Attendance</h1>
-                    <Link to="/attendance-database">
-                        <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
-                    </Link>
-                    <div onClick={() => setShowAddPopup(true)} className="flex gap-[5px] mx-[640px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
+                <div className='flex gap-3 justify-between items-center'>
+                    <div className='flex gap-[10px] items-center'>
+                        <h1 className='text-2xl font-bold text-[#2E2E2E]'>Employee Attendance</h1>
+                        <Link to="/attendance-database">
+                            <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
+                        </Link>
+                    </div>
+                    <div onClick={() => setShowAddPopup(true)} className="flex cursor-pointer gap-[5px]  items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                         <img src={plus} className="w-[12px] h-[12px]" alt="plus" />
                         <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Add</p>
                     </div>

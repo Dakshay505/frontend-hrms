@@ -1,15 +1,17 @@
+
 //export const apiPath = `http://localhost:5050`;
 
 
 
 export const apiPath = ``;
 
+// export const apiPath = ``;
 
 
 
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 
-//export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `https://chawlacomponents.com`;
 
 
 
@@ -52,6 +54,7 @@ export const updateHierarchyGroupApiPath = `${apiPath}/api/v1/group/update/hr`;
 // UPLOAD DOCUMENT
 export const uploadImageApiPath = `${apiPath}/api/v1/employee/docs/uploadImage`;
 export const uploadDocumentApiPath = `${apiPath}/api/v1/employee/docs/upload`;
+export const uploadEmployeeDocumentApiPath = `${apiPath}/api/v1/employee/docs/uploadEmpDoc`;
 
 // LOGIN API
 export const adminLoginApiPath = `${apiPath}/api/v1/auth/admin/login`;

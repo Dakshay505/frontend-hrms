@@ -90,7 +90,7 @@ const ViewDoc: React.FC = () => {
         </div>
       </div>
       {/* DOCUMENT CODE ENDS HERE */}
-    </div>
+    </div> 
   );
 };
 
