@@ -1,9 +1,10 @@
-import React, { useEffect} from 'react';
+import React, { useEffect } from 'react';
 import upload from "../../assets/UploadSimple.png";
 // import { useLocation } from 'react-router-dom';
 import DocumentFrame from '../../assets/documentFrame.svg'
 import { useDispatch, useSelector } from 'react-redux';
-import { getEmployeeImageAsync } from '../../redux/Slice/EmployeeSlice';
+import { getEmployeeImageAsync, getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
+
 // import { addDocumentsAsync } from "../../redux/Slice/EmployeeSlice";
 // interface Document {
 //   id: string;
@@ -16,14 +17,18 @@ const ViewDoc: React.FC = () => {
   // const location = useLocation();
   // const [EmployeeName, setEmployeeName] = useState(location.state?.name);
   // const [EmployeeId, setEmployeeId] = useState(location.state?.empId);
-  const documentList = useSelector((state: any) => state.employee.singleEmployee?.profileId?.document);
-  console.log("singleEmployee",documentList)
-  const data={
+  const documentList = useSelector((state: any) => state.employee.singleEmployee?.docs);
+  const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+  console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", singleEmployee)
+
+  console.log("singleEmployee", documentList)
+  const data = {
     // employeeId:EmployeeId
   }
   useEffect(() => {
     dispatch(getEmployeeImageAsync(data));
-  },[])
+    dispatch(getSingleEmployeeAsync())
+  }, [])
   //   const handleFormSubmit = (data: any) => {
   //     const formData = new FormData();
   //     formData.append('file', selectedFile);
@@ -38,8 +43,6 @@ const ViewDoc: React.FC = () => {
 
   // const [selectedFile, setSelectedFile] = useState<any>(null);
 
- 
-
 
   return (
     <div className="flex items-stretch pt-[32px] px-0 py-[40px] w-[770px] gap-[40px] flex-col">
@@ -49,9 +52,15 @@ const ViewDoc: React.FC = () => {
             <p className="text-[#2E2E2E] text-2xl font-inter font-bold leading-8">
               Viewing Documents
             </p>
-            <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
-              {/* For {EmployeeName} */}
-            </p>
+            <div className='flex justify-between'>
+
+              <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
+                {singleEmployee.name}
+              </p>
+              {/* <p className="text-[#2E2E2E] text-xl font-inter font-semibold leading-8">
+                {singleEmployee.mCode}
+              </p> */}
+            </div>
           </div>
           <div className="flex items-center gap-[20px]">
             <label className="text-primary-blue border-2 border-primary-blue rounded-md items-center gap-[5px] cursor-pointer flex px-[16px] py-[12px] bg-white font-semibold">
@@ -74,14 +83,14 @@ const ViewDoc: React.FC = () => {
             {documentList && documentList.map((element: any, index: any) => {
               return <div key={index} className='w-[210px] rounded-[7px] border-[0.83px] border-solid border-[#9198F7]'>
                 <img src={DocumentFrame} className='w-full' alt="" />
-                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.docsName? element.docsName:"Documnet"}</p>
+                <p className='flex justify-center bg-[#ECEDFE] items-center py-[13px] px-7 text-[13px] leading-4 font-medium text-[#2E2E2E] rounded-b-md'>{element.docsName ? element.docsName : "Documnet"}</p>
               </div>
             })}
           </div>
         </div>
       </div>
       {/* DOCUMENT CODE ENDS HERE */}
-    </div>
+    </div> 
   );
 };
 
