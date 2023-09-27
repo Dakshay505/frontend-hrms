@@ -322,14 +322,14 @@ export const AttendenceDtabase = () => {
 
 
                         </td>
-                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
+                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
                           <div className="flex flex-col">
 
-                            <p onClick={() => handleTableRowClick(element)} className="font-medium">{element.employeeId?.name
+                            <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
                               ? element.employeeId?.name
                               : "Not Avilable"}</p>
 
-                            <p onClick={() => handleTableRowClick(element)} className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                            <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
                               ? element.employeeId.jobProfileId?.jobProfileName
                               : "Not Avilable"}</p>
 
@@ -362,7 +362,7 @@ export const AttendenceDtabase = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
                             ? changetime(latestPunches.punchOut)
-                            : "Not Avilable"}
+                            : "-"}
                         </td>
                         <td className="py-4 px-5">
                           {element?.status === "approved" && (
