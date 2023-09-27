@@ -96,7 +96,7 @@ export const BankDetails = () => {
 
       <div className="flex justify-between items-center">
         <h1 className="text-[18px] font-bold text-[#2E2E2E]">Bank Details</h1>
-        <button type="submit" className="flex gap-[5px] bg-[#414EF1] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
+        <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
           <img src={check} alt="" className="w-[16px] h-[16px]" />
           Save
         </button>

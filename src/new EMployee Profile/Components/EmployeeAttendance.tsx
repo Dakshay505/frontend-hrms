@@ -40,7 +40,6 @@ export const EmployeeAttendance = () => {
     const [popup, setPopUp] = useState(false)
     const [deletePopup, setDeletePopup] = useState(false)
     const handlePopup = (d: any, element: any, updateDate: any) => {
-        console.log("fjhfjhgfjhf", element)
         setDated(d)
         setDeleteId(element._id)
         setUpdateDate(updateDate)
@@ -132,10 +131,6 @@ export const EmployeeAttendance = () => {
         const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
         const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
-
-
-
-
         return formattedTime;
     }
     const handleDeleteSumbit = () => {
@@ -149,17 +144,12 @@ export const EmployeeAttendance = () => {
                 toast.success("Punch delete sucessfully")
                 refresh()
 
-
-
             } else {
                 toast.error(res.payload.message)
                 refresh()
 
             }
-
-
         })
-
     }
     const handleSumbit = () => {
         if (PuchIn === "") {
@@ -176,17 +166,12 @@ export const EmployeeAttendance = () => {
                 if (res.payload.success) {
                     toast.success("Punch add sucessfully")
                     refresh()
-
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
-
                 } else {
                     toast.error(res.payload.message)
-
                 }
-
-
             })
         }
     }
@@ -214,11 +199,7 @@ export const EmployeeAttendance = () => {
                     refresh()
                 } else {
                     toast.error(res.payload.message)
-
-
                 }
-
-
             })
         }
     }
@@ -232,13 +213,6 @@ export const EmployeeAttendance = () => {
         // Set the maxDate state to the current date
         setMaxDate(currentDate);
     }, []);
-
-
-
-
-
-
-
     return (
         <div> {/* Attendance Starts here */}
             <div className='py-8'>
@@ -317,19 +291,9 @@ export const EmployeeAttendance = () => {
 
                                     </div>
                                 </div>
-
-
                             </div>
-
-
-
-
                         </div>
                     </div>
-
-
-
-
                 )}
                 {popup && (
 
@@ -350,8 +314,6 @@ export const EmployeeAttendance = () => {
                             </div>
                         </div>
                     </div>
-
-
                 )}
 
                 <div className='py-8 overflow-auto'>
@@ -381,12 +343,8 @@ export const EmployeeAttendance = () => {
 
                                             <div className="fixed inset-0  flex z-50 items-center justify-center  bg-opacity-80 rounded-md">
                                                 <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[590px] p-6 rounded-lg">
-
                                                     <div className="flex justify-between">
-
                                                         <div className="flex gap-[5px]">
-
-
                                                             <span className="text-[16px]  font-bold text-[#3b404f]">Update Details</span>
                                                             <div onClick={editHandleSumbit} className="flex cursor-pointer gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                                                                 <img src={check} className="w-[12px] h-[12px]" alt="plus" />
@@ -404,11 +362,7 @@ export const EmployeeAttendance = () => {
                                                             <span className="text-[#2A3143]">Employee Name</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
-
                                                             </div>
-
-
-
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">Date</span>
@@ -435,22 +389,11 @@ export const EmployeeAttendance = () => {
                                                             <span className="text-[#2A3143]">PuchOut Time</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
-
                                                             </div>
                                                         </div>
-
-
                                                     </div>
-
-
-
-
                                                 </div>
                                             </div>
-
-
-
-
                                         )}
                                         {deletePopup && (
 
@@ -458,11 +401,6 @@ export const EmployeeAttendance = () => {
 
                                                 <div className="bg-white flex flex-col gap-[30px] w-[300px] h-[150px] p-6 rounded-lg">
                                                     <span className="text-[15px]  font-bold text-[#3b404f]">Do you want to delete permanently ?</span>
-
-
-
-
-
                                                     <div className="flex flex-row items-start gap-[24px] rounded-lg">
                                                         <div onClick={() => setDeletePopup(false)} className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#FFFFFF] rounded-lg ">
 
@@ -475,16 +413,8 @@ export const EmployeeAttendance = () => {
 
                                                     </div>
 
-
-
-
                                                 </div>
                                             </div>
-
-
-
-
-
                                         )}
                                         <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
