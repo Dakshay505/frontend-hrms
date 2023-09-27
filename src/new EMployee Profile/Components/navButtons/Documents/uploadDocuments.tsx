@@ -21,7 +21,6 @@ const UploadPopup = ({ onClose }: any) => {
     const [fileName, setFileName] = useState("");
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        // console.log("dattaaaaaaaaa",data.file[0])
         const formDataToSend = new FormData();
         formDataToSend.append("employeeId", employeeId);
         formDataToSend.append("fileName", fileName);

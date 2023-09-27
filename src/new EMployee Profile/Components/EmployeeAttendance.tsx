@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { Link, useLocation } from 'react-router-dom';
-import { addPunchAsync, deletePunchAsync, editPunchAsync, getAllAttandenceAsync } from '../../redux/Slice/AttandenceSlice';
+import { addPunchAsync, deletePunchAsync, editPunchAsync } from '../../redux/Slice/AttandenceSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
@@ -18,13 +18,14 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
-export const EmployeeAttendance = () => {
+export const EmployeeAttendance = (props:any) => {
+    const { singleEmployeeAttendanceList } = props;
     const dispatch = useDispatch();
     const location = useLocation();
     const [showAddPopup, setShowAddPopup] = useState(false);
     const additionalData = (location.state?.additionalData);
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
-    const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
+    // const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const [date, setDate] = useState("")
     const [PuchIn, setPunchIn] = useState("")
     const [PunchOut, setPunchOut] = useState("")
@@ -75,9 +76,9 @@ export const EmployeeAttendance = () => {
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
-                dispatch(getAllAttandenceAsync(data)).then((res: any) => {
-                    setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
-                })
+                // dispatch(getAllAttandenceAsync(data)).then((res: any) => {
+                //     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
+                // })
             })
             ///setAdditionalData("");
         }

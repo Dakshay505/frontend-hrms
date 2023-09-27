@@ -59,6 +59,12 @@ const navItems: NavItem[] = [
   //   icon: training,
   //   Link: "/new-profile-employee",
   // },
+  {
+    id: "Login Logs",
+    name: "Login Logs",
+    icon: training,
+    Link: "/logs",
+  },
 ];
 
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;

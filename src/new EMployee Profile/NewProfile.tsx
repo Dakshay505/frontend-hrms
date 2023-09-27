@@ -198,7 +198,7 @@ export const NewProfile = () => {
             </div>}
             {/* QR Assigning Logs ENDS HERE */}
 
-            <EmployeeAttendance/>
+            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} />
         </div>
     )
 }

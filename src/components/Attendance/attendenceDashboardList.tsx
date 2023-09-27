@@ -35,8 +35,8 @@ export const AttendenceDashboardList = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  const departmentList=useSelector((state:any)=>state.department.department)
-    const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+  const departmentList = useSelector((state: any) => state.department.department)
+  const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
     a.departmentName.localeCompare(b.departmentName)
   );
 
@@ -50,7 +50,7 @@ export const AttendenceDashboardList = () => {
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
-  const [loading,Setloading]=useState(false)
+  const [loading, Setloading] = useState(false)
 
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -75,7 +75,7 @@ export const AttendenceDashboardList = () => {
     name: "",
     groupName: localStorage.getItem("groupName") || "",
     jobProfileName: localStorage.getItem("jobProfileName") || "",
-    departmentName:localStorage.getItem("departmentName") || "",
+    departmentName: localStorage.getItem("departmentName") || "",
     date: "",
     nextDate: "",
     page: 1,
@@ -120,7 +120,7 @@ export const AttendenceDashboardList = () => {
   const [shopName, setShopName] = useState("");
 
   const handleShopChange = (event: any) => {
-    
+
     const selectedValue = event.target.value;
     setSelectedShop(selectedValue);
 
@@ -150,15 +150,15 @@ export const AttendenceDashboardList = () => {
     }
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
-    let sendData={}
-    console.log("datedddd",filter.nextDate)
-       
-        sendData= {
+    let sendData = {}
+    console.log("datedddd", filter.nextDate)
+
+    sendData = {
       shopName: shopName,
       date: filter.date,
-      nextDate:filter.nextDate
-    
-  }
+      nextDate: filter.nextDate
+
+    }
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       console.log("hiii", data.payload)
@@ -181,12 +181,12 @@ export const AttendenceDashboardList = () => {
         setDateRange([...result]);
       }
     }
-   setShopName("")
-   Setloading(true)
+    setShopName("")
+    Setloading(true)
     localStorage.setItem("jobProfileName", filter.jobProfileName)
     localStorage.setItem("groupName", filter.groupName)
     localStorage.setItem("departmentName", filter.departmentName)
-     
+
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     dispatch(getAllEmployeeAsync(filter))
@@ -292,7 +292,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                  {items.length}
+                    {items.length}
                   </span>
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
@@ -305,7 +305,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading?0:items.length}
+                    {loading ? 0 : items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
                 </div>
@@ -316,7 +316,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading?0:totalEmployees - items.length}
+                    {loading ? 0 : totalEmployees - items.length}
                   </span>
                   <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
                 </div>
@@ -327,7 +327,7 @@ export const AttendenceDashboardList = () => {
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading?0:totalEmployees}
+                    {loading ? 0 : totalEmployees}
                   </span>
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
@@ -422,7 +422,7 @@ export const AttendenceDashboardList = () => {
               >
                 <option value="All Department">All Department</option>
                 {sortedDepartmentList &&
-                 sortedDepartmentList.map((element: any, index: number) => {
+                  sortedDepartmentList.map((element: any, index: number) => {
                     return (
                       <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
                         {element.departmentName}
@@ -446,7 +446,7 @@ export const AttendenceDashboardList = () => {
                   ))}
               </select>
             </div>
-            
+
             <div>
               <select
                 onChange={(event) => {
@@ -466,52 +466,52 @@ export const AttendenceDashboardList = () => {
             </div>
           </div>
           <div>
-            
+
           </div>
-          
+
         </div>
-        
+
       </div>
       <div className="relative mt-4">
-              {isLabelVisible && (
-                <div className="absolute top-[10px] left-6">
-                  <label
-                    htmlFor="searchInput"
-                    className="flex gap-2 items-center cursor-text"
-                  >
-                    <img src={glass} alt="" className="h-4 w-4" />
-                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-                  </label>
-                </div>
-              )}
+        {isLabelVisible && (
+          <div className="absolute top-[10px] left-6">
+            <label
+              htmlFor="searchInput"
+              className="flex gap-2 items-center cursor-text"
+            >
+              <img src={glass} alt="" className="h-4 w-4" />
+              <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+            </label>
+          </div>
+        )}
+        <input
+          type="search"
+          id="searchInput"
+          onChange={handleInputChange}
+          value={search}
+          className="h-10 w-[200px] py-3 px-5 rounded-full text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+        />
+        {suggestions.length > 0 && (
+          <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
+            {suggestions.map((suggestion: any, index: any) => (
               <input
-                type="search"
-                id="searchInput"
-                onChange={handleInputChange}
-                value={search}
-                className="h-10 w-[200px] py-3 px-5 rounded-full text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+                type="text"
+                readOnly
+                key={index}
+                className="py-3 px-5 cursor-pointer focus:outline-none w-[200px] z-30"
+                value={suggestion}
+                onClick={(event) => {
+                  setFilter({
+                    ...filter,
+                    name: (event.target as HTMLInputElement).value,
+                  });
+                  setSuggestions([]);
+                }}
               />
-              {suggestions.length > 0 && (
-                <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-                  {suggestions.map((suggestion: any, index: any) => (
-                    <input
-                      type="text"
-                      readOnly
-                      key={index}
-                      className="py-3 px-5 cursor-pointer focus:outline-none w-[200px] z-30"
-                      value={suggestion}
-                      onClick={(event) => {
-                        setFilter({
-                          ...filter,
-                          name: (event.target as HTMLInputElement).value,
-                        });
-                        setSuggestions([]);
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            ))}
+          </div>
+        )}
+      </div>
 
 
       <div className="py-6 mb-24 overflow-auto">
@@ -538,10 +538,10 @@ export const AttendenceDashboardList = () => {
                 Status
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Marked By{" "}
+                Approved By
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-               Shop
+                Shop
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Photos
@@ -581,24 +581,38 @@ export const AttendenceDashboardList = () => {
 
                       </td>
 
-                      <td className="flex gap-1 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
-                        <p onClick={() => handleTableRowClick(element)}>{element.employeeId?.name
-                          ? element.employeeId?.name
-                          : "Not Avilable"}{" "}</p>
+                      <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                        <div className="flex flex-col">
+
+                          <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                            ? element.employeeId?.name
+                            : "Not Avilable"}</p>
+
+                          <p  className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                            ? element.employeeId.jobProfileId?.jobProfileName
+                            : "Not Avilable"}</p>
+
+                        </div>
+
+
                         {sortedPunches.slice(1).length > 0 ? (
-                          <img onClick={() => {
-                            handleRowClick(index);
-                          }}
-                            src={
-                              showTableRow.includes(index) ? CaretUp : CaretDown
+                          <img
+                            onClick={() => {
+                              handleRowClick(index);
+
+                            }} src={
+                              showTableRow.includes(index)
+                                ? CaretUp
+                                : CaretDown
                             }
-                            className="w-[14px] h-[14px]"
                             alt=""
                           />
                         ) : (
                           ""
                         )}
                       </td>
+
+
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {showTableRow.includes(index)
                           ? latestPunches.punchIn
@@ -611,7 +625,7 @@ export const AttendenceDashboardList = () => {
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                         {latestPunches.punchOut
                           ? changetime(latestPunches.punchOut)
-                          : "Not Avilable"}
+                          : "-"}
                       </td>
                       <td className="py-4 px-5">
                         {element?.status === "approved" && (
@@ -663,15 +677,25 @@ export const AttendenceDashboardList = () => {
                           </span>
                         )}
                       </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element.approvedBy?.name
-                          ? element.approvedBy?.name
-                          : "-"}
+                      <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        <p className="font-medium">
+
+                          {element.approvedBy?.name
+                            ? element.approvedBy?.name
+                            : "-"}
+                        </p>
+                        <p className="text-[12px]">
+
+                          {element.approvedBy?.jobProfileId?.jobProfileName
+                            ? element.approvedBy?.jobProfileId?.jobProfileName
+                            : "-"}
+                        </p>
+
                       </td>
 
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved"  && (
-                          <div>{selectedShop !== "All Shop"?selectedShop:"-"}</div>
+                        {element?.status === "approved" && (
+                          <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
                         )}
                       </td>
 

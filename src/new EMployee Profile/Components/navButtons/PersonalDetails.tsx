@@ -1,16 +1,23 @@
 import check from "../../../assets/Check.png"
-import toast from "react-hot-toast";
+import upload from "../../../assets/UploadSimple.png";
 
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import {
   getSingleEmployeeAsync,
-
   updateEmployeeAsync,
 } from "../../../redux/Slice/EmployeeSlice";
 import { Otp } from "../otp";
 
+
+
+type FormData = {
+  employeeId: string;
+  fileName: string;
+  file: FileList;
+};
 
 
 export const PersonalDetails = () => {
@@ -20,9 +27,7 @@ export const PersonalDetails = () => {
     (state: any) => state.employee.singleEmployee
   );
   console.log(singleEmployee)
-  // const jobProfileList = useSelector(
-  //   (state: any) => state.jobProfile.jobProfiles
-  // );
+
   const groupList = useSelector((state: any) => state.group.groups);
   console.log(groupList)
 
@@ -54,7 +59,10 @@ export const PersonalDetails = () => {
   }, [singleEmployee]);
 
   const { handleSubmit, register } = useForm();
-  // const [fileName, setFileName] = useState("Aadhar Card");
+
+  const [fileName, setFileName] = useState("Aadhar Card");
+
+
 
   return (
     <form onSubmit={handleSubmit((data: any) => {
@@ -77,6 +85,13 @@ export const PersonalDetails = () => {
       setShowInputBoxEmail(false);
       setShowInputBoxGender(false);
       setShowInputAadharCard(false)
+
+      const formDataToSend = new FormData();
+   
+      formDataToSend.append("employeeId", employeeId);
+      formDataToSend.append("fileName", fileName);
+      formDataToSend.append("file", data.file[0]);
+      
 
 
     })}
@@ -194,9 +209,11 @@ export const PersonalDetails = () => {
         {!showInputAadharCard && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
             <div className="flex items-center gap-3">
-              <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-                Aadhar Card
-              </p>
+              <input value={fileName}
+                {...register("fileName")}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
 
             </div>
             <div className="flex gap-[20px] items-center ">
@@ -208,20 +225,32 @@ export const PersonalDetails = () => {
                   {singleEmployee.aadharNumber}
                 </p>
               </div>
+              <div className="text-center">
+                <label htmlFor="fileInput" className="cursor-pointer">
+                  <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                </label>
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                />
+              </div>
 
             </div>
 
           </div>
         )}
+
         {showInputAadharCard && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-            <div className="flex flex-col">
-              <div className="flex gap-3">
-                <p className="text-sm font-semibold  tracking-[0.25px]">
-                  Aadhar Card
-                </p>
-              </div>
-              <div>
+            <div className="flex gap-[10px] flex-col">
+              <input value={fileName}
+                {...register("fileName")}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
+
+              <div className="flex gap-[20px]">
                 <input
                   {...register("aadharNumber", {
                     required: true,
@@ -234,6 +263,19 @@ export const PersonalDetails = () => {
                   }
                   type="text"
                 />
+
+                <div className="text-center">
+                  <label htmlFor="fileInput" className="cursor-pointer">
+                    <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                  </label>
+                  <input
+                    {...register("file")}
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                  />
+
+                </div>
               </div>
             </div>
 
@@ -241,38 +283,7 @@ export const PersonalDetails = () => {
         )}
 
 
-        {/* {showInputAadharCard && (
-          <div className="flex justify-between py-[8px] px-[16px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
-            <div className="flex gap-[20px] flex-col">
-              <div className="flex flex-col gap-[8px]">
-                <label htmlFor="fileName" className="font-medium">
-                  Upload aadhar card
-                </label>
-                <input
-                  type="text"
-                  placeholder="File Name"
-                  value={fileName}
-                  {...register("fileName")}
-                  onChange={(e) => setFileName(e.target.value)}
-                  className="outline-none text-[14px]"
-                />
-              </div>
 
-
-              <div className="flex items-center justify-center border border-dashed border-[#9198F7] bg-[#ECEDFE] w-[200px] h-[35px] rounded-sm">
-                <label htmlFor="file" className="text-[12px] leading-5 font-normal text-[#666666]">Drag & Drop or<span className="text-[#283093] underline cursor-pointer"> Browse</span></label>
-                <input
-                  {...register("file")}
-                  type="file"
-                  name="file"
-                  id="file"
-                  className="absolute opacity-0 cursor-pointer"
-                />
-              </div>
-
-            </div>
-          </div>
-        )} */}
 
 
 
@@ -313,7 +324,7 @@ export const PersonalDetails = () => {
                 />
               </div>
             </div>
-           
+
           </div>
         )}
 
