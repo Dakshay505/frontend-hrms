@@ -8,96 +8,106 @@ import Work from "../../assets/CalendarCheck.png"
 
 const AddWorkDay= () => {
     const dispatch = useDispatch();
-    const groupList = useSelector((state: any) => state.group.groups);
-    const [parentGroupValue, setParentGroupValue] = useState("All Groups");
-    const {
+   
+const {
         register,
         handleSubmit,
         reset,
         setValue,
         formState: { errors },
     }: any = useForm();
-
-    useEffect(() => {
-        dispatch(getAllGroupsAsync());
-    }, [])
-
-
-    const validategroupName = (value:any) => {
-        if (/^\d/.test(value)) {
-          return "Job Profile Name cannot start with a digit";
-        }
-        return true;
-      };
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [numberOfDays, setNumberOfDays] = useState([]);
+  
+    // Function to handle the month selection
+    const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const month: string = e.target.value;
     
-      // Event handler to handle changes in the Job Profile Name field
-      const handlegroupNameChange = (e:any) => {
-        const inputgroupName = e.target.value;
-        if (/^\d/.test(inputgroupName)) {
-          setValue("groupName", inputgroupName.replace(/^\d/, ""));
-        }
-      };
+        const daysInMonth: Record<string, number> = {
+          January: 31,
+          February: 28,
+          March: 31,
+          April: 30,
+          May: 31,
+          June: 30,
+          July: 31,
+          August: 31,
+          September: 30,
+          October: 31,
+          November: 30,
+          December: 31,
+        };
+        
+        const daysArray:any= Array.from({ length: daysInMonth[month] }, (_, i) => i + 1);
+        setNumberOfDays(daysArray);
+        setSelectedMonth(month);
+    }
+ 
+
+
+    
       
 
 
     return (
         <>
             <div className="mx-10">
-                <div className="pt-8 flex flex-row">
-                    <img src={Work} />
-                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Add Group</h1>
+                <div className="pt-8 flex flex-row gap-2">
+                    <img className="h-[24px] w-[24px] mt-1" src={Work} />
+                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Working Days</h1>
                 </div>
-                <form onSubmit={handleSubmit((data: any) => {
-                    if(parentGroupValue === "All Groups"){
-                        data = {
-                            groupName: data.groupName,
-                        }
-                    } else{
-                        data = {
-                            groupName: data.groupName,
-                            parentGroupName: data.parentGroupName
-                        }
-                    }
-                    dispatch(createGroupAsync(data))
-                    .then((res: any) => {
-                        if(res.payload.success){
-                            toast.success(res.payload.message);
-                        } else{
-                            toast.error(res.payload.message);
-                        }
-                        dispatch(getAllGroupsAsync());
-                    });
-                    reset()
-                })}
+                <hr className="color:black"></hr>
+                <form 
+                
                 >
-                    <div className="mt-10">
+                     <div className="mt-10">
                         <div className='flex gap-10'>
                             <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Group Name</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Month</p>
                                 </div>
                                 <div>
-                                    <input
-                                        {...register('groupName', { required:  "Name is required",  validate: validategroupName })}
-                                        type="text" className='border border-solid border-[#DEDEDE] rounded py-4 px-3 h-10 w-[324px]'
-                                        onChange={handlegroupNameChange}/>
-                                         {errors.groupName && <p className="text-red-500">{errors.groupName.message}</p>}
+                                <select
+                                        {...register('monthName', { required: true })}
+                                        value={selectedMonth}
+                                        onChange={handleMonthChange}
+                                        
+                                        className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
+                                        <option>Choose the Month</option>
+                                        <option value="January">January</option>
+                                        <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+                                        
+                                    </select>
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3'>
                             <div className='flex flex-col gap-3'>
                                 <div>
-                                    <p className='text-sm font-normal text-[#1C1C1C]'>Parent Group Name</p>
+                                    <p className='text-sm font-normal text-[#1C1C1C]'>Number of days</p>
                                 </div>
                                 <div>
                                 <select
-                                        {...register('parentGroupName', { required: true })}
-                                        onChange={(event) => setParentGroupValue(event.target.value)}
+                                        {...register('workingDay', { required: true })}
+                                        
                                         className='border border-solid border-[#DEDEDE] text-[#666666] w-[324px] h-10 px-2'>
-                                        <option>All Groups</option>
-                                        {groupList && groupList.map((element: any, index: number) => {
-                                            return <option key={index} className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'>{element.groupName}</option>
-                                        })}
+                                        <option>Select the day</option>
+                                        {numberOfDays.length>0 && numberOfDays.map((day:any) => (
+              <option key={day} value={day}>
+                {day}
+                                       </option>
+                                        ))}
+                       
                                     </select>
                                 </div>
                             </div>
@@ -105,10 +115,11 @@ const AddWorkDay= () => {
                         </div>
                         <div className="mt-10">
                             {/* <Link to="/update-hierarchy"> */}
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Group</p></button>
+                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Work Day</p></button>
                             {/* </Link> */}
                         </div>
                     </div>
+                   
                 </form>
             </div>
         </>
