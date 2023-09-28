@@ -21,7 +21,8 @@ function Excel() {
       const modifiedData = jsonData.map((record:any) => ({
         ...record,
         punches: record.punches.map((punch:any) => `${punch.punchIn} - ${punch.punchOut || 'N/A'}`).join('\n'),
-        employeeId:record.employeeId.name
+        employeeId:record.employeeId.name,
+        approvedBy:record.approvedBy?.name
       
     }));
 
