@@ -236,7 +236,7 @@ export const EmployeeProfile = () => {
 
             dispatch(addPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
-                    toast.success("Punch add sucessfully")
+                    toast.success(res.payload.message)
                     refresh()
                     setPunchIn("")
                     setPunchOut("")

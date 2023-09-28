@@ -76,6 +76,7 @@ import { EditShop } from "./components/Dashboard/EditShop";
 import { NewProfile } from "./new EMployee Profile/NewProfile";
 import AddWorkDay from "./components/Dashboard/AddWorkday";
 import { Loginlogs } from "./new EMployee Profile/Loginlogs";
+import Excel from "./components/Dashboard/Excel";
 
 const router = createBrowserRouter([
   {
@@ -625,6 +626,14 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   }, 
+  {
+    path: "/excel",
+    element: (
+      
+        <Excel/>
+        
+    ),
+  },
  
   {
     path: "*",
