@@ -67,7 +67,10 @@ export function Login() {
         } else {
             data = {
                 phone: data.email,
-                password: data.password
+                password: data.password,
+                userAgent:navigator.userAgent,
+                platform:navigator.platform,
+                ipAddress:Data.IPv4
             }
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
                 if (res.payload.success) {
