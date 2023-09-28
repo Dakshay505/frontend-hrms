@@ -11,6 +11,7 @@ import SalaryReducer from "./redux/Slice/SalarySlice";
 import notificationSlice from "./redux/Slice/notificationSlice";
 import departmentSlice from "./redux/Slice/departmentSlice";
 import ShopSlice from "./redux/Slice/ShopSlice";
+import WorkDaySlice from "./redux/Slice/WorkDaySlice";
 export const store = configureStore({
   reducer: {
     employee: employeeReducer,
@@ -25,6 +26,7 @@ export const store = configureStore({
     notification: notificationSlice,
     department: departmentSlice,
     Shop:ShopSlice,
+    Work:WorkDaySlice,
   },
 });
 

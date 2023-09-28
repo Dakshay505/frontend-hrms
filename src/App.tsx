@@ -126,9 +126,12 @@ const router = createBrowserRouter([
   {
     path: "/add-workday",
     element: (
-      
-        
+        <ProductedRoute>
+        <Aside>
           <AddWorkDay/>
+          </Aside>
+          </ProductedRoute>
+
         
       
     ),
