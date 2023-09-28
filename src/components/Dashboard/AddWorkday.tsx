@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import Work from "../../assets/CalendarCheck.png"
 import { createWorkDayAsync, getWorkDayAsync, updateWorkDayAsync } from "../../redux/Slice/WorkDaySlice";
 import EditImage from "../../assets/PencilSimple.png"
+import check from "../../assets/Check.svg"
 
 const AddWorkDay= () => {
     const dispatch = useDispatch();
@@ -189,7 +190,7 @@ const handleUpdate=(month:any,day:any)=>{
                         </div>
                         <div className="flex flex-row gap-4 mt-10">
                             {/* <Link to="/update-hierarchy"> */}
-                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">{update?"Update work day":"Add Work Day"}</p></button>
+                            <button type='submit' className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={update?check:Plus} className='w-4' alt="" /><p className="px-2">{update?"Update work day":"Add Work Day"}</p></button>
                             {update && <button onClick={()=>setUpdate(false)} className='flex items-center justify-center rounded-sm text-sm font-medium bg-[#283093] text-[#FBFBFC] py-3 px-4'><img src={Plus} className='w-4' alt="" /><p className="px-2">Add Work Day</p></button>
                              }
                             {/* </Link> */}
