@@ -175,7 +175,7 @@ export const BankDetails = () => {
                   onChange={(event) =>
                     setInputAadharCardNumber(event.target.value)
                   }
-                  placeholder="File Name"
+                  placeholder="Aadhar Number"
 
                   type="text"
                 />
@@ -211,7 +211,7 @@ export const BankDetails = () => {
               setShowInputBoxPancard(!showInputBoxPancard);
             }}>
               <input
-                placeholder="5000000000000"
+                placeholder="DBXXXXXX"
                 value={singleEmployee.PAN_Number}
 
                 className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px] outline-none" />
@@ -280,7 +280,7 @@ export const BankDetails = () => {
               <div>
                 <input
                   {...register('PF_UAN_Number', { required: true })}
-                  placeholder="5000000000000"
+                  placeholder="PFXXXXXXXX"
                   className="text-[12px] leading-5 font-normal focus:outline-none"
                   value={inputPfNumber}
                   onChange={(event) => {
@@ -373,7 +373,7 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <input placeholder="45125466325" value={bankdetails.accountNumber} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+                <input placeholder="XXXXXXXXXXXXX" value={bankdetails.accountNumber} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
 
 
               </div>
@@ -385,7 +385,7 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <input placeholder="45210" value={bankdetails.branch} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+                <input placeholder="XXXXXXXXX" value={bankdetails.branch} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
 
 
               </div>
@@ -396,7 +396,7 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <input placeholder="SBI0055" value={bankdetails.IFSC_Code} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+                <input placeholder="XXXXXXXXX" value={bankdetails.IFSC_Code} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
 
 
               </div>
@@ -420,7 +420,7 @@ export const BankDetails = () => {
                     {...register('bankName', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.bankName}
-                    placeholder="SBI"
+                    placeholder="BankName"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -452,7 +452,7 @@ export const BankDetails = () => {
                     {...register('accountNumber', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.accountNumber}
-                    placeholder="52362514251"
+                    placeholder="xxxxxxxx"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -481,7 +481,7 @@ export const BankDetails = () => {
                     {...register('branch', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.branch}
-                    placeholder="SBI"
+                    placeholder="Bank Branch"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -510,7 +510,7 @@ export const BankDetails = () => {
                     {...register('IFSC_Code')}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.IFSC_Code}
-                    placeholder="SBI56252"
+                    placeholder="XXXXXXXX"
                     onChange={(event) => {
 
                       setBankDetail({

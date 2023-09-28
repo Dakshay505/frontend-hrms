@@ -9,7 +9,7 @@ import { getQrAssignAsync, getSingleEmployeeAsync, salaryLogAsync } from '../../
 import ArrowSqureOutBlack from '../../assets/ArrowSquareOutBlack.svg'
 import X from "../../assets/X.svg";
 import plus from "../../assets/Plus.png"
-import closed from "../../assets/x1.png";
+//import closed from "../../assets/x1.png";
 import check from "../../assets/Check.svg";
 import dots from "../../assets/dots-vertical.svg"
 import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
@@ -82,6 +82,7 @@ export const EmployeeAttendance = (props:any) => {
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
+                console.log(data)
                 // dispatch(getAllAttandenceAsync(data)).then((res: any) => {
                 //     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
                 // })

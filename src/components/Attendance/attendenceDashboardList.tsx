@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
 import CaretLeft from "../../assets/CaretLeft.svg";
+import { saveAs } from 'file-saver';
+import toast from "react-hot-toast";
+import * as XLSX from 'xlsx';
 import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
@@ -222,6 +225,31 @@ export const AttendenceDashboardList = () => {
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
     console.log("hello", data)
   };
+  const exportToExcel = () => {
+    if (items) {
+      // Modify jsonData to include concatenated punches
+      const modifiedData = items.map((record:any) => ({
+        ...record,
+        punchIn: `${record.punches[0].punchIn}`,
+        punchOut:record.punches[record.punches.length-1]?.punchOut,
+        employeeId:record.employeeId.name,
+        approvedBy:record.approvedBy?.name,
+        remarks:record.remarks[record.remarks.length-1]?.remark
+      
+    }));
+    modifiedData.forEach((record:any) => {
+      delete record.punches;
+    });
+
+      const ws = XLSX.utils.json_to_sheet(modifiedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Attendance Data');
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, 'attendance_data.xlsx');
+      toast.success("CSV Download Sucessfully")
+    }
+  };
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -268,12 +296,17 @@ export const AttendenceDashboardList = () => {
   return (
     <div className="px-[40px] pt-[32px]">
       <div className="flex flex-col flex-start">
-        <div className=" flex justify-between item-center max-w-[688px]">
+        <div className=" flex gap-3 justify-between items-center">
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
           </div>
+          <div onClick={exportToExcel}  className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+                        
+                        <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export CSV</p>
+                    </div>
 
         </div>
+       
         <div className="flex flex-start pt-4 gap-6">
           {selectedShop !== "All Shop" ? (
             <>
@@ -472,6 +505,7 @@ export const AttendenceDashboardList = () => {
         </div>
 
       </div>
+      <div className="flex flex-row">
       <div className="relative mt-4">
         {isLabelVisible && (
           <div className="absolute top-[10px] left-6">
@@ -511,6 +545,8 @@ export const AttendenceDashboardList = () => {
             ))}
           </div>
         )}
+      </div>
+     
       </div>
 
 
