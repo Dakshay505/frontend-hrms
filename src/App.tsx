@@ -26,7 +26,7 @@ import { LeaveRecords } from './components/LeavesAndGatepass/LeaveRecords';
 import { GatepassRecord } from './components/LeavesAndGatepass/GatepassRecord';
 import { Login } from './components/Login';
 
-import { EmployeeProfile } from './components/Employeeprofile/Profile/profile';
+//import { EmployeeProfile } from './components/Employeeprofile/Profile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
 import { JobProfileInfo } from './components/Employeeprofile/jobprofileinfo';
@@ -77,7 +77,7 @@ import { NewProfile } from "./new EMployee Profile/NewProfile";
 import AddWorkDay from "./components/Dashboard/AddWorkday";
 import { Loginlogs } from "./new EMployee Profile/Loginlogs";
 import { NewPage } from "./newpage/NewPage";
-import Excel from "./components/Dashboard/Excel";
+
 
 const router = createBrowserRouter([
   {
@@ -637,15 +637,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   }, 
-  {
-    path: "/excel",
-    element: (
-      
-        <Excel/>
-        
-    ),
-  },
- 
+  
   {
     path: "*",
     element: (

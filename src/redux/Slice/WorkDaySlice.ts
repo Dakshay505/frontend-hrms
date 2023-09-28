@@ -40,14 +40,14 @@ const workDaySlice = createSlice({
         .addCase(createWorkDayAsync.pending, (state) => {
           state.status = 'loading';
         })
-        .addCase(createWorkDayAsync.fulfilled, (state, action) => {
+        .addCase(createWorkDayAsync.fulfilled, (state) => {
           state.status = 'succeeded';
           
         })
         .addCase(updateWorkDayAsync.pending, (state) => {
           state.status = 'loading';
         })
-        .addCase(updateWorkDayAsync.fulfilled, (state, action) => {
+        .addCase(updateWorkDayAsync.fulfilled, (state) => {
           state.status = 'succeeded';
           
         })

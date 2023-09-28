@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import Plus from "../../assets/Plus.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { createGroupAsync, getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
+//import { createGroupAsync, getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import {useEffect, useState} from "react"
 import toast from 'react-hot-toast';
 import Work from "../../assets/CalendarCheck.png"
@@ -17,9 +17,8 @@ const AddWorkDay= () => {
 const {
         register,
         handleSubmit,
-        reset,
-        setValue,
-        formState: { errors },
+        
+        
     }: any = useForm();
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedDay, setSelectedDay] = useState('');
