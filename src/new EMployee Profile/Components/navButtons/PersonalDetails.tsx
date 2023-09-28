@@ -1,5 +1,4 @@
 import check from "../../../assets/Check.png"
-import upload from "../../../assets/UploadSimple.png";
 
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +11,6 @@ import {
 import { Otp } from "../otp";
 
 
-
-type FormData = {
-  employeeId: string;
-  fileName: string;
-  file: FileList;
-};
 
 
 export const PersonalDetails = () => {
@@ -47,32 +40,24 @@ export const PersonalDetails = () => {
   const [inputBoxEmailValue, setInputBoxEmailValue] = useState<any>("");
 
 
-  const [showInputAadharCard, setShowInputAadharCard] = useState(false);
-  const [inputAadharCardNumber, setInputAadharCardNumber] = useState<any>("");
 
   useEffect(() => {
-    setEmployeeId(singleEmployee._id);
-    setInputBoxContactNumberValue(singleEmployee.contactNumber);
-    setInputBoxEmailValue(singleEmployee.email);
-    setInputBoxGenderValue(singleEmployee.gender);
-    setInputAadharCardNumber(singleEmployee.aadharNumber);
+    setEmployeeId(singleEmployee?._id);
+    setInputBoxContactNumberValue(singleEmployee?.contactNumber);
+    setInputBoxEmailValue(singleEmployee?.email);
+    setInputBoxGenderValue(singleEmployee?.gender);
   }, [singleEmployee]);
 
+
   const { handleSubmit, register } = useForm();
-
-  const [fileName, setFileName] = useState("Aadhar Card");
-
 
 
   return (
     <form onSubmit={handleSubmit((data: any) => {
-      const { overTime } = data;
-      if (overTime === "Yes") {
-        data = { ...data, overTime: true };
-      } else if (overTime === "No") {
-        data = { ...data, overTime: false };
-      }
+
       const sendData = { employeeId: employeeId, data: data };
+      console.log(sendData)
+
       dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
         if (res.payload.success) {
           toast.success(res.payload.message);
@@ -84,14 +69,7 @@ export const PersonalDetails = () => {
       setShowInputBoxContactNumber(false);
       setShowInputBoxEmail(false);
       setShowInputBoxGender(false);
-      setShowInputAadharCard(false)
 
-      const formDataToSend = new FormData();
-   
-      formDataToSend.append("employeeId", employeeId);
-      formDataToSend.append("fileName", fileName);
-      formDataToSend.append("file", data.file[0]);
-      
 
 
     })}
@@ -122,7 +100,7 @@ export const PersonalDetails = () => {
               setShowInputBoxContactNumber(!showInputBoxContactNumber);
             }}>
               <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.contactNumber}
+                {singleEmployee?.contactNumber}
               </p>
             </div>
           </div>
@@ -135,28 +113,33 @@ export const PersonalDetails = () => {
                   Contact Number
                 </p>
               </div>
-              <div>
-                <input
-                  {...register("contactNumber", {
-                    required: true,
-                    pattern: {
-                      value: /^\d{10}$/,
-                      message:
-                        "Invalid phone number format (10 digits allowed)",
-                    },
-                  })}
-                  className="text-[12px] leading-5 font-normal focus:outline-none"
-                  value={inputBoxContactValue}
-                  onChange={(event) =>
-                    setInputBoxContactNumberValue(event.target.value)
+              <input
+                {...register("contactNumber", {
+                  required: true,
+                  pattern: {
+                    value: /^\d{10}$/,
+                    message: "Invalid phone number format (10 digits allowed)",
+                  },
+                })}
+                className="text-[12px] leading-5 font-normal focus:outline-none"
+                value={inputBoxContactValue}
+                onChange={(event) => {
+                  const inputValue = event.target.value;
+                  if (inputValue.length <= 10) {
+                    setInputBoxContactNumberValue(inputValue);
                   }
-                  type="number"
-                />
-              </div>
+
+                }}
+                type="number"
+              />
+
+
             </div>
 
           </div>
         )}
+
+
 
         {!showInputBoxEmail && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
@@ -170,7 +153,7 @@ export const PersonalDetails = () => {
               setShowInputBoxEmail(!showInputBoxEmail);
             }}>
               <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.email}
+                {singleEmployee?.email}
               </p>
             </div>
           </div>
@@ -206,86 +189,6 @@ export const PersonalDetails = () => {
         )}
 
 
-        {!showInputAadharCard && (
-          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-            <div className="flex items-center gap-3">
-              <input value={fileName}
-                {...register("fileName")}
-                onChange={(e) => setFileName(e.target.value)}
-                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-              </input>
-
-            </div>
-            <div className="flex gap-[20px] items-center ">
-
-              <div onClick={() => {
-                setShowInputAadharCard(!showInputAadharCard);
-              }}>
-                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                  {singleEmployee.aadharNumber}
-                </p>
-              </div>
-              <div className="text-center">
-                <label htmlFor="fileInput" className="cursor-pointer">
-                  <img src={upload} alt="" className="w-[20px] h-[20px]" />
-                </label>
-                <input
-                  type="file"
-                  id="fileInput"
-                  className="hidden"
-                />
-              </div>
-
-            </div>
-
-          </div>
-        )}
-
-        {showInputAadharCard && (
-          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-            <div className="flex gap-[10px] flex-col">
-              <input value={fileName}
-                {...register("fileName")}
-                onChange={(e) => setFileName(e.target.value)}
-                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-              </input>
-
-              <div className="flex gap-[20px]">
-                <input
-                  {...register("aadharNumber", {
-                    required: true,
-
-                  })}
-                  className="text-[12px] leading-5 font-normal focus:outline-none"
-                  value={inputAadharCardNumber}
-                  onChange={(event) =>
-                    setInputAadharCardNumber(event.target.value)
-                  }
-                  type="text"
-                />
-
-                <div className="text-center">
-                  <label htmlFor="fileInput" className="cursor-pointer">
-                    <img src={upload} alt="" className="w-[20px] h-[20px]" />
-                  </label>
-                  <input
-                    {...register("file")}
-                    type="file"
-                    id="fileInput"
-                    className="hidden"
-                  />
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-
-
-
-
 
         {!showInputBoxGender && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
@@ -298,9 +201,7 @@ export const PersonalDetails = () => {
             <div onClick={() => {
               setShowInputBoxGender(!showInputBoxGender);
             }}>
-              <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.gender}
-              </p>
+              <input value={singleEmployee?.gender} placeholder="Gender" className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
             </div>
           </div>
         )}
@@ -313,15 +214,17 @@ export const PersonalDetails = () => {
                 </p>
               </div>
               <div>
-                <input
+                <select
                   {...register("gender", { required: true })}
                   className="text-[12px] leading-5 font-normal focus:outline-none"
-                  value={inputBoxGenderValue}
+                  defaultValue={inputBoxGenderValue}
                   onChange={(event) =>
                     setInputBoxGenderValue(event.target.value)
-                  }
-                  type="text"
-                />
+                  }>
+                  <option value="">Male</option>
+                  <option value="">Female</option>
+                  <option value="">Trans</option>
+                </select>
               </div>
             </div>
 

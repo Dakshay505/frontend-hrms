@@ -76,6 +76,7 @@ import { EditShop } from "./components/Dashboard/EditShop";
 import { NewProfile } from "./new EMployee Profile/NewProfile";
 import AddWorkDay from "./components/Dashboard/AddWorkday";
 import { Loginlogs } from "./new EMployee Profile/Loginlogs";
+import { NewPage } from "./newpage/NewPage";
 
 const router = createBrowserRouter([
   {
@@ -407,6 +408,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <Loginlogs/>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/page",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <NewPage/>
         </Aside>
       </ProductedRoute>
     ),

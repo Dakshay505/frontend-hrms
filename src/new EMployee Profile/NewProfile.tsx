@@ -24,7 +24,7 @@ export const NewProfile = () => {
         setActiveTab(tab);
     };
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
-    console.log("employee",singleEmployee._id)
+    console.log("employee",singleEmployee)
 
     // qr asign
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);
@@ -41,14 +41,14 @@ export const NewProfile = () => {
         }
     }
     useEffect(() => {
-        if (singleEmployee.profilePicture) {
+        if (singleEmployee?.profilePicture) {
             setProfilePicture(singleEmployee.profilePicture)
         } else {
             setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
         }
-        if (singleEmployee._id) {
-            dispatch(getQrAssignAsync(singleEmployee._id));
-            dispatch(salaryLogAsync(singleEmployee._id))
+        if (singleEmployee?._id) {
+            dispatch(getQrAssignAsync(singleEmployee?._id));
+            dispatch(salaryLogAsync(singleEmployee?._id))
         }
     }, [singleEmployee])
 
@@ -71,10 +71,10 @@ export const NewProfile = () => {
         const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
-        if (additionalData !== "") {
+        if (additionalData && additionalData !== "") {
             dispatch(getSingleEmployeeAsync(additionalData)).then((res: any) => {
-                dispatch(salaryLogAsync(res.payload.employeeData._id));
-                dispatch(getQrAssignAsync(res.payload.employeeData._id));
+                dispatch(salaryLogAsync(res.payload.employeeData?._id));
+                dispatch(getQrAssignAsync(res.payload.employeeData?._id));
                 let data = {};
                 if (res.payload.employeeData.employeeCode) {
                     data = { name: res.payload.employeeData.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
@@ -121,7 +121,7 @@ export const NewProfile = () => {
                                 }`}
                             onClick={() => toggleTab('bank')}
                         >
-                            Bank Detail
+                            Account Detail
                         </button>
                         
                         <button

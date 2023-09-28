@@ -14,9 +14,9 @@ const NewPicture = () => {
     const [profilePicture, setProfilePicture] = useState("https://cdn-icons-png.flaticon.com/512/219/219983.png")
 
     useEffect(() => {
-        setEmployeeId(singleEmployee._id);
-        if (singleEmployee.profilePicture) {
-            setProfilePicture(singleEmployee.profilePicture)
+        setEmployeeId(singleEmployee?._id);
+        if (singleEmployee?.profilePicture) {
+            setProfilePicture(singleEmployee?.profilePicture)
         } else {
             setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
         }
@@ -31,7 +31,7 @@ const NewPicture = () => {
 
     const handleConfirmDelete = () => {
         setShowConfirmation(false);
-        dispatch(deleteEmployeeAsync({ employeeId: singleEmployee._id })).then(() => {
+        dispatch(deleteEmployeeAsync({ employeeId: singleEmployee?._id })).then(() => {
             navigate("/view-modify-database")
         })
     };

@@ -9,6 +9,14 @@ import {
 } from "../../../redux/Slice/EmployeeSlice";
 import { Otp } from "../otp";
 
+const roleOptions = {
+    admin: 'Admin',
+    dbManager: 'Database Manager',
+    attendanceManager: 'Attendance Manager',
+    employee: 'Employee',
+    manufacturing: 'Manufacturing',
+};
+
 
 
 export const EmployeeDetails = () => {
@@ -25,8 +33,19 @@ export const EmployeeDetails = () => {
 
     const [employeeId, setEmployeeId] = useState("");
 
-    const [inputBoxJobProfileValue, setInputBoxJobProfileValue] = useState<any>("");
+    const [showInputBoxName, setShowInputBoxName] = useState(false);
+    const [inputBoxNameValue, setInputBoxNameValue] = useState<any>("");
+
+
+    const [showInputRole, setShowInputRole] = useState(false);
+    const [inputRoleValue, setInputRoleValue] = useState<any>("");
+
+
+    const [showInputBoxGroup, setShowInputBoxGroup] = useState(false);
+    const [inputBoxGroupValue, setInputBoxGroupValue] = useState<any>("");
+
     const [showInputBoxJobProfile, setShowInputBoxJobProfile] = useState(false);
+    const [inputBoxJobProfileValue, setInputBoxJobProfileValue] = useState<any>("");
 
     const [showInputBoxSalary, setShowInputBoxSalary] = useState(false);
     const [inputBoxSalaryValue, setInputBoxSalaryValue] = useState<any>("");
@@ -49,16 +68,26 @@ export const EmployeeDetails = () => {
     const [inputBoxOverTimeValue, setInputBoxOverTimeValue] =
         useState<any>(false);
 
-  
 
+
+    const [showInputBoxEmployeeCode, setShowInputBoxEmployeeCode] = useState(false);
+    const [inputBoxEmployeeCodeValue, setInputBoxEmployeeCodeValue] = useState<any>("");
+
+
+    console.log(singleEmployee.role)
     useEffect(() => {
-        setEmployeeId(singleEmployee._id);
+        setInputBoxNameValue(singleEmployee?.name);
+        setInputBoxGroupValue(singleEmployee.groupId?.groupName);
+        setInputRoleValue(singleEmployee?.role);
+
+        setEmployeeId(singleEmployee?._id);
         setInputBoxJobProfileValue(singleEmployee.jobProfileId?.jobProfileName);
-        setInputBoxSalaryValue(singleEmployee.salary);
-        setInputBoxLunchTimeValue(singleEmployee.lunchTime);
-        setInputBoxWorkingDaysValue(singleEmployee.workingDays);
-        setInputBoxWorkingHoursValue(singleEmployee.workingHours);
-        setInputBoxOverTimeValue(singleEmployee.overTime);
+        setInputBoxSalaryValue(singleEmployee?.salary);
+        setInputBoxLunchTimeValue(singleEmployee?.lunchTime);
+        setInputBoxWorkingDaysValue(singleEmployee?.workingDays);
+        setInputBoxWorkingHoursValue(singleEmployee?.workingHours);
+        setInputBoxOverTimeValue(singleEmployee?.overTime);
+        setInputBoxEmployeeCodeValue(singleEmployee?.employeeCode);
 
 
     }, [singleEmployee]);
@@ -79,6 +108,7 @@ export const EmployeeDetails = () => {
                     data = { ...data, overTime: false };
                 }
                 const sendData = { employeeId: employeeId, data: data };
+                console.log("abcd", sendData)
                 dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
                     if (res.payload.success) {
                         toast.success(res.payload.message);
@@ -87,14 +117,16 @@ export const EmployeeDetails = () => {
                     }
                     dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
                 })
+                setShowInputBoxName(false);
+                setShowInputBoxGroup(false);
+                setShowInputRole(false)
                 setShowInputBoxJobProfile(false);
                 setShowInputBoxSalary(false);
                 setShowInputBoxLunchTime(false);
                 setShowInputBoxWorkingDays(false);
                 setShowInputBoxWorkingHours(false);
                 setShowInputBoxOverTime(false);
-
-
+                setShowInputBoxEmployeeCode(false);
 
             })}
                 className=" gap-[24px] flex flex-col">
@@ -110,17 +142,66 @@ export const EmployeeDetails = () => {
 
 
                 <div className="flex flex-col gap-[16px]">
-                  <Otp/>
+                    <Otp />
+
+                    {!showInputBoxName && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Name
+                                </p>
+
+                            </div>
+                            <div>
+                                <p onClick={() => {
+                                    setShowInputBoxName(!showInputBoxName);
+                                }} className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                                    {singleEmployee?.name}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                    {showInputBoxName && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold  tracking-[0.25px]">
+                                        Name
+                                    </p>
+                                </div>
+                                <div>
+                                    <input
+                                        {...register("name", { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputBoxNameValue}
+                                        onChange={(event) =>
+                                            setInputBoxNameValue(event.target.value)
+                                        }
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
+
 
                     {!showInputBoxJobProfile && (
                         <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-                            <span className="text-[12px]">Job Profile</span>
+                            <div className="flex items-center gap-3">
+
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Job Profile
+                                </p>
+
+                            </div>
                             <div onClick={() => {
                                 setShowInputBoxJobProfile(!showInputBoxJobProfile);
                             }}>
-                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.jobProfileId?.jobProfileName}
-                                </p>
+                                <input value={singleEmployee.jobProfileId?.jobProfileName} placeholder="Job Profile Name" className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
                             </div>
                         </div>
                     )}
@@ -157,6 +238,158 @@ export const EmployeeDetails = () => {
                     )}
 
 
+                    {!showInputRole && (
+                        <div className="px-[16px] py-[8px] border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Role
+                                </p>
+                            </div>
+                            <div onClick={() => {
+                                setShowInputRole(!showInputRole);
+                            }}>
+                                <input
+                                placeholder="Role"
+                                    // value={singleEmployee?.role}
+                                    value={
+                                        singleEmployee?.role === 'attendanceManager' ? 'Attendance Manager' :
+                                        singleEmployee?.role === 'employee' ? 'Employee' : 
+                                        singleEmployee?.role === 'dbManager' ? 'Database Manager' :
+                                        singleEmployee?.role === 'admin' ? 'Admin' :
+                                        singleEmployee?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
+                                    }
+                                    className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+
+
+                    {showInputRole && (
+                        <div className="flex justify-between py-[8px]  px-[16px]  border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold  tracking-[0.25px]">
+                                        Role
+                                    </p>
+                                </div>
+                                <div>
+                                    <select
+                                        {...register("role", { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputRoleValue}
+                                        onChange={(event) => setInputRoleValue(event.target.value)}
+                                    >
+                                        {Object.keys(roleOptions).map((key) => (
+                                            <option key={key} value={key as keyof typeof roleOptions}>
+                                                {roleOptions[key as keyof typeof roleOptions]}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
+
+
+                    {!showInputBoxGroup && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Group
+                                </p>
+
+                            </div>
+                            <div>
+                                <p onClick={() => {
+                                    setShowInputBoxGroup(!showInputBoxGroup);
+                                }} className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                                    {singleEmployee.groupId?.groupName}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                    {showInputBoxGroup && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold  tracking-[0.25px]">
+                                        Group
+                                    </p>
+                                </div>
+                                <div>
+                                    <select
+                                        {...register("group", { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        defaultValue={inputBoxGroupValue}
+                                        onChange={(event) =>
+                                            setInputBoxGroupValue(event.target.value)
+                                        }
+                                    >
+                                        {groupList &&
+                                            groupList.map((element: any, index: number) => {
+                                                return (
+                                                    <option key={index} value={element.groupName}>
+                                                        {element.groupName}
+                                                    </option>
+                                                );
+                                            })}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
+
+                    {!showInputBoxEmployeeCode && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Employee Code
+                                </p>
+
+                            </div>
+                            <div>
+                                <input onClick={() => {
+                                    setShowInputBoxEmployeeCode(!showInputBoxEmployeeCode);
+                                }}
+                                    value={singleEmployee && singleEmployee?.employeeCode}
+                                    placeholder="22200"
+                                    className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
+                            </div>
+                        </div>
+                    )}
+                    {showInputBoxEmployeeCode && (
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold tracking-[0.25px]">
+                                        Employee Code
+                                    </p>
+                                </div>
+                                <div>
+                                    <input
+                                        {...register("employeeCode", { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        value={inputBoxEmployeeCodeValue}
+                                        onChange={(event) =>
+                                            setInputBoxEmployeeCodeValue(event.target.value)
+                                        }
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    )}
+
 
                     {!showInputBoxSalary && (
                         <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
@@ -171,7 +404,7 @@ export const EmployeeDetails = () => {
                                 setShowInputBoxSalary(!showInputBoxSalary);
                             }}>
                                 <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.salary}
+                                    {singleEmployee?.salary}
                                 </p>
                             </div>
                         </div>
@@ -214,7 +447,7 @@ export const EmployeeDetails = () => {
                                 setShowInputBoxLunchTime(!showInputBoxLunchTime);
                             }}>
                                 <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.lunchTime} Hour
+                                    {singleEmployee?.lunchTime} Hour
                                 </p>
                             </div>
                         </div>
@@ -263,7 +496,7 @@ export const EmployeeDetails = () => {
                                 setShowInputBoxWorkingDays(!showInputBoxWorkingDays);
                             }}>
                                 <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.workingDays} days per Week
+                                    {singleEmployee?.workingDays} days per Week
                                 </p>
                             </div>
                         </div>
@@ -313,7 +546,7 @@ export const EmployeeDetails = () => {
                                 setShowInputBoxWorkingHours(!showInputBoxWorkingHours);
                             }}>
                                 <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.workingHours} Hours per day
+                                    {singleEmployee?.workingHours} Hours per day
                                 </p>
                             </div>
                         </div>
@@ -355,7 +588,7 @@ export const EmployeeDetails = () => {
                                 setShowInputBoxOverTime(!showInputBoxOverTime);
                             }}>
                                 <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                                    {singleEmployee.overTime ? "Yes" : "No"}
+                                    {singleEmployee?.overTime ? "Yes" : "No"}
                                 </p>
                             </div>
                         </div>
@@ -397,8 +630,8 @@ export const EmployeeDetails = () => {
                         <div>
                             <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
                                 {inputBoxOverTimeValue &&
-                                    singleEmployee.overTimeRate &&
-                                    singleEmployee.overTimeRate.toFixed(2)}
+                                    singleEmployee?.overTimeRate &&
+                                    singleEmployee?.overTimeRate.toFixed(2)}
                             </p>
                         </div>
                     </div>
