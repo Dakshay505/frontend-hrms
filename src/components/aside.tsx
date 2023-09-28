@@ -59,6 +59,12 @@ const navItems: NavItem[] = [
   //   icon: training,
   //   Link: "/new-profile-employee",
   // },
+  {
+    id: "Login Logs",
+    name: "Login Logs",
+    icon: training,
+    Link: "/logs",
+  },
 ];
 
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
@@ -101,7 +107,7 @@ export default function aside(props: Props) {
             className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
            
             <div>
-              <p className='px-2 text-[16px] leading-6 font-medium text-white hover:text-black'>Production</p>
+              Production
             </div>
           </div>
 

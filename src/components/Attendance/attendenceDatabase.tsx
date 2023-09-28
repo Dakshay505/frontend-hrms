@@ -178,7 +178,7 @@ export const AttendenceDtabase = () => {
 
   let pendingCount = 0;
   let approvedCount = 0;
-  
+
   for (const entry of items) {
     if (entry.status === "pending") {
       pendingCount++;
@@ -186,7 +186,7 @@ export const AttendenceDtabase = () => {
       approvedCount++;
     }
   }
-  
+
 
   return (
     <div className="px-10 pt-8">
@@ -285,7 +285,7 @@ export const AttendenceDtabase = () => {
                   Status
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                  Marked By{" "}
+                  Approved By{" "}
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Photo
@@ -318,14 +318,22 @@ export const AttendenceDtabase = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
                           {element.employeeId?.employeeCode
                             ? element.employeeId.employeeCode
-                            : "Not Avilable"}{" "}
+                            : "Not Avilable"}
 
 
                         </td>
-                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap hover:underline cursor-pointer">
-                          <p onClick={() => handleTableRowClick(element)}>{element.employeeId?.name
-                            ? element.employeeId?.name
-                            : "Not Avilable"}{" "}</p>
+                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                          <div className="flex flex-col">
+
+                            <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                              ? element.employeeId?.name
+                              : "Not Avilable"}</p>
+
+                            <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                              ? element.employeeId.jobProfileId?.jobProfileName
+                              : "Not Avilable"}</p>
+
+                          </div>
                           {sortedPunches.slice(1).length > 0 ? (
                             <img
                               onClick={() => {
@@ -354,7 +362,7 @@ export const AttendenceDtabase = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {latestPunches.punchOut
                             ? changetime(latestPunches.punchOut)
-                            : "Not Avilable"}
+                            : "-"}
                         </td>
                         <td className="py-4 px-5">
                           {element?.status === "approved" && (
@@ -406,10 +414,20 @@ export const AttendenceDtabase = () => {
                             </span>
                           )}
                         </td>
-                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                          {element.approvedBy?.name
-                            ? element.approvedBy?.name
-                            : "-"}
+                        <td className="py-4 px-5 flex justify-center flex-col  text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            <p className="font-medium">
+
+                            {element.approvedBy?.name
+                              ? element.approvedBy?.name
+                              : "-"}
+                            </p>
+                            <p className="text-[12px]">
+
+                            {element.approvedBy?.jobProfileId?.jobProfileName
+                              ? element.approvedBy?.jobProfileId?.jobProfileName
+                              : "-"}
+                            </p>
+
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&

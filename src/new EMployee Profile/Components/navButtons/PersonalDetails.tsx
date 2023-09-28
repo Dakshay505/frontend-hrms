@@ -1,15 +1,23 @@
 import check from "../../../assets/Check.png"
+import upload from "../../../assets/UploadSimple.png";
+
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import {
   getSingleEmployeeAsync,
-
   updateEmployeeAsync,
 } from "../../../redux/Slice/EmployeeSlice";
 import { Otp } from "../otp";
 
+
+
+type FormData = {
+  employeeId: string;
+  fileName: string;
+  file: FileList;
+};
 
 
 export const PersonalDetails = () => {
@@ -19,9 +27,7 @@ export const PersonalDetails = () => {
     (state: any) => state.employee.singleEmployee
   );
   console.log(singleEmployee)
-  // const jobProfileList = useSelector(
-  //   (state: any) => state.jobProfile.jobProfiles
-  // );
+
   const groupList = useSelector((state: any) => state.group.groups);
   console.log(groupList)
 
@@ -40,15 +46,22 @@ export const PersonalDetails = () => {
   const [showInputBoxEmail, setShowInputBoxEmail] = useState(false);
   const [inputBoxEmailValue, setInputBoxEmailValue] = useState<any>("");
 
+
+  const [showInputAadharCard, setShowInputAadharCard] = useState(false);
+  const [inputAadharCardNumber, setInputAadharCardNumber] = useState<any>("");
+
   useEffect(() => {
     setEmployeeId(singleEmployee._id);
     setInputBoxContactNumberValue(singleEmployee.contactNumber);
     setInputBoxEmailValue(singleEmployee.email);
     setInputBoxGenderValue(singleEmployee.gender);
+    setInputAadharCardNumber(singleEmployee.aadharNumber);
   }, [singleEmployee]);
 
-
   const { handleSubmit, register } = useForm();
+
+  const [fileName, setFileName] = useState("Aadhar Card");
+
 
 
   return (
@@ -71,13 +84,21 @@ export const PersonalDetails = () => {
       setShowInputBoxContactNumber(false);
       setShowInputBoxEmail(false);
       setShowInputBoxGender(false);
+      setShowInputAadharCard(false)
+
+      const formDataToSend = new FormData();
+   
+      formDataToSend.append("employeeId", employeeId);
+      formDataToSend.append("fileName", fileName);
+      formDataToSend.append("file", data.file[0]);
+      
 
 
     })}
       className=" gap-[24px] flex flex-col">
       <div className="flex justify-between items-center">
         <h1 className="text-[18px] font-bold text-[#2E2E2E]">Personal Details</h1>
-        <button type="submit" className="flex gap-[5px] bg-[#414EF1] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
+        <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
           <img src={check} alt="" className="w-[16px] h-[16px]" />
           Save
         </button>
@@ -85,7 +106,7 @@ export const PersonalDetails = () => {
       </div>
 
       <div className="flex flex-col gap-[16px]">
-     <Otp/>
+        <Otp />
 
 
 
@@ -180,16 +201,91 @@ export const PersonalDetails = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-center items-center">
-              <button
-                className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
-                type="submit"
-              >
-                <img src={check} className="w-4 h-4" alt="" />
-              </button>
-            </div>
+
           </div>
         )}
+
+
+        {!showInputAadharCard && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex items-center gap-3">
+              <input value={fileName}
+                {...register("fileName")}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
+
+            </div>
+            <div className="flex gap-[20px] items-center ">
+
+              <div onClick={() => {
+                setShowInputAadharCard(!showInputAadharCard);
+              }}>
+                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                  {singleEmployee.aadharNumber}
+                </p>
+              </div>
+              <div className="text-center">
+                <label htmlFor="fileInput" className="cursor-pointer">
+                  <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                </label>
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                />
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {showInputAadharCard && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex gap-[10px] flex-col">
+              <input value={fileName}
+                {...register("fileName")}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
+
+              <div className="flex gap-[20px]">
+                <input
+                  {...register("aadharNumber", {
+                    required: true,
+
+                  })}
+                  className="text-[12px] leading-5 font-normal focus:outline-none"
+                  value={inputAadharCardNumber}
+                  onChange={(event) =>
+                    setInputAadharCardNumber(event.target.value)
+                  }
+                  type="text"
+                />
+
+                <div className="text-center">
+                  <label htmlFor="fileInput" className="cursor-pointer">
+                    <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                  </label>
+                  <input
+                    {...register("file")}
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                  />
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+
+
+
+
 
         {!showInputBoxGender && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
@@ -228,14 +324,7 @@ export const PersonalDetails = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-center items-center">
-              <button
-                className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
-                type="submit"
-              >
-                <img src={check} className="w-4 h-4" alt="" />
-              </button>
-            </div>
+
           </div>
         )}
 

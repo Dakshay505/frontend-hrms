@@ -26,7 +26,7 @@ export const ViewDocuments = ({ onClose }: any) => {
             </div>
 
             <div className="flex mt-[30px] justify-between">
-                <button onClick={onClose} className="flex gap-[5px] border-[#414EF1] border-1 border  rounded-[8px] px-[16px] py-[5px] justify-center items-center text-[#414EF1]">Close</button>
+                <button onClick={onClose} className="flex gap-[5px] border-[#283093] border-1 border  rounded-[8px] px-[16px] py-[5px] justify-center items-center text-[#283093]">Close</button>
               
             </div>
         </div>

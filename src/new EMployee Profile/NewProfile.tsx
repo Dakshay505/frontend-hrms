@@ -7,9 +7,13 @@ import SalaryLog from '../components/Employeeprofile/Profile/SalaryLog';
 import { useDispatch, useSelector } from 'react-redux';
 import ArrowSqureOut from '../assets/ArrowSquareOut.svg'
 import X from "../assets/X.svg";
-import { getQrAssignAsync, salaryLogAsync } from '../redux/Slice/EmployeeSlice';
+import { getQrAssignAsync, getSingleEmployeeAsync, salaryLogAsync } from '../redux/Slice/EmployeeSlice';
 import { EmployeeAttendance } from './Components/EmployeeAttendance';
 import { EmployeeDocuments } from './Components/navButtons/Documents/EmployeeDocuments';
+import { getAllJobProfileAsync } from '../redux/Slice/JobProfileSlice';
+import { getAllGroupsAsync } from '../redux/Slice/GroupSlice';
+import { useLocation } from 'react-router-dom';
+import { getAllAttandenceAsync } from '../redux/Slice/AttandenceSlice';
 
 export const NewProfile = () => {
     const dispatch = useDispatch();
@@ -20,6 +24,7 @@ export const NewProfile = () => {
         setActiveTab(tab);
     };
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+    console.log("employee",singleEmployee._id)
 
     // qr asign
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);
@@ -35,8 +40,6 @@ export const NewProfile = () => {
             setShowQrRow([index])
         }
     }
-
-
     useEffect(() => {
         if (singleEmployee.profilePicture) {
             setProfilePicture(singleEmployee.profilePicture)
@@ -48,6 +51,43 @@ export const NewProfile = () => {
             dispatch(salaryLogAsync(singleEmployee._id))
         }
     }, [singleEmployee])
+
+    const location = useLocation();
+    const additionalData = (location.state?.additionalData);
+
+    const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
+
+
+    function formatDate(date: any) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    
+    useEffect(() => {
+        const nextDate = new Date();
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllGroupsAsync());
+        if (additionalData !== "") {
+            dispatch(getSingleEmployeeAsync(additionalData)).then((res: any) => {
+                dispatch(salaryLogAsync(res.payload.employeeData._id));
+                dispatch(getQrAssignAsync(res.payload.employeeData._id));
+                let data = {};
+                if (res.payload.employeeData.employeeCode) {
+                    data = { name: res.payload.employeeData.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
+                } else {
+                    data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
+                }
+                dispatch(getAllAttandenceAsync(data)).then((res: any) => {
+                    setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
+                })
+            })
+            //setAdditionalData("");
+        }
+    }, [])
 
 
     return (
@@ -94,8 +134,6 @@ export const NewProfile = () => {
                           Documents
                         </button>
                     </div>
-
-
                     <div className='border  border-[#d7d7d7] rounded-[8px]'>
                         {activeTab === 'employee' && (
                             <div className="p-[16px]"><EmployeeDetails /></div>
@@ -113,10 +151,9 @@ export const NewProfile = () => {
                             <div className="p-[16px]"><EmployeeDocuments/></div>
                         )}
                     </div>
-
                 </div>
             </div>
-            <SalaryLog />
+            <SalaryLog/>
 
             {/* QR Assigning Logs STARTS HERE */}
             {qrAssign && qrAssign.length > 0 && <div className='mt-10'>
@@ -161,10 +198,7 @@ export const NewProfile = () => {
             </div>}
             {/* QR Assigning Logs ENDS HERE */}
 
-
-
-
-            <EmployeeAttendance/>
+            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} />
         </div>
     )
 }

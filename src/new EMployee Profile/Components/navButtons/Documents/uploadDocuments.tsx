@@ -21,7 +21,6 @@ const UploadPopup = ({ onClose }: any) => {
     const [fileName, setFileName] = useState("");
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        // console.log("dattaaaaaaaaa",data.file[0])
         const formDataToSend = new FormData();
         formDataToSend.append("employeeId", employeeId);
         formDataToSend.append("fileName", fileName);
@@ -40,14 +39,7 @@ const UploadPopup = ({ onClose }: any) => {
     const singleEmployee = useSelector(
         (state: any) => state.employee.singleEmployee
     );
-    // console.log("singleEmployee", singleEmployee)
-
-
-    // console.log("jobProfileList", jobProfileList)
-
     const [employeeId, setEmployeeId] = useState("");
-
-
     useEffect(() => {
         setEmployeeId(singleEmployee._id);
     }, [singleEmployee]);
@@ -95,8 +87,8 @@ const UploadPopup = ({ onClose }: any) => {
 
                 <div className="flex mt-[20px] justify-between">
 
-                    <button onClick={onClose} className="flex gap-[5px] border-[#414EF1] border-1 border  rounded-[8px] px-[16px] py-[5px] justify-center items-center text-[#414EF1]">Close</button>
-                    <button type="submit" className="flex gap-[5px] bg-[#414EF1] rounded-[8px] px-[16px] py-[5px] justify-center items-center text-white" >
+                    <button onClick={onClose} className="flex gap-[5px] border-[#283093] border-1 border  rounded-[8px] px-[16px] py-[5px] justify-center items-center text-[#283093]">Close</button>
+                    <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[5px] justify-center items-center text-white" >
                         <img src={check} alt="" className="w-[16px] h-[16px]" />
                         Save
                     </button>
