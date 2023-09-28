@@ -46,7 +46,7 @@ const Home = () => {
                 <div className='my-8'>
                     <h3 className='text-2xl font-bold leading-8 text-[#2E2E2E]'>Configure Database</h3>
                 </div>
-                <div className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg p-4 gap-2 w-[700px]'>
+                <div className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg p-4 gap-2 w-[900px]'>
                     <div className='flex flex-col items-center justify-center w-[109px] h-[120px] gap-3'>
                         <div className=''>
                             <img className='w-[32px] h-[32px]' src={GearSix} alt="gearimg" />
@@ -83,6 +83,16 @@ const Home = () => {
                                 </div>
                                 <div>
                                     <p className='text-xl font-medium text-[#283093]'>Job Profile</p>
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to="/add-workday">
+                            <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                <div className=''>
+                                    <img className='w-[32px] h-[32px]' src={departmentLogo} alt="gearimg" />
+                                </div>
+                                <div>
+                                    <p className='text-xl font-medium text-[#283093]'>Working Day</p>
                                 </div>
                             </div>
                         </Link>

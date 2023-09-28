@@ -8,6 +8,8 @@ import { Navigate } from 'react-router-dom';
 import XCircle from "../assets/XCircle.svg"
 import LoaderGif from '../assets/loadergif.gif'
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
 
 export function Login() {
     const [errorMessage, setErrorMessage] = useState("")
@@ -15,12 +17,40 @@ export function Login() {
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const loaderStatus = useSelector((state: any) => state.login.status)
+    const [Data, setData] = useState<any>({});
+ 
+  useEffect(() => {
+    axios.get('https://geolocation-db.com/json/f2e84010-e1e9-11ed-b2f8-6b70106be3c8')
+      .then((response) => {
+        //console.log("res",response)
+        setData(response.data);
+        
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        
+      });
+  }, []);
+
+  //console.log("userAgent",navigator.userAgent)
+  //console.log("platform",navigator.platform)
     function isValidEmail(email: any) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
     const onSubmit = (data: any) => {
+        
+
+        
         if (isValidEmail(data.email)) {
+            data = {
+                email: data.email,
+                password: data.password,
+                userAgent:navigator.userAgent,
+                platform:navigator.platform,
+                ipAddress:Data.IPv4
+            }
+            console.log("ressss",data)
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
                 if (res.payload.success) {
                     toast.success(res.payload.message);

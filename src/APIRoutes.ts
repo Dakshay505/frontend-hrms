@@ -127,3 +127,9 @@ export const addShopApiPath=`${apiPath}/api/v1/shop/add`
 export const getSingleShopApiPath=`${apiPath}/api/v1/shop`
 export const updateShopApiPath=`${apiPath}/api/v1/shop`
 export const deleteShopApiPath=`${apiPath}/api/v1/shop`
+
+//workday
+export const addWorkDayApiPath=`${apiPath}/api/v2/workingDay/add`
+export const updateWorkDayApiPath=`${apiPath}/api/v2/workingDay/update`
+export const showWorkDayApiPath=`${apiPath}/api/v2/workingDay/`
+
