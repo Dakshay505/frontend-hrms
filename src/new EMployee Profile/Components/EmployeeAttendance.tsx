@@ -12,6 +12,7 @@ import plus from "../../assets/Plus.png"
 import closed from "../../assets/x1.png";
 import check from "../../assets/Check.svg";
 import dots from "../../assets/dots-vertical.svg"
+import ArrowSqureOut from '../../assets/ArrowSquareOut.svg'
 import del from "../../assets/Delete.svg"
 import GreenCheck from '../../assets/GreenCheck.svg';
 import CaretDown from "../../assets/CaretDown11.svg";
@@ -55,6 +56,9 @@ export const EmployeeAttendance = (props:any) => {
         setPopUp(true)
 
     }
+    const handleCloseImage = () => {
+        setIsImageOpen(false);
+      };
 
     function formatDate(date: any) {
         const year = date.getFullYear();
@@ -112,6 +116,14 @@ export const EmployeeAttendance = (props:any) => {
             return "";
         }
     };
+    const [isImageOpen, setIsImageOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState("");
+  
+    const handleImageClick = (imageSrc: any) => {
+      setSelectedImage(imageSrc);
+      setIsImageOpen(true);
+    };
+  
 
     const handleRowClick = (index: number) => {
         const isExpanded = showTableRow.includes(index)
@@ -355,7 +367,7 @@ export const EmployeeAttendance = (props:any) => {
                 )}
 
                 <div className='py-8 overflow-auto'>
-                    <table>
+                <table>
                         <tbody>
                             <tr className='bg-[#ECEDFE] cursor-default'>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
@@ -363,7 +375,10 @@ export const EmployeeAttendance = (props:any) => {
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch In</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
-                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Marked By </td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photo</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark</td>
+                            
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                 //console.log("ghghgh", element.status)
@@ -375,12 +390,12 @@ export const EmployeeAttendance = (props:any) => {
                                 })
                                 const latestPunches = sortedPunches[0];
                                 const firstPunches = sortedPunches[sortedPunches.length - 1];
-                                if (element.employeeId?.employeeCode === singleEmployee?.employeeCode) {
+                                if (element.employeeId.employeeCode === singleEmployee.employeeCode) {
                                     return <>
                                         {updatePopUp && (
 
-                                         <div className="fixed inset-0  flex z-50 items-center justify-center bg-opacity-100 rounded-md">
-                                                   <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
+<div className="fixed inset-0  flex z-50 items-center justify-center bg-opacity-100 rounded-md">
+<div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
 
                                                     <div className="flex justify-between">
 
@@ -465,6 +480,11 @@ export const EmployeeAttendance = (props:any) => {
 
                                                 <div className="bg-white flex flex-col gap-[30px] w-[300px] h-[150px] p-6 rounded-lg">
                                                     <span className="text-[15px]  font-bold text-[#3b404f]">Do you want to delete permanently ?</span>
+
+
+
+
+
                                                     <div className="flex flex-row items-start gap-[24px] rounded-lg">
                                                         <div onClick={() => setDeletePopup(false)} className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#FFFFFF] rounded-lg ">
 
@@ -477,11 +497,19 @@ export const EmployeeAttendance = (props:any) => {
 
                                                     </div>
 
+
+
+
                                                 </div>
                                             </div>
+
+
+
+
+
                                         )}
                                         <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{latestPunches.punchIn ? (latestPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{firstPunches.punchIn ? (firstPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                             <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
                                                 {showTableRow.includes(index)
@@ -526,6 +554,35 @@ export const EmployeeAttendance = (props:any) => {
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.approvedBy?.name
                                                 ? element.approvedBy?.name
                                                 : "-"}</td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        {element?.status === "approved" &&
+                          element.approvedImage && (
+                            <div className="flex gap-[10px] cursor-pointer">
+                              <div>
+                                <p
+                                  className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                  onClick={() =>
+                                    handleImageClick(
+                                      element.approvedImage
+                                    )
+                                  }
+                                >
+                                  Open Photo
+                                </p>
+                              </div>
+                              <div>
+                                <img
+                                  src={ArrowSqureOut}
+                                  className="w-[14px] h-[14px]"
+                                  alt="arrowsqureout"
+                                />
+                              </div>
+                            </div>
+                          )}
+                                            </td> 
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length>0
+                                                ? element.remarks[element.remarks.length-1].remark
+                                                : "-"}</td>   
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>
@@ -563,6 +620,21 @@ export const EmployeeAttendance = (props:any) => {
                                     </>
                                 }
                             })}
+                             {isImageOpen && (
+            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+              <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+              <button
+                className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
+                onClick={handleCloseImage}
+              >
+                <img
+                  src={close}
+                  alt=""
+                  className="h-[25px] w-[25px] bg-white rounded-full "
+                />
+              </button>
+            </div>
+          )}
                         </tbody>
                     </table>
                 </div>
