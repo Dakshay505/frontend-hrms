@@ -71,8 +71,8 @@ export const EmployeeAttendance = (props:any) => {
                 dispatch(salaryLogAsync(res.payload.employeeData._id));
                 dispatch(getQrAssignAsync(res.payload.employeeData._id));
                 let data = {};
-                if (res.payload.employeeData.employeeCode) {
-                    data = { name: res.payload.employeeData.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
+                if (res.payload.employeeData?.employeeCode) {
+                    data = { name: res.payload.employeeData?.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
@@ -338,7 +338,7 @@ export const EmployeeAttendance = (props:any) => {
                                 })
                                 const latestPunches = sortedPunches[0];
                                 const firstPunches = sortedPunches[sortedPunches.length - 1];
-                                if (element.employeeId.employeeCode === singleEmployee.employeeCode) {
+                                if (element.employeeId?.employeeCode === singleEmployee?.employeeCode) {
                                     return <>
                                         {updatePopUp && (
 
