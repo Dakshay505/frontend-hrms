@@ -337,6 +337,7 @@ const EditProfile = () => {
               </div>
             </div>
           )}
+
           {!showInputBoxName && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">
@@ -389,6 +390,7 @@ const EditProfile = () => {
               </div>
             </div>
           )}
+          
           {!showInputBoxEmployeeCode && (
             <div className="flex flex-col p-4 w-[448px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
               <div className="flex items-center gap-3">

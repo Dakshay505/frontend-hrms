@@ -8,7 +8,7 @@ function Excel() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5050/api/v2/attendance', { withCredentials: true });
+      const response = await axios.get('https://chawlacomponents.com/api/v2/attendance?limit=2000', { withCredentials: true });
       setJsonData(response.data.attendanceRecords);
     } catch (error) {
       console.error('Error fetching data:', error);

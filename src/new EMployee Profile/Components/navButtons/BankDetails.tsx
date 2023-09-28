@@ -1,4 +1,5 @@
 import check from "../../../assets/Check.png"
+import upload from "../../../assets/UploadSimple.png";
 
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +26,7 @@ export const BankDetails = () => {
 
 
   console.log(singleEmployee)
- 
+
   const groupList = useSelector((state: any) => state.group.groups);
   console.log(groupList)
 
@@ -38,7 +39,12 @@ export const BankDetails = () => {
   const [pancardNumber, setPancardNumber] = useState<any>('')
 
 
+  const [showInputAadharCard, setShowInputAadharCard] = useState(false);
+  const [inputAadharCardNumber, setInputAadharCardNumber] = useState<any>("");
 
+
+  const [showInputPfNumberValue, setShowInputPfNumberValue] = useState(false);
+  const [inputPfNumber, setInputPfNumber] = useState<any>("");
 
 
   const [InputBankDeatils, setInputBankDeatils] =
@@ -56,6 +62,8 @@ export const BankDetails = () => {
     setEmployeeId(singleEmployee._id);
     setPancardNumber(singleEmployee.PAN_Number)
     setInputBoxESIValue(singleEmployee.ESI_ID)
+    setInputAadharCardNumber(singleEmployee.aadharNumber);
+    setInputPfNumber(singleEmployee.PF_UAN_Number)
     setBankDetail({
       bankName: singleEmployee.bankDetails?.bankName,
       branch: singleEmployee.bankDetails?.branch,
@@ -67,6 +75,7 @@ export const BankDetails = () => {
 
 
   const { handleSubmit, register } = useForm();
+  const [fileName, setFileName] = useState("Aadhar Card");
 
   return (
     <form onSubmit={handleSubmit((data: any) => {
@@ -88,14 +97,14 @@ export const BankDetails = () => {
       setShowInputBoxPancard(false)
       setESIValue(false)
       setInputBankDeatils(false)
-
-
+      setShowInputPfNumberValue(false)
+      setShowInputAadharCard(false)
 
     })}
       className=" gap-[24px] flex flex-col">
 
       <div className="flex justify-between items-center">
-        <h1 className="text-[18px] font-bold text-[#2E2E2E]">Bank Details</h1>
+        <h1 className="text-[18px] font-bold text-[#2E2E2E]">Account Details</h1>
         <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
           <img src={check} alt="" className="w-[16px] h-[16px]" />
           Save
@@ -104,7 +113,90 @@ export const BankDetails = () => {
       </div>
 
       <div className="flex flex-col gap-[16px]">
-      <Otp/>
+        <Otp />
+
+
+
+        {!showInputAadharCard && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex items-center gap-3">
+              <input value={fileName}
+                {...register("fileName")}
+
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
+
+            </div>
+            <div className="flex gap-[20px] items-center ">
+
+              <div onClick={() => {
+                setShowInputAadharCard(!showInputAadharCard);
+              }}>
+                <input placeholder="File Name"
+                  value={singleEmployee.aadharNumber}
+
+                  className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px] outline-none" />
+              </div>
+              <div className="text-center">
+                <label htmlFor="fileInput" className="cursor-pointer">
+                  <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                </label>
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                />
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {showInputAadharCard && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex gap-[10px] flex-col">
+              <input value={fileName}
+                {...register("fileName")}
+                onChange={(e) => setFileName(e.target.value)}
+                className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+              </input>
+
+              <div className="flex gap-[20px]">
+                <input
+                  {...register("aadharNumber", {
+                    required: true,
+
+                  })}
+
+                  className="text-[12px] leading-5 font-normal focus:outline-none"
+                  value={inputAadharCardNumber}
+                  onChange={(event) =>
+                    setInputAadharCardNumber(event.target.value)
+                  }
+                  placeholder="File Name"
+
+                  type="text"
+                />
+
+                <div className="text-center">
+                  <label htmlFor="fileInput" className="cursor-pointer">
+                    <img src={upload} alt="" className="w-[20px] h-[20px]" />
+                  </label>
+                  <input
+                    {...register("file")}
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                  />
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
 
 
         {!showInputBoxPancard && (
@@ -118,9 +210,11 @@ export const BankDetails = () => {
             <div onClick={() => {
               setShowInputBoxPancard(!showInputBoxPancard);
             }}>
-              <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.PAN_Number}
-              </p>
+              <input
+                placeholder="5000000000000"
+                value={singleEmployee.PAN_Number}
+
+                className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px] outline-none" />
             </div>
           </div>
         )}
@@ -135,6 +229,8 @@ export const BankDetails = () => {
               <div>
                 <input
                   {...register('PAN_Number', { required: true })}
+                  placeholder="5000000000000"
+
                   className="text-[12px] leading-5 font-normal focus:outline-none"
                   value={pancardNumber}
                   onChange={(event) => {
@@ -156,6 +252,56 @@ export const BankDetails = () => {
           </div>
         )}
 
+
+        {!showInputPfNumberValue && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex items-center gap-3">
+              <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                PF Number
+              </p>
+
+            </div>
+            <div onClick={() => {
+              setShowInputPfNumberValue(!showInputPfNumberValue);
+            }}>
+              <input placeholder="Pf Number" value={singleEmployee.PF_UAN_Number} className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px] outline-none" />
+
+            </div>
+          </div>
+        )}
+        {showInputPfNumberValue && (
+          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+            <div className="flex flex-col">
+              <div className="flex gap-3">
+                <p className="text-sm font-semibold ] tracking-[0.25px]">
+                  PF Number
+                </p>
+              </div>
+              <div>
+                <input
+                  {...register('PF_UAN_Number', { required: true })}
+                  placeholder="5000000000000"
+                  className="text-[12px] leading-5 font-normal focus:outline-none"
+                  value={inputPfNumber}
+                  onChange={(event) => {
+
+                    if (event.target.value.toString().length <= 10) {
+                      setInputPfNumber(event.target.value);
+                    }
+
+
+                  }}
+                  type="number"
+                />
+
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
         {!ESIValue && (
           <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
             <div className="flex items-center gap-3">
@@ -167,9 +313,8 @@ export const BankDetails = () => {
             <div onClick={() => {
               setESIValue(!ESIValue);
             }}>
-              <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.ESI_ID}
-              </p>
+              <input value={singleEmployee.ESI_ID} placeholder="ESI ID" className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px] outline-none" />
+
             </div>
           </div>
         )}
@@ -192,6 +337,7 @@ export const BankDetails = () => {
 
                   }}
                   type="text"
+                  placeholder="ESI ID"
                 />
 
 
@@ -203,79 +349,6 @@ export const BankDetails = () => {
         )}
 
 
-        {/* {!showInputBankName && (
-          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-            <div className="flex items-center gap-3">
-              <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
-               BANK NAME
-              </p>
-
-            </div>
-            <div onClick={() => {
-              setShowInputBankName(!showInputBankName);
-            }}>
-              <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                {singleEmployee.bankDetails?.bankName}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {showInputBankName && (
-          <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-            <div className="flex flex-col">
-              <div className="flex gap-3">
-                <p className="text-sm font-semibold  tracking-[0.25px]">
-                  Bank Name
-                </p>
-              </div>
-              <div>
-                <input
-                  {...register('bankName', { required: true })}
-                  className="text-[12px] leading-5 font-normal focus:outline-none"
-                  value={bankName}
-                 
-                  onChange={(event) =>
-                    setShowInputBankName(event.target.value)
-                }
-                  type="text"
-                />
-
-
-              </div>
-            </div>
-
-          </div>
-        )} */}
-
-
-        {/* 
-
-        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-          <span className="text-[12px]">Bank Name</span>
-          <input type="text" placeholder="Type bank name" name="" id="" className="outline-none text-[16px]" />
-        </div>
-
-
-
-        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-          <span className="text-[12px]">Account Number</span>
-          <input type="Number" placeholder="Type bank number" name="" id="" className="outline-none text-[16px]" />
-        </div>
-
-
-
-        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-          <span className="text-[12px]">IFSC Code</span>
-          <input type="text" placeholder="Type code" name="" id="" className="outline-none text-[16px]" />
-        </div>
-
-
-
-        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
-          <span className="text-[12px]">Branch Code</span>
-          <input type="text" placeholder="Type your branch code" name="" id="" className="outline-none text-[16px]" />
-        </div> */}
 
 
         {!InputBankDeatils && (
@@ -287,9 +360,9 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                  {bankdetails.bankName}
-                </p>
+                <input placeholder="SBI" value={bankdetails.bankName} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
               </div>
             </div>
 
@@ -300,9 +373,9 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                  {bankdetails.accountNumber}
-                </p>
+                <input placeholder="45125466325" value={bankdetails.accountNumber} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
               </div>
             </div>
 
@@ -312,9 +385,9 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                  {bankdetails.branch}
-                </p>
+                <input placeholder="45210" value={bankdetails.branch} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
               </div>
             </div>
 
@@ -323,9 +396,9 @@ export const BankDetails = () => {
               <div onClick={() => {
                 setInputBankDeatils(!InputBankDeatils);
               }}>
-                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                  {bankdetails.IFSC_Code}
-                </p>
+                <input placeholder="SBI0055" value={bankdetails.IFSC_Code} className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+
+
               </div>
             </div>
             <div>
@@ -347,6 +420,7 @@ export const BankDetails = () => {
                     {...register('bankName', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.bankName}
+                    placeholder="SBI"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -378,6 +452,7 @@ export const BankDetails = () => {
                     {...register('accountNumber', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.accountNumber}
+                    placeholder="52362514251"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -406,6 +481,7 @@ export const BankDetails = () => {
                     {...register('branch', { required: true })}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.branch}
+                    placeholder="SBI"
                     onChange={(event) => {
 
                       setBankDetail({
@@ -434,6 +510,7 @@ export const BankDetails = () => {
                     {...register('IFSC_Code')}
                     className="text-[12px] leading-5 font-normal focus:outline-none"
                     value={bankdetails.IFSC_Code}
+                    placeholder="SBI56252"
                     onChange={(event) => {
 
                       setBankDetail({

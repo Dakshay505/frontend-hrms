@@ -18,6 +18,7 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
+import close from "../../assets/x1.png";
 export const EmployeeAttendance = (props:any) => {
     const { singleEmployeeAttendanceList } = props;
     const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export const EmployeeAttendance = (props:any) => {
     const [deleteId, setDeleteId] = useState("")
     const [punchOutDate, setPunchOutDate] = useState("")
     const [updateDate, setUpdateDate] = useState("")
+    const [remark,Setremark]=useState("")
 
 
     const [showTableRow, setShowTableRow] = useState<any>([]);
@@ -71,8 +73,8 @@ export const EmployeeAttendance = (props:any) => {
                 dispatch(salaryLogAsync(res.payload.employeeData._id));
                 dispatch(getQrAssignAsync(res.payload.employeeData._id));
                 let data = {};
-                if (res.payload.employeeData.employeeCode) {
-                    data = { name: res.payload.employeeData.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
+                if (res.payload.employeeData?.employeeCode) {
+                    data = { name: res.payload.employeeData?.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
@@ -156,20 +158,29 @@ export const EmployeeAttendance = (props:any) => {
         if (PuchIn === "") {
             toast.error("PunchIn is required")
             return
-        } else {
+        }
+        else if(remark===""){
+            toast.error("Remarks is required")
+            return
+
+        } 
+        else {
 
             setShowAddPopup(false)
-            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null,remarks:remark, "id": singleEmployee._id }
             console.log(data)
             // console.log(singleEmployee._id)
 
             dispatch(addPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
-                    toast.success("Punch add sucessfully")
+                    toast.success(res.payload.message)
                     refresh()
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
+                    Setremark("")
+
+
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -183,12 +194,16 @@ export const EmployeeAttendance = (props:any) => {
         else if (punchOutDate === "") {
             toast.error("Punchout Date is required")
         }
+        else if(remark===""){
+            toast.error("Remarks is required")
+            return
+
+        } 
         else {
             setUpdatePopup(false)
-            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id }
+            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id,remarks:remark}
             console.log(data)
             // console.log(singleEmployee._id)
-
 
             dispatch(editPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
@@ -197,10 +212,15 @@ export const EmployeeAttendance = (props:any) => {
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
+                    Setremark("")
                     refresh()
                 } else {
                     toast.error(res.payload.message)
+
+
                 }
+
+
             })
         }
     }
@@ -231,71 +251,88 @@ export const EmployeeAttendance = (props:any) => {
                 </div>
                 {showAddPopup && (
 
-                    <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
-                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[590px] p-6 rounded-lg">
+<div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
+    <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
 
-                            <div className="flex justify-between">
+        <div className="flex justify-between">
 
-                                <div className="flex gap-[5px]">
-
-
-                                    <span className="text-[16px]  font-bold text-[#3b404f]">Add Details</span>
-                                    <div onClick={handleSumbit} className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg cursor-pointer">
-                                        <img src={check} className="w-[12px] h-[12px]" alt="plus" />
-                                        <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
-                                    </div>
+            <div className="flex gap-[5px]">
 
 
-                                </div>
-                                <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 cursor-pointer'>
-                                    <img src={closed} alt="" className="w-[36px] h-[36px] " onClick={() => setShowAddPopup(false)} />
-                                </div>
-                            </div>
-
-                            <div className="flex justify-items-center items-center h-[495px] w-[540px] flex-col  gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
-                                <div className="flex flex-col gap-[7px]">
-                                    <span className="text-[#2A3143]">Employee Name</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
-
-                                    </div>
+                <span className="text-[16px]  font-bold text-[#3b404f]">Add Details</span>
+                <div onClick={handleSumbit} className="flex gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg cursor-pointer">
+                    <img src={check} className="w-[12px] h-[12px]" alt="plus" />
+                    <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Save</p>
+                </div>
 
 
+            </div>
+            <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 cursor-pointer'>
+                <img src={close} alt="" className="w-[36px] h-[36px] " onClick={() => setShowAddPopup(false)} />
+            </div>
+        </div>
 
-                                </div>
-                                <div className="flex flex-col gap-[10px]">
-                                    <span className="text-[#2A3143]">Date</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={date} onChange={(event) => setDate(event.target.value)} max={maxDate} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
+        <div className="flex justify-items-center items-center h-[530px] w-[520px] flex-col  gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+            <div className="flex flex-col gap-[7px]">
+                <span className="text-[#2A3143]">Employee Name</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
 
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-[10px]">
-                                    <span className="text-[#2A3143]">PuchIn Time</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={PuchIn} onChange={(event) => setPunchIn(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+                </div>
 
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-[10px]">
-                                    <span className="text-[#2A3143]">PuchOut Date</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
-                                    </div>
-                                </div>
 
-                                <div className="flex flex-col gap-[10px]">
-                                    <span className="text-[#2A3143]">PuchOut Time</span>
-                                    <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
-                                        <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+            </div>
+            <div className="flex flex-col gap-[10px]">
+                <span className="text-[#2A3143]">Date</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={date} onChange={(event) => setDate(event.target.value)} max={maxDate} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                </div>
+            </div>
+            <div className="flex flex-col gap-[10px]">
+                <span className="text-[#2A3143]">PuchIn Time</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={PuchIn} onChange={(event) => setPunchIn(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                </div>
+            </div>
+            <div className="flex flex-col gap-[10px]">
+                <span className="text-[#2A3143]">PuchOut Date</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-[10px]">
+                <span className="text-[#2A3143]">PuchOut Time</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+
+                </div>
+            </div>
+            <div className="flex flex-col gap-[10px] mb-6">
+                <span className="text-[#2A3143]">Remark</span>
+                <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                    <input value={remark} onChange={(event) => Setremark(event.target.value)} type="text" className="focus:outline-none" required />
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+)}
                 {popup && (
 
                     <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
@@ -338,14 +375,18 @@ export const EmployeeAttendance = (props:any) => {
                                 })
                                 const latestPunches = sortedPunches[0];
                                 const firstPunches = sortedPunches[sortedPunches.length - 1];
-                                if (element.employeeId.employeeCode === singleEmployee.employeeCode) {
+                                if (element.employeeId?.employeeCode === singleEmployee?.employeeCode) {
                                     return <>
                                         {updatePopUp && (
 
-                                            <div className="fixed inset-0  flex z-50 items-center justify-center  bg-opacity-80 rounded-md">
-                                                <div className="bg-white flex flex-col gap-[30px] w-[619px] h-[590px] p-6 rounded-lg">
+                                         <div className="fixed inset-0  flex z-50 items-center justify-center bg-opacity-100 rounded-md">
+                                                   <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
+
                                                     <div className="flex justify-between">
+
                                                         <div className="flex gap-[5px]">
+
+
                                                             <span className="text-[16px]  font-bold text-[#3b404f]">Update Details</span>
                                                             <div onClick={editHandleSumbit} className="flex cursor-pointer gap-[5px] ml-[400px] items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                                                                 <img src={check} className="w-[12px] h-[12px]" alt="plus" />
@@ -354,47 +395,69 @@ export const EmployeeAttendance = (props:any) => {
 
                                                         </div>
                                                         <div className='bg-white rounded-full w-[36px] h-[36px] -mt-10 -mr-10 cursor-pointer '>
-                                                            <img src={closed} alt="" className="w-[36px] h-[36px] " onClick={() => setUpdatePopup(false)} />
+                                                            <img src={close} alt="" className="w-[36px] h-[36px] " onClick={() => setUpdatePopup(false)} />
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex h-[495px] w-[540px] flex-col justify-items-center items-center gap-[24px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                                                    <div className="flex h-[530px] w-[540px] flex-col justify-items-center items-center gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                                         <div className="flex flex-col gap-[7px]">
                                                             <span className="text-[#2A3143]">Employee Name</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
+
                                                             </div>
+
+
+
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">Date</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={dated} type="date" placeholder="e.g.Steel" className="focus:outline-none" readOnly />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchIn Time</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={PuchIn} onChange={(event) => setPunchIn(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Date</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={punchOutDate} onChange={(event) => setPunchOutDate(event.target.value)} type="date" placeholder="e.g.Steel" className="focus:outline-none" required />
 
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">PuchOut Time</span>
-                                                            <div className="px-[16px] w-[450px] flex  h-[40px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={PunchOut} onChange={(event) => setPunchOut(event.target.value)} type="time" placeholder="e.g.Steel" className="focus:outline-none" required />
+
                                                             </div>
                                                         </div>
+                                                        <div className="flex flex-col gap-[10px] mb-6">
+                                    <span className="text-[#2A3143]">Remark</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <input value={remark} onChange={(event) => Setremark(event.target.value)} type="text" className="focus:outline-none" required />
+
+                                    </div>
+                                </div>
+
+
                                                     </div>
+
+
+
+
                                                 </div>
                                             </div>
+
+
+
+
                                         )}
                                         {deletePopup && (
 

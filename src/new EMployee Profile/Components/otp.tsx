@@ -57,7 +57,7 @@ export const Otp = () => {
 
     return (
         <div>
-            {!singleEmployee.verified && (
+            {!singleEmployee?.verified && (
                 <div className="flex gap-[10px] items-center bg-[#FCECEC] rounded-lg p-4">
                     <div>
                         <img src={WarningCircle} className="w-[20px] h-[20px]" alt="" />

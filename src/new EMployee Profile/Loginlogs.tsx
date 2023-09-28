@@ -105,7 +105,11 @@ export const Loginlogs = () => {
 
     return (
         <div className='px-[40px] pb-[50px] pt-[32px]'>
-            <div className="py-6 mb-24 overflow-auto">
+            <div className=" mb-24 flex flex-col gap-[20px] overflow-auto">
+
+                <div>
+                    <h1 className="text-2xl font-bold text-[#2E2E2E]">Login History</h1>
+                </div>
                 <table className="w-full">
                     <tbody>
                         <tr className="bg-[#ECEDFE] cursor-default">
