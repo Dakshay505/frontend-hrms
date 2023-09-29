@@ -87,8 +87,6 @@ export const AttendenceDashboardList = () => {
   // const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
   const shoplist = useSelector((state: any) => state.Shop.shop)
-  console.log(shoplist)
-
   useEffect(() => {
     const currentDate = new Date(date);
     const year = currentDate.getFullYear();
@@ -107,7 +105,6 @@ export const AttendenceDashboardList = () => {
     dispatch(allShopAsync())
   }, []);
   const changetime = (createdAtDate: any) => {
-    //console.log(createdAtDate)
     const date = new Date(createdAtDate)
     const hours = date.getUTCHours(); // Get the hours in UTC
     const minutes = date.getUTCMinutes();
@@ -154,8 +151,6 @@ export const AttendenceDashboardList = () => {
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
     let sendData = {}
-    console.log("datedddd", filter.nextDate)
-
     sendData = {
       shopName: shopName,
       date: filter.date,
@@ -164,7 +159,6 @@ export const AttendenceDashboardList = () => {
     }
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
-      console.log("hiii", data.payload)
       const employeeData = data.payload.attendance;
       setItems(employeeData)
     });
@@ -217,29 +211,93 @@ export const AttendenceDashboardList = () => {
       year: "numeric",
     });
   };
+  function formatDateExcel(date: any) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+  function extractTime(dateTime: any) {
+    if (!dateTime) {
+      return '';
+    }
+    const date = new Date(dateTime);
+    const hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
   const navigate = useNavigate();
 
   const handleTableRowClick = (data: any) => {
     const employeeId = { employeeId: data.employeeId._id };
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-    console.log("hello", data)
   };
   const exportToExcel = () => {
     if (items) {
-      // Modify jsonData to include concatenated punches
-      const modifiedData = items.map((record:any) => ({
-        ...record,
-        punchIn: `${record.punches[0].punchIn}`,
-        punchOut:record.punches[record.punches.length-1]?.punchOut,
-        employeeId:record.employeeId.name,
-        approvedBy:record.approvedBy?.name,
-        remarks:record.remarks[record.remarks.length-1]?.remark
-      
-    }));
-    modifiedData.forEach((record:any) => {
-      delete record.punches;
-    });
+      const columnOrder = [
+        'Date',
+        'EmployeeCode',
+        'Name', // Assuming 'employeeName' is a property in the 'record' object
+        'JobProfile', // Assuming 'employeeName' is a property in the 'record' object
+        'PunchIn',
+        'PunchOut',
+        'Status',
+        'ApprovedBy',
+        'ApprovedTime',
+        'Remark'
+      ];
+
+      const modifiedData = items.map((record) => {
+        // Destructure the record, omit unwanted properties
+        const {
+          updatedAt,
+          createdAt,
+          approvedImage,
+          __v,
+          _id,
+          ...rest
+        } = record;
+        console.log(...rest);
+        // Map the data according to the column order
+        const mappedData = columnOrder.map((column) => {
+          switch (column) {
+            case 'EmployeeCode':
+              return record.employeeId.employeeCode;
+            case 'Name':
+              return record.employeeId.name;
+            case 'Date':
+              const date = new Date(record.date);
+              const formattedDate = formatDateExcel(date);
+              return formattedDate;
+            case 'PunchIn':
+              const time = extractTime(record.punches[0]?.punchIn);
+              return time;
+            case 'PunchOut':
+              const time2 = extractTime(record.punches.length > 0 ? record.punches[record.punches.length - 1]?.punchOut : null);
+              return time2;
+            case 'ApprovedBy':
+              return record.approvedBy?.name;
+            case 'ApprovedTime':
+              const time3 = extractTime(record.approvedTime);
+              return time3;
+            case 'Status':
+              return record.status;
+            case 'JobProfile':
+              return record.employeeId.jobProfileId.jobProfileName;
+            case 'Remark':
+              return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
+            default:
+              return '';
+          }
+        });
+
+        return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
+      });
+      console.log("item", items)
+      modifiedData.forEach((record) => {
+        delete record.punches;
+      });
 
       const ws = XLSX.utils.json_to_sheet(modifiedData);
       const wb = XLSX.utils.book_new();
@@ -247,9 +305,10 @@ export const AttendenceDashboardList = () => {
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, 'attendance_data.xlsx');
-      toast.success("CSV Download Sucessfully")
+      toast.success("CSV Download Successfully");
     }
   };
+
 
   const handleInputChange = (event: any) => {
     if (event.target.value !== "") {
@@ -300,13 +359,13 @@ export const AttendenceDashboardList = () => {
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
           </div>
-          <div onClick={exportToExcel}  className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
-                        
-                        <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export CSV</p>
-                    </div>
+          <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+
+            <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
+          </div>
 
         </div>
-       
+
         <div className="flex flex-start pt-4 gap-6">
           {selectedShop !== "All Shop" ? (
             <>
@@ -506,47 +565,47 @@ export const AttendenceDashboardList = () => {
 
       </div>
       <div className="flex flex-row">
-      <div className="relative mt-4">
-        {isLabelVisible && (
-          <div className="absolute top-[10px] left-6">
-            <label
-              htmlFor="searchInput"
-              className="flex gap-2 items-center cursor-text"
-            >
-              <img src={glass} alt="" className="h-4 w-4" />
-              <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-            </label>
-          </div>
-        )}
-        <input
-          type="search"
-          id="searchInput"
-          onChange={handleInputChange}
-          value={search}
-          className="h-10 w-[200px] py-3 px-5 rounded-full text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
-        />
-        {suggestions.length > 0 && (
-          <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-            {suggestions.map((suggestion: any, index: any) => (
-              <input
-                type="text"
-                readOnly
-                key={index}
-                className="py-3 px-5 cursor-pointer focus:outline-none w-[200px] z-30"
-                value={suggestion}
-                onClick={(event) => {
-                  setFilter({
-                    ...filter,
-                    name: (event.target as HTMLInputElement).value,
-                  });
-                  setSuggestions([]);
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-     
+        <div className="relative mt-4">
+          {isLabelVisible && (
+            <div className="absolute top-[10px] left-6">
+              <label
+                htmlFor="searchInput"
+                className="flex gap-2 items-center cursor-text"
+              >
+                <img src={glass} alt="" className="h-4 w-4" />
+                <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+              </label>
+            </div>
+          )}
+          <input
+            type="search"
+            id="searchInput"
+            onChange={handleInputChange}
+            value={search}
+            className="h-10 w-[200px] py-3 px-5 rounded-full text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+          />
+          {suggestions.length > 0 && (
+            <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
+              {suggestions.map((suggestion: any, index: any) => (
+                <input
+                  type="text"
+                  readOnly
+                  key={index}
+                  className="py-3 px-5 cursor-pointer focus:outline-none w-[200px] z-30"
+                  value={suggestion}
+                  onClick={(event) => {
+                    setFilter({
+                      ...filter,
+                      name: (event.target as HTMLInputElement).value,
+                    });
+                    setSuggestions([]);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
 
 
@@ -586,7 +645,6 @@ export const AttendenceDashboardList = () => {
             {items &&
               items.map((element: any, index: number) => {
                 const punchesList = [...element.punches];
-                console.log(shoplist.shopName)
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                   return (
                     new Date(b.punchIn).getTime() -
@@ -624,7 +682,7 @@ export const AttendenceDashboardList = () => {
                             ? element.employeeId?.name
                             : "Not Avilable"}</p>
 
-                          <p  className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                          <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
                             ? element.employeeId.jobProfileId?.jobProfileName
                             : "Not Avilable"}</p>
 

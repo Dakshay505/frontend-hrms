@@ -1,6 +1,6 @@
+export const apiPath = `http://localhost:5050`;
+// export const apiPath = ``;
 
-// export const apiPath = `http://localhost:5050`;
-export const apiPath = ``;
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 //export const apiPath = `https://chawlacomponents.com`;
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
@@ -79,10 +79,10 @@ export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
 export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPresent`;
-export const addpuchApiPath=`${apiPath}/api/v2/attendance/addPunches`
-export const deletepuchApiPath=`${apiPath}/api/v2/attendance/deletePunches`
-export const editpuchApiPath=`${apiPath}/api/v2/attendance/updatePunches`
-export const shopFiterAttendancePath=`${apiPath}/api/v2/attendance/shopFilter`
+export const addpuchApiPath = `${apiPath}/api/v2/attendance/addPunches`;
+export const deletepuchApiPath = `${apiPath}/api/v2/attendance/deletePunches`;
+export const editpuchApiPath = `${apiPath}/api/v2/attendance/updatePunches`;
+export const shopFiterAttendancePath = `${apiPath}/api/v2/attendance/shopFilter`;
 
 // TRAINING
 export const addTrainingLinkApiPath = `${apiPath}/api/v1/training/addLinks`;
@@ -119,17 +119,19 @@ export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/new
 export const getEmployeeSalaryApiPath = `${apiPath}/api/v1/attendance`;
 
 // employeeBarcode
-export const getEmployeeBarcodeApiPath=`${apiPath}/api/v1/employee/employeeBarCode`
+export const getEmployeeBarcodeApiPath = `${apiPath}/api/v1/employee/employeeBarCode`;
 
 // Shop
-export const getAllShopApiPath=`${apiPath}/api/v1/shop`
-export const addShopApiPath=`${apiPath}/api/v1/shop/add`
-export const getSingleShopApiPath=`${apiPath}/api/v1/shop`
-export const updateShopApiPath=`${apiPath}/api/v1/shop`
-export const deleteShopApiPath=`${apiPath}/api/v1/shop`
+export const getAllShopApiPath = `${apiPath}/api/v1/shop`;
+export const addShopApiPath = `${apiPath}/api/v1/shop/add`;
+export const getSingleShopApiPath = `${apiPath}/api/v1/shop`;
+export const updateShopApiPath = `${apiPath}/api/v1/shop`;
+export const deleteShopApiPath = `${apiPath}/api/v1/shop`;
 
 //workday
-export const addWorkDayApiPath=`${apiPath}/api/v2/workingDay/add`
-export const updateWorkDayApiPath=`${apiPath}/api/v2/workingDay/update`
-export const showWorkDayApiPath=`${apiPath}/api/v2/workingDay/`
+export const addWorkDayApiPath = `${apiPath}/api/v2/workingDay/add`;
+export const updateWorkDayApiPath = `${apiPath}/api/v2/workingDay/update`;
+export const showWorkDayApiPath = `${apiPath}/api/v2/workingDay/`;
 
+// Login history Api
+export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
