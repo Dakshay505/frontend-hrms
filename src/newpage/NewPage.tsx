@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
   EmployeeBarCodesAsync,
-  getSingleEmployeeAsync,
-  updateEmployeeAsync
+  // getSingleEmployeeAsync,
+  // updateEmployeeAsync
 } from "../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
@@ -19,7 +19,7 @@ import LoaderGif from "../assets/loadergif.gif";
 import CaretLeft from "../assets/CaretLeft.svg";
 import CaretRight1 from "../assets/CaretRight1.svg";
 import change from "../assets/Repeat.svg"
-import check from "../assets/Check.png"
+// import check from "../assets/Check.png"
 
 import {
   getAllDepartmentAsync,
@@ -27,19 +27,19 @@ import {
 } from "../redux/Slice/departmentSlice";
 
 import edit from "../assets/editIcon.svg"
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+// import { useForm } from "react-hook-form";
+// import toast from "react-hot-toast";
 
 
 
 
-const roleOptions = {
-  admin: 'Admin',
-  dbManager: 'Database Manager',
-  attendanceManager: 'Attendance Manager',
-  employee: 'Employee',
-  manufacturing: 'Manufacturing',
-};
+// const roleOptions = {
+//   admin: 'Admin',
+//   dbManager: 'Database Manager',
+//   attendanceManager: 'Attendance Manager',
+//   employee: 'Employee',
+//   manufacturing: 'Manufacturing',
+// };
 
 
 
@@ -230,44 +230,58 @@ export const NewPage = () => {
   };
 
 
-  // edit role pop up
-
-  const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
-
-  const [inputRoleValue, setInputRoleValue] = useState<any>("");
-
-  const openEditRolePopup = () => {
-    setIsEditRolePopupOpen(true);
-    setIsChangePasswordPopupOpen(false);
-
-  };
-
-  const closeEditRolePopup = () => {
-    setIsEditRolePopupOpen(false);
-  };
+ 
 
   // Change Password pop up
 
-  const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
+  // const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
 
-  const openChangePasswordPopup = () => {
-    setIsEditRolePopupOpen(true);
-    setIsChangePasswordPopupOpen(false);
+  // const openChangePasswordPopup = () => {
+  //   setIsEditRolePopupOpen(true);
+  //   setIsChangePasswordPopupOpen(false);
+  // };
+
+  // const closeChangePasswordPopup = () => {
+  //   setIsChangePasswordPopupOpen(false);
+  // };
+  
+  const formatDate = (date: any) => {
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
 
-  const closeChangePasswordPopup = () => {
-    setIsChangePasswordPopupOpen(false);
-  };
+
+
+   // edit role pop up
+
+  //  const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
+
+  //  const [inputRoleValue, setInputRoleValue] = useState<any>("");
+ 
+  //  const openEditRolePopup = () => {
+  //    setIsEditRolePopupOpen(true);
+  //    setIsChangePasswordPopupOpen(false);
+ 
+  //  };
+ 
+  //  const closeEditRolePopup = () => {
+  //    setIsEditRolePopupOpen(false);
+  //  };
+
 
   // update role 
-  const { handleSubmit, register } = useForm();
-  const [employeeId, setEmployeeId] = useState("");
-  console.log(employeeId)
+  // const { handleSubmit, register } = useForm();
+  // const [employeeId, setEmployeeId] = useState("");
+  // console.log(employeeId)
 
-  useEffect(() => {
-    setEmployeeId(employeeDetailList?._id);
-    setInputRoleValue(employeeDetailList?.role);
-  }, [employeeDetailList]);
+
+  // useEffect(() => {
+  //   setEmployeeId(employeeDetailList?._id);
+  //   setInputRoleValue(employeeDetailList?.role);
+  // }, [employeeDetailList]);
 
 
   return (
@@ -506,7 +520,7 @@ export const NewPage = () => {
                               src={edit}
                               alt=""
                               className="cursor-pointer"
-                              onClick={openEditRolePopup}
+                              // onClick={openEditRolePopup}
                             />
                           </div>
                         </td>
@@ -514,14 +528,15 @@ export const NewPage = () => {
                           <div className="flex gap-[10px]">
                             Change Password
                             <img src={change} alt="" className="cursor-pointer"
-                              onClick={openChangePasswordPopup}
+                              // onClick={openChangePasswordPopup}
                             />
                           </div>
 
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                          {element.updatedAt ? element.updatedAt.slice(0, 10) : "-"}
+                          {element.updatedAt ? formatDate(new Date(element.updatedAt)) : "-"}
                         </td>
+
 
                       </tr>
                     );
@@ -529,7 +544,7 @@ export const NewPage = () => {
               </tbody>
             </table>
 
-            {isEditRolePopupOpen && (
+            {/* {isEditRolePopupOpen && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
                 <form onSubmit={handleSubmit((data: any) => {
@@ -591,7 +606,7 @@ export const NewPage = () => {
                   <button onClick={closeChangePasswordPopup}>Close</button>
                 </div>
               </div>
-            )}
+            )} */}
 
 
 

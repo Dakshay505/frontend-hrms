@@ -3,7 +3,7 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateShopAsync, getSingleShopAsync, deleteShopAsync } from '../../redux/Slice/ShopSlice';
+import { updateShopAsync, getSingleShopAsync, deleteShopAsync, allShopAsync } from '../../redux/Slice/ShopSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import deleteIcon from "../../assets/Trash.svg"
@@ -30,15 +30,19 @@ export const EditShop = () => {
 
     const location = useLocation();
     const data = location.state.data
-    console.log("i am darta", data)
+    // console.log("i am darta", data)
 
+    const shopss = useSelector((state: any) => state.Shop.shop)
+    console.log(shopss)
 
     useEffect(() => {
         dispatch(getAllJobProfileAsync)
+        dispatch(getSingleShopAsync(data._id))
+
     }, [])
 
     const alljobprofile = useSelector((state: any) => state.jobProfile.jobProfiles)
-    console.log("hiiii", alljobprofile)
+    // console.log("hiiii", alljobprofile)
 
 
     const { register, handleSubmit } = useForm();
@@ -88,9 +92,10 @@ export const EditShop = () => {
         <div className="px-10 py-8">
             <form
                 onSubmit={handleSubmit((Data) => {
-                    const sendData = { shopId: data._id, data: Data }
-                    console.log(sendData);
-                    dispatch(updateShopAsync(sendData)).then((res: any) => {
+                    const sendData = { shopId: data._id, data: Data };
+                    // console.log(sendData);
+                    dispatch(updateShopAsync(sendData)).then((res:any) => {
+                        // console.log("hello",data._id)
                         dispatch(getSingleShopAsync(data._id));
                         if (res.payload.success) {
                             toast.success("Shop Updated Successfully");
@@ -116,7 +121,7 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <input placeholder='Shop Code' value={data.shopCode} className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
+                                <input placeholder='Shop Code' value={shopss.shopCode} className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
                             </div>
                         </div >}
                     {showInputShopCode &&
@@ -154,7 +159,7 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <input value={data.shopName} placeholder='Shop Name' className="text-[12px] bg-[#FAFAFA]  outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
+                                <input value={shopss.shopName} placeholder='Shop Name' className="text-[12px] bg-[#FAFAFA]  outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
                             </div>
                         </div >}
                     {showInputBoxShopName &&
@@ -192,8 +197,8 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <input value={data.jobProfile.jobProfileName
-                                } placeholder='Job Profile' className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
+                                <input value={shopss.jobProfile.jobProfileName
+                                } placeholder='Job Profile' className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
                             </div>
                         </div >}
                     {showInputBoxShopDescription &&

@@ -13,6 +13,7 @@ import calenderr from "../assets/attendence.svg";
 import { logoutUserAsync } from "../redux/Slice/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 
+import employees from "../assets/employees tab.svg"
 import arrowside from "../assets/gray-left.png"
 import openn from "../assets/r-arrow.png"
 
@@ -59,12 +60,12 @@ const navItems: NavItem[] = [
   //   icon: training,
   //   Link: "/new-profile-employee",
   // },
-  // {
-  //   id: "Employees",
-  //   name: "Employees",
-  //   icon: training,
-  //   Link: "/employees",
-  // },
+  {
+    id: "Employees",
+    name: "Employees",
+    icon: employees,
+    Link: "/employees",
+  },
   // {
   //   id: "Page",
   //   name: "Page",
