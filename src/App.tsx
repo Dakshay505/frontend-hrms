@@ -75,8 +75,9 @@ import { Shop } from "./components/Dashboard/Shop";
 import { EditShop } from "./components/Dashboard/EditShop";
 import { NewProfile } from "./new EMployee Profile/NewProfile";
 import AddWorkDay from "./components/Dashboard/AddWorkday";
-import { Loginlogs } from "./new EMployee Profile/Loginlogs";
+import { Loginlogs } from "./newpage/Loginlogs";
 import { NewPage } from "./newpage/NewPage";
+import { EmployeesSidebar } from "./newpage/Employees";
 
 const router = createBrowserRouter([
   {
@@ -416,11 +417,21 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/page",
+    path: "/employees-detail",
     element: (
       <ProductedRoute>
         <Aside>
           <NewPage/>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/employees",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <EmployeesSidebar/>
         </Aside>
       </ProductedRoute>
     ),

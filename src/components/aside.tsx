@@ -60,10 +60,10 @@ const navItems: NavItem[] = [
   //   Link: "/new-profile-employee",
   // },
   // {
-  //   id: "Login History",
-  //   name: "Login History",
+  //   id: "Employees",
+  //   name: "Employees",
   //   icon: training,
-  //   Link: "/logs",
+  //   Link: "/employees",
   // },
   // {
   //   id: "Page",

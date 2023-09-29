@@ -10,6 +10,10 @@ export const apiPath = `http://localhost:5050`;
 export const createJobProfileApiPath = `${apiPath}/api/v1/jobprofile/add`;
 export const getJobProfileApiPath = `${apiPath}/api/v1/jobprofile`;
 
+
+
+
+
 // group API
 
 export const createGroupApiPath = `${apiPath}/api/v1/group/add`;
@@ -133,3 +137,7 @@ export const addWorkDayApiPath=`${apiPath}/api/v2/workingDay/add`
 export const updateWorkDayApiPath=`${apiPath}/api/v2/workingDay/update`
 export const showWorkDayApiPath=`${apiPath}/api/v2/workingDay/`
 
+
+
+// Login history Api
+export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
