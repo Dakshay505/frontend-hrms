@@ -988,12 +988,15 @@ const ViewModifyDatabase = () => {
                       ID
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Shop Code
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Shop Name
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Supervisor Job Profile
                     </td>
-                  </tr>
+                  </tr> 
                   {shopss &&
                     shopss.map((element: any, index: number) => {
                       return (
@@ -1004,6 +1007,11 @@ const ViewModifyDatabase = () => {
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
+                            {element.shopCode
+                              ? element.shopCode
+                              : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
                             {element.shopName
