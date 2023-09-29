@@ -7,6 +7,7 @@ import { updateShopAsync, getSingleShopAsync, deleteShopAsync } from '../../redu
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import deleteIcon from "../../assets/Trash.svg"
+import toast from 'react-hot-toast';
 
 
 
@@ -17,6 +18,11 @@ export const EditShop = () => {
 
     const [showInputBoxShopName, setShowInputBoxShopName] = useState(false);
     const [inputBoxShopNameValue, setInputBoxShopNameValue] = useState<any>("");
+
+    const [showInputShopCode, setShowInputShopCode] = useState(false);
+    const [inputBoxShopCodeValue, setInputBoxShopCodeValue] = useState<any>("");
+
+
     const [showInputBoxShopDescription, setShowInputBoxShopDescription] = useState(false);
     const [, setInputBoxShopDescriptionValue] = useState<any>("");
     const [isConfirmationOpen, setConfirmationOpen] = useState(false);
@@ -37,8 +43,8 @@ export const EditShop = () => {
 
     const { register, handleSubmit } = useForm();
 
-// delete
-    const handleDeleteClick = () => { 
+    // delete
+    const handleDeleteClick = () => {
         setConfirmationOpen(true);
     };
 
@@ -84,10 +90,16 @@ export const EditShop = () => {
                 onSubmit={handleSubmit((Data) => {
                     const sendData = { shopId: data._id, data: Data }
                     console.log(sendData);
-                    dispatch(updateShopAsync(sendData)).then(() => {
+                    dispatch(updateShopAsync(sendData)).then((res: any) => {
                         dispatch(getSingleShopAsync(data._id));
+                        if (res.payload.success) {
+                            toast.success("Shop Updated Successfully");
+                        } else {
+                            toast.error(res.payload.message);
+                        }
                     });
                     setShowInputBoxShopName(false);
+                    setShowInputShopCode(false);
                     setShowInputBoxShopDescription(false);
                 })}
             >
@@ -95,6 +107,44 @@ export const EditShop = () => {
                     <h1 className="text-2xl font-bold text-[#2E2E2E]">Shop Information</h1>
                 </div>
                 <div className="flex flex-col gap-3 mt-10">
+                    {!showInputShopCode &&
+                        <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">Shop Code</p>
+                                <img src={edit} onClick={() => {
+                                    setShowInputShopCode(!showInputShopCode);
+                                }} className="w-3 h-3" alt="" />
+                            </div>
+                            <div>
+                                <input placeholder='Shop Code' value={data.shopCode} className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
+                            </div>
+                        </div >}
+                    {showInputShopCode &&
+                        <div className="flex justify-between p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FFFFFF] rounded">
+                            <div className="flex flex-col">
+                                <div className="flex gap-3">
+                                    <p className="text-sm font-semibold text-[#283093] tracking-[0.25px]">Shop Code</p>
+                                </div>
+                                <div>
+                                    <input
+                                        {...register('shopCode', { required: true })}
+                                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                                        placeholder='Shop Code'
+                                        value={inputBoxShopCodeValue}
+                                        onChange={(event) => setInputBoxShopCodeValue(event.target.value)}
+                                        type="text" />
+                                </div>
+                            </div>
+                            <div className="flex justify-center items-center">
+                                <button
+                                    className="flex justify-center items-center bg-[#283093] rounded w-[35px] h-[35px]"
+                                    type="submit">
+                                    <img src={check} className="w-4 h-4" alt="" />
+                                </button>
+                            </div>
+                        </div>}
+
+
                     {!showInputBoxShopName &&
                         <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                             <div className="flex items-center gap-3">
@@ -104,7 +154,7 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{data.shopName}</p>
+                                <input value={data.shopName} placeholder='Shop Name' className="text-[12px] bg-[#FAFAFA]  outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
                             </div>
                         </div >}
                     {showInputBoxShopName &&
@@ -118,6 +168,7 @@ export const EditShop = () => {
                                         {...register('shopName', { required: true })}
                                         className="text-[12px] leading-5 font-normal focus:outline-none"
                                         value={inputBoxShopNameValue}
+                                        placeholder='Shop Name'
                                         onChange={(event) => setInputBoxShopNameValue(event.target.value)}
                                         type="text" />
                                 </div>
@@ -130,6 +181,8 @@ export const EditShop = () => {
                                 </button>
                             </div>
                         </div>}
+
+
                     {!showInputBoxShopDescription &&
                         <div className="flex flex-col p-4 w-[472px] border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded">
                             <div className="flex items-center gap-3">
@@ -139,8 +192,8 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">{data.jobProfile.jobProfileName
-                                }</p>
+                                <input value={data.jobProfile.jobProfileName
+                                } placeholder='Job Profile' className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"/>
                             </div>
                         </div >}
                     {showInputBoxShopDescription &&
@@ -175,9 +228,12 @@ export const EditShop = () => {
                                 </button>
                             </div>
                         </div>}
-                </div> 
+                </div>
+
+
+
                 <div className='flex flex-row m-3'>
-                   
+
                     <button
                         className="flex  border py-2 px-5 mx-[-12px] my-5 border-red-500 items-center text-[red] text-sm font-medium "
                         onClick={handleDeleteClick}
