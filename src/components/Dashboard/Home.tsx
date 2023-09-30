@@ -4,12 +4,41 @@ import usersThree from '../../assets/UsersThree.png'
 import GearSix from '../../assets/GearSix.png'
 import Briefcase from '../../assets/Briefcase.png'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getLoggedInUserDataAsync } from '../../redux/Slice/loginSlice'
 
 const Home = () => {
+    const dispatch = useDispatch();
+
+    const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+    console.log(loggedInUserData)
+
+    useEffect(() => {
+        dispatch(getLoggedInUserDataAsync());
+    }, [])
+
+
+
+    let roleName = '';
+
+    if (loggedInUserData.admin) {
+        roleName = loggedInUserData.admin.name;
+    } else if (loggedInUserData.dbManager) {
+        roleName = loggedInUserData.dbManager.name;
+    } else if (loggedInUserData.attendanceManager) {
+        roleName = loggedInUserData.attendanceManager.name;
+    } else if (loggedInUserData.employee) {
+        roleName = loggedInUserData.employee.name;
+    } else if (loggedInUserData.manufacturing) {
+        roleName = loggedInUserData.manufacturing.name;
+    }
+    roleName = roleName.charAt(0).toUpperCase() + roleName.slice(1);
+
     return (
         <div className="mx-10">
             <div className='pt-8'>
-                <h1 className='text-[32px] font-bold leading-10 text-[#2E2E2E]'>Welcome Back!</h1>
+                <h1 className='text-[32px] font-bold leading-10 text-[#2E2E2E]'>Welcome Back, {roleName}!</h1>
             </div>
             <div>
                 <div className='my-8'>

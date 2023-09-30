@@ -20,6 +20,7 @@ import CaretUp from "../../assets/CaretUp.svg";
 import RedX from '../../assets/RedX.svg';
 import SpinnerGap from '../../assets/SpinnerGap.svg'
 import close from "../../assets/x1.png";
+import { getLoggedInUserDataAsync } from '../../redux/Slice/loginSlice';
 export const EmployeeAttendance = (props: any) => {
     const { singleEmployeeAttendanceList } = props;
     const dispatch = useDispatch();
@@ -52,7 +53,7 @@ export const EmployeeAttendance = (props: any) => {
         if (element?.punchOut !== null && element?.punchOut !== undefined) {
             setPunchOutDate(element.punchOut.slice(0, 10))
         }
-        //console.log(PunchOut)
+        ////console.log(PunchOut)
         setPopUp(true)
 
     }
@@ -82,7 +83,7 @@ export const EmployeeAttendance = (props: any) => {
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
-                console.log(data)
+                // console.log(data)
                 // dispatch(getAllAttandenceAsync(data)).then((res: any) => {
                 //     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
                 // })
@@ -152,10 +153,10 @@ export const EmployeeAttendance = (props: any) => {
     const handleDeleteSumbit = () => {
         setDeletePopup(false)
         const data = { "punchsId": deleteId, "id": singleEmployee._id }
-        console.log(data)
+        // console.log(data)
 
         dispatch(deletePunchAsync(data)).then((res: any) => {
-            console.log("Response", res)
+            // console.log("Response", res)
             if (res.payload.success) {
                 toast.success("Punch delete sucessfully")
                 refresh()
@@ -181,8 +182,8 @@ export const EmployeeAttendance = (props: any) => {
 
             setShowAddPopup(false)
             const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, remarks: remark, "id": singleEmployee._id }
-            console.log(data)
-            // console.log(singleEmployee._id)
+            //console.log(data)
+            // //console.log(singleEmployee._id)
 
             dispatch(addPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
@@ -215,8 +216,8 @@ export const EmployeeAttendance = (props: any) => {
         else {
             setUpdatePopup(false)
             const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id, remarks: remark }
-            console.log(data)
-            // console.log(singleEmployee._id)
+            // //console.log(data)
+            // //console.log(singleEmployee._id)
 
             dispatch(editPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
@@ -240,13 +241,20 @@ export const EmployeeAttendance = (props: any) => {
 
     const [maxDate, setMaxDate] = useState('');
 
+    const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+    console.log(loggedInUserData)
+
     useEffect(() => {
         // Get the current date in YYYY-MM-DD format
         const currentDate = new Date().toISOString().split('T')[0];
 
         // Set the maxDate state to the current date
         setMaxDate(currentDate);
+        dispatch(getLoggedInUserDataAsync());
+
     }, []);
+
+
     return (
         <div> {/* Attendance Starts here */}
             <div className='py-8'>
@@ -257,10 +265,13 @@ export const EmployeeAttendance = (props: any) => {
                             <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                         </Link>
                     </div>
-                    <div onClick={() => setShowAddPopup(true)} className="flex cursor-pointer gap-[5px]  items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
-                        <img src={plus} className="w-[12px] h-[12px]" alt="plus" />
-                        <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Add</p>
-                    </div>
+                    {loggedInUserData.admin || loggedInUserData.attendanceManager ? (
+
+                        <div onClick={() => setShowAddPopup(true)} className="flex cursor-pointer gap-[5px]  items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
+                            <img src={plus} className="w-[12px] h-[12px]" alt="plus" />
+                            <p className="text-sm font-medium text-[#FFFFFF] tracking-[0.25px] mr-6">Add</p>
+                        </div>
+                    ) : null}
                 </div>
                 {showAddPopup && (
 
@@ -382,7 +393,7 @@ export const EmployeeAttendance = (props: any) => {
 
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
-                                //console.log("ghghgh", element.status)
+                                ////console.log("ghghgh", element.status)
 
                                 const punchesList = [...(element.punches)];
 
@@ -528,27 +539,38 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
-
+                                                        {loggedInUserData.admin || loggedInUserData.attendanceManager ? (
+                                                            <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        ) : null}
                                                     </span>}
                                                 {element?.status === "rejected" &&
                                                     <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        {loggedInUserData.admin || loggedInUserData.attendanceManager ? (
+
+                                                            <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        ) : null}
 
                                                     </span>}
                                                 {(element?.status === "pending") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        {loggedInUserData.admin || loggedInUserData.attendanceManager ? (
+
+                                                            <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        ) : null}
+
                                                     </span>}
                                                 {(element?.status === "added Manually by administrator") &&
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        {loggedInUserData.admin || loggedInUserData.attendanceManager ? (
+                                                            <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
+                                                        ) : null}
+
 
                                                     </span>}
                                             </td>

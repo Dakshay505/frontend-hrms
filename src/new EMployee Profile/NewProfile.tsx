@@ -24,7 +24,7 @@ export const NewProfile = () => {
         setActiveTab(tab);
     };
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
-    console.log("employee",singleEmployee)
+    // console.log("employee",singleEmployee)
 
     // qr asign
     const qrAssign = useSelector((state: any) => state.employee.qrAssign);

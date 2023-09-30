@@ -5,12 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react"
 import { addImageAsync, deleteEmployeeAsync, getSingleEmployeeAsync } from "../../redux/Slice/EmployeeSlice";
 import { useNavigate } from "react-router-dom";
+import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
 const NewPicture = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     const [employeeId, setEmployeeId] = useState("")
+
+    const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+    console.log(loggedInUserData)
+
+
     const [profilePicture, setProfilePicture] = useState("https://cdn-icons-png.flaticon.com/512/219/219983.png")
 
     useEffect(() => {
@@ -20,7 +26,13 @@ const NewPicture = () => {
         } else {
             setProfilePicture("https://cdn-icons-png.flaticon.com/512/219/219983.png")
         }
+        dispatch(getLoggedInUserDataAsync());
+
     }, [singleEmployee])
+
+    useEffect(() => {
+        dispatch(getLoggedInUserDataAsync());
+    }, [])
 
     // delete section
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -61,17 +73,21 @@ const NewPicture = () => {
                         {singleEmployee && singleEmployee.name}
                     </p>
                 </div>
-                <div>
-                    <div
-                        className="flex items-center justify-center cursor-pointer py-3 px-4"
-                        onClick={handleDeleteClick}
-                    >
-                        <div>
-                            <img src={del} alt="" className="w-4 h-4" />
-                        </div>
-                        <p className='px-2 text-sm font-medium text-[#8A2626]'>Delete</p>
-                    </div>
 
+
+                <div>
+                    {loggedInUserData.admin  || loggedInUserData.dbManager ? (
+
+                        <div
+                            className="flex items-center justify-center cursor-pointer py-3 px-4"
+                            onClick={handleDeleteClick}
+                        >
+                            <div>
+                                <img src={del} alt="" className="w-4 h-4" />
+                            </div>
+                            <p className='px-2 text-sm font-medium text-[#8A2626]'>Delete</p>
+                        </div>
+                    ) : null}
                     {showConfirmation && (
                         <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }} className="fixed top-0 bottom-0 right-0 left-0 flex justify-center items-center">
                             <div className='bg-[#FFFFFF] p-10'>

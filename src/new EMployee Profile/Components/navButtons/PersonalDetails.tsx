@@ -9,6 +9,7 @@ import {
   updateEmployeeAsync,
 } from "../../../redux/Slice/EmployeeSlice";
 import { Otp } from "../otp";
+import { getLoggedInUserDataAsync } from "../../../redux/Slice/loginSlice";
 
 
 
@@ -19,10 +20,10 @@ export const PersonalDetails = () => {
   const singleEmployee = useSelector(
     (state: any) => state.employee.singleEmployee
   );
-  console.log(singleEmployee)
+  // console.log(singleEmployee)
 
   const groupList = useSelector((state: any) => state.group.groups);
-  console.log(groupList)
+  // console.log(groupList)
 
   const [employeeId, setEmployeeId] = useState("");
 
@@ -50,13 +51,17 @@ export const PersonalDetails = () => {
 
 
   const { handleSubmit, register } = useForm();
+  const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+  useEffect(() => {
+    dispatch(getLoggedInUserDataAsync());
+  }, [])
 
 
   return (
     <form onSubmit={handleSubmit((data: any) => {
 
       const sendData = { employeeId: employeeId, data: data };
-      console.log(sendData)
+      // console.log(sendData)
 
       dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
         if (res.payload.success) {
@@ -65,6 +70,8 @@ export const PersonalDetails = () => {
           toast.error(res.payload.message);
         }
         dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
+        dispatch(getLoggedInUserDataAsync());
+
       })
       setShowInputBoxContactNumber(false);
       setShowInputBoxEmail(false);
@@ -76,10 +83,13 @@ export const PersonalDetails = () => {
       className=" gap-[24px] flex flex-col">
       <div className="flex justify-between items-center">
         <h1 className="text-[18px] font-bold text-[#2E2E2E]">Personal Details</h1>
-        <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
-          <img src={check} alt="" className="w-[16px] h-[16px]" />
-          Save
-        </button>
+        {loggedInUserData.admin || loggedInUserData.dbManager ? (
+
+          <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
+            <img src={check} alt="" className="w-[16px] h-[16px]" />
+            Save
+          </button>
+        ) : null}
 
       </div>
 

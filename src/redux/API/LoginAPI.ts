@@ -31,6 +31,7 @@ export const employeeLogin = async (loginData: any) => {
 export const getLoggedInUserData = async () => {
   try {
     const { data } = await axios.get(`${getLoginDataApiPath}`, {withCredentials: true});
+    console.log(data)
     return data;
   }catch (error:any) {
     if (error.response && (error.response.status === 400 || error.response.status === 404)) {
