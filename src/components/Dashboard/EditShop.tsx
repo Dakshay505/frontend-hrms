@@ -3,7 +3,7 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateShopAsync, getSingleShopAsync, deleteShopAsync, allShopAsync } from '../../redux/Slice/ShopSlice';
+import { updateShopAsync, getSingleShopAsync, deleteShopAsync } from '../../redux/Slice/ShopSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
 import deleteIcon from "../../assets/Trash.svg"
@@ -94,7 +94,7 @@ export const EditShop = () => {
                 onSubmit={handleSubmit((Data) => {
                     const sendData = { shopId: data?._id, data: Data };
                     // console.log(sendData);
-                    dispatch(updateShopAsync(sendData)).then((res:any) => {
+                    dispatch(updateShopAsync(sendData)).then((res: any) => {
                         // console.log("hello",data._id)
                         dispatch(getSingleShopAsync(data?._id));
                         if (res.payload.success) {

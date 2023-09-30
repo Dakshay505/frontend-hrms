@@ -524,7 +524,7 @@ export const AttendenceDashboardList = () => {
               </select>
             </div>
             <div>
-              <select
+            <select
                 onChange={handleShopChange}
                 value={selectedShop}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
