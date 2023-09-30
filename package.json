@@ -16,6 +16,7 @@
     "@canvasjs/charts": "^3.7.12",
     "@canvasjs/react-charts": "^1.0.0",
     "@hookform/error-message": "^2.0.1",
+    "@iconify/react": "^4.1.1",
     "@mui/x-date-pickers": "^6.9.2",
     "@mui/x-date-pickers-pro": "^6.9.2",
     "@reduxjs/toolkit": "^1.9.5",

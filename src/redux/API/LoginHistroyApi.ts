@@ -1,17 +1,33 @@
-// api.js
+// API/LoginHistroyApi.js
 import axios from 'axios';
-import { getLoginHistroyApiPath } from '../../APIRoutes';
+import { changePasswordPasswordApiPath, getLoginHistroyApiPath } from '../../APIRoutes';
 
-
-export const fetchLoggedInHistoryAPI = async () => {
+export const fetchLoggedInHistoryAPI = async (limit: any, page: any) => {
   try {
-    const {data} = await axios.get(`${getLoginHistroyApiPath}?limit=2000`,{
-      withCredentials:true
+    const { data } = await axios.get(`${getLoginHistroyApiPath}?limit=${limit}&page=${page}`, {
+      withCredentials: true,
     });
-    console.log("i am api ",data)
+    console.log("API response: ", data);
     return data;
   } catch (error) {
     throw error;
   }
 };
- 
+
+
+export const changePasswordAPI = async (employeeId: any, newPassword: any) => {
+  try {
+    console.log(employeeId.employeeId,newPassword)
+    const password  = newPassword
+    const { data } = await axios.put(`${changePasswordPasswordApiPath}/${employeeId.employeeId}`,password, {
+      withCredentials: true,
+    });
+    console.log("Data", data);
+
+    return data;
+  } catch (err: any) {
+    console.error("API Error:", err);
+
+    console.log(err.response.data);
+  }
+};

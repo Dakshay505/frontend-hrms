@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
-  EmployeeBarCodesAsync,
-  // getSingleEmployeeAsync,
-  // updateEmployeeAsync
+
+  getSingleEmployeeAsync,
+  updateEmployeeAsync
 } from "../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
@@ -19,7 +19,7 @@ import LoaderGif from "../assets/loadergif.gif";
 import CaretLeft from "../assets/CaretLeft.svg";
 import CaretRight1 from "../assets/CaretRight1.svg";
 import change from "../assets/Repeat.svg"
-// import check from "../assets/Check.png"
+import check from "../assets/Check.png"
 
 import {
   getAllDepartmentAsync,
@@ -27,19 +27,20 @@ import {
 } from "../redux/Slice/departmentSlice";
 
 import edit from "../assets/editIcon.svg"
-// import { useForm } from "react-hook-form";
-// import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { changePasswordAsync } from "../redux/Slice/LoginHistorySlice";
 
 
 
 
-// const roleOptions = {
-//   admin: 'Admin',
-//   dbManager: 'Database Manager',
-//   attendanceManager: 'Attendance Manager',
-//   employee: 'Employee',
-//   manufacturing: 'Manufacturing',
-// };
+const roleOptions = {
+  admin: 'Admin',
+  dbManager: 'Database Manager',
+  attendanceManager: 'Attendance Manager',
+  employee: 'Employee',
+  manufacturing: 'Manufacturing',
+};
 
 
 
@@ -137,6 +138,8 @@ export const NewPage = () => {
     (state: any) => state.jobProfile.jobProfiles
   );
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+
+
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
       const employeeData = res.payload.employees;
@@ -164,21 +167,12 @@ export const NewPage = () => {
     dispatch(getAllJobProfileAsync());
     dispatch(getAllDepartmentAsync());
     dispatch(getAllParentDepartmentAsync());
-    dispatch(EmployeeBarCodesAsync());
+    dispatch(getSingleEmployeeAsync());
   }, []);
 
 
 
-  const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
-  const BarcodeStore: any = {}
-  // console.log("jjsjsjsssksk", EmployeeBarcode)
-  EmployeeBarcode.forEach((e: any) => {
 
-    const code = e.employeeCode;
-    BarcodeStore[code] = {
-      ...e
-    }
-  });
 
 
 
@@ -230,21 +224,23 @@ export const NewPage = () => {
   };
 
 
- 
+
 
   // Change Password pop up
 
-  // const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
+  const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
 
-  // const openChangePasswordPopup = () => {
-  //   setIsEditRolePopupOpen(true);
-  //   setIsChangePasswordPopupOpen(false);
-  // };
+  const openChangePasswordPopup = (employeeId: any) => {
+    console.log(employeeId)
+    setEmployeeId(employeeId);
+    setIsEditRolePopupOpen(false);
+    setIsChangePasswordPopupOpen(true);
+  };
 
-  // const closeChangePasswordPopup = () => {
-  //   setIsChangePasswordPopupOpen(false);
-  // };
-  
+  const closeChangePasswordPopup = () => {
+    setIsChangePasswordPopupOpen(false);
+  };
+
   const formatDate = (date: any) => {
     return date.toLocaleDateString("en-US", {
       day: "numeric",
@@ -255,33 +251,73 @@ export const NewPage = () => {
 
 
 
-   // edit role pop up
+  // edit role pop up
 
-  //  const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
+  const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
+  const [inputRoleValue, setInputRoleValue] = useState<any>("");
 
-  //  const [inputRoleValue, setInputRoleValue] = useState<any>("");
- 
-  //  const openEditRolePopup = () => {
-  //    setIsEditRolePopupOpen(true);
-  //    setIsChangePasswordPopupOpen(false);
- 
-  //  };
- 
-  //  const closeEditRolePopup = () => {
-  //    setIsEditRolePopupOpen(false);
-  //  };
+  const openEditRolePopup = (employeeId: any) => {
+    setEmployeeId(employeeId);
+    setIsEditRolePopupOpen(true);
+    setIsChangePasswordPopupOpen(false);
+  };
+
+  const closeEditRolePopup = () => {
+    setIsEditRolePopupOpen(false);
+  };
 
 
   // update role 
-  // const { handleSubmit, register } = useForm();
-  // const [employeeId, setEmployeeId] = useState("");
-  // console.log(employeeId)
+  const { handleSubmit, register } = useForm();
+  const [employeeId, setEmployeeId] = useState("");
+  // console.log(setEmployeeId)
+
+  const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
+  // console.log(singleEmployee)
 
 
-  // useEffect(() => {
-  //   setEmployeeId(employeeDetailList?._id);
-  //   setInputRoleValue(employeeDetailList?.role);
-  // }, [employeeDetailList]);
+  useEffect(() => {
+    setEmployeeId(singleEmployee?._id);
+    setInputRoleValue(singleEmployee?.role);
+  }, [singleEmployee]);
+
+
+
+  // changepassword
+
+
+
+
+  const [formData, setFormData] = useState({
+    employeeId: { employeeId },
+    newPassword: '',
+    confirmNewPassword: '',
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handlePasswordSubmit = (e: any) => {
+    e.preventDefault();
+    const { newPassword, confirmNewPassword } = formData;
+
+    if (newPassword !== confirmNewPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+
+    dispatch(changePasswordAsync({ employeeId, newPassword })) 
+      .then((res: any) => {
+        if (res.payload.success) {
+          toast.success(res.payload.message);
+        } else {
+          toast.error(res.payload.message);
+        }
+        closeChangePasswordPopup();
+      });
+  };
+
 
 
   return (
@@ -478,6 +514,8 @@ export const NewPage = () => {
                   </td>
 
                 </tr>
+
+
                 {employeeDetailList &&
                   employeeDetailList.map((element: any, index: number) => {
 
@@ -504,9 +542,9 @@ export const NewPage = () => {
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.contactNumber ? element.contactNumber : "Not Avilable"}
-
-
                         </td>
+
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           <div className="flex gap-[10px]">
                             <div>
@@ -514,21 +552,24 @@ export const NewPage = () => {
                                 element?.role === 'employee' ? 'Employee' :
                                   element?.role === 'dbManager' ? 'Database Manager' :
                                     element?.role === 'admin' ? 'Admin' :
-                                      element?.role === 'manufacturing' ? 'Manufacturing' : 'Role'}
+                                      element?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
+                              }
                             </div>
                             <img
                               src={edit}
                               alt=""
                               className="cursor-pointer"
-                              // onClick={openEditRolePopup}
+                              onClick={() => openEditRolePopup(element._id)}
                             />
                           </div>
                         </td>
+
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           <div className="flex gap-[10px]">
                             Change Password
                             <img src={change} alt="" className="cursor-pointer"
-                              // onClick={openChangePasswordPopup}
+                              onClick={() => openChangePasswordPopup(element._id)}
                             />
                           </div>
 
@@ -544,29 +585,32 @@ export const NewPage = () => {
               </tbody>
             </table>
 
-            {/* {isEditRolePopupOpen && (
+            {isEditRolePopupOpen && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
-                <form onSubmit={handleSubmit((data: any) => {
-                  const sendData = { employeeId: employeeId, data: data };
-                  console.log("abcd", sendData)
-                  dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
-                    if (res.payload.success) {
-                      toast.success(res.payload.message);
-                    } else {
-                      toast.error(res.payload.message);
-                    }
-                    dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
-                  })
-                  setIsEditRolePopupOpen(false)
 
-                })} className="modal relative flex flex-col gap-[20px] bg-white p-6 rounded-lg shadow-lg">
+                <form
+                  onSubmit={handleSubmit((data: any) => {
+                    const sendData = { employeeId: employeeId, data: data };
+                    console.log("abcd", sendData);
+                    dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
+                      if (res.payload.success) {
+                        toast.success(res.payload.message);
+                      } else {
+                        toast.error(res.payload.message);
+                      }
+                      dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
+                    });
+                    setIsEditRolePopupOpen(false);
+                  })}
+                  className="modal relative flex flex-col gap-[20px] bg-white p-6 rounded-lg shadow-lg">
+
                   <div className="flex flex-col gap-[16px]">
                     <h1 className="text-[18px] font-bold text-[#2E2E2E]">Update Role</h1>
                     <div>
                       <select
                         {...register("role", { required: true })}
-                        className="text-[12px] leading-5 font-normal focus:outline-none"
+                        className="text-[16px] leading-5 font-normal focus:outline-none"
                         value={inputRoleValue}
                         onChange={(event) => setInputRoleValue(event.target.value)}
                       >
@@ -583,6 +627,7 @@ export const NewPage = () => {
 
                   <div className="flex gap-[10px]">
                     <button onClick={closeEditRolePopup} className="flex gap-[5px] border-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-[#283093]">Close</button>
+
                     <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[8px] justify-center items-center text-white" >
                       <img src={check} alt="" className="w-[16px] h-[16px]" />
                       Save
@@ -597,16 +642,50 @@ export const NewPage = () => {
             {isChangePasswordPopupOpen && (
               <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
-                <div className="modal relative bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex flex-col gap-[10px] relative bg-white p-6 rounded-lg shadow-lg">
                   <h1 className="font-bold text-[25px]">
 
                     Change Password
                   </h1>
 
-                  <button onClick={closeChangePasswordPopup}>Close</button>
+                  <form onSubmit={handlePasswordSubmit}>
+
+
+                    <div className="flex  flex-col gap-[10px]">
+                      <div>
+                        <input
+                          type="password"
+                          id="newPassword"
+                          name="newPassword"
+                          value={formData.newPassword}
+                          onChange={handleChange}
+                          className="border px-[15px] py-[10px] border-gray-500 rounded-[8px]"
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="password"
+                          id="confirmNewPassword"
+                          name="confirmNewPassword"
+                          value={formData.confirmNewPassword}
+                          onChange={handleChange}
+                          className="border px-[15px] py-[15px] border-gray-500 rounded-[8px]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-[10px] pt-[20px]">
+
+                      <button onClick={closeChangePasswordPopup} className="flex gap-[5px] border-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-[#283093]">Close</button>
+                      <button type="submit" className="flex gap-[5px] bg-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-white">
+                        Change Password
+                      </button>
+                    </div>
+                  </form>
+
                 </div>
               </div>
-            )} */}
+            )}
 
 
 

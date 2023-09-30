@@ -79,7 +79,6 @@ export const EmployeeDetails = () => {
         setInputBoxNameValue(singleEmployee?.name);
         setInputBoxGroupValue(singleEmployee.groupId?.groupName);
         setInputRoleValue(singleEmployee?.role);
-
         setEmployeeId(singleEmployee?._id);
         setInputBoxJobProfileValue(singleEmployee.jobProfileId?.jobProfileName);
         setInputBoxSalaryValue(singleEmployee?.salary);
