@@ -575,7 +575,7 @@ export const NewPage = () => {
 
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                          {element.updatedAt ? formatDate(new Date(element.updatedAt)) : "-"}
+                          {element.updatedAt ? formatDate(new Date(element.createdAt)) : "-"}
                         </td>
 
 
