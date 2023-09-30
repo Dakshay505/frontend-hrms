@@ -263,6 +263,7 @@ export const AttendenceDashboardList = () => {
           _id,
           ...rest
         } = record;
+
         console.log({...rest});
         // Map the data according to the column order
         const mappedData = columnOrder.map((column) => {

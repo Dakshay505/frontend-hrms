@@ -74,10 +74,8 @@ const NewPicture = () => {
                     </p>
                 </div>
 
-
                 <div>
-                    {loggedInUserData.admin  || loggedInUserData.dbManager ? (
-
+                    {loggedInUserData.admin  || loggedInUserData.employee.role === 'dbManager' ? (
                         <div
                             className="flex items-center justify-center cursor-pointer py-3 px-4"
                             onClick={handleDeleteClick}

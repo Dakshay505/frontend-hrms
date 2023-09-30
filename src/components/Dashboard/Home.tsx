@@ -35,6 +35,7 @@ const Home = () => {
     }
     roleName = roleName.charAt(0).toUpperCase() + roleName.slice(1);
 
+
     return (
         <div className="mx-10">
             <div className='pt-8'>
@@ -45,7 +46,7 @@ const Home = () => {
                     <h3 className='text-2xl font-bold leading-8 text-[#2E2E2E]'>View/Update Database</h3>
                 </div>
                 <div className='flex gap-4'>
-                    {loggedInUserData.admin || loggedInUserData.dbManager ? (
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ? (
                         <Link to='/addemployee'>
                             <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
                                 <img className='w-[32px] h-[32px]' src={userPlus} alt="Add Employee" />
@@ -54,7 +55,8 @@ const Home = () => {
                         </Link>
                     ) : null}
 
-                    {loggedInUserData.admin || loggedInUserData.dbManager ? (
+
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ? (
 
                         <Link to='/add-department'>
                             <div className='flex flex-col items-center justify-center gap-[12px]  bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
@@ -64,7 +66,7 @@ const Home = () => {
                         </Link>
                     ) : null}
 
-                    {loggedInUserData.admin || loggedInUserData.dbManager ? (
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ? (
 
                         <Link to='/add-job-profile'>
                             <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
@@ -85,63 +87,66 @@ const Home = () => {
                     </Link>
                 </div>
             </div>
-            <div>
-                <div className='my-8'>
-                    <h3 className='text-2xl font-bold leading-8 text-[#2E2E2E]'>Configure Database</h3>
-                </div>
-                <div className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg p-4 gap-2 w-[900px]'>
-                    <div className='flex flex-col items-center justify-center w-[109px] h-[120px] gap-3'>
-                        <div className=''>
-                            <img className='w-[32px] h-[32px]' src={GearSix} alt="gearimg" />
+            {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ? (
+
+                <div>
+                    <div className='my-8'>
+                        <h3 className='text-2xl font-bold leading-8 text-[#2E2E2E]'>Configure Database</h3>
+                    </div>
+                    <div className='flex border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg p-4 gap-2 w-[900px]'>
+                        <div className='flex flex-col items-center justify-center w-[109px] h-[120px] gap-3'>
+                            <div className=''>
+                                <img className='w-[32px] h-[32px]' src={GearSix} alt="gearimg" />
+                            </div>
+                            <div>
+                                <p className='text-[#757575]'>Configure</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className='text-[#757575]'>Configure</p>
+                        <div className='flex gap-4'>
+                            <Link to="/addnewfieldsemployee">
+                                <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                    <div className=''>
+                                        <img className='w-[32px] h-[32px]' src={userPlus} alt="gearimg" />
+                                    </div>
+                                    <div>
+                                        <p className='text-xl font-medium text-[#283093]'>Employee</p>
+                                    </div>
+                                </div>
+                            </Link>
+                            <Link to="/add-new-fields-for-group">
+                                <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                    <div className=''>
+                                        <img className='w-[32px] h-[32px]' src={usersThree} alt="gearimg" />
+                                    </div>
+                                    <div>
+                                        <p className='text-xl font-medium text-[#283093]'>Group</p>
+                                    </div>
+                                </div>
+                            </Link>
+                            <Link to="/add-new-fields-for-job-profile">
+                                <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                    <div className=''>
+                                        <img className='w-[32px] h-[32px]' src={Briefcase} alt="gearimg" />
+                                    </div>
+                                    <div>
+                                        <p className='text-xl font-medium text-[#283093]'>Job Profile</p>
+                                    </div>
+                                </div>
+                            </Link>
+                            <Link to="/add-workday">
+                                <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
+                                    <div className=''>
+                                        <img className='w-[32px] h-[32px]' src={departmentLogo} alt="gearimg" />
+                                    </div>
+                                    <div>
+                                        <p className='text-xl font-medium text-[#283093]'>Working Day</p>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     </div>
-                    <div className='flex gap-4'>
-                        <Link to="/addnewfieldsemployee">
-                            <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
-                                <div className=''>
-                                    <img className='w-[32px] h-[32px]' src={userPlus} alt="gearimg" />
-                                </div>
-                                <div>
-                                    <p className='text-xl font-medium text-[#283093]'>Employee</p>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to="/add-new-fields-for-group">
-                            <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
-                                <div className=''>
-                                    <img className='w-[32px] h-[32px]' src={usersThree} alt="gearimg" />
-                                </div>
-                                <div>
-                                    <p className='text-xl font-medium text-[#283093]'>Group</p>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to="/add-new-fields-for-job-profile">
-                            <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
-                                <div className=''>
-                                    <img className='w-[32px] h-[32px]' src={Briefcase} alt="gearimg" />
-                                </div>
-                                <div>
-                                    <p className='text-xl font-medium text-[#283093]'>Job Profile</p>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to="/add-workday">
-                            <div className='flex flex-col items-center justify-center w-[169px] h-[120px] bg-[#ECEDFE] rounded-lg p-6 gap-3'>
-                                <div className=''>
-                                    <img className='w-[32px] h-[32px]' src={departmentLogo} alt="gearimg" />
-                                </div>
-                                <div>
-                                    <p className='text-xl font-medium text-[#283093]'>Working Day</p>
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
                 </div>
-            </div>
+            ) : null}
         </div>
     )
 }
