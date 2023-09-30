@@ -92,7 +92,7 @@ export function Login() {
     return (
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
-            {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/emphome' replace={true}></Navigate>}
+            {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/' replace={true}></Navigate>}
             <div className='flex flex-col justify-center items-center w-full mt-20'>
                 <div>
                     <h1 className="text-[28px] leading-9 font-bold">HR Admin Login</h1>

@@ -8,6 +8,7 @@ import {
     updateEmployeeAsync,
 } from "../../../redux/Slice/EmployeeSlice";
 import { Otp } from "../otp";
+import { getLoggedInUserDataAsync } from "../../../redux/Slice/loginSlice";
 
 const roleOptions = {
     admin: 'Admin',
@@ -24,12 +25,12 @@ export const EmployeeDetails = () => {
     const singleEmployee = useSelector(
         (state: any) => state.employee.singleEmployee
     );
-    console.log(singleEmployee)
+    // console.log(singleEmployee)
     const jobProfileList = useSelector(
         (state: any) => state.jobProfile.jobProfiles
     );
     const groupList = useSelector((state: any) => state.group.groups);
-    console.log(groupList)
+    // console.log(groupList)
 
     const [employeeId, setEmployeeId] = useState("");
 
@@ -74,7 +75,7 @@ export const EmployeeDetails = () => {
     const [inputBoxEmployeeCodeValue, setInputBoxEmployeeCodeValue] = useState<any>("");
 
 
-    console.log(singleEmployee.role)
+    // console.log(singleEmployee.role)
     useEffect(() => {
         setInputBoxNameValue(singleEmployee?.name);
         setInputBoxGroupValue(singleEmployee.groupId?.groupName);
@@ -92,7 +93,11 @@ export const EmployeeDetails = () => {
     }, [singleEmployee]);
 
 
-
+    const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+    useEffect(() => {
+      dispatch(getLoggedInUserDataAsync());
+    }, [])
+  
 
     const { handleSubmit, register } = useForm();
 
@@ -107,7 +112,7 @@ export const EmployeeDetails = () => {
                     data = { ...data, overTime: false };
                 }
                 const sendData = { employeeId: employeeId, data: data };
-                console.log("abcd", sendData)
+                // console.log("abcd", sendData)
                 dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
                     if (res.payload.success) {
                         toast.success(res.payload.message);
@@ -115,6 +120,8 @@ export const EmployeeDetails = () => {
                         toast.error(res.payload.message);
                     }
                     dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
+                    dispatch(getLoggedInUserDataAsync());
+
                 })
                 setShowInputBoxName(false);
                 setShowInputBoxGroup(false);
@@ -132,10 +139,13 @@ export const EmployeeDetails = () => {
 
                 <div className="flex justify-between  items-center">
                     <h1 className="text-[18px] font-bold text-[#2E2E2E]">Employee Details</h1>
-                    <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
-                        <img src={check} alt="" className="w-[16px] h-[16px]" />
-                        Save
-                    </button>
+                    {loggedInUserData.admin || loggedInUserData.dbManager ? (
+
+                        <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
+                            <img src={check} alt="" className="w-[16px] h-[16px]" />
+                            Save
+                        </button>
+                    ) : null}
 
                 </div>
 
@@ -248,14 +258,14 @@ export const EmployeeDetails = () => {
                                 setShowInputRole(!showInputRole);
                             }}>
                                 <input
-                                placeholder="Role"
+                                    placeholder="Role"
                                     // value={singleEmployee?.role}
                                     value={
                                         singleEmployee?.role === 'attendanceManager' ? 'Attendance Manager' :
-                                        singleEmployee?.role === 'employee' ? 'Employee' : 
-                                        singleEmployee?.role === 'dbManager' ? 'Database Manager' :
-                                        singleEmployee?.role === 'admin' ? 'Admin' :
-                                        singleEmployee?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
+                                            singleEmployee?.role === 'employee' ? 'Employee' :
+                                                singleEmployee?.role === 'dbManager' ? 'Database Manager' :
+                                                    singleEmployee?.role === 'admin' ? 'Admin' :
+                                                        singleEmployee?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
                                     }
                                     className="outline-none text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]"
                                 />

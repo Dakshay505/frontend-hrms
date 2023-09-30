@@ -60,6 +60,7 @@ const navItems: NavItem[] = [
   //   icon: training,
   //   Link: "/new-profile-employee",
   // },
+
   {
     id: "Employees",
     name: "Employees",
@@ -112,7 +113,7 @@ export default function aside(props: Props) {
               // window.location.replace("http://localhost:5050/prd")
             }}
             className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
-           
+
             <div>
               Production
             </div>
@@ -149,24 +150,27 @@ export default function aside(props: Props) {
           } transition-all ease-in-out duration-500`}>
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
-              <Link
-                key={item.id}
-                to={item.Link}
-                onClick={() => setActiveItem(item.id)}
-                className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
-                  }`}
-              >
-                <div
-                  className={`${activeItem === item.id ? "text-blue-800" : ""} ${asideButtonCSS}`}
+              // Conditional rendering for the "Employees" item
+              (item.id !== "Employees" || (item.id === "Employees" && loggedInUserData.admin)) && (
+                <Link
+                  key={item.id}
+                  to={item.Link}
+                  onClick={() => setActiveItem(item.id)}
+                  className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
+                    }`}
                 >
-                  <img
-                    src={item.icon}
-                    alt={item.name}
-                    className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}`}
-                  />
-                  <p className="whitespace-nowrap text-sm font-medium">{item.name}</p>
-                </div>
-              </Link>
+                  <div
+                    className={`${activeItem === item.id ? "text-blue-800" : ""} ${asideButtonCSS}`}
+                  >
+                    <img
+                      src={item.icon}
+                      alt={item.name}
+                      className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}`}
+                    />
+                    <p className="whitespace-nowrap text-sm font-medium">{item.name}</p>
+                  </div>
+                </Link>
+              )
             ))}
           </div>
           <div className="px-6">

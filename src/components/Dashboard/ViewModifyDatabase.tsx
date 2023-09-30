@@ -35,6 +35,7 @@ import deleteIcon from "../../assets/Trash.svg";
 import toast from "react-hot-toast";
 import mongoose from 'mongoose';
 import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
+import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -47,9 +48,9 @@ const ViewModifyDatabase = () => {
     jobProfileName: localStorage.getItem("jobProfileName") || "",
     page: 1,
     limit: 20,
-    aadhar:"0"
+    aadhar: "0"
   });
-  
+
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
@@ -76,7 +77,7 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page,filter.aadhar]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -170,7 +171,7 @@ const ViewModifyDatabase = () => {
     BarcodeStore[code] = {
       ...e
     }
-  }); 
+  });
 
 
   const navigate = useNavigate();
@@ -352,8 +353,12 @@ const ViewModifyDatabase = () => {
     setConfirmationOpen(false);
   };
 
+  const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+  console.log(loggedInUserData)
 
-
+  useEffect(() => {
+    dispatch(getLoggedInUserDataAsync());
+  }, [])
   return (
     <div className="mx-10">
       <div className="flex justify-between pt-8">
@@ -403,22 +408,26 @@ const ViewModifyDatabase = () => {
             </form>
           </div>
         </div>
-        <div className="flex gap-6">
-          {databaseValue !== "Employees" && databaseValue !== "Shop" && (
-            <Link to="/update-hierarchy">
+        {loggedInUserData.admin || loggedInUserData.dbManager ? (
+
+          <div className="flex gap-6">
+            {databaseValue !== "Employees" && databaseValue !== "Shop" && (
+              <Link to="/update-hierarchy">
+                <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
+                  <img src={Pencil} className="w-4" alt="" />
+                  <p className="px-2">Update Hierarchy</p>
+                </div>
+              </Link>
+            )}
+
+            <Link to={path} className="w-[92px] h-10">
               <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
-                <img src={Pencil} className="w-4" alt="" />
-                <p className="px-2">Update Hierarchy</p>
+                <img src={BluePlus} className="w-4" alt="" />
+                <p className="px-2">Add</p>
               </div>
             </Link>
-          )}
-          <Link to={path} className="w-[92px] h-10">
-            <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
-              <img src={BluePlus} className="w-4" alt="" />
-              <p className="px-2">Add</p>
-            </div>
-          </Link>
-        </div>
+          </div>
+        ) : null}
       </div>
       {databaseValue === "Employees" && (
         <div className="mt-10 flex gap-5">
@@ -485,24 +494,24 @@ const ViewModifyDatabase = () => {
               <select
                 onChange={(event) => {
                   setFilter({
-                      ...filter,
-                      aadhar: event.target.value,
+                    ...filter,
+                    aadhar: event.target.value,
                   });
-              }}
+                }}
                 value={filter.aadhar}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
               >
                 <option value="0">Aadhar Default</option>
                 <option value="1">
-                      Employee with aadhar card
-                      </option>
-                      <option value="-1">
-                      Employee without aadhar card
-                      </option>
-                
+                  Employee with aadhar card
+                </option>
+                <option value="-1">
+                  Employee without aadhar card
+                </option>
+
               </select>
-              
-             
+
+
             </div>
           </div>
           <div>
@@ -618,7 +627,7 @@ const ViewModifyDatabase = () => {
                       className="flex flex-row py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       {/* <p onClick={() => handlerAadhar}> Aadhar No.</p> */}
                       Aadhar No.
-                      
+
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
@@ -830,9 +839,12 @@ const ViewModifyDatabase = () => {
                                     ? element.department.departmentName
                                     : "invaild"}
                                 </p>
-                                <div className="">
-                                  <img src={deleteIcon} alt="delete" />
-                                </div>
+                                {loggedInUserData.admin || loggedInUserData.dbManager ? (
+
+                                  <div className="">
+                                    <img src={deleteIcon} alt="delete" />
+                                  </div>
+                                ) : null}
                               </div>
                             ) : (
                               <div
@@ -996,7 +1008,7 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Supervisor Job Profile
                     </td>
-                  </tr> 
+                  </tr>
                   {shopss &&
                     shopss.map((element: any, index: number) => {
                       return (
