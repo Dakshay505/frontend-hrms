@@ -135,3 +135,9 @@ export const showWorkDayApiPath = `${apiPath}/api/v2/workingDay/`;
 
 // Login history Api
 export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
+
+
+// Login history Api
+export const changePasswordPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`;
+
+

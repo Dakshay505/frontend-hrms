@@ -92,11 +92,11 @@ export const EditShop = () => {
         <div className="px-10 py-8">
             <form
                 onSubmit={handleSubmit((Data) => {
-                    const sendData = { shopId: data._id, data: Data };
+                    const sendData = { shopId: data?._id, data: Data };
                     // console.log(sendData);
                     dispatch(updateShopAsync(sendData)).then((res:any) => {
                         // console.log("hello",data._id)
-                        dispatch(getSingleShopAsync(data._id));
+                        dispatch(getSingleShopAsync(data?._id));
                         if (res.payload.success) {
                             toast.success("Shop Updated Successfully");
                         } else {
@@ -197,8 +197,7 @@ export const EditShop = () => {
                                 }} className="w-3 h-3" alt="" />
                             </div>
                             <div>
-                                <input value={shopss.jobProfile.jobProfileName
-                                } placeholder='Job Profile' className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
+                                <input value={shopss?.jobProfile?.jobProfileName} placeholder='Job Profile' className="text-[12px] bg-[#FAFAFA] outline-none leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]" />
                             </div>
                         </div >}
                     {showInputBoxShopDescription &&
@@ -213,13 +212,13 @@ export const EditShop = () => {
                                     onChange={(event) => setInputBoxShopDescriptionValue(event.target.value)}
                                     className='border border-solid mt-[15px] outline-none border-[#DEDEDE] rounded  px-3 h-[30px] w-[324px] text-[#666666]'>
 
-                                    {alljobprofile.map((option: any, index: any) => (
+                                    {alljobprofile && alljobprofile.map((option: any, index: any) => (
                                         <option
                                             key={index}
-                                            value={option.jobProfileName}
+                                            value={option?.jobProfileName}
                                             className='border border-solid border-[#DEDEDE] w-[324px] h-10 px-2'
                                         >
-                                            {option.jobProfileName}
+                                            {option?.jobProfileName}
                                         </option>
                                     ))}
                                 </select>

@@ -530,12 +530,12 @@ export const AttendenceDashboardList = () => {
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
               >
                 <option value="All Shop">All Shop</option>
-                {shoplist &&
-                  shoplist.map((element: any, index: any) => (
-                    <option key={index} value={element.shopName}>
-                      {element.shopName}
-                    </option>
-                  ))}
+                {shoplist && Array.isArray(shoplist) && shoplist.map((element: any, index: any) => (
+                  <option key={index} value={element?.shopName}>
+                    {element?.shopName}
+                  </option>
+                ))}
+
               </select>
             </div>
 
