@@ -83,7 +83,7 @@ export const EmployeeAttendance = (props: any) => {
                 } else {
                     data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
                 }
-                // console.log(data)
+                console.log(data)
                 // dispatch(getAllAttandenceAsync(data)).then((res: any) => {
                 //     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
                 // })

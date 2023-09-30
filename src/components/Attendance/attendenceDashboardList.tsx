@@ -236,19 +236,24 @@ export const AttendenceDashboardList = () => {
   const exportToExcel = () => {
     if (items) {
       const columnOrder = [
+        'Sr.no',
         'Date',
         'EmployeeCode',
-        'Name', // Assuming 'employeeName' is a property in the 'record' object
-        'JobProfile', // Assuming 'employeeName' is a property in the 'record' object
+        'Name',
+        'JobProfile', 
+        'Group', 
         'PunchIn',
         'PunchOut',
         'Status',
-        'ApprovedBy',
-        'ApprovedTime',
-        'Remark'
+        'Signature',
+        'Shop',
+        // 'ApprovedBy',
+        // 'ApprovedTime',
+        // 'Remark'
+        ""
       ];
 
-      const modifiedData = items.map((record) => {
+      const modifiedData = items.map((record, index: number) => {
         // Destructure the record, omit unwanted properties
         const {
           updatedAt,
@@ -258,10 +263,13 @@ export const AttendenceDashboardList = () => {
           _id,
           ...rest
         } = record;
-        console.log(...rest);
-        
+
+        console.log({...rest});
+        // Map the data according to the column order
         const mappedData = columnOrder.map((column) => {
           switch (column) {
+            case 'Sr.no':
+              return index + 1;
             case 'EmployeeCode':
               return record.employeeId.employeeCode;
             case 'Name':
@@ -276,17 +284,19 @@ export const AttendenceDashboardList = () => {
             case 'PunchOut':
               const time2 = extractTime(record.punches.length > 0 ? record.punches[record.punches.length - 1]?.punchOut : null);
               return time2;
-            case 'ApprovedBy':
-              return record.approvedBy?.name;
-            case 'ApprovedTime':
-              const time3 = extractTime(record.approvedTime);
-              return time3;
             case 'Status':
               return record.status;
             case 'JobProfile':
               return record.employeeId.jobProfileId.jobProfileName;
-            case 'Remark':
-              return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
+            case 'Group':
+              return record.employeeId.groupId.groupName;
+            // case 'ApprovedBy':
+            //   return record.approvedBy?.name;
+            // case 'ApprovedTime':
+            //   const time3 = extractTime(record.approvedTime);
+            //   return time3;
+            // case 'Remark':
+            //   return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
             default:
               return '';
           }
@@ -524,7 +534,7 @@ export const AttendenceDashboardList = () => {
               </select>
             </div>
             <div>
-            <select
+              <select
                 onChange={handleShopChange}
                 value={selectedShop}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"

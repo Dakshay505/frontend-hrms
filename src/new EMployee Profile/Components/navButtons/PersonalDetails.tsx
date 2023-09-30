@@ -22,7 +22,7 @@ export const PersonalDetails = () => {
   );
   // console.log(singleEmployee)
 
-  const groupList = useSelector((state: any) => state.group.groups);
+  // const groupList = useSelector((state: any) => state.group.groups);
   // console.log(groupList)
 
   const [employeeId, setEmployeeId] = useState("");
