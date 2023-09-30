@@ -180,13 +180,14 @@ const ViewModifyDatabase = () => {
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
   };
+
+
   const handleGroupTableRowClick = (data: any) => {
     console.log(data.groupId);
     const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
   };
-
 
   const handleShopTableRowClick = (data: any) => {
     console.log(data.shopId);
@@ -408,7 +409,7 @@ const ViewModifyDatabase = () => {
             </form>
           </div>
         </div>
-        {loggedInUserData.admin || loggedInUserData.dbManager ? (
+        {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
 
           <div className="flex gap-6">
             {databaseValue !== "Employees" && databaseValue !== "Shop" && (
@@ -760,7 +761,10 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => handleGroupTableRowClick(element)}
+
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                            ? handleGroupTableRowClick(element)
+                            : null}
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
@@ -816,9 +820,10 @@ const ViewModifyDatabase = () => {
                             {index + 1}
                           </td>
                           <td
-                            onClick={() =>
-                              handleJobprofileTableRowClick(element)
-                            }
+                            onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                              ?  handleJobprofileTableRowClick(element)
+                              : null}
+                           
                             className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]"
                           >
                             {element.jobProfileName
@@ -839,7 +844,7 @@ const ViewModifyDatabase = () => {
                                     ? element.department.departmentName
                                     : "invaild"}
                                 </p>
-                                {loggedInUserData.admin || loggedInUserData.dbManager ? (
+                                {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
 
                                   <div className="">
                                     <img src={deleteIcon} alt="delete" />
@@ -1015,7 +1020,10 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => handleShopTableRowClick(element)}
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                            ? handleShopTableRowClick(element)
+                            : null}
+                         
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}

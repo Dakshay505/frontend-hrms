@@ -139,7 +139,7 @@ export const EmployeeDetails = () => {
 
                 <div className="flex justify-between  items-center">
                     <h1 className="text-[18px] font-bold text-[#2E2E2E]">Employee Details</h1>
-                    {loggedInUserData.admin || loggedInUserData.dbManager ? (
+                    {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
 
                         <button type="submit" className="flex gap-[5px] bg-[#283093] rounded-[8px] px-[16px] py-[12px] justify-center items-center text-white" >
                             <img src={check} alt="" className="w-[16px] h-[16px]" />
