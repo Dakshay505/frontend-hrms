@@ -259,7 +259,7 @@ export const AttendenceDashboardList = () => {
         } = record;
 
 
-        console.log({...rest});
+        console.log({ ...rest });
         // Map the data according to the column order
         const mappedData = columnOrder.map((column) => {
           switch (column) {
@@ -715,6 +715,9 @@ export const AttendenceDashboardList = () => {
                 Name
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Shift
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Punch In
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -762,8 +765,6 @@ export const AttendenceDashboardList = () => {
                         {element.employeeId?.employeeCode
                           ? element.employeeId.employeeCode
                           : "Not Avilable"}{" "}
-
-
                       </td>
 
                       <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
@@ -795,6 +796,11 @@ export const AttendenceDashboardList = () => {
                         ) : (
                           ""
                         )}
+                      </td>
+
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.shift === "day" ? "Day" :
+                          element.shift === "night" ? "Night" : "-"}
                       </td>
 
 

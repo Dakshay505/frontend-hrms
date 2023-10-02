@@ -283,7 +283,12 @@ export const NewPage = () => {
     });
   };
 
+  const [showPassword, setShowPassword] = useState(false);
 
+  // Create a function to toggle the showPassword state
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
 
   const [newPassword, setNewPassword] = useState('');
@@ -297,6 +302,7 @@ export const NewPage = () => {
         .then(() => {
           toast.success('Password changed successfully');
           setIsChangePasswordPopupOpen(false);
+
         })
         .catch((error: any) => {
           toast.error('Error changing password');
@@ -343,18 +349,23 @@ export const NewPage = () => {
     try {
       if (StatusValue !== null) {
         const active = StatusValue;
-        dispatch(updateEmployeeAsync({ employeeId, active }));
-        
-        closeEditStatusPopup();
+        dispatch(updateEmployeeAsync({ employeeId, active })).then(() => {
+          setStatusValue(active);
+          closeEditStatusPopup();
+          toast.success("Status updated successfully");
+          dispatch(getAllEmployeeAsync({ employeeId }))
+
+        });
       } else {
-        console.log("nnot saved")
+        console.log("not saved");
       }
+      dispatch(getAllGroupsAsync({ employeeId }));
     } catch (error) {
       console.error(error);
+      toast.error("Error updating status");
     }
-    dispatch(getAllGroupsAsync({ employeeId }));
-
   };
+
 
 
   return (
@@ -567,25 +578,25 @@ export const NewPage = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.employeeCode
                             ? element.employeeCode
-                            : "Not Avilable"}
+                            : "-"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
-                          <p className="font-medium hover:underline cursor-pointer"> {element.name ? element.name : "Not Avilable"} </p>
+                          <p className="font-medium hover:underline cursor-pointer"> {element.name ? element.name : "-"} </p>
                           <p className="text-[12px]"> {element.jobProfileId?.jobProfileName
                             ? element.jobProfileId?.jobProfileName
-                            : "Not Avilable"}</p>
+                            : "-"}</p>
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.groupId?.groupName
                             ? element.groupId?.groupName
-                            : "Not Avilable"}
+                            : "-"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                          {element.contactNumber ? element.contactNumber : "Not Avilable"}
+                          {element.contactNumber ? element.contactNumber : "-"}
                         </td>
 
 
-                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] wrap">
                           <div className="flex gap-[10px]">
                             <div>
                               {element?.role === 'attendanceManager' ? 'Attendance Manager' :
@@ -608,7 +619,8 @@ export const NewPage = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           <div className="flex gap-[10px]">
                             <div>
-                              {element.active ? "active" : "Inactive"}
+                              {element.active ? "Active" : "InActive"}
+
                             </div>
                             <img
                               src={edit}
@@ -645,13 +657,13 @@ export const NewPage = () => {
 
                 <form
                   onSubmit={handleSubmit((data: any) => {
-                    const sendData = { employeeId: employeeId, data: data };
+                    const sendData = { employeeId: employeeId, role: data.role };
                     console.log("abcd", sendData);
                     dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
                       if (res.payload.success) {
                         toast.success(res.payload.message);
                         dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
-                        
+
                       } else {
                         toast.error(res.payload.message);
                         dispatch(getSingleEmployeeAsync({ employeeId: employeeId }));
@@ -696,27 +708,29 @@ export const NewPage = () => {
           </div>
 
 
+          {isEditStatusPopupOpen && (
+            <div className="fixed inset-0 flex items-center justify-center z-50 ">
+              <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
+              <div className="flex flex-col gap-[10px] relative bg-white p-6 rounded-lg shadow-lg">
+                <h1 className="font-bold text-[25px]">Edit Status</h1>
+                <select
+                  value={StatusValue === true ? "active" : StatusValue === false ? "inactive" : ""}
+                  onChange={(e) => setStatusValue(e.target.value === "active")}
+                  className="border px-[15px] py-[10px] border-gray-500 rounded-[8px]"
+                >
+                  <option value="">Select Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
 
-          <div className={`fixed inset-0 flex items-center justify-center z-50 ${isEditStatusPopupOpen ? "block" : "hidden"}`}>
-            <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
-            <div className="flex flex-col gap-[10px] relative bg-white p-6 rounded-lg shadow-lg">
-              <h1 className="font-bold text-[25px]">Edit Status</h1>
-              <select
-                value={StatusValue === true ? "active" :
-                  StatusValue === false ? "inactive" :""}
-                onChange={(e) => setStatusValue(e.target.value === "active")}
-                className="border px-[15px] py-[10px] border-gray-500 rounded-[8px]"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
 
-              <div className="flex gap-[10px] pt-[20px]">
-                <button onClick={closeEditStatusPopup} className="flex gap-[5px] border-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-[#283093]">Close</button>
-                <button onClick={handleSaveStatus} className="flex gap-[5px] bg-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-white">Save</button>
+                <div className="flex gap-[10px] pt-[20px]">
+                  <button onClick={closeEditStatusPopup} className="flex gap-[5px] border-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-[#283093]">Close</button>
+                  <button onClick={handleSaveStatus} className="flex gap-[5px] bg-[#283093] border  rounded-[8px] px-[16px] py-[8px] justify-center items-center text-white">Save</button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
 
 
@@ -737,7 +751,7 @@ export const NewPage = () => {
                   <div className="flex  flex-col gap-[10px]">
                     <div>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'} // Use 'text' to show, 'password' to hide
                         placeholder="Change Password"
                         id="newPassword"
                         name="newPassword"
@@ -748,7 +762,7 @@ export const NewPage = () => {
                     </div>
                     <div>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'} // Use 'text' to show, 'password' to hide
                         placeholder="Confirm Change Password"
                         id="confirmNewPassword"
                         name="confirmNewPassword"
@@ -757,7 +771,20 @@ export const NewPage = () => {
                         className="border px-[15px] py-[15px] border-gray-500 rounded-[8px]"
                       />
                     </div>
+
+
+                    <div className="flex justify-end px-[10px]">
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="text-[#283093] text-[12px]  cursor-pointer"
+                      >
+                        {showPassword ? 'Hide Password' : 'Show Password'}
+                      </button>
+                    </div>
+
                   </div>
+
 
                   <div className="flex gap-[10px] pt-[20px]">
 
