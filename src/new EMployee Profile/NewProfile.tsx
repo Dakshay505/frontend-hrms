@@ -56,6 +56,23 @@ export const NewProfile = () => {
     const additionalData = (location.state?.additionalData);
 
     const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      
+      const currentDate = new Date();
+      const currentMonthIndex = currentDate.getMonth();
+      const currentMonthName = monthNames[currentMonthIndex];
+      
+    
+     const [month, setMonth] = useState(currentMonthName);
+     const handleMonth=(value:any)=>{
+        setMonth(value)
+
+     }
+    
+
 
 
     function formatDate(date: any) {
@@ -67,8 +84,10 @@ export const NewProfile = () => {
 
     
     useEffect(() => {
-        const nextDate = new Date();
-        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), -31);
+        const monthIndex = monthNames.indexOf(month);
+        const date = new Date(new Date().getFullYear(), monthIndex, 1);
+        const nextMonth = new Date(new Date().getFullYear(), monthIndex + 1, 0);
+        const nextDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate());
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData && additionalData !== "") {
@@ -87,7 +106,7 @@ export const NewProfile = () => {
             })
             //setAdditionalData("");
         }
-    }, [])
+    }, [month])
 
 
     return (
@@ -198,7 +217,7 @@ export const NewProfile = () => {
             </div>}
             {/* QR Assigning Logs ENDS HERE */}
 
-            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} />
+            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} month={month} handleMonth={handleMonth} />
         </div>
     )
 }
