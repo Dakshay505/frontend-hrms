@@ -38,9 +38,10 @@ export const EmployeeAttendance = (props: any) => {
     const [punchOutDate, setPunchOutDate] = useState("")
     const [updateDate, setUpdateDate] = useState("")
     const [remark, Setremark] = useState("")
-    
+
 
     const [showTableRow, setShowTableRow] = useState<any>([]);
+    const [selectedShift, setSelectedShift] = useState("");
 
     const [popup, setPopUp] = useState(false)
     const [deletePopup, setDeletePopup] = useState(false)
@@ -165,7 +166,6 @@ export const EmployeeAttendance = (props: any) => {
             } else {
                 toast.error(res.payload.message)
                 refresh()
-
             }
         })
     }
@@ -182,9 +182,9 @@ export const EmployeeAttendance = (props: any) => {
         else {
 
             setShowAddPopup(false)
-            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, remarks: remark, "id": singleEmployee._id }
-            //console.log(data)
-            // //console.log(singleEmployee._id)
+            const data = { "date": date, "punchIn": PuchIn !== "" ? `${date}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, remarks: remark, "id": singleEmployee._id, "shift": selectedShift, }
+            // console.log("daaaaataa", data)
+            //console.log(singleEmployee._id)
 
             dispatch(addPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
@@ -194,8 +194,6 @@ export const EmployeeAttendance = (props: any) => {
                     setPunchOut("")
                     setDate("")
                     Setremark("")
-
-
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -216,14 +214,13 @@ export const EmployeeAttendance = (props: any) => {
         }
         else {
             setUpdatePopup(false)
-            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id, remarks: remark }
-            // //console.log(data)
+            const data = { "date": updateDate, "punchIn": PuchIn !== "" ? `${dated}T${PuchIn}` : null, "punchOut": PunchOut !== "" ? `${punchOutDate}T${PunchOut}` : null, "id": singleEmployee._id, remarks: remark, "shift": selectedShift, }
+            console.log("daaaaataa", data)
             // //console.log(singleEmployee._id)
 
             dispatch(editPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
                     toast.success("Punch edit sucessfully")
-
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
@@ -231,11 +228,7 @@ export const EmployeeAttendance = (props: any) => {
                     refresh()
                 } else {
                     toast.error(res.payload.message)
-
-
                 }
-
-
             })
         }
     }
@@ -246,15 +239,13 @@ export const EmployeeAttendance = (props: any) => {
     console.log(loggedInUserData)
 
     useEffect(() => {
-        // Get the current date in YYYY-MM-DD format
         const currentDate = new Date().toISOString().split('T')[0];
 
-        // Set the maxDate state to the current date
         setMaxDate(currentDate);
         dispatch(getLoggedInUserDataAsync());
 
     }, []);
-   
+
 
     return (
         <div> {/* Attendance Starts here */}
@@ -265,7 +256,7 @@ export const EmployeeAttendance = (props: any) => {
                         <Link to="/attendance-database">
                             <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                         </Link>
-                        <select value={props.month} onChange={(event)=>props.handleMonth(event.target.value)} className='ml-2 bg-slate-100 h-8 rounded-md'>
+                        <select value={props.month} onChange={(event) => props.handleMonth(event.target.value)} className='ml-2 mt-2 px-[10px] font-bold bg-[#d8d8d8] h-10 w-[250px] rounded-md'>
                             <option>Select Month</option>
                             <option value="January">January</option>
                             <option value="February">February</option>
@@ -281,7 +272,7 @@ export const EmployeeAttendance = (props: any) => {
                             <option value="December">December</option>
                         </select>
                     </div>
-                    {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager'? (
+                    {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
 
                         <div onClick={() => setShowAddPopup(true)} className="flex cursor-pointer gap-[5px]  items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                             <img src={plus} className="w-[12px] h-[12px]" alt="plus" />
@@ -292,7 +283,7 @@ export const EmployeeAttendance = (props: any) => {
                 {showAddPopup && (
 
                     <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
-                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
+                        <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[600px]  p-6 rounded-lg">
 
                             <div className="flex justify-between">
 
@@ -312,17 +303,28 @@ export const EmployeeAttendance = (props: any) => {
                                 </div>
                             </div>
 
-                            <div className="flex justify-items-center items-center h-[530px] w-[520px] flex-col  gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                            <div className="flex justify-items-center items-center h-[600px] overflow-y-auto w-[520px] flex-col  gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                 <div className="flex flex-col gap-[7px]">
                                     <span className="text-[#2A3143]">Employee Name</span>
                                     <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                         <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
 
                                     </div>
-
-
-
                                 </div>
+
+                                <div className="flex flex-col gap-[10px]">
+                                    <span className="text-[#2A3143]">Shift</span>
+                                    <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                        <select value={selectedShift} onChange={(event) => setSelectedShift(event.target.value)} className="focus:outline-none">
+                                            <option value="">Select Shift</option>
+                                            <option value="day">Day</option>
+                                            <option value="night">Night</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
                                 <div className="flex flex-col gap-[10px]">
                                     <span className="text-[#2A3143]">Date</span>
                                     <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -368,11 +370,9 @@ export const EmployeeAttendance = (props: any) => {
 
                         </div>
                     </div>
-
-
-
-
                 )}
+
+
                 {popup && (
 
                     <div className="fixed inset-0  flex z-50 items-center justify-center bg-gray-900 bg-opacity-50 rounded-md">
@@ -392,6 +392,7 @@ export const EmployeeAttendance = (props: any) => {
                             </div>
                         </div>
                     </div>
+
                 )}
 
                 <div className='py-8 overflow-auto'>
@@ -400,15 +401,14 @@ export const EmployeeAttendance = (props: any) => {
                             <tr className='bg-[#ECEDFE] cursor-default'>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Date</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Name</td>
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Shift</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch In</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Punch Out</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Status</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photo</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark</td>
-                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark By</td>
-                                
-                                
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Edited By</td>
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                 ////console.log("ghghgh", element.status)
@@ -424,8 +424,9 @@ export const EmployeeAttendance = (props: any) => {
                                     return <>
                                         {updatePopUp && (
 
-                                            <div className="fixed inset-0  flex z-50 items-center justify-center bg-opacity-100 rounded-md">
-                                                <div className="bg-white flex flex-col gap-[20px] w-[619px] h-[620px] p-6 rounded-lg">
+                                            <div className="fixed inset-0 flex items-center justify-center z-50">
+                                                <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
+                                                <div className="modal h-[600px] relative bg-white flex flex-col gap-[20px] p-6 rounded-lg shadow-lg">
 
                                                     <div className="flex justify-between">
 
@@ -444,17 +445,26 @@ export const EmployeeAttendance = (props: any) => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex h-[530px] w-[540px] flex-col justify-items-center items-center gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
+                                                    <div className="flex overflow-y-auto w-[540px] flex-col justify-items-center items-center gap-[20px] rounded-lg border-[1px] p-4 border-[#CFD3D4]">
                                                         <div className="flex flex-col gap-[7px]">
                                                             <span className="text-[#2A3143]">Employee Name</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
                                                                 <input value={singleEmployee.name} type="text" placeholder="Gopal" className="focus:outline-none" readOnly />
 
                                                             </div>
-
-
-
                                                         </div>
+
+                                                        <div className="flex flex-col gap-[10px]">
+                                                            <span className="text-[#2A3143]">Shift</span>
+                                                            <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
+                                                                <select value={selectedShift} onChange={(event) => setSelectedShift(event.target.value)} className="focus:outline-none">
+                                                                    <option value="">Select Shift</option>
+                                                                    <option value="day">Day</option>
+                                                                    <option value="night">Night</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
                                                         <div className="flex flex-col gap-[10px]">
                                                             <span className="text-[#2A3143]">Date</span>
                                                             <div className="px-[16px] w-[450px] flex  h-[30px] justify-between  rounded-[4px] border border-[#E3E4E7]">
@@ -494,15 +504,8 @@ export const EmployeeAttendance = (props: any) => {
 
                                                     </div>
 
-
-
-
                                                 </div>
                                             </div>
-
-
-
-
                                         )}
                                         {deletePopup && (
 
@@ -510,10 +513,6 @@ export const EmployeeAttendance = (props: any) => {
 
                                                 <div className="bg-white flex flex-col gap-[30px] w-[300px] h-[150px] p-6 rounded-lg">
                                                     <span className="text-[15px]  font-bold text-[#3b404f]">Do you want to delete permanently ?</span>
-
-
-
-
 
                                                     <div className="flex flex-row items-start gap-[24px] rounded-lg">
                                                         <div onClick={() => setDeletePopup(false)} className="flex gap-[5px]  items-center px-[15px] h-10 w-25 bg-[#FFFFFF] rounded-lg ">
@@ -527,20 +526,16 @@ export const EmployeeAttendance = (props: any) => {
 
                                                     </div>
 
-
-
-
                                                 </div>
                                             </div>
-
-
-
-
-
                                         )}
                                         <tr key={element._id + latestPunches.punchIn} className='hover:bg-[#FAFAFA]' onClick={() => { handleRowClick(index) }} >
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{firstPunches.punchIn ? (firstPunches.punchIn).slice(0, 10) : "Not Avilable"}</td>
                                             <td className='flex gap-2 items-center py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer'>{element.employeeId?.name ? element.employeeId?.name : "Not Avilable"} {sortedPunches.slice(1).length > 0 ? <img src={showTableRow.includes(index) ? CaretUp : CaretDown} className="w-[14px] h-[14px]" alt="" /> : ""}</td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                                                {element.shift === "day" ? "Day" :
+                                                    element.shift === "night" ? "Night" : "-"}
+                                            </td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>
                                                 {showTableRow.includes(index)
                                                     ? latestPunches.punchIn
@@ -565,7 +560,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager'? (
+                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
 
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
@@ -575,7 +570,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager'? (
+                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
 
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
@@ -585,7 +580,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager'? (
+                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
 
@@ -597,34 +592,34 @@ export const EmployeeAttendance = (props: any) => {
                                                 : "-"}</td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                                                 {element?.approvedImage && (
-                                                        <div className="flex gap-[10px] cursor-pointer">
-                                                            <div>
-                                                                <p
-                                                                    className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                                                    onClick={() =>
-                                                                        handleImageClick(
-                                                                            element?.approvedImage
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Open Photo
-                                                                </p>
-                                                            </div>
-                                                            <div>
-                                                                <img
-                                                                    src={ArrowSqureOut}
-                                                                    className="w-[14px] h-[14px]"
-                                                                    alt="arrowsqureout"
-                                                                />
-                                                            </div>
+                                                    <div className="flex gap-[10px] cursor-pointer">
+                                                        <div>
+                                                            <p
+                                                                className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                                                onClick={() =>
+                                                                    handleImageClick(
+                                                                        element?.approvedImage
+                                                                    )
+                                                                }
+                                                            >
+                                                                Open Photo
+                                                            </p>
                                                         </div>
-                                                    )}
+                                                        <div>
+                                                            <img
+                                                                src={ArrowSqureOut}
+                                                                className="w-[14px] h-[14px]"
+                                                                alt="arrowsqureout"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
                                                 ? element.remarks[element.remarks.length - 1].remark
                                                 : "-"}</td>
-                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
-                                                ? element.remarks[element.remarks.length - 1].by
+                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
+                                                ? element.remarks[element.remarks.length - 1].by?.name
                                                 : "-"}</td>
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
@@ -655,7 +650,6 @@ export const EmployeeAttendance = (props: any) => {
                                                             <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                             <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
                                                         </span>}
-
                                                 </td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>{element.approvedBy?.name ? latestPunches.approvedBy?.name : "-"}</td>
                                             </tr>

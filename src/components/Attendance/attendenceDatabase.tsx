@@ -85,7 +85,7 @@ export const AttendenceDtabase = () => {
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  console.log(total);
+  console.log("hello",items);
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
@@ -276,6 +276,9 @@ export const AttendenceDtabase = () => {
                   Name
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Shift
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Punch In
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -350,6 +353,14 @@ export const AttendenceDtabase = () => {
                             ""
                           )}
                         </td>
+
+
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                          {element.shift=== "day"? "Day":
+                          element.shift=== "night"? "Night": "-"}
+                        </td>
+
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {showTableRow.includes(index)
                             ? latestPunches.punchIn
