@@ -51,6 +51,33 @@ export const NewProfile = () => {
             dispatch(salaryLogAsync(singleEmployee?._id))
         }
     }, [singleEmployee])
+    const refresh = () => {
+        const monthIndex = monthNames.indexOf(month);
+        const date = new Date(new Date().getFullYear(), monthIndex, 1);
+        const nextMonth = new Date(new Date().getFullYear(), monthIndex + 1, 0);
+        const nextDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate());
+       
+
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllGroupsAsync());
+        if (additionalData !== "") {
+            dispatch(getSingleEmployeeAsync(additionalData)).then((res: any) => {
+                dispatch(salaryLogAsync(res.payload.employeeData._id));
+                dispatch(getQrAssignAsync(res.payload.employeeData._id));
+                let data = {};
+                if (res.payload.employeeData?.employeeCode) {
+                    data = { name: res.payload.employeeData?.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
+                } else {
+                    data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
+                }
+                console.log(data)
+                dispatch(getAllAttandenceAsync(data)).then((res: any) => {
+                     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
+                 })
+            })
+            ///setAdditionalData("");
+        }
+    }
 
     const location = useLocation();
     const additionalData = (location.state?.additionalData);
@@ -71,6 +98,7 @@ export const NewProfile = () => {
         setMonth(value)
 
      }
+     
     
 
 
@@ -88,6 +116,7 @@ export const NewProfile = () => {
         const date = new Date(new Date().getFullYear(), monthIndex, 1);
         const nextMonth = new Date(new Date().getFullYear(), monthIndex + 1, 0);
         const nextDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate());
+       
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData && additionalData !== "") {
@@ -217,7 +246,7 @@ export const NewProfile = () => {
             </div>}
             {/* QR Assigning Logs ENDS HERE */}
 
-            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} month={month} handleMonth={handleMonth} />
+            <EmployeeAttendance singleEmployeeAttendanceList={singleEmployeeAttendanceList} month={month} handleMonth={handleMonth} refresh={refresh} />
         </div>
     )
 }

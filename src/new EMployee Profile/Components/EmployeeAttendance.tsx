@@ -69,30 +69,7 @@ export const EmployeeAttendance = (props: any) => {
         return `${year}-${month}-${day}`;
     }
 
-    const refresh = () => {
-        const nextDate = new Date();
-        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
-
-        dispatch(getAllJobProfileAsync());
-        dispatch(getAllGroupsAsync());
-        if (additionalData !== "") {
-            dispatch(getSingleEmployeeAsync(additionalData)).then((res: any) => {
-                dispatch(salaryLogAsync(res.payload.employeeData._id));
-                dispatch(getQrAssignAsync(res.payload.employeeData._id));
-                let data = {};
-                if (res.payload.employeeData?.employeeCode) {
-                    data = { name: res.payload.employeeData?.employeeCode, date: formatDate(date), nextDate: formatDate(nextDate) }
-                } else {
-                    data = { name: res.payload.employeeData.name, date: formatDate(date), nextDate: formatDate(nextDate) }
-                }
-                console.log(data)
-                // dispatch(getAllAttandenceAsync(data)).then((res: any) => {
-                //     setSingleEmployeeAttendanceList(res.payload.attendanceRecords)
-                // })
-            })
-            ///setAdditionalData("");
-        }
-    }
+    
 
     const handleDeletePop = () => {
         setPopUp(false)
@@ -161,7 +138,7 @@ export const EmployeeAttendance = (props: any) => {
             // console.log("Response", res)
             if (res.payload.success) {
                 toast.success("Punch delete sucessfully")
-                refresh()
+                props.refresh()
 
             } else {
                 toast.error(res.payload.message)
@@ -189,7 +166,7 @@ export const EmployeeAttendance = (props: any) => {
             dispatch(addPunchAsync(data)).then((res: any) => {
                 if (res.payload.success) {
                     toast.success(res.payload.message)
-                    refresh()
+                    props.refresh()
                     setPunchIn("")
                     setPunchOut("")
                     setDate("")
@@ -225,7 +202,7 @@ export const EmployeeAttendance = (props: any) => {
                     setPunchOut("")
                     setDate("")
                     Setremark("")
-                    refresh()
+                    props.refresh()
                 } else {
                     toast.error(res.payload.message)
                 }
@@ -256,7 +233,9 @@ export const EmployeeAttendance = (props: any) => {
                         <Link to="/attendance-database">
                             <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                         </Link>
+
                         <select value={props.month} onChange={(event) => props.handleMonth(event.target.value)} className='ml-2 mt-2 px-[10px] font-bold bg-[#d8d8d8] h-10 w-[250px] rounded-md'>
+
                             <option>Select Month</option>
                             <option value="January">January</option>
                             <option value="February">February</option>
@@ -409,6 +388,8 @@ export const EmployeeAttendance = (props: any) => {
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photo</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Edited By</td>
+
+
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                 ////console.log("ghghgh", element.status)
@@ -618,9 +599,13 @@ export const EmployeeAttendance = (props: any) => {
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
                                                 ? element.remarks[element.remarks.length - 1].remark
                                                 : "-"}</td>
-                                            <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
-                                                ? element.remarks[element.remarks.length - 1].by?.name
-                                                : "-"}</td>
+
+                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'>
+  {element.remarks?.length > 0
+    ? element.remarks[element.remarks.length - 1].by?.name || "Admin"
+    : "-"}
+</td>
+
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
                                             return <tr key={element._id + element.punchIn}>

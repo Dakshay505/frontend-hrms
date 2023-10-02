@@ -29,10 +29,10 @@ export const Loginlogs = () => {
             if (page > newPageCount) {
                 setPage(newPageCount);
             }
-            dispatch(fetchLoggedInHistory(data.data));
+            //dispatch(fetchLoggedInHistory(data.data));
         };
         fetchData();
-    }, [limit, page, dispatch]);
+    }, [limit, page]);
 
 
 
