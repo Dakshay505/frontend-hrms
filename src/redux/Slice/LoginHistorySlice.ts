@@ -51,7 +51,7 @@ const loggedInHistorySlice = createSlice({
       })
       .addCase(fetchLoggedInHistory.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log("payload", action.payload)
+        // console.log("payload", action.payload)
         state.data = action.payload;
       })
       .addCase(fetchLoggedInHistory.rejected, (state: any, action) => {
