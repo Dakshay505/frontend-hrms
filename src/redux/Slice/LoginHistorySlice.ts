@@ -16,22 +16,17 @@ export const fetchLoggedInHistory: any = createAsyncThunk(
 
 
 
-
-export const changePasswordAsync:any = createAsyncThunk(
+export const changePasswordAsync : any= createAsyncThunk(
   'changePasswordAsync',
-  async ( employeeId:any, password:any ) => {
+  async (employeeId:any) => {
     try {
-      const response = await changePasswordAPI(employeeId, password);
-      console.log("sliec data",response)
+      const response = await changePasswordAPI(employeeId);
       return response;
     } catch (error) {
-      throw error;
+      return (error);
     }
   }
-)
-
-
-
+);
 
 
 const loggedInHistorySlice = createSlice({
@@ -51,7 +46,6 @@ const loggedInHistorySlice = createSlice({
       })
       .addCase(fetchLoggedInHistory.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // console.log("payload", action.payload)
         state.data = action.payload;
       })
       .addCase(fetchLoggedInHistory.rejected, (state: any, action) => {
@@ -59,20 +53,16 @@ const loggedInHistorySlice = createSlice({
         state.error = action.error.message;
       })
 
-       .addCase(changePasswordAsync.pending, (state) => {
+      .addCase(changePasswordAsync.pending, (state) => {
         state.loading = true;
-        state.error = null;
-        state.successMessage = '';
       })
-      .addCase(changePasswordAsync.fulfilled, (state, action) => {
+      .addCase(changePasswordAsync.fulfilled, (state:any) => {
         state.loading = false;
-        state.error = null;
-        state.successMessage = action.payload.message;
+        state.success = true;
       })
-      .addCase(changePasswordAsync.rejected, (state:any, action) => {
+      .addCase(changePasswordAsync.rejected, (state:any, action:any) => {
         state.loading = false;
-        state.error = action.error.message;
-        state.successMessage = '';
+        state.error = action.payload.message;
       });
 
   },

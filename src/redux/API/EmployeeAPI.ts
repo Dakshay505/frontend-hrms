@@ -31,18 +31,18 @@ export const createEmployee = async (employeeData: any) => {
 // UPDATE
 export const updateEmployee = async (employeeData: any) => {
   try {
-    console.log("employeeData", employeeData)
     const { data } = await axios.patch(
-      `${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData.data,
+      `${updateEmployeeApiPath}/${employeeData.employeeId}`, employeeData,
       { withCredentials: true }
-    );
+      );
+      console.log("employeeData", employeeData)
     return data;
   } catch (error: any) {
     return error.response.data
   }
 };
 
-function convertToQueryString(data:any) {
+function convertToQueryString(data: any) {
   let queryStr = '';
   for (let key in data) {
     if (data.hasOwnProperty(key) && data[key] !== null) {
@@ -138,8 +138,8 @@ export const getEmployeeImage = async (employeeId: any) => {
 
 export const getQrAssign = async (id: any) => {
   try {
-    const {data} = await axios.get(`${getQrAssignApiPath}/${id}`, {
-      withCredentials: true, 
+    const { data } = await axios.get(`${getQrAssignApiPath}/${id}`, {
+      withCredentials: true,
     });
     return data;
   } catch (error) {
@@ -171,8 +171,8 @@ export const newPassword = async (sendData: any) => {
 };
 
 export const salaryLog = async (employeeId: any) => {
-try {
-  const { data } = await axios.get(`${salaryLogApiPath}/${employeeId}`, {
+  try {
+    const { data } = await axios.get(`${salaryLogApiPath}/${employeeId}`, {
       withCredentials: true,
     });
     return data;
@@ -180,13 +180,13 @@ try {
     return err.response.data
   }
 };
- 
+
 
 // employeeBarcode
 export const EmployeeBarCodes = async () => {
   try {
     const response = await axios.get(`${getEmployeeBarcodeApiPath}`, {
-      withCredentials:true,
+      withCredentials: true,
     });
     // console.log("hello i am api ",response)
     // const data = await response.data();

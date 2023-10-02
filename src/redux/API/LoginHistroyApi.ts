@@ -15,19 +15,16 @@ export const fetchLoggedInHistoryAPI = async (limit: any, page: any) => {
 };
 
 
-export const changePasswordAPI = async (employeeId: any, newPassword: any) => {
+
+export const changePasswordAPI = async ( employeeId:any ) => {
   try {
-    const password  = newPassword
-    console.log("employeeId : ",employeeId.employeeId, "newPassword :",password)
-    const { data } = await axios.put(`${changePasswordPasswordApiPath}/${employeeId.employeeId}`,password, {
-      withCredentials: true,
+    console.log("employee:  ",employeeId)
+
+    const response = await axios.put(`${changePasswordPasswordApiPath}/${employeeId.employeeId}`,  employeeId ,{
+     withCredentials:true
     });
-    console.log("Data", data);
-
-    return data;
-  } catch (err: any) {
-    console.error("API Error:", err);
-
-    console.log(err.response.data);
+    return response;
+  } catch (error:any) {
+    throw error.response.data;
   }
 };
