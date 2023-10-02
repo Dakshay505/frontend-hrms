@@ -38,7 +38,7 @@ export const EmployeeAttendance = (props: any) => {
     const [punchOutDate, setPunchOutDate] = useState("")
     const [updateDate, setUpdateDate] = useState("")
     const [remark, Setremark] = useState("")
-
+    
 
     const [showTableRow, setShowTableRow] = useState<any>([]);
 
@@ -71,6 +71,7 @@ export const EmployeeAttendance = (props: any) => {
     const refresh = () => {
         const nextDate = new Date();
         const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
+
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData !== "") {
@@ -253,7 +254,7 @@ export const EmployeeAttendance = (props: any) => {
         dispatch(getLoggedInUserDataAsync());
 
     }, []);
-
+   
 
     return (
         <div> {/* Attendance Starts here */}
@@ -264,6 +265,21 @@ export const EmployeeAttendance = (props: any) => {
                         <Link to="/attendance-database">
                             <img src={ArrowSqureOutBlack} className='w-[18px] h-[18px] cursor-pointer' alt="" />
                         </Link>
+                        <select value={props.month} onChange={(event)=>props.handleMonth(event.target.value)} className='ml-2 bg-slate-100 h-8 rounded-md'>
+                            <option>Select Month</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
                     </div>
                     {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager'? (
 
@@ -390,7 +406,9 @@ export const EmployeeAttendance = (props: any) => {
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Approved By </td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Photo</td>
                                 <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark</td>
-
+                                <td className='py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap'>Remark By</td>
+                                
+                                
                             </tr>
                             {singleEmployeeAttendanceList && singleEmployeeAttendanceList.map((element: any, index: number) => {
                                 ////console.log("ghghgh", element.status)
@@ -578,8 +596,7 @@ export const EmployeeAttendance = (props: any) => {
                                                 ? element?.approvedBy?.name
                                                 : "-"}</td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                                                {element?.status === "approved" &&
-                                                    element?.approvedImage && (
+                                                {element?.approvedImage && (
                                                         <div className="flex gap-[10px] cursor-pointer">
                                                             <div>
                                                                 <p
@@ -605,6 +622,9 @@ export const EmployeeAttendance = (props: any) => {
                                             </td>
                                             <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
                                                 ? element.remarks[element.remarks.length - 1].remark
+                                                : "-"}</td>
+                                                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap'> {element.remarks?.length > 0
+                                                ? element.remarks[element.remarks.length - 1].by
                                                 : "-"}</td>
                                         </tr>
                                         {showTableRow.includes(index) && sortedPunches && sortedPunches.slice(1).map((element: any) => {
