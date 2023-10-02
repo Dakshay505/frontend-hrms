@@ -124,6 +124,8 @@ export const NewPage = () => {
 
   // console.log(employeeDetailList)
 
+  // console.log(employeeDetailList)
+
   const departmentList = useSelector((state: any) => state.department.department)
   const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
     a.departmentName.localeCompare(b.departmentName)
@@ -173,7 +175,7 @@ export const NewPage = () => {
 
 
 
-
+  // pagination
 
 
   const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
@@ -287,7 +289,6 @@ export const NewPage = () => {
 
 
 
-
   const [formData, setFormData] = useState({
     employeeId: { employeeId },
     newPassword: '',
@@ -307,7 +308,7 @@ export const NewPage = () => {
       return;
     }
 
-    dispatch(changePasswordAsync({ employeeId, newPassword })) 
+    dispatch(changePasswordAsync({ employeeId, newPassword }))
       .then((res: any) => {
         if (res.payload.success) {
           toast.success(res.payload.message);
@@ -317,6 +318,9 @@ export const NewPage = () => {
         closeChangePasswordPopup();
       });
   };
+
+
+
 
 
 
@@ -655,6 +659,7 @@ export const NewPage = () => {
                       <div>
                         <input
                           type="password"
+                          placeholder="Change Password"
                           id="newPassword"
                           name="newPassword"
                           value={formData.newPassword}
@@ -665,6 +670,7 @@ export const NewPage = () => {
                       <div>
                         <input
                           type="password"
+                          placeholder="Confirm Change Password"
                           id="confirmNewPassword"
                           name="confirmNewPassword"
                           value={formData.confirmNewPassword}

@@ -7,7 +7,7 @@ export const fetchLoggedInHistoryAPI = async (limit: any, page: any) => {
     const { data } = await axios.get(`${getLoginHistroyApiPath}?limit=${limit}&page=${page}`, {
       withCredentials: true,
     });
-    console.log("API response: ", data);
+    // console.log("API response: ", data);
     return data;
   } catch (error) {
     throw error;
@@ -17,8 +17,8 @@ export const fetchLoggedInHistoryAPI = async (limit: any, page: any) => {
 
 export const changePasswordAPI = async (employeeId: any, newPassword: any) => {
   try {
-    console.log(employeeId.employeeId,newPassword)
     const password  = newPassword
+    console.log("employeeId : ",employeeId.employeeId, "newPassword :",password)
     const { data } = await axios.put(`${changePasswordPasswordApiPath}/${employeeId.employeeId}`,password, {
       withCredentials: true,
     });

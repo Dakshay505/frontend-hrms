@@ -41,7 +41,8 @@ export const Loginlogs = () => {
             setPage(newPage); 
             dispatch(fetchLoggedInHistory({ page: newPage, limit }));
         } else {
-            alert("Invalid page number");
+            setPage(1);
+            dispatch(fetchLoggedInHistory({ page: 1, limit }));
         }
     }
 
