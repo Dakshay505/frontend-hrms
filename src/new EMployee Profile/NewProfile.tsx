@@ -68,7 +68,7 @@ export const NewProfile = () => {
     
     useEffect(() => {
         const nextDate = new Date();
-        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), 1);
+        const date = new Date(nextDate.getFullYear(), nextDate.getMonth(), -31);
         dispatch(getAllJobProfileAsync());
         dispatch(getAllGroupsAsync());
         if (additionalData && additionalData !== "") {
