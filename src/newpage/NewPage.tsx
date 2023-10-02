@@ -283,7 +283,12 @@ export const NewPage = () => {
     });
   };
 
+  const [showPassword, setShowPassword] = useState(false);
 
+  // Create a function to toggle the showPassword state
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
 
   const [newPassword, setNewPassword] = useState('');
@@ -297,7 +302,7 @@ export const NewPage = () => {
         .then(() => {
           toast.success('Password changed successfully');
           setIsChangePasswordPopupOpen(false);
-          
+
         })
         .catch((error: any) => {
           toast.error('Error changing password');
@@ -348,7 +353,7 @@ export const NewPage = () => {
           setStatusValue(active);
           closeEditStatusPopup();
           toast.success("Status updated successfully");
-          dispatch(getAllEmployeeAsync({employeeId}))
+          dispatch(getAllEmployeeAsync({ employeeId }))
 
         });
       } else {
@@ -614,7 +619,7 @@ export const NewPage = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           <div className="flex gap-[10px]">
                             <div>
-                              {element.active ? "active" : "InActive"}
+                              {element.active ? "Active" : "InActive"}
 
                             </div>
                             <img
@@ -713,6 +718,7 @@ export const NewPage = () => {
                   onChange={(e) => setStatusValue(e.target.value === "active")}
                   className="border px-[15px] py-[10px] border-gray-500 rounded-[8px]"
                 >
+                  <option value="">Select Status</option>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
@@ -745,7 +751,7 @@ export const NewPage = () => {
                   <div className="flex  flex-col gap-[10px]">
                     <div>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'} // Use 'text' to show, 'password' to hide
                         placeholder="Change Password"
                         id="newPassword"
                         name="newPassword"
@@ -756,7 +762,7 @@ export const NewPage = () => {
                     </div>
                     <div>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'} // Use 'text' to show, 'password' to hide
                         placeholder="Confirm Change Password"
                         id="confirmNewPassword"
                         name="confirmNewPassword"
@@ -765,7 +771,20 @@ export const NewPage = () => {
                         className="border px-[15px] py-[15px] border-gray-500 rounded-[8px]"
                       />
                     </div>
+
+
+                    <div className="flex justify-end px-[10px]">
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="text-[#283093] text-[12px]  cursor-pointer"
+                      >
+                        {showPassword ? 'Hide Password' : 'Show Password'}
+                      </button>
+                    </div>
+
                   </div>
+
 
                   <div className="flex gap-[10px] pt-[20px]">
 
