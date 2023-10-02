@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { addPunchAsync, deletePunchAsync, editPunchAsync } from '../../redux/Slice/AttandenceSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
-import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
-import { getQrAssignAsync, getSingleEmployeeAsync, salaryLogAsync } from '../../redux/Slice/EmployeeSlice';
+// import { getAllJobProfileAsync } from '../../redux/Slice/JobProfileSlice';
+// import { getAllGroupsAsync } from '../../redux/Slice/GroupSlice';
+// import { getQrAssignAsync, getSingleEmployeeAsync, salaryLogAsync } from '../../redux/Slice/EmployeeSlice';
 import ArrowSqureOutBlack from '../../assets/ArrowSquareOutBlack.svg'
 import X from "../../assets/X.svg";
 import plus from "../../assets/Plus.png"
@@ -24,9 +24,9 @@ import { getLoggedInUserDataAsync } from '../../redux/Slice/loginSlice';
 export const EmployeeAttendance = (props: any) => {
     const { singleEmployeeAttendanceList } = props;
     const dispatch = useDispatch();
-    const location = useLocation();
+    // const location = useLocation();
     const [showAddPopup, setShowAddPopup] = useState(false);
-    const additionalData = (location.state?.additionalData);
+    // const additionalData = (location.state?.additionalData);
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     // const [singleEmployeeAttendanceList, setSingleEmployeeAttendanceList] = useState([])
     const [date, setDate] = useState("")
@@ -62,12 +62,12 @@ export const EmployeeAttendance = (props: any) => {
         setIsImageOpen(false);
     };
 
-    function formatDate(date: any) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
+    // function formatDate(date: any) {
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0');
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     return `${year}-${month}-${day}`;
+    // }
 
     
 
@@ -142,7 +142,7 @@ export const EmployeeAttendance = (props: any) => {
 
             } else {
                 toast.error(res.payload.message)
-                refresh()
+                props.refresh()
             }
         })
     }

@@ -15,7 +15,7 @@ import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
-import up from "../../assets/arrow-up.png";
+// import up from "../../assets/arrow-up.png";
 import { getAllAttandenceAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
@@ -29,8 +29,8 @@ import { allShopAsync } from "../../redux/Slice/ShopSlice";
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
-  const employeeList = useSelector((state: any) => state.employee.employees);
-  const totalEmployees = employeeList.length;
+  // const employeeList = useSelector((state: any) => state.employee.employees);
+  // const totalEmployees = employeeList.length;
   const sortedgroupList = [...groupList].sort((a: any, b: any) =>
     a.groupName.localeCompare(b.groupName
     )
@@ -54,7 +54,7 @@ export const AttendenceDashboardList = () => {
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
   const [loading, Setloading] = useState(false)
-
+console.log(loading)
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
   const handleRowClick = (index: number) => {
