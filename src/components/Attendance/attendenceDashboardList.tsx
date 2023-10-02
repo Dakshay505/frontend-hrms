@@ -16,7 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
 import up from "../../assets/arrow-up.png";
-import { getAllAttandenceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getAllAttandenceAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
@@ -226,13 +226,7 @@ export const AttendenceDashboardList = () => {
     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
-  const navigate = useNavigate();
 
-  const handleTableRowClick = (data: any) => {
-    const employeeId = { employeeId: data.employeeId._id };
-    dispatch(getEmployeeImageAsync(employeeId));
-    navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-  };
   const exportToExcel = () => {
     if (items) {
       const columnOrder = [
@@ -240,8 +234,8 @@ export const AttendenceDashboardList = () => {
         'Date',
         'EmployeeCode',
         'Name',
-        'JobProfile', 
-        'Group', 
+        'JobProfile',
+        'Group',
         'PunchIn',
         'PunchOut',
         'Status',
@@ -263,6 +257,7 @@ export const AttendenceDashboardList = () => {
           _id,
           ...rest
         } = record;
+
 
         console.log({...rest});
         // Map the data according to the column order
@@ -362,6 +357,38 @@ export const AttendenceDashboardList = () => {
     setIsImageOpen(false);
   };
 
+
+
+
+  useEffect(() => {
+    dispatch(getGroupAttendanceAsync());
+  }, []);
+  const totalPresent = items?.length
+  console.log(totalPresent)
+
+  // pending rejected total
+  const navigate = useNavigate();
+  const handleTableRowClick = (data: any) => {
+    const employeeId = { employeeId: data.employeeId._id };
+    dispatch(getEmployeeImageAsync(employeeId));
+    navigate(`/employee-profile`, { state: { additionalData: employeeId } });
+    console.log("hello", data)
+  };
+
+  let pendingCount = 0;
+  let approvedCount = 0;
+  let rejectedCount = 0;
+
+  for (const entry of items) {
+    if (entry.status === "pending") {
+      pendingCount++;
+    } else if (entry.status === "approved") {
+      approvedCount++;
+    } else if (entry.start === "rejected") {
+      rejectedCount++;
+    }
+  }
+
   return (
     <div className="px-[40px] pt-[32px]">
       <div className="flex flex-col flex-start">
@@ -403,37 +430,91 @@ export const AttendenceDashboardList = () => {
               </div>
             </>
           ) : (
+            // <>
+            //   <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            //     <div className="flex justify-center items-center">
+            //       <span className="text-[#283093] text-2xl font-semibold">
+            //         {loading ? 0 : items.length}
+            //       </span>
+            //       <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
+            //     </div>
+            //     <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            //       Present
+            //     </p>
+            //   </div>
+            //   <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            //     <div className="flex justify-center items-center">
+            //       <span className="text-[#283093] text-2xl font-semibold">
+            //         {loading ? 0 : totalEmployees - items.length}
+            //       </span>
+            //       <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
+            //     </div>
+            //     <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            //       Absent
+            //     </p>
+            //   </div>
+            //   <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            //     <div className="flex justify-center items-center">
+            //       <span className="text-[#283093] text-2xl font-semibold">
+            //         {loading ? 0 : totalEmployees}
+            //       </span>
+            //     </div>
+            //     <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            //       Total
+            //     </p>
+            //   </div>
+            // </>
             <>
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading ? 0 : items.length}
+                    {approvedCount}
                   </span>
-                  <img src={up} alt="" className="h-[16px] w-[16px] ms-1" />
+                  {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-                  Present
+                  Approved
+
                 </p>
               </div>
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading ? 0 : totalEmployees - items.length}
+                    {pendingCount}
                   </span>
-                  <img src={up} alt="" className="h-[16px] w-[16px] rotate-180 ms-1" />
+                  {/* <img
+                src={up}
+                alt=""
+                className="h-[16px] w-[16px] rotate-180 ms-1"
+              /> */}
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-                  Absent
+                  Pending
                 </p>
               </div>
               <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                 <div className="flex justify-center items-center">
                   <span className="text-[#283093] text-2xl font-semibold">
-                    {loading ? 0 : totalEmployees}
+                    {rejectedCount}
                   </span>
+                  {/* <img
+                src={up}
+                alt=""
+                className="h-[16px] w-[16px] rotate-180 ms-1"
+              /> */}
                 </div>
                 <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-                  Total
+                  Rejected
+                </p>
+              </div>
+              <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center">
+                  <span className="text-[#283093] text-2xl font-semibold">
+                    {totalPresent}
+                  </span>
+                </div>
+                <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                  Total Present
                 </p>
               </div>
             </>

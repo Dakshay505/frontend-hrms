@@ -1,15 +1,11 @@
-import del from "../../assets/TrashSimple11.svg"
-import del1 from "../../assets/TrashSimple.svg"
 import EditPicture from "../../assets/EditPicture.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react"
-import { addImageAsync, deleteEmployeeAsync, getSingleEmployeeAsync } from "../../redux/Slice/EmployeeSlice";
-import { useNavigate } from "react-router-dom";
+import { addImageAsync,  getSingleEmployeeAsync } from "../../redux/Slice/EmployeeSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
 const NewPicture = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
     const [employeeId, setEmployeeId] = useState("")
 
@@ -34,23 +30,7 @@ const NewPicture = () => {
         dispatch(getLoggedInUserDataAsync());
     }, [])
 
-    // delete section
-    const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const handleDeleteClick = () => {
-        setShowConfirmation(true);
-    };
-
-    const handleConfirmDelete = () => {
-        setShowConfirmation(false);
-        dispatch(deleteEmployeeAsync({ employeeId: singleEmployee?._id })).then(() => {
-            navigate("/view-modify-database")
-        })
-    };
-
-    const handleCancelDelete = () => {
-        setShowConfirmation(false);
-    };
     return (
         <div className="flex mt-10 gap-6">
             <div className="flex flex-col gap-2 items-center">
@@ -73,6 +53,7 @@ const NewPicture = () => {
                         {singleEmployee && singleEmployee.name}
                     </p>
                 </div>
+
 
                 <div>
                     {loggedInUserData.admin  || loggedInUserData.employee.role === 'dbManager' ? (

@@ -1,5 +1,7 @@
+
 // export const apiPath = `http://localhost:5050`;
-//export const apiPath = ``;
+export const apiPath = ``;
+
 
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 export const apiPath = `https://chawlacomponents.com`;
