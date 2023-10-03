@@ -54,8 +54,7 @@ export const getAllAttandence = async (sendData: any) => {
 export const getShopFilterAttendance = async (sendData: any) => {
   try {
     
-    const { data } = await axios.get(
-      sendData.nextDate?`${shopFiterAttendancePath}?date=${sendData.date}&shopName=${sendData.shopName}&nextDate=${sendData.nextDate}&limit=500`:`${shopFiterAttendancePath}?date=${sendData.date}&shopName=${sendData.shopName}&limit=500`,
+    const { data } = await axios.post(`${shopFiterAttendancePath}`,sendData,
       {
         withCredentials: true,
       }
