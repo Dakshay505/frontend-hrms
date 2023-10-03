@@ -60,7 +60,8 @@ export const PersonalDetails = () => {
   return (
     <form onSubmit={handleSubmit((data: any) => {
 
-      const sendData = { employeeId: employeeId, data: data };
+      const sendData = { ...data,employeeId: employeeId};
+      
       // console.log(sendData)
 
       dispatch(updateEmployeeAsync(sendData)).then((res: any) => {

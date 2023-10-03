@@ -111,7 +111,7 @@ export const EmployeeDetails = () => {
                 } else if (overTime === "No") {
                     data = { ...data, overTime: false };
                 }
-                const sendData = { employeeId: employeeId, data: data };
+                const sendData = { ...data,employeeId: employeeId};
                 // console.log("abcd", sendData)
                 dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
                     if (res.payload.success) {

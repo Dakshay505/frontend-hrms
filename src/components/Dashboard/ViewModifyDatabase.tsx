@@ -44,21 +44,24 @@ const ViewModifyDatabase = () => {
 
   const [filter, setFilter] = useState({
     name: localStorage.getItem("name") || "",
-    groupName: localStorage.getItem("groupName") || "",
-    jobProfileName: localStorage.getItem("jobProfileName") || "",
+    //groupName: localStorage.getItem("groupName") || "",
+    groupName:[],
+    //jobProfileName: localStorage.getItem("jobProfileName") || "",
+    jobProfileName:[],
     page: 1,
     limit: 20,
     aadhar: "0"
   });
 
   useEffect(() => {
+    console.log("filter",filter)
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
       //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
-      localStorage.setItem("groupName", filter.groupName);
-      localStorage.setItem("jobProfileName", filter.jobProfileName);
+      //localStorage.setItem("groupName", filter.groupName);
+      //localStorage.setItem("jobProfileName", filter.jobProfileName);
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -225,7 +228,64 @@ const ViewModifyDatabase = () => {
     }
     return element;
   };
+  const [isOpen, setIsOpen] = useState(false);
+  const [isGroupOpen, setIsGroupOpen] = useState(false);
 
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+  const GrouptoggleDropdown = () => {
+    setIsGroupOpen(!isGroupOpen);
+  };
+  const handleJobCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
+  
+
+    if (checked) {
+      setFilter((prevFilter:any) => ({
+        ...prevFilter,
+        jobProfileName: [...prevFilter.jobProfileName, value],
+      }));
+
+    } else {
+      setFilter({
+        ...filter,
+        jobProfileName: filter.jobProfileName.filter((profile:any) => profile !== value),
+      });
+    }
+  };
+  const handleGroupCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
+  
+
+    if (checked) {
+      setFilter((prevFilter:any) => ({
+        ...prevFilter,
+        groupName: [...prevFilter.groupName, value],
+      }));
+
+    } else {
+      setFilter({
+        ...filter,
+        groupName: filter.groupName.filter((profile:any) => profile !== value),
+      });
+    }
+  };
+const selectAll = () => {
+    const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
+    setFilter((prevFilter:any) => ({
+      ...prevFilter,
+      jobProfileName: allProfiles,
+    }));
+  };
+
+  const clearAll = () => {
+    setFilter({
+      ...filter,
+      jobProfileName: [],
+    });
+  };
   const handleInputChange = (event: any) => {
     setSearch(event.target.value);
     setFilter({
@@ -434,7 +494,7 @@ const ViewModifyDatabase = () => {
         <div className="mt-10 flex gap-5">
           <div className="flex gap-4">
             <div>
-              <select
+              {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Groups") {
                     setFilter({
@@ -460,10 +520,44 @@ const ViewModifyDatabase = () => {
                       </option>
                     );
                   })}
-              </select>
+              </select> */}
+              <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={GrouptoggleDropdown}
+      >
+        All Group
+      </button>
+      {isGroupOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {groupList &&
+              groupList.map((element:any, index:any) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.groupName}
+                   //checked={filter.jobProfileName.includes(element.jobProfileName)}
+                   
+                   onChange={handleGroupCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.groupName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
             <div>
-              <select
+              {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Job Profiles") {
                     setFilter({
@@ -489,7 +583,41 @@ const ViewModifyDatabase = () => {
                       </option>
                     );
                   })}
-              </select>
+              </select> */}
+              <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={toggleDropdown}
+      >
+        All Job Profiles
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {jobProfileList &&
+              jobProfileList.map((element:any, index:any) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.jobProfileName}
+                   //checked={filter.jobProfileName.includes(element.jobProfileName)}
+                   
+                   onChange={handleJobCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.jobProfileName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
             <div>
               <select

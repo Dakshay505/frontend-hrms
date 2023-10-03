@@ -89,7 +89,7 @@ export const BankDetails = () => {
       } else if (overTime === "No") {
         data = { ...data, overTime: false };
       }
-      const sendData = { employeeId: employeeId, data: data };
+      const sendData = { ...data,employeeId: employeeId};
       dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
         if (res.payload.success) {
           toast.success(res.payload.message);
