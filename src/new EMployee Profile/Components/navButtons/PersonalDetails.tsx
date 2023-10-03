@@ -59,7 +59,9 @@ export const PersonalDetails = () => {
 
   return (
 
+
       <form onSubmit={handleSubmit((data: any) => {
+
 
         const sendData = { ...data,employeeId: employeeId};
         
