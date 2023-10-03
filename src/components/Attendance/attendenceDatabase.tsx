@@ -85,7 +85,7 @@ export const AttendenceDtabase = () => {
   const [showTableRow, setShowTableRow] = useState<any>([]);
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  console.log("hello",items);
+  console.log("hello",items,total);
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
