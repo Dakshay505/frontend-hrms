@@ -23,7 +23,7 @@ import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
-// import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
+import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 
 export const AttendenceDashboardList = () => {
@@ -120,19 +120,19 @@ console.log(loading)
   }
 
   const [selectedShop, setSelectedShop] = useState("All Shop");
-  const [shopName, setShopName] = useState([""]);
+  const [shopName, setShopName] = useState("");
 
-  // const handleShopChange = (event: any) => {
+  const handleShopChange = (event: any) => {
 
-  //   const selectedValue = event.target.value;
-  //   setSelectedShop(selectedValue);
+    const selectedValue = event.target.value;
+    setSelectedShop(selectedValue);
 
-  //   if (selectedValue === "All Shop") {
-  //     setShopName("");
-  //   } else {
-  //     setShopName(selectedValue);
-  //   }
-  // };
+    if (selectedValue === "All Shop") {
+      setShopName("");
+    } else {
+      setShopName(selectedValue);
+    }
+  };
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -148,25 +148,21 @@ console.log(loading)
       }
     }
     getDateRange(filter.date, filter.nextDate);
-    
+    if (shopName === "") {
+      return
+    }
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
-    if(filter.nextDate === "")
-    {
-      filter.nextDate=filter.date
-    }
     let sendData = {}
     sendData = {
-      shopNames: shopName,
+      shopName: shopName,
       date: filter.date,
-      nextDate: filter.nextDate,
-      limit:500
+      nextDate: filter.nextDate
 
     }
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.attendance;
-      console.log("hiiiii",employeeData)
       setItems(employeeData)
     });
 
@@ -212,48 +208,9 @@ console.log(loading)
       }
     });
   }, [filter, status]);
-  useEffect(() => {
-    function getDateRange(startDate: any, endDate: any) {
-      if (nextDate) {
-        const result = [];
-        const currentDate = new Date(startDate);
-        const finalDate = new Date(endDate);
-        while (currentDate <= finalDate) {
-          result.push(currentDate.toISOString().slice(0, 10));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        setDateRange([...result]);
-      }
-    }
-    //setShopName("")
-    Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    getDateRange(filter.date, filter.nextDate);
-    filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
-    if(filter.nextDate===""){
-    filter.nextDate=filter.date
-    }
-    
-    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      const employeeData = data.payload.attendanceRecords;
-      console.log("hii",employeeData)
-      if (status === "") {
-        setItems(employeeData);
-        Setloading(false)
-      }
-      else {
-        const filteredItems = employeeData.filter((element: any) => element.status === status);
-        setItems(filteredItems)
-        Setloading(false)
-      }
-    });
-  }, []);
- 
+  // const handlerFatchMore = () => {
+  //   setPage((prevPage) => prevPage + 1);
+  // };
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString("en-US", {
@@ -298,7 +255,7 @@ console.log(loading)
         ""
       ];
 
-      const modifiedData = items.map((record:any, index: number) => {
+      const modifiedData = items.map((record, index: number) => {
         // Destructure the record, omit unwanted properties
         const {
           updatedAt,
@@ -351,7 +308,7 @@ console.log(loading)
         return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
       });
       console.log("item", items)
-      modifiedData.forEach((record:any) => {
+      modifiedData.forEach((record) => {
         delete record.punches;
       });
 
@@ -446,20 +403,20 @@ console.log(loading)
       });
     }
   };
-  const handleShopCheckboxChange = (event:any) => {
-    const { value, checked } = event.target;
+  // const handleShopCheckboxChange = (event:any) => {
+  //   const { value, checked } = event.target;
   
 
-    if (checked) {
+  //   if (checked) {
       
-      setShopName([...shopName,value])
+  //     setShopName([...shopName,value])
 
-    } else {
+  //   } else {
       
-       setShopName(shopName.filter((profile:any) => profile !== value))
+  //      setShopName(shopName.filter((profile:any) => profile !== value))
       
-    }
-  };
+  //   }
+  // };
   const selectAll = () => {
     const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
     setFilter((prevFilter:any) => ({
@@ -502,14 +459,14 @@ console.log(loading)
       groupName: [],
     });
   };
-  const selectShopAll = () => {
-    const allProfiles = shoplist.map((element:any) => element.shopName);
-     setShopName(allProfiles)
-  };
+  // const selectShopAll = () => {
+  //   const allProfiles = shoplist.map((element:any) => element.shopName);
+  //    setShopName(allProfiles)
+  // };
 
-  const clearShopAll = () => {
-    setShopName([])
-  };
+  // const clearShopAll = () => {
+  //   setShopName([])
+  // };
   
   
 
@@ -531,6 +488,7 @@ console.log(loading)
       });
     }
   };
+
 
   const tileClassName = ({ date }: any) => {
     const localDate = new Date(
@@ -569,7 +527,7 @@ console.log(loading)
   const navigate = useNavigate();
   const handleTableRowClick = (data: any) => {
     const employeeId = { employeeId: data.employeeId._id };
-    // dispatch(getEmployeeImageAsync(employeeId));
+    dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
     console.log("hello", data)
   };
@@ -778,7 +736,7 @@ console.log(loading)
                   <input
                    type="checkbox"
                    value={element.groupName}
-                   checked={filter.groupName.includes(element.groupNamegit)}
+                   checked={filter.groupName.includes(element.groupName)}
                    
                    onChange={handleGroupCheckboxChange}
                    className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
@@ -820,7 +778,7 @@ console.log(loading)
                     );
                   })}
               </select> */}
-              <div className="relative inline-block text-left ml-4">
+              <div className="relative inline-block text-left  ml-3">
       <button
         type="button"
         className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
@@ -918,7 +876,7 @@ console.log(loading)
    </div>
             </div>
             <div>
-              {/* <select
+              <select
                 onChange={handleShopChange}
                 value={selectedShop}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
@@ -930,41 +888,7 @@ console.log(loading)
                   </option>
                 ))}
 
-              </select> */}
-              <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={ShoptoggleDropdown}
-      >
-        All Shop
-      </button>
-      {isShopOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectShopAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearShopAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {shoplist&&
-              shoplist.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.shopName}
-                   checked={shopName.includes(element.shopName)}
-                   
-                   onChange={handleShopCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.shopName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+              </select>
             </div>
 
             <div>
@@ -1036,7 +960,7 @@ console.log(loading)
 
       </div>
 
-    
+
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
         <table className="w-full">
@@ -1073,9 +997,8 @@ console.log(loading)
                 Photos
               </td>
             </tr>
-           
             {items &&
-                items.map((element: any, index: number) => {
+              items.map((element: any, index: number) => {
                 const punchesList = [...element.punches];
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                   return (
@@ -1293,7 +1216,6 @@ console.log(loading)
                   </>
                 );
               })}
-            
           </tbody >
 
           {loaderStatus === "loading" ? (
@@ -1323,9 +1245,6 @@ console.log(loading)
         </table>
         {/* TABLE ENDS HERE */}
       </div>
-      
-      
-
 
       <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
