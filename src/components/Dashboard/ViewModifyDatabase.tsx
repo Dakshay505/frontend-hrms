@@ -535,22 +535,7 @@ const ViewModifyDatabase = () => {
                 value={search}
                 className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
               />
-              {/* {suggestions.length > 0 && (
-                            <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-                                {suggestions.map((suggestion: any, index: any) => (
-                                    <input type="text" readOnly key={index}
-                                        className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
-                                        value={suggestion}
-                                        onClick={(event) => {
-                                            setFilter({
-                                                ...filter,
-                                                name: (event.target as HTMLInputElement).value
-                                            })
-                                            setSuggestions([]);
-                                        }} />
-                                ))}
-                            </div>
-                        )} */}
+            
               {suggestions.length > 0 && (
                 <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
                   {suggestions.map((element: any, index: any) => {
