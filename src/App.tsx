@@ -78,6 +78,8 @@ import AddWorkDay from "./components/Dashboard/AddWorkday";
 import { Loginlogs } from "./newpage/Loginlogs";
 import { NewPage } from "./newpage/NewPage";
 import { EmployeesSidebar } from "./newpage/Employees";
+import { DepartmentInfo } from "./components/Dashboard/Department-Info";
+import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
 
 
 const router = createBrowserRouter([
@@ -477,6 +479,26 @@ const router = createBrowserRouter([
         <Aside>
           {" "}
           <GroupInfo></GroupInfo>{" "}
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/department-info",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <DepartmentInfo></DepartmentInfo>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/parent-department-info",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <ParentDepartmentInfo></ParentDepartmentInfo>
         </Aside>
       </ProductedRoute>
     ),
