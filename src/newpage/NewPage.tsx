@@ -169,8 +169,6 @@ export const NewPage = () => {
   }, []);
 
 
-
-
   // pagination
 
 
@@ -255,9 +253,6 @@ export const NewPage = () => {
   }, [singleEmployee]);
 
 
-
-
-
   // Change Password pop up
 
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
@@ -311,8 +306,6 @@ export const NewPage = () => {
     }
   };
 
-
-
   // active in active atstus
 
   const [isEditStatusPopupOpen, setIsEditStatusPopupOpen] = useState(false);
@@ -329,19 +322,12 @@ export const NewPage = () => {
     setIsEditStatusPopupOpen(false);
   };
 
-
-
-
   const [StatusValue, setStatusValue] = useState<boolean | null>(null);
-
 
   useEffect(() => {
     setEmployeeId(singleEmployee?._id);
     setStatusValue(singleEmployee?.active);
   }, [singleEmployee]);
-
-
-
 
   const handleSaveStatus = async () => {
     try {
@@ -363,7 +349,6 @@ export const NewPage = () => {
       toast.error("Error updating status");
     }
   };
-
 
 
   return (

@@ -380,13 +380,15 @@ console.log(loading)
   let rejectedCount = 0;
 
   for (const entry of items) {
+    console.log(entry)
     if (entry.status === "pending") {
       pendingCount++;
     } else if (entry.status === "approved") {
       approvedCount++;
-    } else if (entry.start === "rejected") {
+    } else if (entry.status === "rejected") {
       rejectedCount++;
     }
+    console.log(rejectedCount)
   }
 
   return (
@@ -934,6 +936,9 @@ console.log(loading)
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                             </td>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td> 
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
                                 ? changetime(element.punchIn)
