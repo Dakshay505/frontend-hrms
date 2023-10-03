@@ -23,7 +23,7 @@ import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
-import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
+// import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 
 export const AttendenceDashboardList = () => {
@@ -487,7 +487,7 @@ console.log(loading)
   const navigate = useNavigate();
   const handleTableRowClick = (data: any) => {
     const employeeId = { employeeId: data.employeeId._id };
-    dispatch(getEmployeeImageAsync(employeeId));
+    // dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
     console.log("hello", data)
   };

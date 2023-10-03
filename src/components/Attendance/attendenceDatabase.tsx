@@ -19,24 +19,24 @@ import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDtabase = () => {
   // const [page, setPage] = useState(1);
   // const [totalPage, setTotalPage] = useState(1);
-  function convertToQueryString(data: any) {
-    let queryStr = "";
-    for (let key in data) {
-      if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
-        if (queryStr !== "") {
-          queryStr += "&";
-        }
-        queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(
-          data[key]
-        )}`;
-      }
-    }
-    return queryStr;
-  }
+  // function convertToQueryString(data: any) {
+  //   let queryStr = "";
+  //   for (let key in data) {
+  //     if (data.hasOwnProperty(key) && data[key] !== "" && data[key] !== null) {
+  //       if (queryStr !== "") {
+  //         queryStr += "&";
+  //       }
+  //       queryStr += `${encodeURIComponent(key)}=${encodeURIComponent(
+  //         data[key]
+  //       )}`;
+  //     }
+  //   }
+  //   return queryStr;
+  // }
   const getAllAttandence = async (sendData: any) => {
     // setIsLoading(true);
     try {
-      const filterDatta = convertToQueryString(sendData);
+      // const filterDatta = convertToQueryString(sendData);
       const { data } = await axios.post(
         `${getAllAttandenceApiPath}`,sendData,
         {

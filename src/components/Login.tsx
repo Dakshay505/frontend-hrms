@@ -93,7 +93,7 @@ export function Login() {
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
             {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/' replace={true}></Navigate>}
-            {(loggedInUserData &&loggedInUserData?.employee?.role === 'manufacturing') && <Navigate to='/prd'  replace={true}></Navigate>}
+            {/* {(loggedInUserData &&loggedInUserData?.employee?.role === 'manufacturing') && <Navigate to='/prd'  replace={true}></Navigate>} */}
            
             <div className='flex flex-col justify-center items-center w-full mt-20'>
                 <div>
