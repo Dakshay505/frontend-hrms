@@ -45,9 +45,9 @@ const ViewModifyDatabase = () => {
   const [filter, setFilter] = useState({
     name: localStorage.getItem("name") || "",
     //groupName: localStorage.getItem("groupName") || "",
-    groupName:[],
+    groupName:[""],
     //jobProfileName: localStorage.getItem("jobProfileName") || "",
-    jobProfileName:[],
+    jobProfileName:[""],
     page: 1,
     limit: 20,
     aadhar: "0"
@@ -262,9 +262,11 @@ const ViewModifyDatabase = () => {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+    setIsGroupOpen(false);
   };
   const GrouptoggleDropdown = () => {
     setIsGroupOpen(!isGroupOpen);
+    setIsOpen(false);
   };
   const handleJobCheckboxChange = (event:any) => {
     const { value, checked } = event.target;
@@ -312,6 +314,20 @@ const selectAll = () => {
     setFilter({
       ...filter,
       jobProfileName: [],
+    });
+  };
+  const selectGroupAll = () => {
+    const allProfiles = groupList.map((element:any) => element.groupName);
+    setFilter((prevFilter:any) => ({
+      ...prevFilter,
+      groupName: allProfiles,
+    }));
+  };
+
+  const clearGroupAll = () => {
+    setFilter({
+      ...filter,
+      groupName: [],
     });
   };
   const handleInputChange = (event: any) => {
@@ -561,8 +577,8 @@ const selectAll = () => {
       {isGroupOpen && (
         <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
           <div className="p-2">
-            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+            <button onClick={selectGroupAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearGroupAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
           </div>
           <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
             {groupList &&
@@ -571,7 +587,7 @@ const selectAll = () => {
                   <input
                    type="checkbox"
                    value={element.groupName}
-                   //checked={filter.jobProfileName.includes(element.jobProfileName)}
+                   checked={filter.groupName.includes(element.groupName)}
                    
                    onChange={handleGroupCheckboxChange}
                    className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
@@ -634,7 +650,7 @@ const selectAll = () => {
                   <input
                    type="checkbox"
                    value={element.jobProfileName}
-                   //checked={filter.jobProfileName.includes(element.jobProfileName)}
+                   checked={filter.jobProfileName.includes(element.jobProfileName)}
                    
                    onChange={handleJobCheckboxChange}
                    className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
