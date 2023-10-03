@@ -76,9 +76,12 @@ console.log(loading)
 
   const [filter, setFilter] = useState({
     name: "",
-    groupName: localStorage.getItem("groupName") || "",
-    jobProfileName: localStorage.getItem("jobProfileName") || "",
-    departmentName: localStorage.getItem("departmentName") || "",
+    //groupName: localStorage.getItem("groupName") || "",
+    groupName:[""],
+    //jobProfileName: localStorage.getItem("jobProfileName") || [],
+    jobProfileName:[""],
+    //departmentName: localStorage.getItem("departmentName") || "",
+    departmentName:[""],
     date: "",
     nextDate: "",
     page: 1,
@@ -180,13 +183,18 @@ console.log(loading)
     }
     setShopName("")
     Setloading(true)
-    localStorage.setItem("jobProfileName", filter.jobProfileName)
-    localStorage.setItem("groupName", filter.groupName)
-    localStorage.setItem("departmentName", filter.departmentName)
+    //localStorage.setItem("jobProfileName", filter.jobProfileName)
+    //localStorage.setItem("groupName", filter.groupName)
+    //localStorage.setItem("departmentName", filter.departmentName)
 
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    dispatch(getAllEmployeeAsync(filter))
+    //dispatch(getAllEmployeeAsync(filter))
+    console.log(filter)
+    if(filter.nextDate===""){
+    filter.nextDate=filter.date
+    }
+    
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
@@ -313,6 +321,115 @@ console.log(loading)
       toast.success("CSV Download Successfully");
     }
   };
+  const [isOpen, setIsOpen] = useState(false);
+  const [isGroupOpen, setIsGroupOpen] = useState(false);
+  const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+  const GrouptoggleDropdown = () => {
+    setIsGroupOpen(!isGroupOpen);
+  };
+  const DepartmenttoggleDropdown = () => {
+    setIsDepartmentOpen(!isDepartmentOpen);
+  };
+  const handleJobCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
+  
+
+    if (checked) {
+      setFilter((prevFilter:any) => ({
+        ...prevFilter,
+        jobProfileName: [...prevFilter.jobProfileName, value],
+      }));
+
+    } else {
+      setFilter({
+        ...filter,
+        jobProfileName: filter.jobProfileName.filter((profile:any) => profile !== value),
+      });
+    }
+  };
+  const handleGroupCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
+  
+
+    if (checked) {
+      setFilter((prevFilter:any) => ({
+        ...prevFilter,
+        groupName: [...prevFilter.groupName, value],
+      }));
+
+    } else {
+      setFilter({
+        ...filter,
+        groupName: filter.groupName.filter((profile:any) => profile !== value),
+      });
+    }
+  };
+  const handleDepartmentCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
+  
+
+    if (checked) {
+      setFilter((prevFilter:any) => ({
+        ...prevFilter,
+        departmentName: [...prevFilter.departmentName, value],
+      }));
+
+    } else {
+      setFilter({
+        ...filter,
+        departmentName: filter.departmentName.filter((profile:any) => profile !== value),
+      });
+    }
+  };
+  const selectAll = () => {
+    const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
+    setFilter((prevFilter:any) => ({
+      ...prevFilter,
+      jobProfileName: allProfiles,
+    }));
+  };
+
+  const clearAll = () => {
+    setFilter({
+      ...filter,
+      jobProfileName: [],
+    });
+  };
+  const selectDepartmentAll = () => {
+    const allProfiles = departmentList.map((element:any) => element.departmentName);
+    setFilter((prevFilter:any) => ({
+      ...prevFilter,
+      departmentName: allProfiles,
+    }));
+  };
+
+  const clearDepartmentAll = () => {
+    setFilter({
+      ...filter,
+      departmentName: [],
+    });
+  };
+  const selectGroupAll = () => {
+    const allProfiles = sortedgroupList.map((element:any) => element.groupName);
+    setFilter((prevFilter:any) => ({
+      ...prevFilter,
+      groupName: allProfiles,
+    }));
+  };
+
+  const clearGroupAll = () => {
+    setFilter({
+      ...filter,
+      groupName: [],
+    });
+  };
+  
+  
 
 
   const handleInputChange = (event: any) => {
@@ -530,7 +647,7 @@ console.log(loading)
         <div className="flex gap-5">
           <div className="flex gap-3">
             <div>
-              <select
+              {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Groups") {
                     setFilter({
@@ -556,10 +673,44 @@ console.log(loading)
                       </option>
                     );
                   })}
-              </select>
+              </select> */}
+               <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={GrouptoggleDropdown}
+      >
+        All Group
+      </button>
+      {isGroupOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectGroupAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearGroupAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {sortedgroupList&&
+              sortedgroupList.map((element:any, index:any) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.groupName}
+                   checked={filter.groupName.includes(element.groupName)}
+                   
+                   onChange={handleGroupCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.groupName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
             <div>
-              <select
+              {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Job Profiles") {
                     setFilter({
@@ -575,7 +726,8 @@ console.log(loading)
                 }}
                 value={filter.jobProfileName}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              >
+              
+                >
                 <option value="All Job Profiles">All Job Profiles</option>
                 {sortedjobProfileList &&
                   sortedjobProfileList.map((element: any, index: number) => {
@@ -585,10 +737,43 @@ console.log(loading)
                       </option>
                     );
                   })}
-              </select>
+              </select> */}
+              <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={toggleDropdown}
+      >
+        All Job Profiles
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearAll}  className="text-red-600 underline ml-2 test-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {sortedjobProfileList &&
+              sortedjobProfileList.map((element, index) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.jobProfileName}
+                   checked={filter.jobProfileName.includes(element.jobProfileName)}
+                   onChange={handleJobCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.jobProfileName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
             <div>
-              <select
+              {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Department") {
                     setFilter({
@@ -614,7 +799,41 @@ console.log(loading)
                       </option>
                     );
                   })}
-              </select>
+              </select> */}
+              <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={DepartmenttoggleDropdown}
+      >
+        All Department
+      </button>
+      {isDepartmentOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectDepartmentAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearDepartmentAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {sortedDepartmentList&&
+              sortedDepartmentList.map((element:any, index:any) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.departmentName}
+                   checked={filter.departmentName.includes(element.departmentName)}
+                   
+                   onChange={handleDepartmentCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.departmentName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
             <div>
               <select
@@ -658,7 +877,7 @@ console.log(loading)
 
       </div>
       <div className="flex flex-row">
-        <div className="relative mt-4">
+      {!isGroupOpen &&  <div className="relative mt-4">
           {isLabelVisible && (
             <div className="absolute top-[10px] left-6">
               <label
@@ -697,7 +916,7 @@ console.log(loading)
               ))}
             </div>
           )}
-        </div>
+        </div>}
 
       </div>
 

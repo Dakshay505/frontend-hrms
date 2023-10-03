@@ -62,7 +62,7 @@ export const getAllEmployee = async (sendData: any) => {
     //console.log("hii",sendData)
     const queryStr = convertToQueryString(sendData);
     console.log(`${getEmployeeApiPath}?${queryStr}`)
-    const { data } = await axios.get(`${getEmployeeApiPath}?${queryStr}`, {
+    const { data } = await axios.post(`${getEmployeeApiPath}`, sendData,{
       withCredentials: true,
     });
     return data;
@@ -192,6 +192,6 @@ export const EmployeeBarCodes = async () => {
     // const data = await response.data();
     return response;
   } catch (error) {
-    throw error;
+    //throw error;
   }
 };

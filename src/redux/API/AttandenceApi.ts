@@ -38,9 +38,9 @@ function convertToQueryString(data: any) {
 export const getAllAttandence = async (sendData: any) => {
   try {
     const filterDatta = convertToQueryString(sendData);
-    console.log(`${getAllAttandenceApiPath}?${filterDatta}`);
-    const { data } = await axios.get(
-      `${getAllAttandenceApiPath}?${filterDatta}`,
+    //console.log(`${getAllAttandenceApiPath}?${filterDatta}`);
+    const { data } = await axios.post(
+      `${getAllAttandenceApiPath}`,sendData,
       {
         withCredentials: true,
       }

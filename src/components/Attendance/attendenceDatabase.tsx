@@ -37,8 +37,8 @@ export const AttendenceDtabase = () => {
     // setIsLoading(true);
     try {
       const filterDatta = convertToQueryString(sendData);
-      const { data } = await axios.get(
-        `${getAllAttandenceApiPath}?${filterDatta}`,
+      const { data } = await axios.post(
+        `${getAllAttandenceApiPath}`,sendData,
         {
           withCredentials: true,
         }
@@ -135,6 +135,7 @@ export const AttendenceDtabase = () => {
       date: `${year}-${month}-${day}`,
       page: 1, // Use the incremented page
       limit: limit,
+
     };
     //console.log(requestData)
     // if (page === 0) {

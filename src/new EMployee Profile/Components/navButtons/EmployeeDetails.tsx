@@ -112,7 +112,7 @@ export const EmployeeDetails = () => {
                     data = { ...data, overTime: false };
                 }
                 const sendData = { ...data,employeeId: employeeId};
-                 console.log("abcd", sendData)
+
                 dispatch(updateEmployeeAsync(sendData)).then((res: any) => {
                     if (res.payload.success) {
                         toast.success(res.payload.message);
