@@ -89,7 +89,7 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.departmentName]);
+  }, [filter.groupName, filter.jobProfileName,filter.name, filter.page, filter.departmentName]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -199,6 +199,7 @@ export const NewPage = () => {
     return element;
   };
 
+
   const handleInputChange = (event: any) => {
     setSearch(event.target.value);
     setFilter({
@@ -220,9 +221,6 @@ export const NewPage = () => {
     );
     setSuggestions(filteredSuggestions);
   };
-
-
-
 
 
 
@@ -711,7 +709,7 @@ export const NewPage = () => {
           {isEditStatusPopupOpen && (
             <div className="fixed inset-0 flex items-center justify-center z-50 ">
               <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
-              <div className="flex flex-col gap-[10px] relative bg-white p-6 rounded-lg shadow-lg">
+              <div className="flex flex-col gap-[10px] w-[300px] h-[230px] justify-between relative bg-white p-6 rounded-lg shadow-lg">
                 <h1 className="font-bold text-[25px]">Edit Status</h1>
                 <select
                   value={StatusValue === true ? "active" : StatusValue === false ? "inactive" : ""}
