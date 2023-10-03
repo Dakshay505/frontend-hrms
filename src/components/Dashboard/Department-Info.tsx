@@ -3,9 +3,9 @@ import edit from "../../assets/PencilSimple.png"
 import check from "../../assets/Check.png"
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-// import deleteIcon from "../../assets/Trash.svg"
+import deleteIcon from "../../assets/Trash.svg"
 import { useLocation, useNavigate } from "react-router-dom";
-import {  updateDepartmentAsync } from '../../redux/Slice/departmentSlice';
+import { deleteDepartmentAsync, updateDepartmentAsync } from '../../redux/Slice/departmentSlice';
 import toast from 'react-hot-toast';
 
 export const DepartmentInfo = () => {
@@ -17,7 +17,7 @@ export const DepartmentInfo = () => {
     const description = location.state.description;
     const [showInputBoxDepartmentName, setShowInputBoxDepartmentName] = useState(false);
     const [showInputBoxDepartmentDepartment, setShowInputBoxDepartmentDepartment] = useState(false);
-    // const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+    const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [inputBoxDepartmentNameValue, setInputBoxDepartmentNameValue] = useState(departmentName);
     const [inputBoxDescriptionValue, setInputBoxDescriptionValue] = useState(description);
 
@@ -52,52 +52,52 @@ export const DepartmentInfo = () => {
             console.error('An error occurred:', error);
         }
     };
-    // const handleDeleteClick = () => {
-    //     setDeleteConfirmationOpen(true);
-    // };
+    const handleDeleteClick = () => {
+        setDeleteConfirmationOpen(true);
+    };
 
-    // const handleDeleteCancel = () => {
-    //     setDeleteConfirmationOpen(false);
-    // };
+    const handleDeleteCancel = () => {
+        setDeleteConfirmationOpen(false);
+    };
 
-    // const handleDeleteConfirm = async () => {
-    //     try {
-    //         const response = await dispatch(deleteDepartmentAsync(departmentid));
-    //         if (response.payload.success) {
-    //             toast.success('Department deleted successfully');
-    //             navigate('/view-modify-database');
-    //         } else {
-    //             toast.error('Department deletion failed');
-    //         }
-    //     } catch (error) {
-    //         console.error('An error occurred:', error);
-    //     }
-    //     setDeleteConfirmationOpen(false);
-    // };
+    const handleDeleteConfirm = async () => {
+        try {
+            const response = await dispatch(deleteDepartmentAsync(departmentid));
+            if (response.payload.success) {
+                toast.success('Department deleted successfully');
+                navigate('/view-modify-database');
+            } else {
+                toast.error('Department deletion failed');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+        setDeleteConfirmationOpen(false);
+    };
 
-    // const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
-    //     return isOpen ? (
-    //         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    //             <div className="bg-white p-6 rounded shadow-md">
-    //                 <p className="text-lg font-semibold mb-4">Are you sure you want to delete?</p>
-    //                 <div className="flex justify-end">
-    //                     <button
-    //                         className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
-    //                         onClick={onCancel}
-    //                     >
-    //                         Cancel
-    //                     </button>
-    //                     <button
-    //                         className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
-    //                         onClick={onConfirm}
-    //                     >
-    //                         Confirm
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     ) : null;
-    // };
+    const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
+        return isOpen ? (
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                    <p className="text-lg font-semibold mb-4">Are you sure you want to delete?</p>
+                    <div className="flex justify-end">
+                        <button
+                            className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
+                            onClick={onCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                            onClick={onConfirm}
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        ) : null;
+    };
     useEffect(() => {
         // setdepartmentId(departmentId);
         setInputBoxDepartmentNameValue(departmentName)
@@ -193,7 +193,7 @@ export const DepartmentInfo = () => {
                 </div>
 
             </form>
-            {/* <div className='flex flex-row m-3'>
+            <div className='flex flex-row m-3'>
                 <button
                     className="flex border py-2 px-5 mx-[-12px] my-5 border-red-500 items-center text-[red] text-sm font-medium"
                     onClick={handleDeleteClick}
@@ -206,7 +206,7 @@ export const DepartmentInfo = () => {
                     onCancel={handleDeleteCancel}
                     onConfirm={handleDeleteConfirm}
                 />
-            </div> */}
+            </div>
         </div>
     )
 }
