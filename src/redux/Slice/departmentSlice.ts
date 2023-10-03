@@ -7,6 +7,8 @@ import {
   getDepartmentByParent,
   getParentAllDepartment,
   getjobProfileBySubDepartmentName,
+  updateDepartment,
+  updateParentDepartment,
 } from "../API/departmentAPI";
 
 const initialState = {
@@ -88,6 +90,34 @@ export const getjobProfileBySubDepartmentNameAsync: any = createAsyncThunk(
     }
   }
 );
+
+export const updateDepartmentAsync: any = createAsyncThunk(
+  'updateDepartmentAsync',
+  async (data) => {
+    try {
+      const response = await updateDepartment(data);
+      console.log("llllllllll", response)
+      return response;
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  }
+);
+
+export const updateParentDepartmentAsync: any = createAsyncThunk(
+  'updateParentDepartmentAsync',
+  async (data) => {
+    try {
+      const response = await updateParentDepartment(data);
+      console.log("llllllllll", response)
+      return response;
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  }
+);
+
+
 export const deleteDepartmentAsync: any = createAsyncThunk(
   "deleteDepartment",
   async (data) => {
@@ -121,8 +151,7 @@ export const departmentSlice = createSlice({
       .addCase(getAllDepartmentAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        getAllDepartmentAsync.fulfilled,
+      .addCase(getAllDepartmentAsync.fulfilled,
         function (state: any, action: any) {
           state.status = "idle";
           state.department = action.payload.allDepartment;
@@ -158,6 +187,30 @@ export const departmentSlice = createSlice({
           state.departmentJobProfile = action.payload.jobProfile;
         }
       )
+
+      .addCase(updateDepartmentAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        updateDepartmentAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.myDepartment = action.payload;
+        }
+      )
+
+      .addCase(updateParentDepartmentAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        updateParentDepartmentAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.myDepartment = action.payload;
+        }
+      )
+
+
       .addCase(deleteDepartmentAsync.pending, (state) => {
         state.status = "loading";
       })

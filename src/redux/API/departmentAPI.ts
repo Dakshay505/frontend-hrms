@@ -7,6 +7,8 @@ import {
   getAllParentDepartmentApiPath,
   getDepartmentByParentApiPath,
   getSalaryBySubDepartmentApiPath,
+  updateDepartmentApiPath,
+  updateParentDepartmentApiPath,
 } from "../../APIRoutes";
 
 // CREATE
@@ -79,6 +81,36 @@ export const getjobProfileBySubDepartmentName = async (Data: any) => {
     console.log(err.response.data);
   }
 };
+ 
+
+export const updateDepartment = async (Data:any) => {
+  try {
+    console.log("abcd",Data)
+    const { data } = await axios.patch(
+      `${updateDepartmentApiPath}/${Data.departmentId}`, Data,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error:any) {
+    return error.response.data;
+  }
+};
+ 
+
+export const updateParentDepartment = async (Data:any) => {
+  try {
+    console.log("abcd",Data)
+    const { data } = await axios.patch(
+      `${updateParentDepartmentApiPath}/${Data.departmentId}`, Data,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error:any) {
+    return error.response.data;
+  }
+};
+
+
 export const deleteDepartment = async (id: any) => {
   try {
     const { data } = await axios.delete(`${deleteDepartmentApiPath}/${id}`);
