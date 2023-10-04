@@ -23,7 +23,7 @@ import LoaderGif from "../../assets/loadergif.gif";
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
-import { getAllEmployeeAsync, getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
+import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 
 export const AttendenceDashboardList = () => {
@@ -120,7 +120,7 @@ console.log(loading)
     return formattedTime;
   }
 
-  const [selectedShop, setSelectedShop] = useState("All Shop");
+  const [selectedShop, ] = useState("All Shop");
   const [shopName, setShopName] = useState([""]);
 
   // const handleShopChange = (event: any) => {
@@ -1410,7 +1410,7 @@ console.log(loading)
 
                       </td>
 
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                      <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
                         {element?.status === "approved" && (
                           <div>{temp.shopName ? temp.shopName : "-"}</div>
                         )}
