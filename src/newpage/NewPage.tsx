@@ -54,12 +54,9 @@ export const NewPage = () => {
 
   const [filter, setFilter] = useState({
     name: localStorage.getItem("name") || "",
-    //groupName: localStorage.getItem("groupName") || "",
-    //jobProfileName: localStorage.getItem("jobProfileName") || "",
-    //departmentName: localStorage.getItem("departmentName") || "",
-    groupName:[""],
-    jobProfileName:[""],
-    departmentName:[""],
+    groupName: [""],
+    jobProfileName: [""],
+    departmentName: [""],
     page: 1,
     limit: 20,
     aadhar: "0"
@@ -70,11 +67,7 @@ export const NewPage = () => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
-      //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
-      //localStorage.setItem("groupName", filter.groupName);
-      //localStorage.setItem("jobProfileName", filter.jobProfileName);
-      //localStorage.setItem("departmentName", filter.departmentName)
 
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
@@ -94,7 +87,7 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName,filter.name, filter.departmentName]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.departmentName]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -128,9 +121,9 @@ export const NewPage = () => {
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
   console.log(employeeDetailList)
   const departmentList = useSelector((state: any) => state.department.department)
-  const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
-    a.departmentName.localeCompare(b.departmentName)
-  );
+  // const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+  //   a.departmentName.localeCompare(b.departmentName)
+  // );
 
 
 
@@ -175,34 +168,37 @@ export const NewPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
-  
+
 
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
     setIsGroupOpen(false);
     setIsDepartmentOpen(false);
-    
+
   };
   const GrouptoggleDropdown = () => {
     setIsGroupOpen(!isGroupOpen);
     setIsOpen(false);
     setIsDepartmentOpen(false);
-  
+
   };
   const DepartmenttoggleDropdown = () => {
     setIsDepartmentOpen(!isDepartmentOpen);
     setIsOpen(false);
     setIsGroupOpen(false);
-   
+
   };
-  
-  const handleJobCheckboxChange = (event:any) => {
+
+ 
+
+
+  const handleJobCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         jobProfileName: [...prevFilter.jobProfileName, value],
       }));
@@ -210,16 +206,17 @@ export const NewPage = () => {
     } else {
       setFilter({
         ...filter,
-        jobProfileName: filter.jobProfileName.filter((profile:any) => profile !== value),
+        jobProfileName: filter.jobProfileName.filter((profile: any) => profile !== value),
       });
     }
   };
-  const handleGroupCheckboxChange = (event:any) => {
+
+  const handleGroupCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         groupName: [...prevFilter.groupName, value],
       }));
@@ -227,16 +224,17 @@ export const NewPage = () => {
     } else {
       setFilter({
         ...filter,
-        groupName: filter.groupName.filter((profile:any) => profile !== value),
+        groupName: filter.groupName.filter((profile: any) => profile !== value),
       });
     }
   };
-  const handleDepartmentCheckboxChange = (event:any) => {
+
+  const handleDepartmentCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         departmentName: [...prevFilter.departmentName, value],
       }));
@@ -244,14 +242,14 @@ export const NewPage = () => {
     } else {
       setFilter({
         ...filter,
-        departmentName: filter.departmentName.filter((profile:any) => profile !== value),
+        departmentName: filter.departmentName.filter((profile: any) => profile !== value),
       });
     }
   };
- 
+
   const selectAll = () => {
-    const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       jobProfileName: allProfiles,
     }));
@@ -264,8 +262,8 @@ export const NewPage = () => {
     });
   };
   const selectDepartmentAll = () => {
-    const allProfiles = departmentList.map((element:any) => element.departmentName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = departmentList.map((element: any) => element.departmentName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       departmentName: allProfiles,
     }));
@@ -278,8 +276,8 @@ export const NewPage = () => {
     });
   };
   const selectGroupAll = () => {
-    const allProfiles = groupList.map((element:any) => element.groupName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = groupList.map((element: any) => element.groupName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       groupName: allProfiles,
     }));
@@ -291,7 +289,7 @@ export const NewPage = () => {
       groupName: [],
     });
   };
-  
+
 
 
 
@@ -498,194 +496,116 @@ export const NewPage = () => {
       <div className="flex gap-5 flex-wrap">
         <div className="flex gap-4">
           <div>
-            {/* <select
-              onChange={(event) => {
-                if (event.target.value === "All Groups") {
-                  setFilter({
-                    ...filter,
-                    groupName: "",
-                  });
-                } else {
-                  setFilter({
-                    ...filter,
-                    groupName: event.target.value,
-                  });
-                }
-              }}
-              value={filter.groupName}
-              className="border border-solid w-[17rem] border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-            >
-              <option value="All Groups">All Groups</option>
-              {groupList &&
-                groupList.map((element: any, index: number) => {
-                  return (
-                    <option key={index} value={element.groupName}>
-                      {element.groupName}
-                    </option>
-                  );
-                })}
-            </select> */}
+          
             <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={GrouptoggleDropdown}
-      >
-        All Group
-      </button>
-      {isGroupOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          
-          <div className="flex flex-row p-2 gap-3">
-            <img src={SelectAll}  onClick={selectGroupAll} className="h-5 w-5 bg-blue-500" />
-            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearGroupAll}   />
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {groupList&&
-              groupList.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.groupName}
-                   checked={filter.groupName.includes(element.groupName)}
-                   
-                   onChange={handleGroupCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.groupName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
-          </div>
-          <div>
-            {/* <select
-              onChange={(event) => {
-                if (event.target.value === "All Job Profiles") {
-                  setFilter({
-                    ...filter,
-                    jobProfileName: "",
-                  });
-                } else {
-                  setFilter({
-                    ...filter,
-                    jobProfileName: event.target.value,
-                  });
-                }
-              }}
-              value={filter.jobProfileName}
-              className="border border-solid w-[20rem] border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-            >
-              <option value="All Job Profiles">All Job Profiles</option>
-              {jobProfileList &&
-                jobProfileList.map((element: any, index: number) => {
-                  return (
-                    <option key={index} value={element.jobProfileName}>
-                      {element.jobProfileName}
-                    </option>
-                  );
-                })}
-            </select> */}
-            <div className="relative inline-block text-left  ml-3">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={toggleDropdown}
-      >
-        All Job Profiles
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="flex flex-row p-2 gap-3">
-            <img src={SelectAll} onClick={selectAll} className="h-5 w-5 bg-blue-500" />
-            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearAll}  />
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {jobProfileList &&
-              jobProfileList.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.jobProfileName}
-                   checked={filter.jobProfileName.includes(element.jobProfileName)}
-                   onChange={handleJobCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.jobProfileName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={GrouptoggleDropdown}
+              >
+                All Group
+              </button>
+              {isGroupOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {groupList &&
+                      groupList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.groupName}
+                            checked={filter.groupName.includes(element.groupName)}
+
+                            onChange={handleGroupCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.groupName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div>
-            {/* <select
-              onChange={(event) => {
-                if (event.target.value === "All Department") {
-                  setFilter({
-                    ...filter,
-                    departmentName: "",
-                  });
-                } else {
-                  setFilter({
-                    ...filter,
-                    departmentName: event.target.value,
-                  });
-                }
-              }}
-              value={filter.departmentName}
-              className="border border-solid w-[12rem] border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E]  px-5 focus:outline-none"
-            >
-              <option value="All Department">All Department</option>
-              {sortedDepartmentList &&
-                sortedDepartmentList.map((element: any, index: number) => {
-                  return (
-                    <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
-                      {element.departmentName}
-                    </option>
-                  );
-                })}
-            </select> */}
-             <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={DepartmenttoggleDropdown}
-      >
-        All Department
-      </button>
-      {isDepartmentOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
           
-          <div className="flex flex-row p-2 gap-3">
-            <img src={SelectAll} onClick={selectDepartmentAll}  className="h-5 w-5 bg-blue-500" />
-            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearDepartmentAll}  />
+            <div className="relative inline-block text-left  ml-3 " >
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={toggleDropdown}
+              >
+                All Job Profiles
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectAll} className="h-5 w-5" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {jobProfileList &&
+                      jobProfileList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.jobProfileName}
+                            checked={filter.jobProfileName.includes(element.jobProfileName)}
+                            onChange={handleJobCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.jobProfileName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {departmentList&&
-              departmentList.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.departmentName}
-                   checked={filter.departmentName.includes(element.departmentName)}
-                   
-                   onChange={handleDepartmentCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.departmentName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+          <div>
+           
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={DepartmenttoggleDropdown}
+              >
+                All Department
+              </button>
+              {isDepartmentOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {departmentList &&
+                      departmentList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.departmentName}
+                            checked={filter.departmentName.includes(element.departmentName)}
+
+                            onChange={handleDepartmentCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.departmentName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
