@@ -15,7 +15,7 @@ import CaretRight from "../../assets/CaretRight1.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
-import up from "../../assets/arrow-up.png";
+// import up from "../../assets/arrow-up.png";
 import { getAllAttandenceAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
@@ -29,8 +29,8 @@ import { allShopAsync } from "../../redux/Slice/ShopSlice";
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
-  const employeeList = useSelector((state: any) => state.employee.employees);
-  const totalEmployees = employeeList.length;
+  // const employeeList = useSelector((state: any) => state.employee.employees);
+  // const totalEmployees = employeeList.length;
   const sortedgroupList = [...groupList].sort((a: any, b: any) =>
     a.groupName.localeCompare(b.groupName
     )
@@ -54,7 +54,7 @@ export const AttendenceDashboardList = () => {
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
   const [loading, Setloading] = useState(false)
-
+console.log(loading)
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
   const handleRowClick = (index: number) => {
@@ -89,6 +89,7 @@ export const AttendenceDashboardList = () => {
   });
   // const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
+  const [shopitems, setShopItems] = useState<any[]>([]);
   const shoplist = useSelector((state: any) => state.Shop.shop)
   useEffect(() => {
     const currentDate = new Date(date);
@@ -148,26 +149,26 @@ export const AttendenceDashboardList = () => {
       }
     }
     getDateRange(filter.date, filter.nextDate);
+    if(shopName.length<1){
+      return;
+    }
     
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
-    if(filter.nextDate === "")
-    {
-      filter.nextDate=filter.date
-    }
     let sendData = {}
     sendData = {
       shopNames: shopName,
       date: filter.date,
-      nextDate: filter.nextDate,
-      limit:500
+      nextDate: filter.nextDate
 
     }
+    //console.log("Daatta",sendData)
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
-      const employeeData = data.payload.attendance;
-      console.log("hiiiii",employeeData)
-      setItems(employeeData)
+      const employeeData = data.payload.shopData;
+      console.log("HHHHHHHHHHH",employeeData)
+      setShopItems(employeeData)
+      //setItems(employeeData)
     });
 
   }, [shopName])
@@ -185,7 +186,7 @@ export const AttendenceDashboardList = () => {
         setDateRange([...result]);
       }
     }
-    setShopName("")
+    setShopName([])
     Setloading(true)
     //localStorage.setItem("jobProfileName", filter.jobProfileName)
     //localStorage.setItem("groupName", filter.groupName)
@@ -212,48 +213,9 @@ export const AttendenceDashboardList = () => {
       }
     });
   }, [filter, status]);
-  useEffect(() => {
-    function getDateRange(startDate: any, endDate: any) {
-      if (nextDate) {
-        const result = [];
-        const currentDate = new Date(startDate);
-        const finalDate = new Date(endDate);
-        while (currentDate <= finalDate) {
-          result.push(currentDate.toISOString().slice(0, 10));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        setDateRange([...result]);
-      }
-    }
-    //setShopName("")
-    Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    getDateRange(filter.date, filter.nextDate);
-    filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
-    if(filter.nextDate===""){
-    filter.nextDate=filter.date
-    }
-    
-    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      const employeeData = data.payload.attendanceRecords;
-      console.log("hii",employeeData)
-      if (status === "") {
-        setItems(employeeData);
-        Setloading(false)
-      }
-      else {
-        const filteredItems = employeeData.filter((element: any) => element.status === status);
-        setItems(filteredItems)
-        Setloading(false)
-      }
-    });
-  }, []);
- 
+  // const handlerFatchMore = () => {
+  //   setPage((prevPage) => prevPage + 1);
+  // };
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString("en-US", {
@@ -298,7 +260,7 @@ export const AttendenceDashboardList = () => {
         ""
       ];
 
-      const modifiedData = items.map((record:any, index: number) => {
+      const modifiedData = items.map((record, index: number) => {
         // Destructure the record, omit unwanted properties
         const {
           updatedAt,
@@ -351,7 +313,7 @@ export const AttendenceDashboardList = () => {
         return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
       });
       console.log("item", items)
-      modifiedData.forEach((record:any) => {
+      modifiedData.forEach((record) => {
         delete record.punches;
       });
 
@@ -532,6 +494,7 @@ export const AttendenceDashboardList = () => {
     }
   };
 
+
   const tileClassName = ({ date }: any) => {
     const localDate = new Date(
       date.getTime() - date.getTimezoneOffset() * 60000
@@ -571,7 +534,7 @@ export const AttendenceDashboardList = () => {
     const employeeId = { employeeId: data.employeeId._id };
     dispatch(getEmployeeImageAsync(employeeId));
     navigate(`/employee-profile`, { state: { additionalData: employeeId } });
-    console.log("hello", data)
+    //console.log("hello", data)
   };
 
   let pendingCount = 0;
@@ -579,13 +542,15 @@ export const AttendenceDashboardList = () => {
   let rejectedCount = 0;
 
   for (const entry of items) {
+   // console.log(entry)
     if (entry.status === "pending") {
       pendingCount++;
     } else if (entry.status === "approved") {
       approvedCount++;
-    } else if (entry.start === "rejected") {
+    } else if (entry.status === "rejected") {
       rejectedCount++;
     }
+    console.log(rejectedCount)
   }
 
   return (
@@ -776,7 +741,7 @@ export const AttendenceDashboardList = () => {
                   <input
                    type="checkbox"
                    value={element.groupName}
-                   checked={filter.groupName.includes(element.groupNamegit)}
+                   checked={filter.groupName.includes(element.groupName)}
                    
                    onChange={handleGroupCheckboxChange}
                    className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
@@ -818,7 +783,7 @@ export const AttendenceDashboardList = () => {
                     );
                   })}
               </select> */}
-              <div className="relative inline-block text-left ml-4">
+              <div className="relative inline-block text-left  ml-3">
       <button
         type="button"
         className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
@@ -1034,7 +999,7 @@ export const AttendenceDashboardList = () => {
 
       </div>
 
-    
+
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
         <table className="w-full">
@@ -1071,9 +1036,9 @@ export const AttendenceDashboardList = () => {
                 Photos
               </td>
             </tr>
-           
-            {items &&
-                items.map((element: any, index: number) => {
+            {shopName.length<1?
+            items &&
+              items.map((element: any, index: number) => {
                 const punchesList = [...element.punches];
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
                   return (
@@ -1270,6 +1235,234 @@ export const AttendenceDashboardList = () => {
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                             </td>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td> 
+                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                              {element.punchIn
+                                ? changetime(element.punchIn)
+                                : "Not Avilable"}
+                            </td>
+                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                              {element.punchOut
+                                ? changetime(element.punchOut)
+                                : "Not Avilable"}
+                            </td>
+
+
+                          </tr>
+                        );
+                      })}
+                  </>
+                );
+              })
+              :
+              shopitems && shopitems.map((temp:any)=>{
+                return(
+                  <>
+                   {
+                   temp?.attendance
+                   &&
+              temp?.attendance.map((element: any, index: number) => {
+                const punchesList = [...element.punches];
+                const sortedPunches = punchesList.sort((a: any, b: any) => {
+                  return (
+                    new Date(b.punchIn).getTime() -
+                    new Date(a.punchIn).getTime()
+                  );
+                });
+                const latestPunches = sortedPunches[0];
+                const firstPunches = sortedPunches[sortedPunches.length - 1]
+
+
+                return (
+                  <>
+                    <tr
+                      key={element._id + latestPunches.punchIn}
+                      className="hover:bg-[#FAFAFA]"
+
+                    >
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        {latestPunches.punchIn
+                          ? latestPunches.punchIn.slice(0, 10)
+                          : "Not Avilable"}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.employeeId?.employeeCode
+                          ? element.employeeId.employeeCode
+                          : "Not Avilable"}{" "}
+                      </td>
+
+                      <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                        <div className="flex flex-col">
+
+                          <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                            ? element.employeeId?.name
+                            : "Not Avilable"}</p>
+
+                          <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                            ? element.employeeId.jobProfileId?.jobProfileName
+                            : "Not Avilable"}</p>
+
+                        </div>
+
+
+                        {sortedPunches.slice(1).length > 0 ? (
+                          <img
+                            onClick={() => {
+                              handleRowClick(index);
+
+                            }} src={
+                              showTableRow.includes(index)
+                                ? CaretUp
+                                : CaretDown
+                            }
+                            alt=""
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </td>
+
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                        {element.shift === "day" ? "Day" :
+                          element.shift === "night" ? "Night" : "-"}
+                      </td>
+
+
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        {showTableRow.includes(index)
+                          ? latestPunches.punchIn
+                            ? changetime(latestPunches.punchIn)
+                            : "Not Available"
+                          : firstPunches.punchIn
+                            ? changetime(firstPunches.punchIn)
+                            : "Not Available"}
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        {latestPunches.punchOut
+                          ? changetime(latestPunches.punchOut)
+                          : "-"}
+                      </td>
+                      <td className="py-4 px-5">
+                        {element?.status === "approved" && (
+                          <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={GreenCheck}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#186A3B]">
+                              Approved
+                            </span>
+                          </span>
+                        )}
+                        {element?.status === "rejected" && (
+                          <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={RedX}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#8A2626]">
+                              Rejected
+                            </span>
+                          </span>
+                        )}
+                        {element.status === "pending" && (
+                          <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#945D2D]">
+                              Pending
+                            </span>
+                          </span>
+                        )}
+                        {element.status === "added Manually by administrator" && (
+                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                            <img
+                              src={SpinnerGap}
+                              className="h-[10px] w-[10px]"
+                              alt="check"
+                            />
+                            <span className="text-sm font-normal text-[#2c2c6d]">
+                              Manual
+                            </span>
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                        <p className="font-medium">
+
+                          {element.approvedBy?.name
+                            ? element.approvedBy?.name
+                            : "-"}
+                        </p>
+                        <p className="text-[12px]">
+
+                          {element.approvedBy?.jobProfileId?.jobProfileName
+                            ? element.approvedBy?.jobProfileId?.jobProfileName
+                            : "-"}
+                        </p>
+
+                      </td>
+
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        {element?.status === "approved" && (
+                          <div>{temp.shopName ? temp.shopName : "-"}</div>
+                        )}
+                      </td>
+
+
+                      {/* photo open */}
+
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        {element?.status === "approved" &&
+                          element.approvedImage && (
+                            <div className="flex gap-[10px] cursor-pointer">
+                              <div>
+                                <p
+                                  className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                  onClick={() =>
+                                    handleImageClick(
+                                      element.approvedImage
+                                    )
+                                  }
+                                >
+                                  Open Photo
+                                </p>
+                              </div>
+                              <div>
+                                <img
+                                  src={ArrowSqureOut}
+                                  className="w-[14px] h-[14px]"
+                                  alt="arrowsqureout"
+                                />
+                              </div>
+                            </div>
+                          )}
+                      </td>
+                    </tr>
+                    {showTableRow.includes(index) &&
+                      sortedPunches &&
+                      sortedPunches.slice(1).map((element: any) => {
+                        return (
+                          <tr key={element._id + element.punchIn}>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td> 
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
                                 ? changetime(element.punchIn)
@@ -1288,7 +1481,10 @@ export const AttendenceDashboardList = () => {
                   </>
                 );
               })}
-            
+                  </>
+                )
+              })
+            }
           </tbody >
 
           {loaderStatus === "loading" ? (
@@ -1318,9 +1514,6 @@ export const AttendenceDashboardList = () => {
         </table>
         {/* TABLE ENDS HERE */}
       </div>
-      
-      
-
 
       <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
