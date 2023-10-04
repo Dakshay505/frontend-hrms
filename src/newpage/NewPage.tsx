@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SelectAll from "../assets/Select All.svg"
+import ClearAll from "../assets/Clear-all.svg"
 import {
   getAllEmployeeAsync,
 
@@ -534,9 +536,10 @@ export const NewPage = () => {
       </button>
       {isGroupOpen && (
         <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectGroupAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearGroupAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          
+          <div className="flex flex-row p-2 gap-3">
+            <img src={SelectAll}  onClick={selectGroupAll} className="h-5 w-5 bg-blue-500" />
+            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearGroupAll}   />
           </div>
           <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
             {groupList&&
@@ -597,9 +600,9 @@ export const NewPage = () => {
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearAll}  className="text-red-600 underline ml-2 test-sm">Clear All</button>
+          <div className="flex flex-row p-2 gap-3">
+            <img src={SelectAll} onClick={selectAll} className="h-5 w-5 bg-blue-500" />
+            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearAll}  />
           </div>
           <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
             {jobProfileList &&
@@ -659,9 +662,10 @@ export const NewPage = () => {
       </button>
       {isDepartmentOpen && (
         <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectDepartmentAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearDepartmentAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          
+          <div className="flex flex-row p-2 gap-3">
+            <img src={SelectAll} onClick={selectDepartmentAll}  className="h-5 w-5 bg-blue-500" />
+            <img src={ClearAll} className="h-5 w-5 bg-red-500" onClick={clearDepartmentAll}  />
           </div>
           <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
             {departmentList&&
