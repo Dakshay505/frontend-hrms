@@ -172,7 +172,7 @@ export const NewProfile = () => {
                             Account Detail
                         </button>
                         
-                        {/* <button
+                        <button
                             className={`p-2 ${activeTab === 'documents'
                                 ? 'text-[#283093] underline font-medium'
                                 : 'text-black'
@@ -180,7 +180,7 @@ export const NewProfile = () => {
                             onClick={() => toggleTab('documents')}
                         >
                           Documents
-                        </button> */}
+                        </button>
                     </div>
                     <div className='border  border-[#d7d7d7] rounded-[8px]'>
                         {activeTab === 'employee' && (
