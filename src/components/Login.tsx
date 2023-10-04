@@ -18,39 +18,39 @@ export function Login() {
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
     const loaderStatus = useSelector((state: any) => state.login.status)
     const [Data, setData] = useState<any>({});
- 
-  useEffect(() => {
-    axios.get('https://geolocation-db.com/json/f2e84010-e1e9-11ed-b2f8-6b70106be3c8')
-      .then((response) => {
-        //console.log("res",response)
-        setData(response.data);
-        
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        
-      });
-  }, []);
 
-  //console.log("userAgent",navigator.userAgent)
-  //console.log("platform",navigator.platform)
+    useEffect(() => {
+        axios.get('https://geolocation-db.com/json/f2e84010-e1e9-11ed-b2f8-6b70106be3c8')
+            .then((response) => {
+                //console.log("res",response)
+                setData(response.data);
+
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+
+            });
+    }, []);
+
+    //console.log("userAgent",navigator.userAgent)
+    //console.log("platform",navigator.platform)
     function isValidEmail(email: any) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
     const onSubmit = (data: any) => {
-        
 
-        
+
+
         if (isValidEmail(data.email)) {
             data = {
                 email: data.email,
                 password: data.password,
-                userAgent:navigator.userAgent,
-                platform:navigator.platform,
-                ipAddress:Data.IPv4
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                ipAddress: Data.IPv4
             }
-            console.log("ressss",data)
+            console.log("ressss", data)
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
                 if (res.payload.success) {
                     toast.success(res.payload.message);
@@ -68,9 +68,9 @@ export function Login() {
             data = {
                 phone: data.email,
                 password: data.password,
-                userAgent:navigator.userAgent,
-                platform:navigator.platform,
-                ipAddress:Data.IPv4
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                ipAddress: Data.IPv4
             }
             dispatch(getAdminLoginAsync(data)).then((res: any) => {
                 if (res.payload.success) {
@@ -93,9 +93,11 @@ export function Login() {
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
             {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/' replace={true}></Navigate>}
+            {/* {(loggedInUserData &&loggedInUserData?.employee?.role === 'manufacturing') && <Navigate to='/prd'  replace={true}></Navigate>} */}
+           
             <div className='flex flex-col justify-center items-center w-full mt-20'>
                 <div>
-                    <h1 className="text-[28px] leading-9 font-bold">HR Admin Login</h1>
+                    <h1 className="text-[28px]  -9 font-bold">HR Admin Login</h1>
                 </div>
                 <div className='mt-8'>
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -148,7 +150,7 @@ export function Login() {
                                     </div>
                                 </button>
 
-                             
+
                             </div>
                             {loaderStatus === "loading" ? <div className='flex w-full'>
                                 <img src={LoaderGif} className='w-6 h-6' alt="" />

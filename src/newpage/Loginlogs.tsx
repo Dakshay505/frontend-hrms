@@ -29,7 +29,6 @@ export const Loginlogs = () => {
             if (page > newPageCount) {
                 setPage(newPageCount);
             }
-            //dispatch(fetchLoggedInHistory(data.data));
         };
         fetchData();
     }, [limit, page]);

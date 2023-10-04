@@ -112,12 +112,12 @@ const ViewModifyDatabase = () => {
   const dispatch = useDispatch();
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
 
-  // const [items, setItems] = useState<any[]>([]);
-  // setItems(employeeDetailList)
+ 
   const loaderStatus = useSelector((state: any) => state.employee.status);
   const departmentList = useSelector(
     (state: any) => state.department.department
   );
+
 
   const parentDepartmentList = useSelector(
     (state: any) => state.department.parentdepartment
@@ -186,11 +186,39 @@ const ViewModifyDatabase = () => {
 
 
   const handleGroupTableRowClick = (data: any) => {
-    console.log(data.groupId);
+    // console.log("aaaaaaaaaaa", data.groupId);
     const groupId = { groupId: data.groupId };
     dispatch(getSingleGroupAsync(groupId));
     navigate(`/groups-info`, { state: { data: data } });
   };
+
+  const handleDepartmentTableRowClick = (data: any) => {
+    console.log(data._id);
+
+    const stateObject = {
+      departmentid: data?._id || "Not Available",
+      departmentName: data.departmentName || "Not Available",
+      description: data.description || "Not Available"
+    };
+
+    navigate(`/department-info`, { state: stateObject });
+  };
+
+  const handleParentDepartmentTableRowClick = (data: any) => {
+    console.log(data._id);
+
+    const stateObject = {
+      Parentdepartmentid: data?._id || "Not Available",
+      ParentdepartmentName: data.departmentName || "Not Available",
+      Parentdescription: data.description || "Not Available"
+    };
+
+    navigate(`/parent-department-info`, { state: stateObject });
+  };
+
+
+
+
 
   const handleShopTableRowClick = (data: any) => {
     console.log(data.shopId);
@@ -679,22 +707,7 @@ const selectAll = () => {
                 value={search}
                 className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
               />
-              {/* {suggestions.length > 0 && (
-                            <div className="absolute top-10 flex flex-col text-[#2E2E2E]">
-                                {suggestions.map((suggestion: any, index: any) => (
-                                    <input type="text" readOnly key={index}
-                                        className="py-3 px-5 cursor-pointer focus:outline-none w-[200px]"
-                                        value={suggestion}
-                                        onClick={(event) => {
-                                            setFilter({
-                                                ...filter,
-                                                name: (event.target as HTMLInputElement).value
-                                            })
-                                            setSuggestions([]);
-                                        }} />
-                                ))}
-                            </div>
-                        )} */}
+
               {suggestions.length > 0 && (
                 <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
                   {suggestions.map((element: any, index: any) => {
@@ -965,9 +978,9 @@ const selectAll = () => {
                           </td>
                           <td
                             onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                              ?  handleJobprofileTableRowClick(element)
+                              ? handleJobprofileTableRowClick(element)
                               : null}
-                           
+
                             className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]"
                           >
                             {element.jobProfileName
@@ -1055,6 +1068,9 @@ const selectAll = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                            ? handleDepartmentTableRowClick(element)
+                            : null}
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
@@ -1119,6 +1135,9 @@ const selectAll = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                          ? handleParentDepartmentTableRowClick(element)
+                          : null}
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
@@ -1167,7 +1186,7 @@ const selectAll = () => {
                           onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
                             ? handleShopTableRowClick(element)
                             : null}
-                         
+
                         >
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
                             {index + 1}
