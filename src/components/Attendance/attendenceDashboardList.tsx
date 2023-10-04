@@ -25,7 +25,8 @@ import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
-
+import SelectAll from "../../assets/Select All.svg"
+import ClearAll from "../../assets/Clear-all.svg"
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
@@ -54,7 +55,7 @@ export const AttendenceDashboardList = () => {
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
   const [loading, Setloading] = useState(false)
-console.log(loading)
+  console.log(loading)
   const [showTableRow, setShowTableRow] = useState<any>([]);
 
   const handleRowClick = (index: number) => {
@@ -77,11 +78,11 @@ console.log(loading)
   const [filter, setFilter] = useState({
     name: "",
     //groupName: localStorage.getItem("groupName") || "",
-    groupName:[""],
+    groupName: [""],
     //jobProfileName: localStorage.getItem("jobProfileName") || [],
-    jobProfileName:[""],
+    jobProfileName: [""],
     //departmentName: localStorage.getItem("departmentName") || "",
-    departmentName:[""],
+    departmentName: [""],
     date: "",
     nextDate: "",
     page: 1,
@@ -120,7 +121,7 @@ console.log(loading)
     return formattedTime;
   }
 
-  const [selectedShop, ] = useState("All Shop");
+  const [selectedShop,] = useState("All Shop");
   const [shopName, setShopName] = useState([""]);
 
   // const handleShopChange = (event: any) => {
@@ -149,10 +150,10 @@ console.log(loading)
       }
     }
     getDateRange(filter.date, filter.nextDate);
-    if(shopName.length<1){
+    if (shopName.length < 1) {
       return;
     }
-    
+
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
     let sendData = {}
@@ -166,7 +167,7 @@ console.log(loading)
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
-      console.log("HHHHHHHHHHH",employeeData)
+      console.log("HHHHHHHHHHH", employeeData)
       setShopItems(employeeData)
       //setItems(employeeData)
     });
@@ -196,10 +197,10 @@ console.log(loading)
     filter.page = 1;
     //dispatch(getAllEmployeeAsync(filter))
     console.log(filter)
-    if(filter.nextDate===""){
-    filter.nextDate=filter.date
+    if (filter.nextDate === "") {
+      filter.nextDate = filter.date
     }
-    
+
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
@@ -357,12 +358,12 @@ console.log(loading)
     setIsGroupOpen(false);
     setIsShopOpen(!isShopOpen)
   };
-  const handleJobCheckboxChange = (event:any) => {
+  const handleJobCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         jobProfileName: [...prevFilter.jobProfileName, value],
       }));
@@ -370,16 +371,16 @@ console.log(loading)
     } else {
       setFilter({
         ...filter,
-        jobProfileName: filter.jobProfileName.filter((profile:any) => profile !== value),
+        jobProfileName: filter.jobProfileName.filter((profile: any) => profile !== value),
       });
     }
   };
-  const handleGroupCheckboxChange = (event:any) => {
+  const handleGroupCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         groupName: [...prevFilter.groupName, value],
       }));
@@ -387,16 +388,16 @@ console.log(loading)
     } else {
       setFilter({
         ...filter,
-        groupName: filter.groupName.filter((profile:any) => profile !== value),
+        groupName: filter.groupName.filter((profile: any) => profile !== value),
       });
     }
   };
-  const handleDepartmentCheckboxChange = (event:any) => {
+  const handleDepartmentCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      setFilter((prevFilter:any) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         departmentName: [...prevFilter.departmentName, value],
       }));
@@ -404,27 +405,27 @@ console.log(loading)
     } else {
       setFilter({
         ...filter,
-        departmentName: filter.departmentName.filter((profile:any) => profile !== value),
+        departmentName: filter.departmentName.filter((profile: any) => profile !== value),
       });
     }
   };
-  const handleShopCheckboxChange = (event:any) => {
+  const handleShopCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
-  
+
 
     if (checked) {
-      
-      setShopName([...shopName,value])
+
+      setShopName([...shopName, value])
 
     } else {
-      
-       setShopName(shopName.filter((profile:any) => profile !== value))
-      
+
+      setShopName(shopName.filter((profile: any) => profile !== value))
+
     }
   };
   const selectAll = () => {
-    const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       jobProfileName: allProfiles,
     }));
@@ -437,8 +438,8 @@ console.log(loading)
     });
   };
   const selectDepartmentAll = () => {
-    const allProfiles = departmentList.map((element:any) => element.departmentName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = departmentList.map((element: any) => element.departmentName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       departmentName: allProfiles,
     }));
@@ -451,8 +452,8 @@ console.log(loading)
     });
   };
   const selectGroupAll = () => {
-    const allProfiles = sortedgroupList.map((element:any) => element.groupName);
-    setFilter((prevFilter:any) => ({
+    const allProfiles = sortedgroupList.map((element: any) => element.groupName);
+    setFilter((prevFilter: any) => ({
       ...prevFilter,
       groupName: allProfiles,
     }));
@@ -465,15 +466,15 @@ console.log(loading)
     });
   };
   const selectShopAll = () => {
-    const allProfiles = shoplist.map((element:any) => element.shopName);
-     setShopName(allProfiles)
+    const allProfiles = shoplist.map((element: any) => element.shopName);
+    setShopName(allProfiles)
   };
 
   const clearShopAll = () => {
     setShopName([])
   };
-  
-  
+
+
 
 
   const handleInputChange = (event: any) => {
@@ -542,7 +543,7 @@ console.log(loading)
   let rejectedCount = 0;
 
   for (const entry of items) {
-   // console.log(entry)
+    // console.log(entry)
     if (entry.status === "pending") {
       pendingCount++;
     } else if (entry.status === "approved") {
@@ -719,40 +720,41 @@ console.log(loading)
                     );
                   })}
               </select> */}
-               <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={GrouptoggleDropdown}
-      >
-        All Group
-      </button>
-      {isGroupOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectGroupAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearGroupAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {sortedgroupList&&
-              sortedgroupList.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.groupName}
-                   checked={filter.groupName.includes(element.groupName)}
-                   
-                   onChange={handleGroupCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.groupName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+              <div className="relative inline-block text-left">
+                <button
+                  type="button"
+                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                  onClick={GrouptoggleDropdown}
+                >
+                  All Group
+                </button>
+                {isGroupOpen && (
+                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                 
+                    <div className="flex flex-row p-2 gap-3">
+                      <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll}/>
+                    </div>
+                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                      {sortedgroupList &&
+                        sortedgroupList.map((element: any, index: any) => (
+                          <label key={index} className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              value={element.groupName}
+                              checked={filter.groupName.includes(element.groupName)}
+
+                              onChange={handleGroupCheckboxChange}
+                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                            />
+                            <span>{element.groupName}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               {/* <select
@@ -784,38 +786,39 @@ console.log(loading)
                   })}
               </select> */}
               <div className="relative inline-block text-left  ml-3">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={toggleDropdown}
-      >
-        All Job Profiles
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearAll}  className="text-red-600 underline ml-2 test-sm">Clear All</button>
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {sortedjobProfileList &&
-              sortedjobProfileList.map((element, index) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.jobProfileName}
-                   checked={filter.jobProfileName.includes(element.jobProfileName)}
-                   onChange={handleJobCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.jobProfileName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+                <button
+                  type="button"
+                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                  onClick={toggleDropdown}
+                >
+                  All Job Profiles
+                </button>
+                {isOpen && (
+                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                    <div className="flex flex-row p-2 gap-3">
+                      <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
+                      <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                    </div>
+                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                      {sortedjobProfileList &&
+                        sortedjobProfileList.map((element, index) => (
+                          <label key={index} className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              value={element.jobProfileName}
+                              checked={filter.jobProfileName.includes(element.jobProfileName)}
+                              onChange={handleJobCheckboxChange}
+                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                            />
+                            <span>{element.jobProfileName}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               {/* <select
@@ -846,39 +849,40 @@ console.log(loading)
                   })}
               </select> */}
               <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={DepartmenttoggleDropdown}
-      >
-        All Department
-      </button>
-      {isDepartmentOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectDepartmentAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearDepartmentAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {sortedDepartmentList&&
-              sortedDepartmentList.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.departmentName}
-                   checked={filter.departmentName.includes(element.departmentName)}
-                   
-                   onChange={handleDepartmentCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.departmentName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+                <button
+                  type="button"
+                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                  onClick={DepartmenttoggleDropdown}
+                >
+                  All Department
+                </button>
+                {isDepartmentOpen && (
+                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                    
+                    <div className="flex flex-row p-2 gap-3">
+                      <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                      <img src={ClearAll} className="h-5 w-5 "onClick={clearDepartmentAll} />
+                    </div>
+                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                      {sortedDepartmentList &&
+                        sortedDepartmentList.map((element: any, index: any) => (
+                          <label key={index} className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              value={element.departmentName}
+                              checked={filter.departmentName.includes(element.departmentName)}
+
+                              onChange={handleDepartmentCheckboxChange}
+                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                            />
+                            <span>{element.departmentName}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               {/* <select
@@ -895,39 +899,41 @@ console.log(loading)
 
               </select> */}
               <div className="relative inline-block text-left">
-      <button
-        type="button"
-        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              
-        onClick={ShoptoggleDropdown}
-      >
-        All Shop
-      </button>
-      {isShopOpen && (
-        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          <div className="p-2">
-            <button onClick={selectShopAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
-            <button onClick={clearShopAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
-          </div>
-          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-            {shoplist&&
-              shoplist.map((element:any, index:any) => (
-                <label key={index} className="flex items-center space-x-2">
-                  <input
-                   type="checkbox"
-                   value={element.shopName}
-                   checked={shopName.includes(element.shopName)}
-                   
-                   onChange={handleShopCheckboxChange}
-                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                 />
-                 <span>{element.shopName}</span>
-               </label>
-             ))}
-         </div>
-       </div>
-     )}
-   </div>
+                <button
+                  type="button"
+                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                  onClick={ShoptoggleDropdown}
+                >
+                  All Shop
+                </button>
+                {isShopOpen && (
+                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  
+
+                    <div className="flex flex-row p-2 gap-3">
+                      <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
+                      <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
+                    </div>
+                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                      {shoplist &&
+                        shoplist.map((element: any, index: any) => (
+                          <label key={index} className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              value={element.shopName}
+                              checked={shopName.includes(element.shopName)}
+
+                              onChange={handleShopCheckboxChange}
+                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                            />
+                            <span>{element.shopName}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
@@ -956,7 +962,7 @@ console.log(loading)
 
       </div>
       <div className="flex flex-row">
-      {!isGroupOpen &&  <div className="relative mt-4">
+        {!isGroupOpen && <div className="relative mt-4">
           {isLabelVisible && (
             <div className="absolute top-[10px] left-6">
               <label
@@ -1036,8 +1042,8 @@ console.log(loading)
                 Photos
               </td>
             </tr>
-            {shopName.length<1?
-            items &&
+            {shopName.length < 1 ?
+              items &&
               items.map((element: any, index: number) => {
                 const punchesList = [...element.punches];
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
@@ -1237,7 +1243,7 @@ console.log(loading)
                             </td>
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td> 
+                            </td>
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
                                 ? changetime(element.punchIn)
@@ -1257,230 +1263,230 @@ console.log(loading)
                 );
               })
               :
-              shopitems && shopitems.map((temp:any)=>{
-                return(
-                  <>
-                   {
-                   temp?.attendance
-                   &&
-              temp?.attendance.map((element: any, index: number) => {
-                const punchesList = [...element.punches];
-                const sortedPunches = punchesList.sort((a: any, b: any) => {
-                  return (
-                    new Date(b.punchIn).getTime() -
-                    new Date(a.punchIn).getTime()
-                  );
-                });
-                const latestPunches = sortedPunches[0];
-                const firstPunches = sortedPunches[sortedPunches.length - 1]
-
-
+              shopitems && shopitems.map((temp: any) => {
                 return (
                   <>
-                    <tr
-                      key={element._id + latestPunches.punchIn}
-                      className="hover:bg-[#FAFAFA]"
-
-                    >
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchIn
-                          ? latestPunches.punchIn.slice(0, 10)
-                          : "Not Avilable"}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                        {element.employeeId?.employeeCode
-                          ? element.employeeId.employeeCode
-                          : "Not Avilable"}{" "}
-                      </td>
-
-                      <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
-                        <div className="flex flex-col">
-
-                          <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
-                            ? element.employeeId?.name
-                            : "Not Avilable"}</p>
-
-                          <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
-                            ? element.employeeId.jobProfileId?.jobProfileName
-                            : "Not Avilable"}</p>
-
-                        </div>
+                    {
+                      temp?.attendance
+                      &&
+                      temp?.attendance.map((element: any, index: number) => {
+                        const punchesList = [...element.punches];
+                        const sortedPunches = punchesList.sort((a: any, b: any) => {
+                          return (
+                            new Date(b.punchIn).getTime() -
+                            new Date(a.punchIn).getTime()
+                          );
+                        });
+                        const latestPunches = sortedPunches[0];
+                        const firstPunches = sortedPunches[sortedPunches.length - 1]
 
 
-                        {sortedPunches.slice(1).length > 0 ? (
-                          <img
-                            onClick={() => {
-                              handleRowClick(index);
-
-                            }} src={
-                              showTableRow.includes(index)
-                                ? CaretUp
-                                : CaretDown
-                            }
-                            alt=""
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                        {element.shift === "day" ? "Day" :
-                          element.shift === "night" ? "Night" : "-"}
-                      </td>
-
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {showTableRow.includes(index)
-                          ? latestPunches.punchIn
-                            ? changetime(latestPunches.punchIn)
-                            : "Not Available"
-                          : firstPunches.punchIn
-                            ? changetime(firstPunches.punchIn)
-                            : "Not Available"}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchOut
-                          ? changetime(latestPunches.punchOut)
-                          : "-"}
-                      </td>
-                      <td className="py-4 px-5">
-                        {element?.status === "approved" && (
-                          <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={GreenCheck}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#186A3B]">
-                              Approved
-                            </span>
-                          </span>
-                        )}
-                        {element?.status === "rejected" && (
-                          <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={RedX}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#8A2626]">
-                              Rejected
-                            </span>
-                          </span>
-                        )}
-                        {element.status === "pending" && (
-                          <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={SpinnerGap}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#945D2D]">
-                              Pending
-                            </span>
-                          </span>
-                        )}
-                        {element.status === "added Manually by administrator" && (
-                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={SpinnerGap}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#2c2c6d]">
-                              Manual
-                            </span>
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        <p className="font-medium">
-
-                          {element.approvedBy?.name
-                            ? element.approvedBy?.name
-                            : "-"}
-                        </p>
-                        <p className="text-[12px]">
-
-                          {element.approvedBy?.jobProfileId?.jobProfileName
-                            ? element.approvedBy?.jobProfileId?.jobProfileName
-                            : "-"}
-                        </p>
-
-                      </td>
-
-                      <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
-                        {element?.status === "approved" && (
-                          <div>{temp.shopName ? temp.shopName : "-"}</div>
-                        )}
-                      </td>
-
-
-                      {/* photo open */}
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" &&
-                          element.approvedImage && (
-                            <div className="flex gap-[10px] cursor-pointer">
-                              <div>
-                                <p
-                                  className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                  onClick={() =>
-                                    handleImageClick(
-                                      element.approvedImage
-                                    )
-                                  }
-                                >
-                                  Open Photo
-                                </p>
-                              </div>
-                              <div>
-                                <img
-                                  src={ArrowSqureOut}
-                                  className="w-[14px] h-[14px]"
-                                  alt="arrowsqureout"
-                                />
-                              </div>
-                            </div>
-                          )}
-                      </td>
-                    </tr>
-                    {showTableRow.includes(index) &&
-                      sortedPunches &&
-                      sortedPunches.slice(1).map((element: any) => {
                         return (
-                          <tr key={element._id + element.punchIn}>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td> 
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchIn
-                                ? changetime(element.punchIn)
-                                : "Not Avilable"}
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchOut
-                                ? changetime(element.punchOut)
-                                : "Not Avilable"}
-                            </td>
+                          <>
+                            <tr
+                              key={element._id + latestPunches.punchIn}
+                              className="hover:bg-[#FAFAFA]"
+
+                            >
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {latestPunches.punchIn
+                                  ? latestPunches.punchIn.slice(0, 10)
+                                  : "Not Avilable"}
+                              </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                                {element.employeeId?.employeeCode
+                                  ? element.employeeId.employeeCode
+                                  : "Not Avilable"}{" "}
+                              </td>
+
+                              <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                                <div className="flex flex-col">
+
+                                  <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                                    ? element.employeeId?.name
+                                    : "Not Avilable"}</p>
+
+                                  <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                                    ? element.employeeId.jobProfileId?.jobProfileName
+                                    : "Not Avilable"}</p>
+
+                                </div>
 
 
-                          </tr>
+                                {sortedPunches.slice(1).length > 0 ? (
+                                  <img
+                                    onClick={() => {
+                                      handleRowClick(index);
+
+                                    }} src={
+                                      showTableRow.includes(index)
+                                        ? CaretUp
+                                        : CaretDown
+                                    }
+                                    alt=""
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                                {element.shift === "day" ? "Day" :
+                                  element.shift === "night" ? "Night" : "-"}
+                              </td>
+
+
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {showTableRow.includes(index)
+                                  ? latestPunches.punchIn
+                                    ? changetime(latestPunches.punchIn)
+                                    : "Not Available"
+                                  : firstPunches.punchIn
+                                    ? changetime(firstPunches.punchIn)
+                                    : "Not Available"}
+                              </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                {latestPunches.punchOut
+                                  ? changetime(latestPunches.punchOut)
+                                  : "-"}
+                              </td>
+                              <td className="py-4 px-5">
+                                {element?.status === "approved" && (
+                                  <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
+                                    <img
+                                      src={GreenCheck}
+                                      className="h-[10px] w-[10px]"
+                                      alt="check"
+                                    />
+                                    <span className="text-sm font-normal text-[#186A3B]">
+                                      Approved
+                                    </span>
+                                  </span>
+                                )}
+                                {element?.status === "rejected" && (
+                                  <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
+                                    <img
+                                      src={RedX}
+                                      className="h-[10px] w-[10px]"
+                                      alt="check"
+                                    />
+                                    <span className="text-sm font-normal text-[#8A2626]">
+                                      Rejected
+                                    </span>
+                                  </span>
+                                )}
+                                {element.status === "pending" && (
+                                  <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                                    <img
+                                      src={SpinnerGap}
+                                      className="h-[10px] w-[10px]"
+                                      alt="check"
+                                    />
+                                    <span className="text-sm font-normal text-[#945D2D]">
+                                      Pending
+                                    </span>
+                                  </span>
+                                )}
+                                {element.status === "added Manually by administrator" && (
+                                  <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                                    <img
+                                      src={SpinnerGap}
+                                      className="h-[10px] w-[10px]"
+                                      alt="check"
+                                    />
+                                    <span className="text-sm font-normal text-[#2c2c6d]">
+                                      Manual
+                                    </span>
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                <p className="font-medium">
+
+                                  {element.approvedBy?.name
+                                    ? element.approvedBy?.name
+                                    : "-"}
+                                </p>
+                                <p className="text-[12px]">
+
+                                  {element.approvedBy?.jobProfileId?.jobProfileName
+                                    ? element.approvedBy?.jobProfileId?.jobProfileName
+                                    : "-"}
+                                </p>
+
+                              </td>
+
+                              <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
+                                {element?.status === "approved" && (
+                                  <div>{temp.shopName ? temp.shopName : "-"}</div>
+                                )}
+                              </td>
+
+
+                              {/* photo open */}
+
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                                {element?.status === "approved" &&
+                                  element.approvedImage && (
+                                    <div className="flex gap-[10px] cursor-pointer">
+                                      <div>
+                                        <p
+                                          className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                                          onClick={() =>
+                                            handleImageClick(
+                                              element.approvedImage
+                                            )
+                                          }
+                                        >
+                                          Open Photo
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <img
+                                          src={ArrowSqureOut}
+                                          className="w-[14px] h-[14px]"
+                                          alt="arrowsqureout"
+                                        />
+                                      </div>
+                                    </div>
+                                  )}
+                              </td>
+                            </tr>
+                            {showTableRow.includes(index) &&
+                              sortedPunches &&
+                              sortedPunches.slice(1).map((element: any) => {
+                                return (
+                                  <tr key={element._id + element.punchIn}>
+                                    <td>
+                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                    </td>
+                                    <td>
+                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                    </td>
+                                    <td>
+                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                    </td>
+                                    <td>
+                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                      {element.punchIn
+                                        ? changetime(element.punchIn)
+                                        : "Not Avilable"}
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                      {element.punchOut
+                                        ? changetime(element.punchOut)
+                                        : "Not Avilable"}
+                                    </td>
+
+
+                                  </tr>
+                                );
+                              })}
+                          </>
                         );
                       })}
-                  </>
-                );
-              })}
                   </>
                 )
               })
