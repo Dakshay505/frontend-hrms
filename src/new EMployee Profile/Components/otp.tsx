@@ -12,8 +12,7 @@ import { getSingleEmployeeAsync } from '../../redux/Slice/EmployeeSlice';
 export const Otp = () => {
     const [,] =
         useState(false);
-    const [inputBoxContactValue, ] =
-        useState<any>("");
+ 
 
     const dispatch = useDispatch();
 
@@ -54,6 +53,8 @@ export const Otp = () => {
     const singleEmployee = useSelector(
         (state: any) => state.employee.singleEmployee
     );
+    const [inputBoxContactValue, ] =
+    useState("");
 
     return (
         <div>
@@ -68,7 +69,7 @@ export const Otp = () => {
                             <span
                                 onClick={() => {
                                     setShowOtp(!showOtp);
-                                    getOtpAsync({ phoneNumber: inputBoxContactValue }).then(
+                                    getOtpAsync({ phoneNumber:singleEmployee.contactNumber }).then(
                                         (res) => {
                                             if (res.data.Status === "Success") {
                                                 setOtpSent("OTP Sent");
@@ -100,7 +101,7 @@ export const Otp = () => {
                             </div>
                             <div>
                                 <h3 className="text-[18px] leading-6 font-medium text-[#1C1C1C]">
-                                    OTP sent to {inputBoxContactValue}
+                                    OTP sent to {singleEmployee.contactNumber}
                                 </h3>
                             </div>
                         </div>
@@ -111,7 +112,7 @@ export const Otp = () => {
                                 </p>
                                 <p
                                     onClick={() => {
-                                        getOtpAsync({ phoneNumber: inputBoxContactValue }).then(
+                                        getOtpAsync({ phoneNumber: singleEmployee.contactNumber }).then(
                                             (res) => {
                                                 if (res.data.Status === "Success") {
                                                     setOtpSent("Resend otp Successfully");
