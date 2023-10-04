@@ -92,7 +92,7 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.departmentName]);
+  }, [filter.groupName, filter.jobProfileName,filter.name, filter.departmentName]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
