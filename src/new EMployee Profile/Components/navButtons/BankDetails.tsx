@@ -129,16 +129,14 @@ export const BankDetails = () => {
         <div className="flex flex-col gap-[16px]">
           <Otp />
 
-
-
           {!showInputAadharCard && (
             <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
               <div className="flex items-center gap-3">
-                <input value={fileName}
+                <input disabled value={fileName}
                   {...register("fileName")}
 
                   onChange={(e) => setFileName(e.target.value)}
-                  className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                  className="text-sm bg-white font-semibold text-[#2E2E2E] tracking-[0.25px] outline-none">
                 </input>
 
               </div>
@@ -171,10 +169,10 @@ export const BankDetails = () => {
           {showInputAadharCard && (
             <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
               <div className="flex gap-[10px] flex-col">
-                <input value={fileName}
+                <input disabled value={fileName}
                   {...register("fileName")}
                   onChange={(e) => setFileName(e.target.value)}
-                  className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                  className="text-sm bg-white font-semibold text-[#2E2E2E] tracking-[0.25px]">
                 </input>
 
                 <div className="flex gap-[20px]">
