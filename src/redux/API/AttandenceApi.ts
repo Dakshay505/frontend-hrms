@@ -53,6 +53,7 @@ export const getAllAttandence = async (sendData: any) => {
 
 export const getShopFilterAttendance = async (sendData: any) => {
   try {
+    console.log("Dtaaaaa",sendData)
     
     const { data } = await axios.post(`${shopFiterAttendancePath}`,sendData,
       {
