@@ -121,19 +121,19 @@ console.log(loading)
   }
 
   const [selectedShop, setSelectedShop] = useState("All Shop");
-  const [shopName, setShopName] = useState("");
+  const [shopName, setShopName] = useState([""]);
 
-  const handleShopChange = (event: any) => {
+  // const handleShopChange = (event: any) => {
 
-    const selectedValue = event.target.value;
-    setSelectedShop(selectedValue);
+  //   const selectedValue = event.target.value;
+  //   setSelectedShop(selectedValue);
 
-    if (selectedValue === "All Shop") {
-      setShopName("");
-    } else {
-      setShopName(selectedValue);
-    }
-  };
+  //   if (selectedValue === "All Shop") {
+  //     setShopName("");
+  //   } else {
+  //     setShopName(selectedValue);
+  //   }
+  // };
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -149,16 +149,15 @@ console.log(loading)
       }
     }
     getDateRange(filter.date, filter.nextDate);
-
     if(shopName.length<1){
       return;
     }
-
+    
     // const currentDate = new Date();
     // const formattedDate = currentDate.toISOString().slice(0, 10);
     let sendData = {}
     sendData = {
-      shopName: shopName,
+      shopNames: shopName,
       date: filter.date,
       nextDate: filter.nextDate
 
@@ -166,12 +165,10 @@ console.log(loading)
     //console.log("Daatta",sendData)
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
-
       const employeeData = data.payload.shopData;
-      //console.log("HHHHHHHHHHH",employeeData)
+      console.log("HHHHHHHHHHH",employeeData)
       setShopItems(employeeData)
       //setItems(employeeData)
-
     });
 
   }, [shopName])
@@ -411,20 +408,20 @@ console.log(loading)
       });
     }
   };
-  // const handleShopCheckboxChange = (event:any) => {
-  //   const { value, checked } = event.target;
+  const handleShopCheckboxChange = (event:any) => {
+    const { value, checked } = event.target;
   
 
-  //   if (checked) {
+    if (checked) {
       
-  //     setShopName([...shopName,value])
+      setShopName([...shopName,value])
 
-  //   } else {
+    } else {
       
-  //      setShopName(shopName.filter((profile:any) => profile !== value))
+       setShopName(shopName.filter((profile:any) => profile !== value))
       
-  //   }
-  // };
+    }
+  };
   const selectAll = () => {
     const allProfiles = jobProfileList.map((element:any) => element.jobProfileName);
     setFilter((prevFilter:any) => ({
@@ -467,14 +464,14 @@ console.log(loading)
       groupName: [],
     });
   };
-  // const selectShopAll = () => {
-  //   const allProfiles = shoplist.map((element:any) => element.shopName);
-  //    setShopName(allProfiles)
-  // };
+  const selectShopAll = () => {
+    const allProfiles = shoplist.map((element:any) => element.shopName);
+     setShopName(allProfiles)
+  };
 
-  // const clearShopAll = () => {
-  //   setShopName([])
-  // };
+  const clearShopAll = () => {
+    setShopName([])
+  };
   
   
 
@@ -545,9 +542,7 @@ console.log(loading)
   let rejectedCount = 0;
 
   for (const entry of items) {
-
    // console.log(entry)
-
     if (entry.status === "pending") {
       pendingCount++;
     } else if (entry.status === "approved") {
@@ -886,7 +881,7 @@ console.log(loading)
    </div>
             </div>
             <div>
-              <select
+              {/* <select
                 onChange={handleShopChange}
                 value={selectedShop}
                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
@@ -898,7 +893,41 @@ console.log(loading)
                   </option>
                 ))}
 
-              </select>
+              </select> */}
+              <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+              
+        onClick={ShoptoggleDropdown}
+      >
+        All Shop
+      </button>
+      {isShopOpen && (
+        <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div className="p-2">
+            <button onClick={selectShopAll} className="text-blue-600 underline mb-2 text-sm">Select All</button>
+            <button onClick={clearShopAll}  className="text-red-600 underline ml-2 text-sm">Clear All</button>
+          </div>
+          <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+            {shoplist&&
+              shoplist.map((element:any, index:any) => (
+                <label key={index} className="flex items-center space-x-2">
+                  <input
+                   type="checkbox"
+                   value={element.shopName}
+                   checked={shopName.includes(element.shopName)}
+                   
+                   onChange={handleShopCheckboxChange}
+                   className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                 />
+                 <span>{element.shopName}</span>
+               </label>
+             ))}
+         </div>
+       </div>
+     )}
+   </div>
             </div>
 
             <div>
@@ -1007,10 +1036,8 @@ console.log(loading)
                 Photos
               </td>
             </tr>
-
             {shopName.length<1?
             items &&
-
               items.map((element: any, index: number) => {
                 const punchesList = [...element.punches];
                 const sortedPunches = punchesList.sort((a: any, b: any) => {
@@ -1211,7 +1238,6 @@ console.log(loading)
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                             </td> 
-
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
                                 ? changetime(element.punchIn)
@@ -1437,7 +1463,6 @@ console.log(loading)
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                             </td> 
-
                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                               {element.punchIn
                                 ? changetime(element.punchIn)
@@ -1456,12 +1481,10 @@ console.log(loading)
                   </>
                 );
               })}
-
                   </>
                 )
               })
             }
-
           </tbody >
 
           {loaderStatus === "loading" ? (
