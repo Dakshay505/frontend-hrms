@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAdminLoginAsync, getLoggedInUserDataAsync } from '../redux/Slice/loginSlice';
 import eye from "../assets/Eye.png"
 import signin from "../assets/SignIn.png"
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import XCircle from "../assets/XCircle.svg"
 import LoaderGif from '../assets/loadergif.gif'
 import toast from 'react-hot-toast';
@@ -84,6 +84,15 @@ export function Login() {
 
     };
 
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (loggedInUserData && loggedInUserData.employee?.role === 'manufacturing') {
+            navigate('/prd', { replace: true });
+            window.location.reload();
+        }
+    }, [loggedInUserData, navigate]);
+
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
     }, [])
@@ -93,8 +102,8 @@ export function Login() {
         <>
             {(loggedInUserData && loggedInUserData.admin) && <Navigate to='/' replace={true}></Navigate>}
             {(loggedInUserData && loggedInUserData.employee) && <Navigate to='/' replace={true}></Navigate>}
-            {(loggedInUserData &&loggedInUserData?.employee?.role === 'manufacturing') && <Navigate to='/prd'  replace={true}></Navigate>}
-           
+            {/* {(loggedInUserData &&loggedInUserData?.employee?.role === 'manufacturing') && <Navigate to='/prd'  replace={true}></Navigate>} */}
+
             <div className='flex flex-col justify-center items-center w-full mt-20'>
                 <div>
                     <h1 className="text-[28px]  -9 font-bold">HR Admin Login</h1>
