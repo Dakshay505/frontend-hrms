@@ -80,6 +80,7 @@ import { NewPage } from "./newpage/NewPage";
 import { EmployeesSidebar } from "./newpage/Employees";
 import { DepartmentInfo } from "./components/Dashboard/Department-Info";
 import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
+import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 
 
 const router = createBrowserRouter([
@@ -610,6 +611,16 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+  // {
+  //   path: "/salary-parent-department",
+  //   element: (
+  //     <ProductedRoute>
+  //       <Aside>
+  //         <NewSalaryPage />
+  //       </Aside>
+  //     </ProductedRoute>
+  //   ),
+  // },
   {
     path: "/salary-parent-department",
     element: (
@@ -620,6 +631,9 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+
+
+
   {
     path: "/salary-department",
     element: (

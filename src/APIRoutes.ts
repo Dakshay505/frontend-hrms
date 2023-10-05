@@ -150,3 +150,4 @@ export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
 export const changePasswordPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`;
 
 
+export const getNewSalaryApiPath = `${apiPath}/api/v2/salary/salary`;

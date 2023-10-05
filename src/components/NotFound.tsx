@@ -15,7 +15,7 @@ const NotFound = () => {
               </p>
               <Link to={"https://chawlacomponents.com/"}>
                 <button className="sm:w-full lg:w-auto my-2  px-8 text-center">
-                  
+
                 </button>
               </Link>
             </div>
@@ -24,6 +24,7 @@ const NotFound = () => {
                 type="button"
                 className=" bg-gray-900 flex mt-3 gap-2 text-white items-center focus:ring-4 focus:ring-green-300 border  font-medium rounded-md text-sm px-4 py-2 text-center"
               >
+
                Take me there 
               </button></Link>
           </div>
