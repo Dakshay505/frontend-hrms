@@ -84,18 +84,6 @@ export function Login() {
 
     };
 
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (loggedInUserData && loggedInUserData.employee?.role === 'manufacturing') {
-            navigate('/prd', { replace: true });
-            window.location.reload();
-        }
-    }, [loggedInUserData, navigate]);
-
-    useEffect(() => {
-        dispatch(getLoggedInUserDataAsync());
-    }, [])
     const [showPassword, setShowPassword] = useState(false);
 
 
