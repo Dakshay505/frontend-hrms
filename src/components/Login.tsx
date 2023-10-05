@@ -86,7 +86,7 @@ export function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
 
-
+    const navigate = useNavigate()
     useEffect(() => {
         if (loggedInUserData && loggedInUserData.employee?.role === 'manufacturing') {
             navigate('/prd', { replace: true });

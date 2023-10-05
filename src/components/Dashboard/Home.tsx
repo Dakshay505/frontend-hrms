@@ -12,7 +12,7 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
-    console.log(loggedInUserData)
+    // console.log(loggedInUserData)
 
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());

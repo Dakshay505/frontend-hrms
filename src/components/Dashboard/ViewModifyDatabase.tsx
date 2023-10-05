@@ -38,6 +38,8 @@ import toast from "react-hot-toast";
 import mongoose from 'mongoose';
 import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
+import img from "../../assets/img1.png"
+
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -56,7 +58,7 @@ const ViewModifyDatabase = () => {
   });
 
   useEffect(() => {
-    console.log("filter", filter)
+    // console.log("filter", filter)
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
@@ -132,9 +134,11 @@ const ViewModifyDatabase = () => {
   const [path, setPath] = useState("/addemployee");
   const [databaseValue, setDatabaseValue] = useState("Employees");
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
       const employeeData = res.payload.employees;
+      console.log("aaaaaaaaaaaaaa", employeeData)
       const arr = [];
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
@@ -143,7 +147,8 @@ const ViewModifyDatabase = () => {
             profilePicture: employeeData[i].profilePicture,
             jobProfileName: employeeData[i].jobProfileId.jobProfileName,
           });
-        } else {
+        }
+        else {
           arr.push({
             name: employeeData[i].name,
             profilePicture:
@@ -195,7 +200,7 @@ const ViewModifyDatabase = () => {
   };
 
   const handleDepartmentTableRowClick = (data: any) => {
-    console.log(data._id);
+    // console.log(data._id);
 
     const stateObject = {
       departmentid: data?._id || "Not Available",
@@ -207,7 +212,7 @@ const ViewModifyDatabase = () => {
   };
 
   const handleParentDepartmentTableRowClick = (data: any) => {
-    console.log(data._id);
+    // console.log(data._id);
 
     const stateObject = {
       Parentdepartmentid: data?._id || "Not Available",
@@ -223,7 +228,7 @@ const ViewModifyDatabase = () => {
 
 
   const handleShopTableRowClick = (data: any) => {
-    console.log(data.shopId);
+    // console.log(data.shopId);
     const shopId = { shopId: data._id };
     dispatch(getSingleShopAsync(shopId));
     navigate(`/edit-shop`, { state: { data: data } });
@@ -372,7 +377,7 @@ const ViewModifyDatabase = () => {
     });
   };
   const deleteAssignedDepartment = (element: any) => {
-    console.log("1", element);
+    // console.log("1", element);
     const data = {
       departmentName: element.department.departmentName,
       jobProfileName: element.jobProfileName,
@@ -431,7 +436,7 @@ const ViewModifyDatabase = () => {
     useState<Department | null>(null);
   const handleDeleteClick = (element: Department) => {
     setConfirmationOpen(true);
-    console.log(element, "element to delete");
+    // console.log(element, "element to delete");
     setDepartmentToDelete(element);
   };
 
@@ -455,13 +460,13 @@ const ViewModifyDatabase = () => {
         .catch((error: any) => {
           toast.error(error);
         });
-      console.log("hi3", departmentId);
+      // console.log("hi3", departmentId);
     }
     setConfirmationOpen(false);
   };
 
   const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
-  console.log(loggedInUserData)
+  // console.log(loggedInUserData)
 
   useEffect(() => {
     dispatch(getLoggedInUserDataAsync());
@@ -578,10 +583,10 @@ const ViewModifyDatabase = () => {
                 </button>
                 {isGroupOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                 
+
                     <div className="flex flex-row p-2 gap-3">
                       <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll}/>
+                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
                     </div>
 
                     <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
@@ -643,7 +648,7 @@ const ViewModifyDatabase = () => {
                 </button>
                 {isOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                  
+
 
                     <div className="flex flex-row p-2 gap-3">
                       <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
@@ -770,6 +775,9 @@ const ViewModifyDatabase = () => {
                 <tbody>
                   <tr className="bg-[#ECEDFE] cursor-default">
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Profile Photo
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employee ID
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -796,19 +804,29 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Number of  Barcode
-                    </td>
+                    </td> */}
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
-
                       return (
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA]"
                           onClick={() => handleTableRowClick(element)}
                         >
+                          <td className="py-4 px-4 text-sm  font-normal text-[#2E2E2E] whitespace-nowrap">
+                            <div className="rounded-full px-[24px] py-[8px] overflow-hidden">
+                              <img
+                                src={element?.profilePicture ? element?.profilePicture :"-"}
+                                alt="Profile Photo"
+                                className="rounded-full object-cover w-[80px] h-[80px]"
+                              />
+
+                            </div>
+                          </td>
+
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.employeeCode
                               ? element.employeeCode
@@ -841,19 +859,17 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />
                           </td>
-                          <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {/* <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <div className="flex gap-[10px]">
                               {BarcodeStore[element.employeeCode] &&
                                 BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
                                   <div>
-
                                     {element + " ,"}
                                   </div>
                                 ))
-
                               }
                             </div>
-                          </td>
+                          </td> */}
                         </tr>
                       );
                     })}
