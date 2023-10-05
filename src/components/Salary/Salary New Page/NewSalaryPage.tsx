@@ -91,7 +91,7 @@ export const NewSalaryPage = () => {
                             Total Salary
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            {salaryData.salary}
+                            +545K
                         </div>
                     </div>
 
