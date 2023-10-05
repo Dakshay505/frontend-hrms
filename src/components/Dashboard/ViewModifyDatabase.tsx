@@ -38,8 +38,7 @@ import toast from "react-hot-toast";
 import mongoose from 'mongoose';
 import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
-import img from "../../assets/img1.png"
-
+import img3 from "../../assets/pngimg.png"
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
@@ -817,9 +816,9 @@ const ViewModifyDatabase = () => {
                           onClick={() => handleTableRowClick(element)}
                         >
                           <td className="py-4 px-4 text-sm  font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <div className="rounded-full px-[24px] py-[8px] overflow-hidden">
+                            <div className="rounded-full  overflow-hidden">
                               <img
-                                src={element?.profilePicture ? element?.profilePicture :"-"}
+                                src={element?.profilePicture ? element?.profilePicture :img3}
                                 alt="Profile Photo"
                                 className="rounded-full object-cover w-[80px] h-[80px]"
                               />
