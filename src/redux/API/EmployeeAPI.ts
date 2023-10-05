@@ -61,10 +61,10 @@ export const getAllEmployee = async (sendData: any) => {
   try {
     //console.log("hii",sendData)
     const queryStr = convertToQueryString(sendData);
-    console.log(`${getEmployeeApiPath}?${queryStr}`)
     const { data } = await axios.post(`${getEmployeeApiPath}`, sendData,{
       withCredentials: true,
     });
+    // console.log("fattttttttttttta",data)
     return data;
   } catch (error: any) {
     console.log(error.response.data);

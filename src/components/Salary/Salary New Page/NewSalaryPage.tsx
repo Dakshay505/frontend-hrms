@@ -25,9 +25,9 @@ export const NewSalaryPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getNewSalaryDataApi( limit, page ); 
+            const data = await getNewSalaryDataApi(limit, page);
             const totalItems = data?.data?.salaryRecord?.length
-            console.log("ghere",totalItems)
+            console.log("ghere", totalItems)
             setTotal(totalItems);
             const newPageCount = Math.ceil(totalItems / limit);
             setPageCount(newPageCount)
@@ -91,7 +91,7 @@ export const NewSalaryPage = () => {
                             Total Salary
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            +545K
+                            {salaryData.salary}
                         </div>
                     </div>
 
@@ -135,119 +135,136 @@ export const NewSalaryPage = () => {
                 </div>
 
 
-                <div className="py-6 mb-24 ">
-                    <table className="w-full overflow-auto">
-                        <tbody>
-                            <tr className="bg-[#ECEDFE] cursor-default">
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Sr No.
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Employee Code
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Employee Name
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Group Name
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Job Profile
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Over Time
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Duty hour required
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Lunch
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    total working hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Added By
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Actual working hour
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Total working hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Duty hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    over time hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Earning in a day/Salary A
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary B
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary c
-                                </td>
+                <div className="py-6 mb-24">
+                    <div className="table-container" style={{ overflowY: 'auto' }}>
+                        <table className="w-full">
 
-                            </tr>
-
-                            {salaryData && salaryData.map((element: any, index: any) => (
-                                <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {index + 1}
+                            <tbody className="">
+                                <tr className="bg-[#ECEDFE] cursor-default">
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Sr No.
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Employee Code
                                     </td>
-
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.name ? element?.employee?.name : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Employee Name
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Group Name
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Job Profile
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.overTime ? element?.employee?.overTime : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Over Time
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.salary ? element?.employee?.salary : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Duty hour required
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Lunch
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        total working hours
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Added By
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Actual working hour
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Total working hours
                                     </td>
-
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Duty hours
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        over time hours
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Earning in a day/Salary A
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary B
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary c
+                                    </td>
 
                                 </tr>
-                            ))}
 
-                        </tbody >
+                                {salaryData && salaryData.map((element: any, index: any) => (
+                                    <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {index + 1}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
+                                        </td>
 
-                    </table>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.name ? element?.employee?.name : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.overTime ? element?.employee?.overTime : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.salary ? element?.employee?.salary : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            Added By
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            Overtime rate
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.salary ? element?.salary : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {element?.salaryB ? element?.salaryB : "-"}
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            SalaryC
+                                        </td>
 
 
+                                    </tr>
+                                ))}
+
+                            </tbody >
+
+                        </table>
+
+                    </div>
 
                     <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
                         <div className="px-3">

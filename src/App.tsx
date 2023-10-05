@@ -612,6 +612,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+
   // {
   //   path: "/salary-parent-department",
   //   element: (
@@ -627,6 +628,18 @@ const router = createBrowserRouter([
     element: (
       <ProductedRoute>
         <Aside>
+          <NewSalaryPage />
+
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+
+  {
+    path: "/salary-parent-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
           <SalaryWithDepartment />
         </Aside>
       </ProductedRoute>
@@ -635,16 +648,16 @@ const router = createBrowserRouter([
 
 
 
-  {
-    path: "/salary-department",
-    element: (
-      <ProductedRoute>
-        <Aside>
-          <SalaryDepartment />
-        </Aside>
-      </ProductedRoute>
-    ),
-  },
+  // {
+  //   path: "/salary-department",
+  //   element: (
+  //     <ProductedRoute>
+  //       <Aside>
+  //         <SalaryDepartment />
+  //       </Aside>
+  //     </ProductedRoute>
+  //   ),
+  // },
   {
     path: "/salary-jobProfile-department",
     element: (
