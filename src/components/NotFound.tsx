@@ -13,7 +13,7 @@ const NotFound = () => {
                 Sorry about that! Please visit our homepage to get where you
                 need to go.
               </p>
-              <Link to={"/"}>
+              <Link to={"https://chawlacomponents.com/"}>
                 <button className="sm:w-full lg:w-auto my-2  px-8 text-center">
 
                 </button>
@@ -22,13 +22,11 @@ const NotFound = () => {
             <Link to={"https://chawlacomponents.com/"}>
               <button
                 type="button"
-                className=" bg-gray-900 flex mt-3 gap-2 items-center focus:ring-4 focus:ring-green-300 border  font-medium rounded-md text-sm px-4 py-2 text-center"
+                className=" bg-gray-900 flex mt-3 gap-2 text-white items-center focus:ring-4 focus:ring-green-300 border  font-medium rounded-md text-sm px-4 py-2 text-center"
               >
-                <span className="font-inter text-[12px] md:text-base md:font-medium leading-7 tracking-tight text-white text-center">
-                  Take me there!
-                </span>
-              </button>
-            </Link>
+
+               Take me there 
+              </button></Link>
           </div>
           {/* <div className="opacity-5">
             <img src="https://i.ibb.co/G9DC8S0/404-2.png" />
