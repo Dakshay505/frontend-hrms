@@ -614,6 +614,7 @@ export const EmployeeAttendance = (props: any) => {
                                                 <td><div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div></td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchIn ? changetime(element.punchIn) : "Not Avilable"}</td>
                                                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap'>{element.punchOut ? changetime(element.punchOut) : "Not Avilable"}</td>
+                                                
                                                 <td className='py-4 px-5'>
 
                                                     {element.status === "approved" &&
