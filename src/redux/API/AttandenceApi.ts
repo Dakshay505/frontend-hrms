@@ -7,6 +7,7 @@ import {
   getGroupAttendanceApiPath,
   getMyAttandenceApiPath,
   getStaffAttendanceApiPath,
+  punchInPunchOutAttendanceApiPath,
   shopFiterAttendancePath,
   updateAttendanceApiPath,
 } from "../../APIRoutes";
@@ -39,12 +40,19 @@ export const getAllAttandence = async (sendData: any) => {
   try {
     // const filterDatta = convertToQueryString(sendData);
     //console.log(`${getAllAttandenceApiPath}?${filterDatta}`);
-    const { data } = await axios.post(
-      `${getAllAttandenceApiPath}`,sendData,
-      {
-        withCredentials: true,
-      }
-    );
+    const { data } = await axios.post(`${getAllAttandenceApiPath}`, sendData, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const getAllPunchInPunchOut = async () => {
+  try {
+    const { data } = await axios.get(`${punchInPunchOutAttendanceApiPath}`, {
+      withCredentials: true,
+    });
     return data;
   } catch (err: any) {
     console.log(err.response.data);
@@ -53,14 +61,12 @@ export const getAllAttandence = async (sendData: any) => {
 
 export const getShopFilterAttendance = async (sendData: any) => {
   try {
-    console.log("Dtaaaaa",sendData)
-    
-    const { data } = await axios.post(`${shopFiterAttendancePath}`,sendData,
-      {
-        withCredentials: true,
-      }
-    );
-    console.log("shopFiterAttendance", data)
+    console.log("Dtaaaaa", sendData);
+
+    const { data } = await axios.post(`${shopFiterAttendancePath}`, sendData, {
+      withCredentials: true,
+    });
+    console.log("shopFiterAttendance", data);
     return data;
   } catch (err: any) {
     console.error(err.response.data);

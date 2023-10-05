@@ -1,7 +1,7 @@
 
 
-// export const apiPath = `http://localhost:5050`;
-export const apiPath = ``;
+export const apiPath = `http://localhost:5050`;
+// export const apiPath = ``;
 
 
 
@@ -82,6 +82,7 @@ export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`;
 
 // attendance
 export const updateAttendanceApiPath = `${apiPath}/api/v2/attendance/updateAttendance`;
+export const punchInPunchOutAttendanceApiPath = `${apiPath}/api/v2/attendance/getPunchInPunchOut`;
 export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
