@@ -27,7 +27,7 @@ import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
-import { AnyAction } from "@reduxjs/toolkit";
+// import { AnyAction } from "@reduxjs/toolkit";
 
 
 export const AttendenceDashboardList = () => {
@@ -1647,7 +1647,7 @@ export const AttendenceDashboardList = () => {
                 onChange={(event) => {
                   if (calenderDayClicked.length === 0) {
                     setDate(event);
-                    const datePart= date.toISOString().slice(0, 10);
+                    // const datePart= date.toISOString().slice(0, 10);
                   
                     // setFilter({
                     //   ...filter,
@@ -1696,7 +1696,7 @@ export const AttendenceDashboardList = () => {
               temp.setDate(nextDate.getDate() + 1);
               console.log("Date",temp)
               setnextDate(temp);
-              const datePart= temp.toISOString().slice(0, 10);
+              // const datePart= temp.toISOString().slice(0, 10);
               // setFilter({
               //   ...filter,
               //   nextDate:datePart
