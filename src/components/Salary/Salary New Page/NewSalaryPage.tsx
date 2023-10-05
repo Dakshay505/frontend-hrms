@@ -4,6 +4,7 @@ import { SalaryFilterComponents } from './components/SalaryFilterComponents';
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getAllSalaryAsync } from "../../../redux/Slice/NewSalarySlice";
+import { getNewSalaryDataApi } from "../../../redux/API/NewSalaryApi";
 
 
 
@@ -18,32 +19,38 @@ export const NewSalaryPage = () => {
     const dispatch = useDispatch();
 
 
-    // useEffect(() => {
-    //     dispatch(getAllSalaryAsync({ limit, page }));
-    // }, [limit, page, dispatch]);
+    useEffect(() => {
+        dispatch(getAllSalaryAsync({ limit, page }));
+    }, [limit, page, dispatch]);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const data = await getNewSalaryDataApi(limit,page);
-    //         setTotal(data.totalLogs);
-    //         const newPageCount = Math.ceil(data.totalLogs / limit);
-    //         setPageCount(newPageCount);
-    //         if (page > newPageCount) {
-    //             setPage(newPageCount);
-    //         }
-    //     };
-    //     fetchData();
-    // }, [limit, page]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getNewSalaryDataApi( limit, page ); 
+            const totalItems = data?.data?.salaryRecord?.length
+            console.log("ghere",totalItems)
+            setTotal(totalItems);
+            const newPageCount = Math.ceil(totalItems / limit);
+            setPageCount(newPageCount)
+
+            if (page > newPageCount) {
+                setPage(newPageCount);
+            } else {
+                setPage(page);
+            }
+
+        };
+        fetchData();
+    }, [limit, page]);
 
 
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
-            // dispatch(getAllSalaryAsync({ page: newPage, limit }));
+            dispatch(getAllSalaryAsync({ page: newPage, limit }));
         } else {
             setPage(1);
-            // dispatch(getAllSalaryAsync({ page: 1, limit }));
+            dispatch(getAllSalaryAsync({ page: 1, limit }));
         }
     }
 
@@ -205,7 +212,7 @@ export const NewSalaryPage = () => {
                                         {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
                                     </td>
                                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        { element?.employee?.jobProfileId?.jobProfileName ?  element?.employee?.jobProfileId?.jobProfileName : "-"}
+                                        {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
                                     </td>
                                     <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                         {element?.employee?.overTime ? element?.employee?.overTime : "-"}

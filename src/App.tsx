@@ -611,26 +611,26 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
-  // {
-  //   path: "/salary-parent-department",
-  //   element: (
-  //     <ProductedRoute>
-  //       <Aside>
-  //         <NewSalaryPage />
-  //       </Aside>
-  //     </ProductedRoute>
-  //   ),
-  // },
   {
     path: "/salary-parent-department",
     element: (
       <ProductedRoute>
         <Aside>
-          <SalaryWithDepartment />
+          <NewSalaryPage />
         </Aside>
       </ProductedRoute>
     ),
   },
+  // {
+  //   path: "/salary-parent-department",
+  //   element: (
+  //     <ProductedRoute>
+  //       <Aside>
+  //         <SalaryWithDepartment />
+  //       </Aside>
+  //     </ProductedRoute>
+  //   ),
+  // },
 
 
 

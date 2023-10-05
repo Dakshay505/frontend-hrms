@@ -102,7 +102,23 @@ export const AttendenceDashboardList = () => {
       date: `${year}-${month}-${day}`,
       page: 1,
     });
+
+
+    // setFilter({
+    //   name: localStorage.getItem("name") || "",
+    //   groupName: [localStorage.getItem("groupName") || ""], 
+    //   jobProfileName: JSON.parse(localStorage.getItem("jobProfileName") || "[]"),
+    //   departmentName: [localStorage.getItem("departmentName") || ""], 
+    //   date: localStorage.getItem("date") || "",
+    //   nextDate: localStorage.getItem("nextDate") || "",
+    //   page: 1,
+    //   limit: 2000,
+    // });
   }, [date]);
+
+  // localStorage.setItem("groupName", filter.groupName[0] || ""); 
+  // localStorage.setItem("departmentName", filter.departmentName[0] || "");
+
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
@@ -189,10 +205,13 @@ export const AttendenceDashboardList = () => {
     }
     setShopName([])
     Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
 
+    
+    // localStorage.setItem("jobProfileName", filter.jobProfileName)
+    // localStorage.setItem("groupName", filter.groupName)
+    // localStorage.setItem("departmentName", filter.departmentName)
+
+    
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     //dispatch(getAllEmployeeAsync(filter))
