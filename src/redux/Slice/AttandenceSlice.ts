@@ -4,6 +4,7 @@ import {
   deletePunches,
   editPunches,
   getAllAttandence,
+  getAllPunchInPunchOut,
   getGroupAttendance,
   getMyAttandence,
   getShopFilterAttendance,
@@ -18,6 +19,7 @@ const initialState = {
   staffAttendance: [],
   groupAttendance: [],
   singleGroupAttendance: [],
+  punchInPunchOut:[],
   status: "idle",
 };
 
@@ -28,6 +30,17 @@ export const getAllAttandenceAsync: any = createAsyncThunk(
     try {
       console.log("data", data);
       const response: any = await getAllAttandence(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const getAllPunchInPunchOutAsync: any = createAsyncThunk(
+  "getAllPunchInPunchOutAsync",
+  async () => {
+    try {
+      const response: any = await getAllPunchInPunchOut();
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -165,6 +178,16 @@ export const AttandenceSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.allAttandence = action.payload;
+        }
+      )
+      .addCase(getAllPunchInPunchOutAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getAllPunchInPunchOutAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.punchInPunchOut = action.payload;
         }
       )
       .addCase(getMyAttandenceAsync.pending, (state) => {

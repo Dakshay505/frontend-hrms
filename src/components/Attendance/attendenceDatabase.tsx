@@ -14,7 +14,7 @@ import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getAllPunchInPunchOutAsync, getGroupAttendanceAsync } from "../../redux/Slice/AttandenceSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 export const AttendenceDtabase = () => {
   // const [page, setPage] = useState(1);
@@ -38,7 +38,7 @@ export const AttendenceDtabase = () => {
     try {
       // const filterDatta = convertToQueryString(sendData);
       const { data } = await axios.post(
-        `${getAllAttandenceApiPath}`,sendData,
+        `${getAllAttandenceApiPath}`, sendData,
         {
           withCredentials: true,
         }
@@ -86,12 +86,12 @@ export const AttendenceDtabase = () => {
   const [items, setItems] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   console.log(total)
-  console.log("hello",items);
+  console.log("hello", items);
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
-  console.log(loaderStatus)
 
+  const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
   // useEffect(() => {
   //   const observer = new IntersectionObserver(
   //     (entries) => {
@@ -159,7 +159,9 @@ export const AttendenceDtabase = () => {
 
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
+    dispatch(getAllPunchInPunchOutAsync());
   }, []);
+
   const totalPresent = items?.length
   console.log(totalPresent)
   // const totalEmployees = groupAttendanceList.reduce(
@@ -189,11 +191,11 @@ export const AttendenceDtabase = () => {
     }
   }
 
- 
+
   return (
     <div className="px-10 pt-8">
       <div className="flex flex-col flex-start">
-        <div className=" flex justify-between item-center max-w-[688px]">
+        <div className=" flex justify-between item-center max-w-[90%]">
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Overview
           </div>
@@ -245,10 +247,30 @@ export const AttendenceDtabase = () => {
               Total Present
             </p>
           </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+              Punch In
+            </p>
+          </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+              Punch Out
+            </p>
+          </div>
         </div>
       </div>
       <div className="flex flex-col py-[48px]">
-        <div className=" flex justify-between max-w-[688px] item-center">
+        <div className=" flex justify-between max-w-[90%] item-center">
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
           </div>
@@ -358,8 +380,8 @@ export const AttendenceDtabase = () => {
 
 
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                          {element.shift=== "day"? "Day":
-                          element.shift=== "night"? "Night": "-"}
+                          {element.shift === "day" ? "Day" :
+                            element.shift === "night" ? "Night" : "-"}
                         </td>
 
 
@@ -428,18 +450,18 @@ export const AttendenceDtabase = () => {
                           )}
                         </td>
                         <td className="py-4 px-5 flex justify-center flex-col  text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <p className="font-medium">
+                          <p className="font-medium">
 
                             {element.approvedBy?.name
                               ? element.approvedBy?.name
                               : "-"}
-                            </p>
-                            <p className="text-[12px]">
+                          </p>
+                          <p className="text-[12px]">
 
                             {element.approvedBy?.jobProfileId?.jobProfileName
                               ? element.approvedBy?.jobProfileId?.jobProfileName
                               : "-"}
-                            </p>
+                          </p>
 
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
@@ -475,6 +497,9 @@ export const AttendenceDtabase = () => {
                         sortedPunches.slice(1).map((element: any) => {
                           return (
                             <tr key={element._id + element.punchIn}>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
                               <td>
                                 <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                               </td>

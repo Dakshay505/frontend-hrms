@@ -95,6 +95,7 @@ export const AttendenceDashboardList = () => {
   const [items, setItems] = useState<any[]>([]);
   const [shopitems, setShopItems] = useState<any[]>([]);
   const shoplist = useSelector((state: any) => state.Shop.shop)
+
   // useEffect(() => {
   //   const currentDate = new Date(date);
   //   const year = currentDate.getFullYear();
@@ -106,6 +107,10 @@ export const AttendenceDashboardList = () => {
   //     page: 1,
   //   });
   // }, [date]);
+
+
+
+    
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
@@ -285,10 +290,12 @@ export const AttendenceDashboardList = () => {
     }
     setShopName([])
     Setloading(true)
+
     //localStorage.setItem("jobProfileName", filter.jobProfileName)
     //localStorage.setItem("groupName", filter.groupName)
     //localStorage.setItem("departmentName", filter.departmentName)
    filter.date=new Date().toISOString().slice(0, 10)
+
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     //dispatch(getAllEmployeeAsync(filter))
