@@ -111,7 +111,7 @@ export default function aside(props: Props) {
 
             <div
               onClick={() => {
-                window.location.replace("https://chawlacomponents.com/prd")
+                window.location.replace("https://chawlacomponents.com/prd/")
                 // window.location.replace("http://localhost:5050/prd")
               }}
               className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
