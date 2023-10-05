@@ -485,6 +485,7 @@ export const AttendenceDashboardList = () => {
         ...filter,
         name: event.target.value,
       });
+      console.log("searchh1",filter)
     } else {
       setLabelVisible(true);
       setSearch(event.target.value);
@@ -961,6 +962,7 @@ export const AttendenceDashboardList = () => {
         </div>
 
       </div>
+      
       <div className="flex flex-row">
         {!isGroupOpen && <div className="relative mt-4">
           {isLabelVisible && (

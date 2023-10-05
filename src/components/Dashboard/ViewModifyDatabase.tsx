@@ -62,8 +62,8 @@ const ViewModifyDatabase = () => {
       const employeeData = data.payload.employees;
       //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
-      //localStorage.setItem("groupName", filter.groupName);
-      //localStorage.setItem("jobProfileName", filter.jobProfileName);
+      // localStorage.setItem("groupName", filter.groupName);
+      // localStorage.setItem("jobProfileName", filter.jobProfileName);
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
