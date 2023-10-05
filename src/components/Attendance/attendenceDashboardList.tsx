@@ -27,6 +27,9 @@ import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
+import { AnyAction } from "@reduxjs/toolkit";
+
+
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
@@ -50,7 +53,7 @@ export const AttendenceDashboardList = () => {
   const loaderStatus = useSelector((state: any) => state.attandence.status);
 
   const [date, setDate] = useState<any>(new Date());
-  const [nextDate, setnextDate] = useState<any>();
+  const [nextDate, setnextDate] = useState<any>(new Date());
   const [showCalender, setShowCalender] = useState(false);
   const [calenderDayClicked, setcalenderDayClicked] = useState<any>([]);
   const [status, Setstatus] = useState("")
@@ -92,33 +95,22 @@ export const AttendenceDashboardList = () => {
   const [items, setItems] = useState<any[]>([]);
   const [shopitems, setShopItems] = useState<any[]>([]);
   const shoplist = useSelector((state: any) => state.Shop.shop)
-  useEffect(() => {
-    const currentDate = new Date(date);
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    setFilter({
-      ...filter,
-      date: `${year}-${month}-${day}`,
-      page: 1,
-    });
+
+  // useEffect(() => {
+  //   const currentDate = new Date(date);
+  //   const year = currentDate.getFullYear();
+  //   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  //   const day = String(currentDate.getDate()).padStart(2, "0");
+  //   setFilter({
+  //     ...filter,
+  //     date: `${year}-${month}-${day}`,
+  //     page: 1,
+  //   });
+  // }, [date]);
 
 
-    // setFilter({
-    //   name: localStorage.getItem("name") || "",
-    //   groupName: [localStorage.getItem("groupName") || ""], 
-    //   jobProfileName: JSON.parse(localStorage.getItem("jobProfileName") || "[]"),
-    //   departmentName: [localStorage.getItem("departmentName") || ""], 
-    //   date: localStorage.getItem("date") || "",
-    //   nextDate: localStorage.getItem("nextDate") || "",
-    //   page: 1,
-    //   limit: 2000,
-    // });
-  }, [date]);
 
-  // localStorage.setItem("groupName", filter.groupName[0] || ""); 
-  // localStorage.setItem("departmentName", filter.departmentName[0] || "");
-
+    
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
@@ -191,28 +183,25 @@ export const AttendenceDashboardList = () => {
   }, [shopName])
   const [dateRange, setDateRange] = useState<any>([]);
   useEffect(() => {
-    function getDateRange(startDate: any, endDate: any) {
-      if (nextDate) {
-        const result = [];
-        const currentDate = new Date(startDate);
-        const finalDate = new Date(endDate);
-        while (currentDate <= finalDate) {
-          result.push(currentDate.toISOString().slice(0, 10));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        setDateRange([...result]);
-      }
-    }
+    // function getDateRange(startDate: any, endDate: any) {
+    //   if (nextDate) {
+    //     const result = [];
+    //     const currentDate = new Date(startDate);
+    //     const finalDate = new Date(endDate);
+    //     while (currentDate <= finalDate) {
+    //       result.push(currentDate.toISOString().slice(0, 10));
+    //       currentDate.setDate(currentDate.getDate() + 1);
+    //     }
+    //     setDateRange([...result]);
+    //   }
+    // }
     setShopName([])
     Setloading(true)
+    //localStorage.setItem("jobProfileName", filter.jobProfileName)
+    //localStorage.setItem("groupName", filter.groupName)
+    //localStorage.setItem("departmentName", filter.departmentName)
 
-    
-    // localStorage.setItem("jobProfileName", filter.jobProfileName)
-    // localStorage.setItem("groupName", filter.groupName)
-    // localStorage.setItem("departmentName", filter.departmentName)
-
-    
-    getDateRange(filter.date, filter.nextDate);
+    //getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
     //dispatch(getAllEmployeeAsync(filter))
     console.log(filter)
@@ -233,9 +222,101 @@ export const AttendenceDashboardList = () => {
       }
     });
   }, [filter, status]);
+  useEffect(() => {
+    // function getDateRange(startDate: any, endDate: any) {
+    //   if (nextDate) {
+    //     const result = [];
+    //     const currentDate = new Date(startDate);
+    //     const finalDate = new Date(endDate);
+    //     while (currentDate <= finalDate) {
+    //       result.push(currentDate.toISOString().slice(0, 10));
+    //       currentDate.setDate(currentDate.getDate() + 1);
+    //     }
+    //     setDateRange([...result]);
+    //   }
+    // }
+    setShopName([])
+    Setloading(true)
+    //localStorage.setItem("jobProfileName", filter.jobProfileName)
+    //localStorage.setItem("groupName", filter.groupName)
+    //localStorage.setItem("departmentName", filter.departmentName)
+
+    //getDateRange(filter.date, filter.nextDate);
+    filter.page = 1;
+    //dispatch(getAllEmployeeAsync(filter))
+    console.log(filter)
+    if (filter.nextDate === "") {
+      filter.nextDate = filter.date
+    }
+    const currentDate = new Date(date);
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const nDate = new Date(nextDate);
+      const nextyear = nDate.getFullYear();
+      const nextmonth = String(nDate.getMonth() + 1).padStart(2, "0");
+    const nextday = String(nDate.getDate()).padStart(2, "0");
+    
+    filter.date=`${year}-${month}-${day}`
+    filter.nextDate=`${nextyear}-${nextmonth}-${nextday}`;
+    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      const employeeData = data.payload.attendanceRecords;
+      if (status === "") {
+        setItems(employeeData);
+        Setloading(false)
+      }
+      else {
+        const filteredItems = employeeData.filter((element: any) => element.status === status);
+        setItems(filteredItems)
+        Setloading(false)
+      }
+    });
+  }, [date,nextDate]);
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
+  useEffect(() => {
+    function getDateRange(startDate: any, endDate: any) {
+      if (nextDate) {
+        const result = [];
+        const currentDate = new Date(startDate);
+        const finalDate = new Date(endDate);
+        while (currentDate <= finalDate) {
+          result.push(currentDate.toISOString().slice(0, 10));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        setDateRange([...result]);
+      }
+    }
+    setShopName([])
+    Setloading(true)
+
+    //localStorage.setItem("jobProfileName", filter.jobProfileName)
+    //localStorage.setItem("groupName", filter.groupName)
+    //localStorage.setItem("departmentName", filter.departmentName)
+   filter.date=new Date().toISOString().slice(0, 10)
+
+    getDateRange(filter.date, filter.nextDate);
+    filter.page = 1;
+    //dispatch(getAllEmployeeAsync(filter))
+    console.log(filter)
+    if (filter.nextDate === "") {
+      filter.nextDate = filter.date
+    }
+
+    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      const employeeData = data.payload.attendanceRecords;
+      if (status === "") {
+        setItems(employeeData);
+        Setloading(false)
+      }
+      else {
+        const filteredItems = employeeData.filter((element: any) => element.status === status);
+        setItems(filteredItems)
+        Setloading(false)
+      }
+    });
+  }, []);
 
   const formatDate = (date: any) => {
     return date.toLocaleDateString("en-US", {
@@ -571,7 +652,7 @@ export const AttendenceDashboardList = () => {
     } else if (entry.status === "rejected") {
       rejectedCount++;
     }
-    console.log(rejectedCount)
+  
   }
 
   return (
@@ -1546,9 +1627,15 @@ export const AttendenceDashboardList = () => {
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
           <button
             onClick={() => {
-              const nextDate = new Date(date);
-              nextDate.setDate(date.getDate() - 1);
-              setDate(nextDate);
+              const temp = new Date(date);
+              temp.setDate(date.getDate() - 1);
+              setDate(temp);
+              const datePart= temp.toISOString().slice(0, 10);
+              setFilter({
+                ...filter,
+                date:datePart
+              }
+              )
             }}
           >
             <img src={CaretLeft} alt="" className="w-4 h-4" />
@@ -1558,8 +1645,26 @@ export const AttendenceDashboardList = () => {
               <Calendar
                 tileClassName={tileClassName}
                 onChange={(event) => {
-                  calenderDayClicked.length === 0 ? setDate(event) : "";
-                  calenderDayClicked.length === 1 ? setnextDate(event) : "";
+                  if (calenderDayClicked.length === 0) {
+                    setDate(event);
+                    const datePart= date.toISOString().slice(0, 10);
+                  
+                    // setFilter({
+                    //   ...filter,
+                    //   date:datePart
+                    // }
+                    // )
+
+                  } else if (calenderDayClicked.length === 1) {
+                    setnextDate(event);
+              //       const datePart= nextDate.toISOString().slice(0, 10);
+              // setFilter({
+              //   ...filter,
+              //   nextDate:datePart
+              // }
+              // )
+                  }
+                  
                   if (calenderDayClicked.length < 1) {
                     setcalenderDayClicked([...calenderDayClicked, 1]);
                   }
@@ -1587,9 +1692,17 @@ export const AttendenceDashboardList = () => {
             }`}</p>
           <button
             onClick={() => {
-              const nextDate = new Date(date);
-              nextDate.setDate(date.getDate() + 1);
-              setDate(nextDate);
+              const temp = new Date(nextDate);
+              temp.setDate(nextDate.getDate() + 1);
+              console.log("Date",temp)
+              setnextDate(temp);
+              const datePart= temp.toISOString().slice(0, 10);
+              // setFilter({
+              //   ...filter,
+              //   nextDate:datePart
+              // }
+              // )
+
             }}
           >
             <img src={CaretRight} className="w-4 h-4" alt="" />
