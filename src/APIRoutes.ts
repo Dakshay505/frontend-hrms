@@ -1,5 +1,7 @@
+
 export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
+
 
 
 
@@ -125,6 +127,7 @@ export const updateParentDepartmentApiPath = `${apiPath}/api/v1/department/updat
 // new Salary
 export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`;
 export const getEmployeeSalaryApiPath = `${apiPath}/api/v1/attendance`;
+export const EmployeePasswordChangeApiPath = `${apiPath}/api/v1/attendance`;
 
 // employeeBarcode
 export const getEmployeeBarcodeApiPath = `${apiPath}/api/v1/employee/employeeBarCode`;

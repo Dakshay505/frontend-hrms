@@ -9,6 +9,7 @@ import { useEffect, useState, useRef } from "react";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
+import DummyProfilr from "../../assets/Dummy.jpeg"
 import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import axios from "axios";
@@ -60,9 +61,14 @@ export const AttendenceDtabase = () => {
   const [isImageOpen, setIsImageOpen] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState("");
+  const [selectedProfileImage, setSelectedProfileImage] = useState("");
 
-  const handleImageClick = (imageSrc: any) => {
+  const handleImageClick = (imageSrc: any,profileSrc:any) => {
     setSelectedImage(imageSrc);
+    
+    setSelectedProfileImage(profileSrc)
+    
+    
     setIsImageOpen(true);
   };
 
@@ -290,8 +296,12 @@ export const AttendenceDtabase = () => {
           <table className="w-full">
             <tbody>
               <tr className="bg-[#ECEDFE] cursor-default" >
+             
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Date
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Profile Name
                 </td>
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Employee Code
@@ -342,6 +352,12 @@ export const AttendenceDtabase = () => {
                             ? latestPunches.punchIn.slice(0, 10)
                             : "Not Avilable"}
                         </td>
+                        <td className="py-4 px-5"  >
+                            {element.profilePicture
+                              ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                              : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+                          
+                          </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
                           {element.employeeId?.employeeCode
                             ? element.employeeId.employeeCode
@@ -467,28 +483,36 @@ export const AttendenceDtabase = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&
                             element.approvedImage && (
-                              <div className="flex gap-[10px] cursor-pointer">
-                                <div>
-                                  <p
-                                    className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                    onClick={() =>
-                                      handleImageClick(
-                                        element.approvedImage
-                                      )
-                                    }
-                                  >
-                                    Open
-                                  </p>
-                                </div>
+                              // <div className="flex gap-[10px] cursor-pointer">
+                              //   <div>
+                              //     <p
+                              //       className="text-[12px] leading-4 font-medium text-[#283093] underline"
+                              //       onClick={() =>
+                              //         handleImageClick(
+                              //           element.approvedImage
+                              //         )
+                              //       }
+                              //     >
+                              //       Open
+                              //     </p>
+                              //   </div>
 
-                                <div>
-                                  <img
-                                    src={ArrowSqureOut}
-                                    className="w-[14px] h-[14px]"
-                                    alt="arrowsqureout"
-                                  />
-                                </div>
-                              </div>
+                              //   <div>
+                              //     <img
+                              //       src={ArrowSqureOut}
+                              //       className="w-[14px] h-[14px]"
+                              //       alt="arrowsqureout"
+                              //     />
+                              //   </div>
+                              // </div>
+                              <img   onClick={() =>
+                                        handleImageClick(
+                                          element.approvedImage,
+                                          element?.profilePicture
+                                          
+                                        )
+                                      } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+                                
                             )}
                         </td>
                       </tr>
@@ -539,11 +563,27 @@ export const AttendenceDtabase = () => {
 
             {isImageOpen && (
               <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+                <div className="flex flex-row gap-2">
+                  <div className="flex flex-col text-center gap-2">
+                    <p className="font-bold text-white ">Profile Image</p>
+                    {selectedProfileImage?
+
+                <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
+                    :<img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+                    
+              }
+                </div>
+                <div className="flex flex-col text-center gap-2">
+                <p className="font-bold text-white">Approved Image</p>
                 <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                </div>
+                
+                </div>
                 <button
-                  className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
+                  className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
                   onClick={handleCloseImage}
                 >
+                  
                   <img
                     src={close}
                     alt=""

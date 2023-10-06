@@ -12,6 +12,7 @@ import { saveAs } from 'file-saver';
 import toast from "react-hot-toast";
 import * as XLSX from 'xlsx';
 import CaretRight from "../../assets/CaretRight1.svg";
+import DummyProfilr from "../../assets/Dummy.jpeg"
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
@@ -606,11 +607,17 @@ export const AttendenceDashboardList = () => {
   // open image
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [selectedProfileImage, setSelectedProfileImage] = useState("");
 
-  const handleImageClick = (imageSrc: any) => {
+  const handleImageClick = (imageSrc: any,profileSrc:any) => {
     setSelectedImage(imageSrc);
+    
+    setSelectedProfileImage(profileSrc)
+    
+    
     setIsImageOpen(true);
   };
+
 
   const handleCloseImage = () => {
     setIsImageOpen(false);
@@ -1237,9 +1244,11 @@ export const AttendenceDashboardList = () => {
                                   className="text-[12px] leading-4 font-medium text-[#283093] underline"
                                   onClick={() =>
                                     handleImageClick(
-                                      element.approvedImage
+                                      element.approvedImage,
+                                      element?.profilePicture
+                                      
                                     )
-                                  }
+                                  } 
                                 >
                                   Open Photo
                                 </p>
@@ -1462,7 +1471,9 @@ export const AttendenceDashboardList = () => {
                                           className="text-[12px] leading-4 font-medium text-[#283093] underline"
                                           onClick={() =>
                                             handleImageClick(
-                                              element.approvedImage
+                                              element.approvedImage,
+                                              element?.profilePicture
+                                              
                                             )
                                           }
                                         >
@@ -1531,20 +1542,36 @@ export const AttendenceDashboardList = () => {
           }
           <div ref={observerTarget}></div>
           {isImageOpen && (
-            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-              <img src={selectedImage} alt="Approved" className="h-[20rem]" />
-              <button
-                className="close-button absolute top-[10rem] right-[37rem] p-[10px]  rounded-full shadow-lg"
-                onClick={handleCloseImage}
-              >
-                <img
-                  src={close}
-                  alt=""
-                  className="h-[25px] w-[25px] bg-white rounded-full "
-                />
-              </button>
-            </div>
-          )}
+              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+                <div className="flex flex-row gap-2">
+                  <div className="flex flex-col text-center gap-2">
+                    <p className="font-bold text-white ">Profile Image</p>
+                    {selectedProfileImage?
+
+                <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
+                    :<img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+                    
+              }
+                </div>
+                <div className="flex flex-col text-center gap-2">
+                <p className="font-bold text-white">Approved Image</p>
+                <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                </div>
+                
+                </div>
+                <button
+                  className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
+                  onClick={handleCloseImage}
+                >
+                  
+                  <img
+                    src={close}
+                    alt=""
+                    className="h-[25px] w-[25px] bg-white rounded-full "
+                  />
+                </button>
+              </div>
+            )}
         </table>
         {/* TABLE ENDS HERE */}
       </div>
