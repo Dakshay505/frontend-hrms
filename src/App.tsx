@@ -26,7 +26,7 @@ import { LeaveRecords } from './components/LeavesAndGatepass/LeaveRecords';
 import { GatepassRecord } from './components/LeavesAndGatepass/GatepassRecord';
 import { Login } from './components/Login';
 
-//import { EmployeeProfile } from './components/Employeeprofile/Profile/profile';
+// import { EmployeeProfile } from './components/Employeeprofile/Profile/profile';
 import { EmployeeRequestingdocument } from './components/employeedocumentmodel/requestingdocument';
 import { EmployeeUploadingdocument } from './components/employeedocumentmodel/uploadingdocument';
 import { JobProfileInfo } from './components/Employeeprofile/jobprofileinfo';
@@ -67,7 +67,7 @@ import { EmployeeAssessmentQuiz } from "./Employee/training/AssesmentQuiz";
 import toast, { Toaster } from 'react-hot-toast';
 import AddDepartment from "./components/Dashboard/AddDepartment";
 import AddParentDepartment from "./components/Dashboard/AddParentDepartment";
-import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
+// import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import SalaryDepartment from "./components/Salary/SalaryDepartment/SalaryBySubDepartment";
 import SalaryJobProfilebyDepartment from "./components/Salary/SalaryDepartment/SalaryJobProfilebyDepartment";
 import SalaryEmployee from "./components/Salary/SalaryDepartment/SalaryEmployee";
@@ -80,6 +80,8 @@ import { NewPage } from "./newpage/NewPage";
 import { EmployeesSidebar } from "./newpage/Employees";
 import { DepartmentInfo } from "./components/Dashboard/Department-Info";
 import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
+// import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
+import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 import MonthlyReport from "./components/Dashboard/monthlyReport";
 
@@ -612,26 +614,29 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
-  // {
-  //   path: "/salary-parent-department",
-  //   element: (
-  //     <ProductedRoute>
-  //       <Aside>
-  //         <NewSalaryPage />
-  //       </Aside>
-  //     </ProductedRoute>
-  //   ),
-  // },
+
   {
     path: "/salary-parent-department",
     element: (
       <ProductedRoute>
         <Aside>
-          <SalaryWithDepartment />
+          <NewSalaryPage />
         </Aside>
       </ProductedRoute>
     ),
   },
+
+
+  // {
+  //   path: "/salary-parent-department",
+  //   element: (
+  //     <ProductedRoute>
+  //       <Aside>
+  //         <SalaryWithDepartment />
+  //       </Aside>
+  //     </ProductedRoute>
+  //   ),
+  // },
 
 
 

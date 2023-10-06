@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react"
 import { addImageAsync,  getSingleEmployeeAsync } from "../../redux/Slice/EmployeeSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
-
+import warning from "../../assets/warning.png"
 const NewPicture = () => {
     const dispatch = useDispatch();
     const singleEmployee = useSelector((state: any) => state.employee.singleEmployee);
@@ -52,6 +52,12 @@ const NewPicture = () => {
                     <p className="text-center text-[18px] leading-6 font-semibold text-[#2E2E2E]">
                         {singleEmployee && singleEmployee.name}
                     </p>
+                </div>
+
+                <div className="flex flex-col justify-center items-center gap-[16px] py-8 px-4 bg-[#FAFAFA] rounded-lg border border-solid border-[#DEDEDE] w-[192px] ">
+                    <div className='relative'>
+                        <img src={singleEmployee.permanentBarCode ? singleEmployee.permanentBarCode : warning} alt="Employee Image" className='rounded-full object-cover w-[144px] h-[144px]' />
+                    </div>
                 </div>
 
 

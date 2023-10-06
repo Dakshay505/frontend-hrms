@@ -2,15 +2,15 @@ import axios from "axios";
 import { getNewSalaryApiPath } from "../../APIRoutes";
 
 
-export const getNewSalaryDataApi = async () => {
+export const getNewSalaryDataApi = async (Data:any) => {
     try {
-      const response= await axios.get(`${getNewSalaryApiPath}`, {
+      const {data}= await axios.post(`${getNewSalaryApiPath}`,Data, {
         withCredentials: true,
       });
-      console.log(response)
-      return response;
+      console.log("hello:,",data)
+      return data;
     } catch (err: any) {
-      console.log(err.response);
+      console.log(err.data);
     }
   };
 

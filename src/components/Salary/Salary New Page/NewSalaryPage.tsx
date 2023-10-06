@@ -1,51 +1,225 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import search from "../../../assets/MagnifyingGlass.png"
-import { SalaryFilterComponents } from './components/SalaryFilterComponents';
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getAllSalaryAsync } from "../../../redux/Slice/NewSalarySlice";
+import { getNewSalaryDataApi } from "../../../redux/API/NewSalaryApi";
+import { getAllPunchInPunchOutAsync } from "../../../redux/Slice/AttandenceSlice";
+import SelectAll from "../../../assets/Select All.svg"
+import ClearAll from "../../../assets/Clear-all.svg"
+import { getAllGroupsAsync } from "../../../redux/Slice/GroupSlice";
+import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
+import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
 
 
+const options2 = [
+    { label: 'Day' },
+    { label: 'Night' },
+];
 
 export const NewSalaryPage = () => {
-
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
 
+    const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(getAllSalaryAsync({ limit, page }));
+    }, [limit, page, dispatch]);
 
-    // useEffect(() => {
-    //     dispatch(getAllSalaryAsync({ limit, page }));
-    // }, [limit, page, dispatch]);
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const data = await getNewSalaryDataApi(limit,page);
-    //         setTotal(data.totalLogs);
-    //         const newPageCount = Math.ceil(data.totalLogs / limit);
-    //         setPageCount(newPageCount);
-    //         if (page > newPageCount) {
-    //             setPage(newPageCount);
-    //         }
-    //     };
-    //     fetchData();
-    // }, [limit, page]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getNewSalaryDataApi(filter);
+            setTotal(data.count);
+            const newPageCount = Math.ceil(data.count / limit);
+            setPageCount(newPageCount);
+            if (page > newPageCount) {
+                setPage(newPageCount);
+            }
+        };
+        fetchData();
+    }, [limit, page]);
 
 
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
-            // dispatch(getAllSalaryAsync({ page: newPage, limit }));
+            dispatch(getAllSalaryAsync({ page: newPage, limit }));
         } else {
             setPage(1);
-            // dispatch(getAllSalaryAsync({ page: 1, limit }));
+            dispatch(getAllSalaryAsync({ page: 1, limit }));
         }
     }
+
+
+    useEffect(() => {
+        dispatch(getAllSalaryAsync({ limit, page }));
+    }, [limit, page, dispatch]);
+    const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
+
+
+
+
+    const [filter, setFilter] = useState<any>({
+        groupName: [],
+        jobProfileName: [],
+        departmentName: [],
+        employeeCode: [],
+        page: 1,
+        limit: 20,
+    });
+
+
+    useEffect(() => {
+
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", filter)
+        dispatch(getAllSalaryAsync(filter));
+
+        dispatch(getAllPunchInPunchOutAsync());
+
+    }, [filter]);
+
+
+    // filter
+
+    const [isOpen1, setIsOpen1] = useState(false);
+    const dropdownRef1 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen2, setIsOpen2] = useState(false);
+    const dropdownRef2 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen3, setIsOpen3] = useState(false);
+    const dropdownRef3 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen4, setIsOpen4] = useState(false);
+    const dropdownRef4 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen5, setIsOpen5] = useState(false);
+    const dropdownRef5 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen6, setIsOpen6] = useState(false);
+    const dropdownRef6 = useRef<HTMLDivElement | null>(null);
+
+    const [isOpen7, setIsOpen7] = useState(false);
+    const dropdownRef7 = useRef<HTMLDivElement | null>(null);
+
+
+
+
+
+    useEffect(() => {
+        function handleClickOutside(event: any) {
+            if (
+                dropdownRef1.current && !dropdownRef1.current.contains(event.target) &&
+                dropdownRef2.current && !dropdownRef2.current.contains(event.target) &&
+                dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
+                dropdownRef4.current && !dropdownRef4.current.contains(event.target) &&
+                dropdownRef5.current && !dropdownRef5.current.contains(event.target) &&
+                dropdownRef6.current && !dropdownRef6.current.contains(event.target) &&
+                dropdownRef7.current && !dropdownRef7.current.contains(event.target)
+            ) {
+                setIsOpen1(false);
+                setIsOpen2(false);
+                setIsOpen3(false);
+                setIsOpen4(false);
+                setIsOpen5(false);
+                setIsOpen6(false);
+                setIsOpen7(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const toggleDropdown1 = () => {
+        if (!isOpen1) {
+            setIsOpen1(true);
+        } else {
+            setIsOpen1(false);
+
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                groupName: [],
+            }));
+        }
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown2 = () => {
+        setIsOpen2(!isOpen2);
+        setIsOpen1(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown3 = () => {
+        setIsOpen3(!isOpen3);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown4 = () => {
+        setIsOpen4(!isOpen4);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown5 = () => {
+        setIsOpen5(!isOpen5);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown6 = () => {
+        setIsOpen6(!isOpen6);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen7(false)
+    };
+
+    const toggleDropdown7 = () => {
+        setIsOpen7(!isOpen7);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+    };
+
 
 
 
@@ -53,8 +227,135 @@ export const NewSalaryPage = () => {
         dispatch(getAllSalaryAsync());
     }, []);
 
-    const salaryData = useSelector((state: any) => state.newSalary?.data?.data?.salaryRecords);
-    console.log("aaaaaaaaaaaaaaaa", salaryData)
+
+
+
+
+    // filters
+
+    const groupList = useSelector((state: any) => state.group.groups);
+
+    const sortedgroupList = [...groupList].sort((a: any, b: any) =>
+        a.groupName.localeCompare(b.groupName
+        )
+    );
+    const jobProfileList = useSelector(
+        (state: any) => state.jobProfile.jobProfiles
+    );
+    const departmentList = useSelector((state: any) => state.department.department)
+    const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
+        a.departmentName.localeCompare(b.departmentName)
+    );
+
+    const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
+        a.jobProfileName.localeCompare(b.jobProfileName)
+    );
+
+
+    useEffect(() => {
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllDepartmentAsync());
+    }, []);
+
+
+
+    const handleJobCheckboxChange = (event: any) => {
+        const { value, checked } = event.target;
+
+
+        if (checked) {
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                jobProfileName: [...prevFilter.jobProfileName, value],
+            }));
+
+        } else {
+            setFilter({
+                ...filter,
+                jobProfileName: filter.jobProfileName.filter((profile: any) => profile !== value),
+            });
+        }
+    };
+    const handleGroupCheckboxChange = (event: any) => {
+        const { value, checked } = event.target;
+
+
+        if (checked) {
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                groupName: [...prevFilter.groupName, value],
+            }));
+
+        } else {
+            setFilter({
+                ...filter,
+                groupName: filter.groupName.filter((profile: any) => profile !== value),
+            });
+        }
+    };
+    const handleDepartmentCheckboxChange = (event: any) => {
+        const { value, checked } = event.target;
+
+
+        if (checked) {
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                departmentName: [...prevFilter.departmentName, value],
+            }));
+
+        } else {
+            setFilter({
+                ...filter,
+                departmentName: filter.departmentName.filter((profile: any) => profile !== value),
+            });
+        }
+    };
+
+    const selectAll = () => {
+        const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
+        setFilter((prevFilter: any) => ({
+            ...prevFilter,
+            jobProfileName: allProfiles,
+        }));
+    };
+
+    const clearAll = () => {
+        setFilter({
+            ...filter,
+            jobProfileName: [],
+        });
+    };
+    const selectDepartmentAll = () => {
+        const allProfiles = departmentList.map((element: any) => element.departmentName);
+        setFilter((prevFilter: any) => ({
+            ...prevFilter,
+            departmentName: allProfiles,
+        }));
+    };
+
+    const clearDepartmentAll = () => {
+        setFilter({
+            ...filter,
+            departmentName: [],
+        });
+    };
+    const selectGroupAll = () => {
+        const allProfiles = sortedgroupList.map((element: any) => element.groupName);
+        setFilter((prevFilter: any) => ({
+            ...prevFilter,
+            groupName: allProfiles,
+        }));
+    };
+
+    const clearGroupAll = () => {
+        setFilter({
+            ...filter,
+            groupName: [],
+        });
+    };
+
+
 
 
     return (
@@ -73,7 +374,275 @@ export const NewSalaryPage = () => {
                         </div>
 
                     </div>
-                    <SalaryFilterComponents />
+
+                    <div className='flex py-[20px] gap-[10px]'>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef1}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] font-bold  bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown1}
+                            >
+                                All Group
+                            </button>
+
+                            {isOpen1 && (
+                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                                    <div className="flex flex-row p-2 gap-3">
+                                        <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                        {sortedgroupList &&
+                                            sortedgroupList.map((element: any, index: any) => (
+                                                <label key={index} className="flex items-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        value={element.groupName}
+                                                        checked={filter.groupName.includes(element.groupName)}
+
+                                                        onChange={handleGroupCheckboxChange}
+                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                    />
+                                                    <span>{element.groupName}</span>
+                                                </label>
+                                            ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef2}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown2}
+
+                            >
+                                Departmnt
+                            </button>
+
+                            {isOpen2 && (
+                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                                    <div className="flex flex-row p-2 gap-3">
+                                        <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                        {sortedDepartmentList &&
+                                            sortedDepartmentList.map((element: any, index: any) => (
+                                                <label key={index} className="flex items-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        value={element.departmentName}
+                                                        checked={filter.departmentName.includes(element.departmentName)}
+
+                                                        onChange={handleDepartmentCheckboxChange}
+                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                    />
+                                                    <span>{element.departmentName}</span>
+                                                </label>
+                                            ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown3}
+
+                            >
+                                Employee Code
+                            </button>
+
+                            {isOpen3 && (
+                                <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="flex flex-row px-4 py-2 gap-3">
+                                        <img src={SelectAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+
+                                        {salaryData && salaryData.map((element: any) => (
+                                            <label
+                                                key={element.id}
+                                                className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox h-5 w-5 text-blue-600"
+
+                                                />
+                                                {element?.employee?.employeeCode}
+
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown4}
+
+                            >
+                                Job Profile
+                            </button>
+
+
+                            {isOpen4 && (
+                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                                    <div className="flex flex-row p-2 gap-3">
+                                        <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                        {sortedjobProfileList &&
+                                            sortedjobProfileList.map((element, index) => (
+                                                <label key={index} className="flex items-center space-x-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        value={element.jobProfileName}
+                                                        checked={filter.jobProfileName.includes(element.jobProfileName)}
+                                                        onChange={handleJobCheckboxChange}
+                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                    />
+                                                    <span>{element.jobProfileName}</span>
+                                                </label>
+                                            ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown5}
+
+                            >
+                                Date
+                            </button>
+
+                            {isOpen5 && (
+                                <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="flex flex-row px-4 py-2 gap-3">
+                                        <img src={SelectAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+
+                                        {salaryData && salaryData.map((element: any) => (
+                                            <label
+                                                key={element.id}
+                                                className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox h-5 w-5 text-blue-600"
+
+                                                />
+                                                {element?.attendance?.date.slice(0, 10)}
+
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef6}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown6}
+
+                            >
+                                MOnth
+                            </button>
+
+                            {isOpen6 && (
+                                <div className=" absolute left-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="flex flex-row px-4 py-2 gap-3">
+                                        <img src={SelectAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+
+                                        {options2.map((option) => (
+                                            <label
+                                                className="flex items-center gap-[10px] justify-between px-4 py-2 cursor-pointer"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox h-5 w-5 text-blue-600"
+
+                                                />
+                                                {option.label}
+
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
+                            <button
+                                type="button"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                onClick={toggleDropdown7}
+
+                            >
+                                Shift
+                            </button>
+
+                            {isOpen7 && (
+                                <div className=" absolute left-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="flex flex-row px-4 py-2 gap-3">
+                                        <img src={SelectAll} className="h-5 w-5 b" />
+                                        <img src={ClearAll} className="h-5 w-5 " />
+                                    </div>
+                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+
+                                        {options2.map((option) => (
+                                            <label
+                                                className="flex items-center gap-[10px] justify-between px-4 py-2 cursor-pointer"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox h-5 w-5 text-blue-600"
+
+                                                />
+                                                {option.label}
+
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
+
+
+                    </div>
+
                 </div>
 
                 <hr />
@@ -81,12 +650,35 @@ export const NewSalaryPage = () => {
                 <div className="flex flex-start pt-[25px] gap-6">
                     <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                         <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary
+                            Total Salary A
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            +545K
+                            
+                            {salaryData?.salary !== undefined ? salaryData.salary.toFixed(2) : "-"}
                         </div>
                     </div>
+
+
+
+                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                            Total Salary B
+                        </p>
+                        <div className="flex text-[24px] font-bold justify-center items-center">
+                        {salaryData?.salaryB !== undefined ? salaryData.salaryB.toFixed(2) : "-"}
+                        </div>
+                    </div>
+
+                    {/* <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                            Total Salary C
+                        </p>
+                        <div className="flex text-[24px] font-bold justify-center items-center">
+                            5,45,000
+                        </div>
+                    </div> */}
+
+
 
 
 
@@ -95,32 +687,21 @@ export const NewSalaryPage = () => {
                             Total Punch in
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            100
+                            {punchesData && punchesData.countIn ? punchesData.countIn : 0}
                         </div>
                     </div>
+
 
 
 
                     <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                         <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Punch Out
+                            Total Present
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            95
+                            {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
                         </div>
                     </div>
-
-
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary A
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            5,45,000
-                        </div>
-                    </div>
-
 
 
 
@@ -128,119 +709,138 @@ export const NewSalaryPage = () => {
                 </div>
 
 
-                <div className="py-6 mb-24 ">
-                    <table className="w-full overflow-auto">
-                        <tbody>
-                            <tr className="bg-[#ECEDFE] cursor-default">
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Sr No.
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Employee Code
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Employee Name
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Group Name
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Job Profile
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Over Time
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Duty hour required
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Lunch
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    total working hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Added By
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Actual working hour
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Total working hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Duty hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    over time hours
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Earning in a day/Salary A
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary B
-                                </td>
-                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                    Salary c
-                                </td>
+                <div className="py-6 mb-24">
+                    <div className="table-container" style={{ overflowY: 'auto' }}>
+                        <table className="w-full">
 
-                            </tr>
-
-                            {salaryData && salaryData.map((element: any, index: any) => (
-                                <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {index + 1}
+                            <tbody className="">
+                                <tr className="bg-[#ECEDFE] cursor-default">
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Sr No.
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Employee Code
                                     </td>
-
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.name ? element?.employee?.name : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Employee Name
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Group Name
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        { element?.employee?.jobProfileId?.jobProfileName ?  element?.employee?.jobProfileId?.jobProfileName : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Job Profile
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.overTime ? element?.employee?.overTime : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Over Time
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.salary ? element?.employee?.salary : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Duty hour required
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Lunch
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        total working hours
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Added By
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Actual working hour
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                        {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Total working hours
                                     </td>
-
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Duty hours
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        over time hours
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Earning in a day/Salary A
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary B
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary c
+                                    </td>
 
                                 </tr>
-                            ))}
 
-                        </tbody >
+                                {salaryData && salaryData
+                                    .map((element: any, index: any) => (
+                                        <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {index + 1}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
+                                            </td>
 
-                    </table>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.name ? element?.employee?.name : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.overTime ? element?.employee?.overTime : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.salary ? element?.employee?.salary : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                Added By
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                Overtime rate
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.salary !== undefined ? element.salary.toFixed(2) : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
+                                            </td>
+
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                SalaryC
+                                            </td>
 
 
+                                        </tr>
+                                    ))}
+
+                            </tbody >
+
+                        </table>
+
+                    </div>
 
                     <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
                         <div className="px-3">
@@ -252,11 +852,11 @@ export const NewSalaryPage = () => {
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
-                                        // dispatch(getAllSalaryAsync({ page: 1, limit: total }));
+                                        dispatch(getAllSalaryAsync({ page: 1, limit: total }));
                                     } else {
                                         setLimit(selectedLimit);
                                         setPage(1);
-                                        // dispatch(getAllSalaryAsync({ page: 1, limit: selectedLimit }));
+                                        dispatch(getAllSalaryAsync({ page: 1, limit: selectedLimit }));
                                     }
                                 }}
                             >

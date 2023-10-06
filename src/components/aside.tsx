@@ -113,19 +113,21 @@ export default function aside(props: Props) {
             </Link>
           }
           {/* asd */}
-          <div
-            onClick={() => {
-              window.location.replace("https://chawlacomponents.com/prd")
-              // window.location.replace("http://localhost:5050/prd")
-            }}
-            className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
+          {loggedInUserData.admin && loggedInUserData.admin ? (
 
-            <div>
-              Production
+            <div
+              onClick={() => {
+                window.location.replace("https://chawlacomponents.com/prd/")
+                // window.location.replace("http://localhost:5050/prd")
+              }}
+              className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
+
+              <div>
+                Production
+              </div>
             </div>
-          </div>
 
-
+          ) : null}
 
           <Link to='/show-notifications'>
             <div>

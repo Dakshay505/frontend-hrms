@@ -25,7 +25,7 @@ export const EmployeeDetails = () => {
     const singleEmployee = useSelector(
         (state: any) => state.employee.singleEmployee
     );
-    // console.log(singleEmployee)
+    console.log(singleEmployee)
     const jobProfileList = useSelector(
         (state: any) => state.jobProfile.jobProfiles
     );
