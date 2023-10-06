@@ -614,41 +614,41 @@ const router = createBrowserRouter([
     ),
   },
 
-  // {
-  //   path: "/salary-parent-department",
-  //   element: (
-  //     <ProductedRoute>
-  //       <Aside>
-  //         <NewSalaryPage />
-  //       </Aside>
-  //     </ProductedRoute>
-  //   ),
-  // },
-
-
   {
     path: "/salary-parent-department",
     element: (
       <ProductedRoute>
         <Aside>
-          <SalaryWithDepartment />
+          <NewSalaryPage />
         </Aside>
       </ProductedRoute>
     ),
   },
 
 
-
   // {
-  //   path: "/salary-department",
+  //   path: "/salary-parent-department",
   //   element: (
   //     <ProductedRoute>
   //       <Aside>
-  //         <SalaryDepartment />
+  //         <SalaryWithDepartment />
   //       </Aside>
   //     </ProductedRoute>
   //   ),
   // },
+
+
+
+  {
+    path: "/salary-department",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <SalaryDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
   {
     path: "/salary-jobProfile-department",
     element: (
