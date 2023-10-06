@@ -67,6 +67,12 @@ const navItems: NavItem[] = [
     icon: employees,
     Link: "/employees",
   },
+  {
+    id: "Monthly Report",
+    name: "Monthly Report",
+    icon: employees,
+    Link: "/monthly-report",
+  },
   // {
   //   id: "Page",
   //   name: "Page",

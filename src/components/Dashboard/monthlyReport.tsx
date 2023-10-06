@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import BluePlus from "../../assets/BluePlus.png";
-import greyPlus from "../../assets/gretyPlus.svg";
-import { Link } from "react-router-dom";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
@@ -14,7 +13,7 @@ import {
   getSingleGroupAsync,
 } from "../../redux/Slice/GroupSlice";
 import { useNavigate } from "react-router-dom";
-import Pencil from "../../assets/PencilSimple.svg";
+
 import {
   deleteDepartmentToJobProfileAsync,
   getAllJobProfileAsync,
@@ -30,8 +29,7 @@ import {
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
-import userIcon from "../../assets/UsersThree.svg";
-import deleteIcon from "../../assets/Trash.svg";
+
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
 import toast from "react-hot-toast";
@@ -39,7 +37,7 @@ import mongoose from 'mongoose';
 import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
-const ViewModifyDatabase = () => {
+const MonthlyReport = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -54,6 +52,17 @@ const ViewModifyDatabase = () => {
     limit: 20,
     aadhar: "0"
   });
+  const changetime = (createdAtDate: any) => {
+    const date = new Date(createdAtDate)
+    const hours = date.getUTCHours(); // Get the hours in UTC
+    const minutes = date.getUTCMinutes();
+    const period = hours >= 12 ? "PM" : "AM";
+
+    const formattedHours = (hours % 12) || 12; // Use 12 for 0 hours
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
+    return formattedTime;
+  }
 
   useEffect(() => {
     console.log("filter", filter)
@@ -163,6 +172,114 @@ const ViewModifyDatabase = () => {
     dispatch(EmployeeBarCodesAsync());
     dispatch(allShopAsync())
   }, []);
+  function formatDateExcel(dated: any) {
+    const date=new Date(dated)
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year} ${changetime(date)}`;
+  }
+  const exportToExcel = () => {
+    if (employeeDetailList) {
+      const columnOrder = [
+        'Name',
+        'EmployeeCode',
+        'JobProfile',
+        'Group',
+        'Email',
+        'Contact Number',
+        'Gender',
+        'Aadhar',
+        'PF Number',
+        'ESI Number',
+        'Pan Card Number',
+        'Salary',
+        'Lunch Time',
+        'Working Hours',
+        'Over Time Status',
+        'Lunch Time',
+        'Bank Name',
+        'Bank Account Number',
+        'Bank IFSC Code',
+        'updatedAt',
+        'createdAt'
+        // 'ApprovedBy',
+        // 'ApprovedTime',
+        // 'Remark'
+        
+      ];
+
+      const modifiedData = employeeDetailList.map((record:any, index: number) => {
+      
+        const mappedData = columnOrder.map((column) => {
+          switch (column) {
+            
+            case 'EmployeeCode':
+              return record.employeeCode;
+            case 'Name':
+              return record.name;
+            case 'Aadhar':
+              return record.aadharNumber;
+            case 'PF Number':
+              return record.PF_UAN_Number
+            case 'Pan Card Number':
+                return record.PAN_Number;
+            case 'ESI Number':
+              return record.ESI_ID;
+            case 'Salary':
+              return record.salary;
+            case 'Working Hours':
+                return record.workingHours;
+            case 'Over Time Status':
+                  return record.overTime;
+            case 'Lunch Time':
+              return record.lunchTime
+            case 'Bank Name':
+                return record?.bankDetails?.bankName
+            case 'Bank Account Number':
+               return record?.bankDetails?.accountNumber
+            case 'Bank IFSC Code':
+                return record?.bankDetails?.IFSC_Code
+            
+            case 'updatedAt':
+             
+              return  formatDateExcel(record.updatedAt);
+            case 'createdAt':
+              
+             
+              return  formatDateExcel(record.createdAt);
+            
+            case 'Email':
+              return record.email;
+            case 'Contact Number':
+                  return record.contactNumber;
+            
+            case 'JobProfile':
+              return record.jobProfileId.jobProfileName;
+            case 'Group':
+              return record.groupId.groupName;
+            case 'Gender':
+              return record.gender
+            
+            default:
+              return '';
+          }
+        });
+
+        return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
+      });
+      
+      
+
+      const ws = XLSX.utils.json_to_sheet(modifiedData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Master Report Data');
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, 'Master Report.xlsx');
+      toast.success("CSV Download Successfully");
+    }
+  };
 
 
   const shopss = useSelector((state: any) => state.Shop.shop)
@@ -471,71 +588,18 @@ const ViewModifyDatabase = () => {
     <div className="mx-10">
       <div className="flex justify-between pt-8">
         <div className="flex gap-7 items-center justify-center">
-          <div>
+          <div  className="flex gap-3 justify-between items-center">
             <h1 className="text-2xl font-bold text-[#2E2E2E] whitespace-nowrap">
-              View Database
+              Monthly Report
             </h1>
-          </div>
-          <div>
-            <form
-              onChange={(event: any) => {
-                setDatabaseValue(event.target.value);
-                const selectedValue = event.target.value;
+            <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
 
-                if (selectedValue === "Employees") {
-                  setPath("/addemployee");
-                }
-                if (selectedValue === "Groups") {
-                  setPath("/add-group");
-                }
-                if (selectedValue === "Job Profiles") {
-                  setPath("/add-job-profile");
-                }
-                if (selectedValue === "Department") {
-                  setPath("/add-department");
-                }
-                if (selectedValue === "Parent Department") {
-                  setPath("/add-department");
-                }
-                if (selectedValue === "Shop") {
-                  setPath("/Shop");
-                }
-              }}
-            >
-              <select
-                className="bg-[#ECEDFE] rounded-lg py-3 px-5 text-[#283093] text-sm font-medium focus:outline-none"
-                defaultValue="Employees"
-              >
-                <option>Employees</option>
-                <option>Groups</option>
-                <option>Job Profiles</option>
-                <option>Department</option>
-                <option>Parent Department</option>
-                <option>Shop</option>
-              </select>
-            </form>
+<p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
+</div>
           </div>
+         
         </div>
-        {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
-
-          <div className="flex gap-6">
-            {databaseValue !== "Employees" && databaseValue !== "Shop" && (
-              <Link to="/update-hierarchy">
-                <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
-                  <img src={Pencil} className="w-4" alt="" />
-                  <p className="px-2">Update Hierarchy</p>
-                </div>
-              </Link>
-            )}
-
-            <Link to={path} className="w-[92px] h-10">
-              <div className="flex items-center justify-center rounded-lg text-sm font-medium text-[#283093] py-3 px-4 border border-solid border-[#283093]">
-                <img src={BluePlus} className="w-4" alt="" />
-                <p className="px-2">Add</p>
-              </div>
-            </Link>
-          </div>
-        ) : null}
+      
       </div>
       {databaseValue === "Employees" && (
         <div className="mt-10 flex gap-5">
@@ -770,15 +834,41 @@ const ViewModifyDatabase = () => {
               <table className="w-full">
                 <tbody>
                   <tr className="bg-[#ECEDFE] cursor-default">
+                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Profile Photo
+                    </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employee ID
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Name
                     </td>
+                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Email
+                    </td>
+                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Contact Number
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Gender
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Aadhar Number
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      PF Number
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      ESI NUMBER
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Pan Card Number
+                    </td>
+                    
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Job Profile
                     </td>
+                    
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Group
                     </td>
@@ -788,18 +878,32 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Employement Status
                     </td>
-                    <td
-                      className="flex flex-row py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      {/* <p onClick={() => handlerAadhar}> Aadhar No.</p> */}
-                      Aadhar No.
-
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Lunch Time
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Current Barcode
+                      Working Time
                     </td>
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Number of  Barcode
+                      OverTime Allow
                     </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Bank Name
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Bank Account Number
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Bank IFSC NUMBER
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Updated at
+                    </td>
+                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                      Created at
+                    </td>
+                    
+                   
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
@@ -810,6 +914,11 @@ const ViewModifyDatabase = () => {
                           className="hover:bg-[#FAFAFA]"
                           onClick={() => handleTableRowClick(element)}
                         >
+                           <td className="py-4 px-5"  >
+                            {element.profilePicture
+                              ? <img src={element.profilePicture} className="w-[80px] h-[80px] rounded-full" />
+                              : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[80px] h-[80px] rounded-full" />}
+                          </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.employeeCode
                               ? element.employeeCode
@@ -818,6 +927,28 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
                             {element.name ? element.name : "Not Avilable"}
                           </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                            {element.email ? element.email : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                            {element.contactNumber ? element.contactNumber : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.gender ? element.gender : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.PF_UAN_Number ? element.PF_UAN_Number : <p className="">0</p>}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.ESI_ID ? element.ESI_ID : <p className="">0</p>}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.PAN_Number ? element.PAN_Number : <p className="">0</p>}
+                          </td>
+
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             {element.jobProfileId?.jobProfileName
                               ? element.jobProfileId?.jobProfileName
@@ -837,24 +968,46 @@ const ViewModifyDatabase = () => {
                               : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
+                            {element.lunchTime
+                              ? element.lunchTime
+                              : "Not Avilable"}
                           </td>
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <img src={element.currentBarCode} alt="barcode" />
+                            {element.workingHours
+                              ? element.workingHours
+                              : "Not Avilable"}
                           </td>
-                          <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <div className="flex gap-[10px]">
-                              {BarcodeStore[element.employeeCode] &&
-                                BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
-                                  <div>
-
-                                    {element + " ,"}
-                                  </div>
-                                ))
-
-                              }
-                            </div>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.overTime
+                              ? element.overTime
+                              : "Not Avilable"}
                           </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.bankDetails
+                              ? element.bankDetails.bankName
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.bankDetails
+                              ? element.bankDetails.accountNumber
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.bankDetails
+                              ? element.bankDetails.IFSC_Code
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.updatedAt
+                              ? `${element.updatedAt.slice(0,10)}: ${changetime(element.updatedAt)}`
+                              : "Not Avilable"}
+                          </td>
+                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                            {element.createdAt
+                              ? `${element.createdAt.slice(0,10)}: ${changetime(element.createdAt)}`
+                              : "Not Avilable"}
+                          </td>
+                          
                         </tr>
                       );
                     })}
@@ -902,384 +1055,16 @@ const ViewModifyDatabase = () => {
                 </div>
               </div>
             )}
-            {/* PAGINATIN ENDS */}
-
-            {/* TABLE FOR DEPARTMENT */}
-            {databaseValue === "Groups" && (
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE]">
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Group ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Group Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Number of Employee
-                    </td>
-                  </tr>
-                  {groupCount &&
-                    groupCount.map((element: any, index: number) => {
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA] cursor-default"
-
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                            ? handleGroupTableRowClick(element)
-                            : null}
-                        >
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {index + 1}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer hover:underline border-r border-b border-solid border-[#EBEBEB]">
-                            {element.groupName
-                              ? element.groupName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  border-b border-solid border-[#EBEBEB]">
-                            {element.employeeCount
-                              ? element.employeeCount
-                              : "Not Avilable"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
-            {/* TABLE FOR DEPARTMENTS ENDS */}
-            {databaseValue === "Job Profiles" && (
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE] cursor-default">
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Job Profile ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Job Profile Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Description
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Number Of Employee
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Employement Type
-                    </td>
-                  </tr>
-                  {jobProfileList &&
-                    jobProfileList.map((element: any, index: number) => {
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA] cursor-default"
-                        >
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {index + 1}
-                          </td>
-                          <td
-                            onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                              ? handleJobprofileTableRowClick(element)
-                              : null}
-
-                            className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]"
-                          >
-                            {element.jobProfileName
-                              ? element.jobProfileName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
-                            {/* Department */}
-                            {element.department ? (
-                              <div
-                                onClick={() => {
-                                  deleteAssignedDepartment(element);
-                                }}
-                                className="flex items-center gap-[8px]"
-                              >
-                                <p>
-                                  {element.department.departmentName
-                                    ? element.department.departmentName
-                                    : "invaild"}
-                                </p>
-                                {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
-
-                                  <div className="">
-                                    <img src={deleteIcon} alt="delete" />
-                                  </div>
-                                ) : null}
-                              </div>
-                            ) : (
-                              <div
-                                onClick={() => handleDepartmentEdit(element)}
-                                className="flex items-center gap-[8px]"
-                              >
-                                <img
-                                  src={greyPlus}
-                                  className="w-4 h-3"
-                                  alt=""
-                                />
-                                <p className="underline">Assign</p>
-                              </div>
-                            )}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.jobDescription
-                              ? element.jobDescription
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.numberOfEmployees ? element.numberOfEmployees : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-b border-solid border-[#EBEBEB]">
-                            {element.employmentType
-                              ? element.employmentType
-                              : "Not Avilable"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
-            {/*  */}
-            {databaseValue === "Department" && (
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE] cursor-default">
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department Description
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Parent Department
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Edit
-                    </td>
-                  </tr>
-                  {departmentList &&
-                    departmentList.map((element: any, index: number) => {
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                            ? handleDepartmentTableRowClick(element)
-                            : null}
-                        >
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {index + 1}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
-                            {element.departmentName
-                              ? element.departmentName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.description
-                              ? element.description
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {element.parentDepartmentId.departmentName
-                              ? element.parentDepartmentId.departmentName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            <button
-                              className="flex py-2 px-5 mx-[-12px] my-5  items-center text-sm font-medium "
-                              onClick={() => handleDeleteClick(element)}
-                            >
-                              <img
-                                src={deleteIcon}
-                                alt="delete"
-                                className="mr-2"
-                              />
-                              Delete
-                            </button>
-                            <DeleteConfirmationDialog
-                              isOpen={isConfirmationOpen}
-                              onCancel={handleCancel}
-                              onConfirm={handleConfirm}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
-
-            {databaseValue === "Parent Department" && (
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE] cursor-default">
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Department Description
-                    </td>
-                  </tr>
-                  {parentDepartmentList &&
-                    parentDepartmentList.map((element: any, index: number) => {
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                            ? handleParentDepartmentTableRowClick(element)
-                            : null}
-                        >
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {index + 1}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
-                            {element.departmentName
-                              ? element.departmentName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
-                            {element.description
-                              ? element.description
-                              : "Not Avilable"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
-
-            {/* table for shop */}
-            {databaseValue === "Shop" && (
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE] cursor-default">
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Shop Code
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Shop Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Supervisor Job Profile
-                    </td>
-                  </tr>
-                  {shopss &&
-                    shopss.map((element: any, index: number) => {
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
-                            ? handleShopTableRowClick(element)
-                            : null}
-
-                        >
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]">
-                            {index + 1}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
-                            {element.shopCode
-                              ? element.shopCode
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer border-r border-b border-solid border-[#EBEBEB]">
-                            {element.shopName
-                              ? element.shopName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] w-[50rem] border-r border-b border-solid border-[#EBEBEB]">
-                            {element.jobProfile.jobProfileName
-                              ? element.jobProfile.jobProfileName
-                              : "Not Avilable"}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            )}
+           
+          
           </div>
         </div>
         {/* popup */}
-        {assignDepartment && (
-          <div
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-            className="fixed flex justify-center items-center top-0 bottom-0 right-0 left-0"
-          >
-            <div className="bg-[#FFFFFF] p-10">
-              <div className="flex items-center gap-2 pb-4 w-[640px] border-b border-solid border-[#B0B0B0]">
-                <div>
-                  <img src={userIcon} alt="user" />
-                </div>
-                <div>
-                  <h3 className="text-[18px] leading-6 font-medium text-[#1C1C1C]">
-                    Assign Department to ‘ {assignedName} ’
-                  </h3>
-                </div>
-              </div>
-              <div className="pt-6 flex flex-col gap-3">
-                <p className="ms-1 text-[14px]">Department</p>
-                <div>
-                  <select
-                    className="px-[12px] py-[16px] rounded border w-full focus:outline-none"
-                    onChange={handleDepartmentChange}
-                  >
-                    <option>Choose a Department</option>
-                    {departmentList &&
-                      departmentList.map((element: any, index: number) => {
-                        return (
-                          <option key={index}>{element.departmentName}</option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </div>
-              <div className="pt-[21px]">
-                <div className="flex gap-4 justify-end">
-                  <div
-                    onClick={() => setAssignDepartment(false)}
-                    className="flex justify-center items-center h-[34px] w-[96px] border border-solid border-[#3B3B3B] rounded-lg cursor-pointer"
-                  >
-                    <p className="text-sm font-medium text-[#3B3B3B]">Cancel</p>
-                  </div>
-                  <div
-                    onClick={() => {
-                      assigningDepartment();
-                    }}
-                    className="flex justify-center items-center h-[34px] w-[122px] bg-[#283093] rounded-lg cursor-pointer"
-                  >
-                    <p className="text-sm font-medium text-[#FBFBFC]">Assign</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+       
         {/* popup */}
       </div>
     </div>
   );
 };
 
-export default ViewModifyDatabase;
+export default MonthlyReport;
