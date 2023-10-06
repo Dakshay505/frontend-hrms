@@ -12,17 +12,21 @@ const initialState = {
 };
 
 
-export const getAllSalaryAsync: any = createAsyncThunk(
+
+
+
+export const getAllSalaryAsync:any = createAsyncThunk(
   "getAllSalaryAsync",
-  async (limit, page) => {
+  async (Data) => {
     try {
-      const data: any = await getNewSalaryDataApi(limit, page);
-      return data;
-    } catch (error: any) {
-      console.log(error.message);
+      const response: any = await getNewSalaryDataApi(Data);
+      return response; 
+    } catch (error:any) {
+      return (error.message);
     }
   }
 );
+
 
 
 
