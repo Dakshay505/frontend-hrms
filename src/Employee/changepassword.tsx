@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 // import { updateEmployeeAsync } from '../redux/Slice/EmployeeSlice';
 import Asterisk from '../assets/Asterisk.svg'
-import { updatePasswordAsync } from '../redux/Slice/EmployeeSlice';
+import { newPasswordAsync, updatePasswordAsync } from '../redux/Slice/EmployeeSlice';
+
+import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
+import toast from 'react-hot-toast';
 
 
 export function ChangePassword() {
@@ -15,6 +18,7 @@ export function ChangePassword() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const singleEmployee = useSelector((state: any) => state.employee.singleEmployee)
+  const user = useSelector((state: any) => state.login.loggedInUserData);
 
   const { handleSubmit, register, reset } = useForm();
   const dispatch = useDispatch();
@@ -29,11 +33,20 @@ export function ChangePassword() {
       </div>
       <div className='mt-10'>
         <form onSubmit={handleSubmit((data) => {
-          const sendData = { employeeId: employeeId, data: data }
+          if(data.newPassword!==data.confirmPassword){
+            toast.error("Password not match")
+            return;
+          }
+          const sendData = { ...data,employeeId: user.employee._id}
           console.log(sendData)
-          dispatch(updatePasswordAsync(sendData)).then(() => {
-            setEmployeeId(singleEmployee._id);
-          });;
+           dispatch(updatePasswordAsync(sendData)).then((res: any) => {
+            if (res.payload.success) {
+                toast.success(res.payload.message);
+                
+            } else {
+                toast.error(res.payload.message);
+            }
+          })
           reset()
         })}>
           <div className='flex flex-col gap-6'>

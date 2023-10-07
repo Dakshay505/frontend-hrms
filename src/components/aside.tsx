@@ -181,6 +181,7 @@ export default function aside(props: Props) {
               )
             ))}
           </div>
+          
           <div className="px-6">
             <Link to="/">
               <div className="flex items-center justify-center">
