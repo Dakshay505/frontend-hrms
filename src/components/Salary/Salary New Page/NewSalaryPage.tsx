@@ -12,10 +12,10 @@ import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
 
 
-const options2 = [
-    { label: 'Day' },
-    { label: 'Night' },
-];
+// const options2 = [
+//     { label: 'Day' },
+//     { label: 'Night' },
+// ];
 
 export const NewSalaryPage = () => {
     const [limit, setLimit] = useState(10);
@@ -24,6 +24,8 @@ export const NewSalaryPage = () => {
     const [pageCount, setPageCount] = useState(1);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    const totalSalaryA= useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
+    const totalSalaryB=useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
     // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
 
     const dispatch = useDispatch();
@@ -107,6 +109,7 @@ export const NewSalaryPage = () => {
     const dropdownRef6 = useRef<HTMLDivElement | null>(null);
 
     const [isOpen7, setIsOpen7] = useState(false);
+    console.log(isOpen5,isOpen6,isOpen7,isOpen3)
     const dropdownRef7 = useRef<HTMLDivElement | null>(null);
 
 
@@ -170,15 +173,15 @@ export const NewSalaryPage = () => {
         setIsOpen7(false)
     };
 
-    const toggleDropdown3 = () => {
-        setIsOpen3(!isOpen3);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen6(false)
-        setIsOpen7(false)
-    };
+    // const toggleDropdown3 = () => {
+    //     setIsOpen3(!isOpen3);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen4(false)
+    //     setIsOpen5(false)
+    //     setIsOpen6(false)
+    //     setIsOpen7(false)
+    // };
 
     const toggleDropdown4 = () => {
         setIsOpen4(!isOpen4);
@@ -190,35 +193,35 @@ export const NewSalaryPage = () => {
         setIsOpen7(false)
     };
 
-    const toggleDropdown5 = () => {
-        setIsOpen5(!isOpen5);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen6(false)
-        setIsOpen7(false)
-    };
+    // const toggleDropdown5 = () => {
+    //     setIsOpen5(!isOpen5);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen3(false)
+    //     setIsOpen4(false)
+    //     setIsOpen6(false)
+    //     setIsOpen7(false)
+    // };
 
-    const toggleDropdown6 = () => {
-        setIsOpen6(!isOpen6);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
-    };
+    // const toggleDropdown6 = () => {
+    //     setIsOpen6(!isOpen6);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen3(false)
+    //     setIsOpen4(false)
+    //     setIsOpen5(false)
+    //     setIsOpen7(false)
+    // };
 
-    const toggleDropdown7 = () => {
-        setIsOpen7(!isOpen7);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen6(false)
-    };
+    // const toggleDropdown7 = () => {
+    //     setIsOpen7(!isOpen7);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen3(false)
+    //     setIsOpen4(false)
+    //     setIsOpen5(false)
+    //     setIsOpen6(false)
+    // };
 
 
 
@@ -452,7 +455,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -488,7 +491,7 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div>
+                        </div> */}
 
                         <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
                             <button
@@ -528,7 +531,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -564,9 +567,9 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div>
+                        </div> */}
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef6}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef6}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -601,9 +604,9 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div>
+                        </div> */}
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -638,7 +641,7 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div>
+                        </div> */}
 
 
                     </div>
@@ -654,7 +657,7 @@ export const NewSalaryPage = () => {
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
                             
-                            {salaryData?.salary !== undefined ? salaryData.salary.toFixed(2) : "-"}
+                            {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
                         </div>
                     </div>
 
@@ -665,7 +668,7 @@ export const NewSalaryPage = () => {
                             Total Salary B
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                        {salaryData?.salaryB !== undefined ? salaryData.salaryB.toFixed(2) : "-"}
+                        {totalSalaryB!== undefined ? totalSalaryB.toFixed(2) : "-"}
                         </div>
                     </div>
 
@@ -745,9 +748,9 @@ export const NewSalaryPage = () => {
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         total working hours
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Added By
-                                    </td>
+                                    </td> */}
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Actual working hour
                                     </td>
@@ -757,18 +760,18 @@ export const NewSalaryPage = () => {
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Duty hours
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         over time hours
-                                    </td>
+                                    </td> */}
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Earning in a day/Salary A
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary B
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary c
-                                    </td>
+                                    </td> */}
 
                                 </tr>
 
@@ -806,9 +809,9 @@ export const NewSalaryPage = () => {
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
                                             </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 Added By
-                                            </td>
+                                            </td> */}
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
                                             </td>
@@ -818,19 +821,19 @@ export const NewSalaryPage = () => {
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
                                             </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 Overtime rate
-                                            </td>
+                                            </td> */}
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salary !== undefined ? element.salary.toFixed(2) : "-"}
+                                                {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
                                             </td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
                                             </td>
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 SalaryC
-                                            </td>
+                                            </td> */}
 
 
                                         </tr>

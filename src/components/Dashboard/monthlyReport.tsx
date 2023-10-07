@@ -10,22 +10,21 @@ import {
 import {
   getAllGroupsAsync,
   getAllGroupsCountEmployeeAsync,
-  getSingleGroupAsync,
+  
 } from "../../redux/Slice/GroupSlice";
 import { useNavigate } from "react-router-dom";
 
 import {
-  deleteDepartmentToJobProfileAsync,
+  
   getAllJobProfileAsync,
-  getSingleJobProfileAsync,
-  updateJobProfileDepartmentAsync,
+ 
 } from "../../redux/Slice/JobProfileSlice";
 import glass from "../../assets/MagnifyingGlass.png";
 import LoaderGif from "../../assets/loadergif.gif";
 import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight1 from "../../assets/CaretRight1.svg";
 import {
-  deleteDepartmentAsync,
+ 
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
@@ -33,8 +32,8 @@ import {
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
 import toast from "react-hot-toast";
-import mongoose from 'mongoose';
-import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
+
+import { allShopAsync} from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
 const MonthlyReport = () => {
@@ -126,21 +125,13 @@ const MonthlyReport = () => {
 
 
   const loaderStatus = useSelector((state: any) => state.employee.status);
-  const departmentList = useSelector(
-    (state: any) => state.department.department
-  );
-
-
-  const parentDepartmentList = useSelector(
-    (state: any) => state.department.parentdepartment
-  );
+  
   const groupList = useSelector((state: any) => state.group.groups);
-  const groupCount = useSelector((state: any) => state.group.employeeCount);
+  
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  const [path, setPath] = useState("/addemployee");
-  const [databaseValue, setDatabaseValue] = useState("Employees");
+  
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
@@ -209,7 +200,7 @@ const MonthlyReport = () => {
         
       ];
 
-      const modifiedData = employeeDetailList.map((record:any, index: number) => {
+      const modifiedData = employeeDetailList.map((record:any) => {
       
         const mappedData = columnOrder.map((column) => {
           switch (column) {
@@ -282,7 +273,7 @@ const MonthlyReport = () => {
   };
 
 
-  const shopss = useSelector((state: any) => state.Shop.shop)
+
   // console.log("shoepeeee",shopss)
 
   const EmployeeBarcode = useSelector((state: any) => state.employee.Baremployees)
@@ -305,52 +296,9 @@ const MonthlyReport = () => {
   };
 
 
-  const handleGroupTableRowClick = (data: any) => {
-    // console.log("aaaaaaaaaaa", data.groupId);
-    const groupId = { groupId: data.groupId };
-    dispatch(getSingleGroupAsync(groupId));
-    navigate(`/groups-info`, { state: { data: data } });
-  };
+ 
 
-  const handleDepartmentTableRowClick = (data: any) => {
-    console.log(data._id);
-
-    const stateObject = {
-      departmentid: data?._id || "Not Available",
-      departmentName: data.departmentName || "Not Available",
-      description: data.description || "Not Available"
-    };
-
-    navigate(`/department-info`, { state: stateObject });
-  };
-
-  const handleParentDepartmentTableRowClick = (data: any) => {
-    console.log(data._id);
-
-    const stateObject = {
-      Parentdepartmentid: data?._id || "Not Available",
-      ParentdepartmentName: data.departmentName || "Not Available",
-      Parentdescription: data.description || "Not Available"
-    };
-
-    navigate(`/parent-department-info`, { state: stateObject });
-  };
-
-
-
-
-
-  const handleShopTableRowClick = (data: any) => {
-    console.log(data.shopId);
-    const shopId = { shopId: data._id };
-    dispatch(getSingleShopAsync(shopId));
-    navigate(`/edit-shop`, { state: { data: data } });
-  };
-  const handleJobprofileTableRowClick = (data: any) => {
-    const jobProfileId = { jobProfileId: data._id };
-    dispatch(getSingleJobProfileAsync(jobProfileId));
-    navigate(`/jobprofile-info`, { state: { data: data } });
-  };
+ 
 
   const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
 
@@ -471,112 +419,18 @@ const MonthlyReport = () => {
     );
     setSuggestions(filteredSuggestions);
   };
-  const [assignDepartment, setAssignDepartment] = useState(false);
-  const [assignedName, setAssignedName] = useState("");
-  const handleDepartmentEdit = (element: any) => {
-    setAssignDepartment(true);
-    const name = element.jobProfileName;
-    setAssignedName(name);
-  };
-  const assigningDepartment = () => {
-    setAssignDepartment(false);
-    const data = {
-      departmentName: selectedDepartment,
-      jobProfileName: assignedName,
-    };
+  
+  
 
-    dispatch(updateJobProfileDepartmentAsync(data)).then(() => {
-      dispatch(getAllJobProfileAsync());
-    });
-  };
-  const deleteAssignedDepartment = (element: any) => {
-    console.log("1", element);
-    const data = {
-      departmentName: element.department.departmentName,
-      jobProfileName: element.jobProfileName,
-    };
-
-    dispatch(deleteDepartmentToJobProfileAsync(data)).then(() => {
-      dispatch(getAllJobProfileAsync());
-    });
-  };
-
-  const [selectedDepartment, setSelectedDepartment] = useState(
-    "Choose a Department"
-  );
-  const handleDepartmentChange = (event: any) => {
-    setSelectedDepartment(event.target.value);
-  };
   // delete department
-  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
-
-  const DeleteConfirmationDialog = ({ isOpen, onCancel, onConfirm }: any) => {
-    return isOpen ? (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-md">
-          <p className="text-lg font-semibold mb-4">
-            Are you sure you want to delete?
-          </p>
-          <div className="flex justify-end">
-            <button
-              className="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800"
-              onClick={onCancel}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
-              onClick={onConfirm}
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    ) : null;
-  };
+  
   // const handlerAadhar = () => {
   //   if (items.length > 1) {
   //     const filteredItems = items.filter((element: any) => element.aadharNumber !== 0);
   //     setItems(filteredItems)
   //   }
   // }
-  interface Department {
-    departmentName: string;
-    _id: mongoose.Types.ObjectId;
-  }
-  const [departmentToDelete, setDepartmentToDelete] =
-    useState<Department | null>(null);
-  const handleDeleteClick = (element: Department) => {
-    setConfirmationOpen(true);
-    console.log(element, "element to delete");
-    setDepartmentToDelete(element);
-  };
-
-  const handleCancel = () => {
-    setConfirmationOpen(false);
-  };
-
-  const handleConfirm = () => {
-    if (departmentToDelete) {
-      const departmentId = departmentToDelete._id;
-      dispatch(deleteDepartmentAsync(departmentId))
-        .then((res: any) => {
-          if (res.payload.success) {
-            toast.success(res.payload.message);
-            dispatch(getAllDepartmentAsync());
-          } else {
-            toast.error(res.payload.message);
-          }
-          navigate("/view-modify-database");
-        })
-        .catch((error: any) => {
-          toast.error(error);
-        });
-      console.log("hi3", departmentId);
-    }
-    setConfirmationOpen(false);
-  };
+ 
 
   const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
   console.log(loggedInUserData)
@@ -601,7 +455,7 @@ const MonthlyReport = () => {
         </div>
       
       </div>
-      {databaseValue === "Employees" && (
+     
         <div className="mt-10 flex gap-5">
           <div className="flex gap-4">
             <div>
@@ -818,7 +672,7 @@ const MonthlyReport = () => {
             </div>
           </div>
         </div>
-      )}
+      
       {loaderStatus === "loading" ? (
         <div className="flex justify-center w-full">
           <img src={LoaderGif} className="w-6 h-6" alt="" />
@@ -830,7 +684,7 @@ const MonthlyReport = () => {
         <div className="mt-3 overflow-auto">
           <div className="py-5">
             {/* TABLE FOR EMPLOYEE */}
-            {databaseValue === "Employees" && (
+            
               <table className="w-full">
                 <tbody>
                   <tr className="bg-[#ECEDFE] cursor-default">
@@ -1013,11 +867,11 @@ const MonthlyReport = () => {
                     })}
                 </tbody>
               </table>
-            )}
+          
             {/* TABLE FOR EMPLOYEE ENDS */}
 
             {/* PAGINATION STARTS */}
-            {databaseValue === "Employees" && (
+          
               <div className="flex gap-4 items-center justify-center">
                 <div
                   onClick={() => {
@@ -1054,7 +908,7 @@ const MonthlyReport = () => {
                   <img src={CaretRight1} alt="" />
                 </div>
               </div>
-            )}
+          
            
           
           </div>

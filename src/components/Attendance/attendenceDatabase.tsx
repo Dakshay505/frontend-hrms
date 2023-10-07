@@ -10,7 +10,7 @@ import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
 import DummyProfilr from "../../assets/Dummy.jpeg"
-import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
+//import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import axios from "axios";
 import { getAllAttandenceApiPath } from "../../APIRoutes";

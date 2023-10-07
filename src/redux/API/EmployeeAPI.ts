@@ -42,25 +42,25 @@ export const updateEmployee = async (employeeData: any) => {
   }
 };
 
-function convertToQueryString(data: any) {
-  let queryStr = '';
-  for (let key in data) {
-    if (data.hasOwnProperty(key) && data[key] !== null) {
-      const encodedKey = encodeURIComponent(key);
-      const encodedValue = encodeURIComponent(data[key]);
-      if (queryStr !== '') {
-        queryStr += '&';
-      }
-      queryStr += `${encodedKey}=${encodedValue}`;
-    }
-  }
-  return queryStr;
-}
+// function convertToQueryString(data: any) {
+//   let queryStr = '';
+//   for (let key in data) {
+//     if (data.hasOwnProperty(key) && data[key] !== null) {
+//       const encodedKey = encodeURIComponent(key);
+//       const encodedValue = encodeURIComponent(data[key]);
+//       if (queryStr !== '') {
+//         queryStr += '&';
+//       }
+//       queryStr += `${encodedKey}=${encodedValue}`;
+//     }
+//   }
+//   return queryStr;
+// }
 
 export const getAllEmployee = async (sendData: any) => {
   try {
     //console.log("hii",sendData)
-    const queryStr = convertToQueryString(sendData);
+    //const queryStr = convertToQueryString(sendData);
     const { data } = await axios.post(`${getEmployeeApiPath}`, sendData,{
       withCredentials: true,
     });
