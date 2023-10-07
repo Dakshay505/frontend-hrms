@@ -10,21 +10,21 @@ import {
 import {
   getAllGroupsAsync,
   getAllGroupsCountEmployeeAsync,
-  
+
 } from "../../redux/Slice/GroupSlice";
 import { useNavigate } from "react-router-dom";
 
 import {
-  
+
   getAllJobProfileAsync,
- 
+
 } from "../../redux/Slice/JobProfileSlice";
 import glass from "../../assets/MagnifyingGlass.png";
 import LoaderGif from "../../assets/loadergif.gif";
 import CaretLeft from "../../assets/CaretLeft.svg";
 import CaretRight1 from "../../assets/CaretRight1.svg";
 import {
- 
+
   getAllDepartmentAsync,
   getAllParentDepartmentAsync,
 } from "../../redux/Slice/departmentSlice";
@@ -33,7 +33,7 @@ import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
 import toast from "react-hot-toast";
 
-import { allShopAsync} from "../../redux/Slice/ShopSlice";
+import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
 const MonthlyReport = () => {
@@ -121,17 +121,17 @@ const MonthlyReport = () => {
 
   const dispatch = useDispatch();
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
-  console.log("Hii",employeeDetailList)
+  console.log("Hii", employeeDetailList)
 
 
   const loaderStatus = useSelector((state: any) => state.employee.status);
-  
+
   const groupList = useSelector((state: any) => state.group.groups);
-  
+
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-  
+
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
@@ -164,12 +164,12 @@ const MonthlyReport = () => {
     dispatch(allShopAsync())
   }, []);
   function formatDateExcel(dated: any) {
-    const date=new Date(dated)
+    const date = new Date(dated)
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const year = date.getFullYear();
     return `${day}-${month}-${year} ${changetime(date)}`;
-  }
+  } 
   const exportToExcel = () => {
     if (employeeDetailList) {
       const columnOrder = [
@@ -197,14 +197,14 @@ const MonthlyReport = () => {
         // 'ApprovedBy',
         // 'ApprovedTime',
         // 'Remark'
-        
+
       ];
 
-      const modifiedData = employeeDetailList.map((record:any) => {
-      
+      const modifiedData = employeeDetailList.map((record: any) => {
+
         const mappedData = columnOrder.map((column) => {
           switch (column) {
-            
+
             case 'EmployeeCode':
               return record.employeeCode;
             case 'Name':
@@ -214,44 +214,44 @@ const MonthlyReport = () => {
             case 'PF Number':
               return record.PF_UAN_Number
             case 'Pan Card Number':
-                return record.PAN_Number;
+              return record.PAN_Number;
             case 'ESI Number':
               return record.ESI_ID;
             case 'Salary':
               return record.salary;
             case 'Working Hours':
-                return record.workingHours;
+              return record.workingHours;
             case 'Over Time Status':
-                  return record.overTime;
+              return record.overTime;
             case 'Lunch Time':
               return record.lunchTime
             case 'Bank Name':
-                return record?.bankDetails?.bankName
+              return record?.bankDetails?.bankName
             case 'Bank Account Number':
-               return record?.bankDetails?.accountNumber
+              return record?.bankDetails?.accountNumber
             case 'Bank IFSC Code':
-                return record?.bankDetails?.IFSC_Code
-            
+              return record?.bankDetails?.IFSC_Code
+
             case 'updatedAt':
-             
-              return  formatDateExcel(record.updatedAt);
+
+              return formatDateExcel(record.updatedAt);
             case 'createdAt':
-              
-             
-              return  formatDateExcel(record.createdAt);
-            
+
+
+              return formatDateExcel(record.createdAt);
+
             case 'Email':
               return record.email;
             case 'Contact Number':
-                  return record.contactNumber;
-            
+              return record.contactNumber;
+
             case 'JobProfile':
               return record.jobProfileId.jobProfileName;
             case 'Group':
               return record.groupId.groupName;
             case 'Gender':
               return record.gender
-            
+
             default:
               return '';
           }
@@ -259,8 +259,8 @@ const MonthlyReport = () => {
 
         return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
       });
-      
-      
+
+
 
       const ws = XLSX.utils.json_to_sheet(modifiedData);
       const wb = XLSX.utils.book_new();
@@ -296,9 +296,9 @@ const MonthlyReport = () => {
   };
 
 
- 
 
- 
+
+
 
   const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
 
@@ -419,18 +419,18 @@ const MonthlyReport = () => {
     );
     setSuggestions(filteredSuggestions);
   };
-  
-  
+
+
 
   // delete department
-  
+
   // const handlerAadhar = () => {
   //   if (items.length > 1) {
   //     const filteredItems = items.filter((element: any) => element.aadharNumber !== 0);
   //     setItems(filteredItems)
   //   }
   // }
- 
+
 
   const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
   console.log(loggedInUserData)
@@ -442,24 +442,24 @@ const MonthlyReport = () => {
     <div className="mx-10">
       <div className="flex justify-between pt-8">
         <div className="flex gap-7 items-center justify-center">
-          <div  className="flex gap-3 justify-between items-center">
+          <div className="flex gap-3 justify-between items-center">
             <h1 className="text-2xl font-bold text-[#2E2E2E] whitespace-nowrap">
-              Monthly Report
+              Master Sheet
             </h1>
             <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
 
-<p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
-</div>
+              <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
+            </div>
           </div>
-         
+
         </div>
-      
+
       </div>
-     
-        <div className="mt-10 flex gap-5">
-          <div className="flex gap-4">
-            <div>
-              {/* <select
+
+      <div className="mt-10 flex gap-5">
+        <div className="flex gap-4">
+          <div>
+            {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Groups") {
                     setFilter({
@@ -486,45 +486,45 @@ const MonthlyReport = () => {
                     );
                   })}
               </select> */}
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                  onClick={GrouptoggleDropdown}
-                >
-                  All Group
-                </button>
-                {isGroupOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                 
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll}/>
-                    </div>
+                onClick={GrouptoggleDropdown}
+              >
+                All Group
+              </button>
+              {isGroupOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {groupList &&
-                        groupList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.groupName}
-                              checked={filter.groupName.includes(element.groupName)}
-
-                              onChange={handleGroupCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.groupName}</span>
-                          </label>
-                        ))}
-                    </div>
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
                   </div>
-                )}
-              </div>
+
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {groupList &&
+                      groupList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.groupName}
+                            checked={filter.groupName.includes(element.groupName)}
+
+                            onChange={handleGroupCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.groupName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <div>
-              {/* <select
+          </div>
+          <div>
+            {/* <select
                 onChange={(event) => {
                   if (event.target.value === "All Job Profiles") {
                     setFilter({
@@ -551,128 +551,128 @@ const MonthlyReport = () => {
                     );
                   })}
               </select> */}
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                  onClick={toggleDropdown}
-                >
-                  All Job Profiles
-                </button>
-                {isOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                  
-
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {jobProfileList &&
-                        jobProfileList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.jobProfileName}
-                              checked={filter.jobProfileName.includes(element.jobProfileName)}
-
-                              onChange={handleJobCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.jobProfileName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-              <select
-                onChange={(event) => {
-                  setFilter({
-                    ...filter,
-                    aadhar: event.target.value,
-                  });
-                }}
-                value={filter.aadhar}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+                onClick={toggleDropdown}
               >
-                <option value="0">Aadhar Default</option>
-                <option value="1">
-                  Employee with aadhar card
-                </option>
-                <option value="-1">
-                  Employee without aadhar card
-                </option>
-
-              </select>
+                All Job Profiles
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
 
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {jobProfileList &&
+                      jobProfileList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.jobProfileName}
+                            checked={filter.jobProfileName.includes(element.jobProfileName)}
+
+                            onChange={handleJobCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.jobProfileName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div>
-            <div className="relative">
-              {isLabelVisible && (
-                <div className="absolute top-[10px] left-6">
-                  <label
-                    htmlFor="searchInput"
-                    className="flex gap-2 items-center cursor-text"
-                  >
-                    <img src={glass} alt="" className="h-4 w-4" />
-                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-                  </label>
-                </div>
-              )}
-              <input
-                type="search"
-                id="searchInput"
-                onChange={handleInputChange}
-                value={search}
-                className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
-              />
+            <select
+              onChange={(event) => {
+                setFilter({
+                  ...filter,
+                  aadhar: event.target.value,
+                });
+              }}
+              value={filter.aadhar}
+              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+            >
+              <option value="0">Aadhar Default</option>
+              <option value="1">
+                Employee with aadhar card
+              </option>
+              <option value="-1">
+                Employee without aadhar card
+              </option>
 
-              {suggestions.length > 0 && (
-                <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
-                  {suggestions.map((element: any, index: any) => {
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          setSearch(element.name);
-                          setFilter({
-                            ...filter,
-                            name: element.name,
-                          });
-                          setSuggestions([]);
-                        }}
-                        className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
-                      >
-                        <div>
-                          <img
-                            src={element.profilePicture}
-                            className="w-[50px] h-[50px] rounded-full"
-                            alt=""
-                          />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium #1C1C1C">
-                            {element.name}
-                          </p>
-                          <p className="text-[12px] leading-5 font-normal text-[#757575]">
-                            {element.jobProfileName}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            </select>
+
+
           </div>
         </div>
-      
+        <div>
+          <div className="relative">
+            {isLabelVisible && (
+              <div className="absolute top-[10px] left-6">
+                <label
+                  htmlFor="searchInput"
+                  className="flex gap-2 items-center cursor-text"
+                >
+                  <img src={glass} alt="" className="h-4 w-4" />
+                  <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                </label>
+              </div>
+            )}
+            <input
+              type="search"
+              id="searchInput"
+              onChange={handleInputChange}
+              value={search}
+              className="h-10 w-[200px] py-3 px-5 rounded-full z-0 text-sm font-medium text-[#2E2E2E] border border-solid border-primary-border focus:outline-none"
+            />
+
+            {suggestions.length > 0 && (
+              <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                {suggestions.map((element: any, index: any) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setSearch(element.name);
+                        setFilter({
+                          ...filter,
+                          name: element.name,
+                        });
+                        setSuggestions([]);
+                      }}
+                      className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
+                    >
+                      <div>
+                        <img
+                          src={element.profilePicture}
+                          className="w-[50px] h-[50px] rounded-full"
+                          alt=""
+                        />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium #1C1C1C">
+                          {element.name}
+                        </p>
+                        <p className="text-[12px] leading-5 font-normal text-[#757575]">
+                          {element.jobProfileName}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {loaderStatus === "loading" ? (
         <div className="flex justify-center w-full">
           <img src={LoaderGif} className="w-6 h-6" alt="" />
@@ -684,237 +684,237 @@ const MonthlyReport = () => {
         <div className="mt-3 overflow-auto">
           <div className="py-5">
             {/* TABLE FOR EMPLOYEE */}
-            
-              <table className="w-full">
-                <tbody>
-                  <tr className="bg-[#ECEDFE] cursor-default">
-                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Profile Photo
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Employee ID
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Name
-                    </td>
-                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Email
-                    </td>
-                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Contact Number
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Gender
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Aadhar Number
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      PF Number
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      ESI NUMBER
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Pan Card Number
-                    </td>
-                    
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Job Profile
-                    </td>
-                    
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Group
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Salary
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Employement Status
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Lunch Time
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Working Time
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      OverTime Allow
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Bank Name
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Bank Account Number
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Bank IFSC NUMBER
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Updated at
-                    </td>
-                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Created at
-                    </td>
-                    
-                   
-                  </tr>
-                  {employeeDetailList &&
-                    employeeDetailList.map((element: any, index: number) => {
 
-                      return (
-                        <tr
-                          key={index}
-                          className="hover:bg-[#FAFAFA]"
-                          onClick={() => handleTableRowClick(element)}
-                        >
-                           <td className="py-4 px-5"  >
-                            {element.profilePicture
-                              ? <img src={element.profilePicture} className="w-[80px] h-[80px] rounded-full" />
-                              : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[80px] h-[80px] rounded-full" />}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.employeeCode
-                              ? element.employeeCode
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
-                            {element.name ? element.name : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
-                            {element.email ? element.email : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
-                            {element.contactNumber ? element.contactNumber : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.gender ? element.gender : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.PF_UAN_Number ? element.PF_UAN_Number : <p className="">0</p>}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.ESI_ID ? element.ESI_ID : <p className="">0</p>}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.PAN_Number ? element.PAN_Number : <p className="">0</p>}
-                          </td>
+            <table className="w-full">
+              <tbody>
+                <tr className="bg-[#ECEDFE] cursor-default">
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Profile Photo
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Employee ID
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Name
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Email
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Contact Number
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Gender
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Aadhar Number
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    PF Number
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    ESI NUMBER
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Pan Card Number
+                  </td>
 
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.jobProfileId?.jobProfileName
-                              ? element.jobProfileId?.jobProfileName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.groupId?.groupName
-                              ? element.groupId?.groupName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.salary ? element.salary : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.jobProfileId?.employmentType
-                              ? element.jobProfileId?.employmentType
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.lunchTime
-                              ? element.lunchTime
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.workingHours
-                              ? element.workingHours
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.overTime
-                              ? element.overTime
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.bankDetails
-                              ? element.bankDetails.bankName
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.bankDetails
-                              ? element.bankDetails.accountNumber
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.bankDetails
-                              ? element.bankDetails.IFSC_Code
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.updatedAt
-                              ? `${element.updatedAt.slice(0,10)}: ${changetime(element.updatedAt)}`
-                              : "Not Avilable"}
-                          </td>
-                          <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            {element.createdAt
-                              ? `${element.createdAt.slice(0,10)}: ${changetime(element.createdAt)}`
-                              : "Not Avilable"}
-                          </td>
-                          
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-          
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Job Profile
+                  </td>
+
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Group
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Salary
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Employement Status
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Lunch Time
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Working Time
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    OverTime Allow
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Bank Name
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Bank Account Number
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Bank IFSC NUMBER
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Updated at
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Created at
+                  </td>
+
+
+                </tr>
+                {employeeDetailList &&
+                  employeeDetailList.map((element: any, index: number) => {
+
+                    return (
+                      <tr
+                        key={index}
+                        className="hover:bg-[#FAFAFA]"
+                        onClick={() => handleTableRowClick(element)}
+                      >
+                        <td className="py-4 px-5"  >
+                          {element.profilePicture
+                            ? <img src={element.profilePicture} className="w-[80px] h-[80px] rounded-full" />
+                            : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[80px] h-[80px] rounded-full" />}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.employeeCode
+                            ? element.employeeCode
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                          {element.name ? element.name : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                          {element.email ? element.email : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap hover:underline cursor-pointer">
+                          {element.contactNumber ? element.contactNumber : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.gender ? element.gender : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.aadharNumber ? element.aadharNumber : <p className="">0</p>}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.PF_UAN_Number ? element.PF_UAN_Number : <p className="">0</p>}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.ESI_ID ? element.ESI_ID : <p className="">0</p>}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.PAN_Number ? element.PAN_Number : <p className="">0</p>}
+                        </td>
+
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.jobProfileId?.jobProfileName
+                            ? element.jobProfileId?.jobProfileName
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.groupId?.groupName
+                            ? element.groupId?.groupName
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.salary ? element.salary : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.jobProfileId?.employmentType
+                            ? element.jobProfileId?.employmentType
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.lunchTime
+                            ? element.lunchTime
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.workingHours
+                            ? element.workingHours
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.overTime
+                            ? element.overTime
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.bankDetails
+                            ? element.bankDetails.bankName
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.bankDetails
+                            ? element.bankDetails.accountNumber
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.bankDetails
+                            ? element.bankDetails.IFSC_Code
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.updatedAt
+                            ? `${element.updatedAt.slice(0, 10)}: ${changetime(element.updatedAt)}`
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.createdAt
+                            ? `${element.createdAt.slice(0, 10)}: ${changetime(element.createdAt)}`
+                            : "Not Avilable"}
+                        </td>
+
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+
             {/* TABLE FOR EMPLOYEE ENDS */}
 
             {/* PAGINATION STARTS */}
-          
-              <div className="flex gap-4 items-center justify-center">
-                <div
-                  onClick={() => {
-                    if (page > 1) {
-                      setPage(page - 1);
-                    }
-                  }}
-                >
-                  {" "}
-                  <img src={CaretLeft} alt="" />{" "}
-                </div>
-                {pagination().map((element: any, index) => {
-                  if (pagiArrIncludes.includes(index) && element) {
-                    return (
-                      <div key={index} className="flex">
-                        {filter.page > 2 ? "..." : ""}
-                        {filter.page === 1 ? "" : pagination()[index - 1]}
-                        {pagination()[index]}
-                        {pagination()[index + 1]}
-                        {filter.page === 1 ? pagination()[index + 2] : ""}
-                        {filter.page >= totalPage - 1 ? "" : "..."}
-                      </div>
-                    );
+
+            <div className="flex gap-4 items-center justify-center">
+              <div
+                onClick={() => {
+                  if (page > 1) {
+                    setPage(page - 1);
                   }
-                })}
-                <div
-                  onClick={() => {
-                    if (page !== totalPage) {
-                      setPage(page + 1);
-                    }
-                  }}
-                >
-                  {" "}
-                  <img src={CaretRight1} alt="" />
-                </div>
+                }}
+              >
+                {" "}
+                <img src={CaretLeft} alt="" />{" "}
               </div>
-          
-           
-          
+              {pagination().map((element: any, index) => {
+                if (pagiArrIncludes.includes(index) && element) {
+                  return (
+                    <div key={index} className="flex">
+                      {filter.page > 2 ? "..." : ""}
+                      {filter.page === 1 ? "" : pagination()[index - 1]}
+                      {pagination()[index]}
+                      {pagination()[index + 1]}
+                      {filter.page === 1 ? pagination()[index + 2] : ""}
+                      {filter.page >= totalPage - 1 ? "" : "..."}
+                    </div>
+                  );
+                }
+              })}
+              <div
+                onClick={() => {
+                  if (page !== totalPage) {
+                    setPage(page + 1);
+                  }
+                }}
+              >
+                {" "}
+                <img src={CaretRight1} alt="" />
+              </div>
+            </div>
+
+
+
           </div>
         </div>
         {/* popup */}
-       
+
         {/* popup */}
       </div>
     </div>

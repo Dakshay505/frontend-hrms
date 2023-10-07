@@ -69,7 +69,7 @@ const navItems: NavItem[] = [
   },
   {
     id: "Monthly Report",
-    name: "Monthly Report",
+    name: "Master Sheet",
     icon: employees,
     Link: "/monthly-report",
   },
