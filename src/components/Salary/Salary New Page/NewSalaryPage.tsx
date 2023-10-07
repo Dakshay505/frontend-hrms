@@ -10,6 +10,10 @@ import ClearAll from "../../../assets/Clear-all.svg"
 import { getAllGroupsAsync } from "../../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
+import Calendar from "react-calendar";
+import * as XLSX from 'xlsx';
+import toast from "react-hot-toast";
+import { saveAs } from 'file-saver';
 
 
 // const options2 = [
@@ -24,8 +28,8 @@ export const NewSalaryPage = () => {
     const [pageCount, setPageCount] = useState(1);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
-    const totalSalaryA= useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
-    const totalSalaryB=useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
+    const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
+    const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
     // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
 
     const dispatch = useDispatch();
@@ -72,17 +76,16 @@ export const NewSalaryPage = () => {
         groupName: [],
         jobProfileName: [],
         departmentName: [],
-        employeeCode: [],
+        employeeCodes: [],
         page: 1,
         limit: 20,
+
     });
 
 
     useEffect(() => {
-
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", filter)
         dispatch(getAllSalaryAsync(filter));
-
         dispatch(getAllPunchInPunchOutAsync());
 
     }, [filter]);
@@ -109,7 +112,7 @@ export const NewSalaryPage = () => {
     const dropdownRef6 = useRef<HTMLDivElement | null>(null);
 
     const [isOpen7, setIsOpen7] = useState(false);
-    console.log(isOpen5,isOpen6,isOpen7,isOpen3)
+    console.log(isOpen5, isOpen6, isOpen7, isOpen3)
     const dropdownRef7 = useRef<HTMLDivElement | null>(null);
 
 
@@ -173,15 +176,15 @@ export const NewSalaryPage = () => {
         setIsOpen7(false)
     };
 
-    // const toggleDropdown3 = () => {
-    //     setIsOpen3(!isOpen3);
-    //     setIsOpen1(false)
-    //     setIsOpen2(false)
-    //     setIsOpen4(false)
-    //     setIsOpen5(false)
-    //     setIsOpen6(false)
-    //     setIsOpen7(false)
-    // };
+    const toggleDropdown3 = () => {
+        setIsOpen3(!isOpen3);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen4(false)
+        setIsOpen5(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
 
     const toggleDropdown4 = () => {
         setIsOpen4(!isOpen4);
@@ -193,15 +196,15 @@ export const NewSalaryPage = () => {
         setIsOpen7(false)
     };
 
-    // const toggleDropdown5 = () => {
-    //     setIsOpen5(!isOpen5);
-    //     setIsOpen1(false)
-    //     setIsOpen2(false)
-    //     setIsOpen3(false)
-    //     setIsOpen4(false)
-    //     setIsOpen6(false)
-    //     setIsOpen7(false)
-    // };
+    const toggleDropdown5 = () => {
+        setIsOpen5(!isOpen5);
+        setIsOpen1(false)
+        setIsOpen2(false)
+        setIsOpen3(false)
+        setIsOpen4(false)
+        setIsOpen6(false)
+        setIsOpen7(false)
+    };
 
     // const toggleDropdown6 = () => {
     //     setIsOpen6(!isOpen6);
@@ -237,28 +240,29 @@ export const NewSalaryPage = () => {
     // filters
 
     const groupList = useSelector((state: any) => state.group.groups);
+    const sortedgroupList = [...groupList].sort((a: any, b: any) =>a.groupName.localeCompare(b.groupName));
 
-    const sortedgroupList = [...groupList].sort((a: any, b: any) =>
-        a.groupName.localeCompare(b.groupName
-        )
+    const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
+    const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
+        a.jobProfileName.localeCompare(b.jobProfileName)
     );
-    const jobProfileList = useSelector(
-        (state: any) => state.jobProfile.jobProfiles
-    );
+
+
     const departmentList = useSelector((state: any) => state.department.department)
     const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
         a.departmentName.localeCompare(b.departmentName)
     );
 
-    const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
-        a.jobProfileName.localeCompare(b.jobProfileName)
-    );
+
+   
 
 
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
         dispatch(getAllDepartmentAsync());
+        dispatch(getAllSalaryAsync());
+
     }, []);
 
 
@@ -315,6 +319,24 @@ export const NewSalaryPage = () => {
         }
     };
 
+
+    const handleMCodeCheckboxChange = (event: any) => {
+        const { value, checked } = event.target;
+        if (checked) {
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                employeeCodes: [...prevFilter.employeeCodes, value],
+            }));
+
+        } else {
+            setFilter({
+                ...filter,
+                employeeCodes: filter.employeeCodes.filter((profile: any) => profile !== value),
+            });
+        }
+    };
+
+
     const selectAll = () => {
         const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
         setFilter((prevFilter: any) => ({
@@ -361,20 +383,130 @@ export const NewSalaryPage = () => {
 
 
 
+
+
+
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+
+    //   date
+    const formatDateToYYMMDD = (date: any) => {
+        const year = date.getFullYear().toString();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
+
+    useEffect(() => {
+        console.log("Filter:", filter);
+        dispatch(getAllSalaryAsync(filter));
+        dispatch(getAllPunchInPunchOutAsync());
+
+    }, [filter]);
+
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState<any>(new Date());
+
+    const handleDateChange = (date: any) => {
+        if (!startDate) {
+            setStartDate(date);
+            setSelectedDate(date);
+        } else if (!endDate) {
+            if (date > startDate) {
+                setEndDate(date);
+                setSelectedDate(date);
+            } else {
+                console.error("Invalid date selection: End date should be after start date.");
+            }
+        } else {
+            setStartDate(date);
+            setEndDate(null);
+            setSelectedDate(date);
+        }
+    };
+
+    useEffect(() => {
+        if (endDate) {
+
+            setFilter({
+
+                ...filter,
+                date: formatDateToYYMMDD(startDate),
+
+                nextDate: formatDateToYYMMDD(endDate),
+            })
+        }
+    }, [startDate, endDate])
+
+
+    // excel
+
+
+    const exportToExcel = () => {
+        if (getAllSalaryAsync) {
+            const columnOrder = [
+                'Name',
+                'EmployeeCode',
+
+
+            ];
+
+            const modifiedData = getAllSalaryAsync.map((record: any) => {
+                const mappedData = columnOrder.map((column) => {
+                    switch (column) {
+                        case 'EmployeeCode':
+                            return record.employee?.employeeCode;
+                        case 'Name':
+                            return record.employee?.name;
+
+
+                        default:
+                            return '';
+                    }
+                });
+
+                return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
+            });
+
+
+
+            const ws = XLSX.utils.json_to_sheet(modifiedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Master Report Data');
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, 'Master Report.xlsx');
+            toast.success("CSV Download Successfully");
+        }
+    };
+
+
+
+
     return (
         <div className='p-[40px]'>
             <div className='flex flex-col gap-[10px]'>
-
-
                 <div className="flex flex-col py-[10px] gap-6  flex-start">
                     <div className="flex-col flex gap-[20px] justify-between ">
-                        <div className="text-2xl font-bold text-[#2E2E2E]">
-                            Salary Database
+                        <div className="flex justify-between ">
+                            <div className="text-2xl font-bold text-[#2E2E2E]">
+                                Salary Database
+                            </div>
+
+                            <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+
+                                <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
+                            </div>
+
                         </div>
+
                         <div className='border flex gap-[15px] px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
                             <img src={search} alt="" className='w-[20px] h-[20px]' />
                             <input type="search" className='outline-none w-full ' placeholder="Search" />
                         </div>
+
 
                     </div>
 
@@ -455,7 +587,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -491,7 +623,7 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div> */}
+                        </div>
 
                         <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
                             <button
@@ -531,43 +663,32 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
+                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
                             <button
                                 type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E] focus:outline-none"
                                 onClick={toggleDropdown5}
-
                             >
-                                Date
+                                {startDate && endDate ? `${startDate.toDateString()} - ${endDate.toDateString()}` : 'Select Dates'}
                             </button>
-
                             {isOpen5 && (
-                                <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="flex flex-row px-4 py-2 gap-3">
-                                        <img src={SelectAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-
-                                        {salaryData && salaryData.map((element: any) => (
-                                            <label
-                                                key={element.id}
-                                                className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox h-5 w-5 text-blue-600"
-
-                                                />
-                                                {element?.attendance?.date.slice(0, 10)}
-
-                                            </label>
-                                        ))}
+                                <div className="absolute left-0 mt-2 w-[300px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="px-4 py-2 space-y-2  overflow-y-auto">
+                                        <Calendar
+                                            onChange={handleDateChange}
+                                            value={selectedDate}
+                                            tileClassName={({ date }) =>
+                                                (startDate && endDate && date >= startDate && date <= endDate)
+                                                    ? 'text-black selected-date'
+                                                    : date.toDateString() === selectedDate.toDateString()
+                                                        ? 'text-black selected-date'
+                                                        : ''
+                                            }
+                                        />
                                     </div>
                                 </div>
                             )}
-
-                        </div> */}
+                        </div>
 
                         {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef6}>
                             <button
@@ -656,7 +777,7 @@ export const NewSalaryPage = () => {
                             Total Salary A
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                            
+
                             {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
                         </div>
                     </div>
@@ -668,7 +789,7 @@ export const NewSalaryPage = () => {
                             Total Salary B
                         </p>
                         <div className="flex text-[24px] font-bold justify-center items-center">
-                        {totalSalaryB!== undefined ? totalSalaryB.toFixed(2) : "-"}
+                            {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
                         </div>
                     </div>
 
@@ -905,6 +1026,6 @@ export const NewSalaryPage = () => {
             </div>
 
 
-        </div>
+        </div >
     )
 }
