@@ -113,7 +113,7 @@ export default function aside(props: Props) {
             </Link>
           }
           {/* asd */}
-          {loggedInUserData.admin && loggedInUserData.admin ? (
+          {loggedInUserData.employee.role==='admin'&& loggedInUserData.employee.role==='admin'? (
 
             <div
               onClick={() => {
