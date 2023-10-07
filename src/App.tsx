@@ -81,7 +81,7 @@ import { EmployeesSidebar } from "./newpage/Employees";
 import { DepartmentInfo } from "./components/Dashboard/Department-Info";
 import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
 // import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
-import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
+//import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 import MonthlyReport from "./components/Dashboard/monthlyReport";
 
