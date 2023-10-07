@@ -150,7 +150,7 @@ export const getQrAssign = async (id: any) => {
 
 export const updatePassword = async (document: any) => {
   try {
-    const { data } = await axios.put(`${updatePasswordApiPath}`, document.data, {
+    const { data } = await axios.put(`${updatePasswordApiPath}`, document, {
       withCredentials: true,
     });
     return data;
