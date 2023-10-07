@@ -11,9 +11,9 @@ import { getAllGroupsAsync } from "../../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
 import Calendar from "react-calendar";
-import * as XLSX from 'xlsx';
-import toast from "react-hot-toast";
-import { saveAs } from 'file-saver';
+// import * as XLSX from 'xlsx';
+// import toast from "react-hot-toast";
+// import { saveAs } from 'file-saver';
 
 
 // const options2 = [
@@ -26,6 +26,7 @@ export const NewSalaryPage = () => {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
+    const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
@@ -71,7 +72,6 @@ export const NewSalaryPage = () => {
 
 
 
-
     const [filter, setFilter] = useState<any>({
         groupName: [],
         jobProfileName: [],
@@ -79,6 +79,7 @@ export const NewSalaryPage = () => {
         employeeCodes: [],
         page: 1,
         limit: 20,
+        shifts: selectedShifts,
 
     });
 
@@ -108,11 +109,9 @@ export const NewSalaryPage = () => {
     const [isOpen5, setIsOpen5] = useState(false);
     const dropdownRef5 = useRef<HTMLDivElement | null>(null);
 
-    const [isOpen6, setIsOpen6] = useState(false);
-    const dropdownRef6 = useRef<HTMLDivElement | null>(null);
 
     const [isOpen7, setIsOpen7] = useState(false);
-    console.log(isOpen5, isOpen6, isOpen7, isOpen3)
+    console.log(isOpen5, isOpen7, isOpen3)
     const dropdownRef7 = useRef<HTMLDivElement | null>(null);
 
 
@@ -127,7 +126,6 @@ export const NewSalaryPage = () => {
                 dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
                 dropdownRef4.current && !dropdownRef4.current.contains(event.target) &&
                 dropdownRef5.current && !dropdownRef5.current.contains(event.target) &&
-                dropdownRef6.current && !dropdownRef6.current.contains(event.target) &&
                 dropdownRef7.current && !dropdownRef7.current.contains(event.target)
             ) {
                 setIsOpen1(false);
@@ -135,7 +133,6 @@ export const NewSalaryPage = () => {
                 setIsOpen3(false);
                 setIsOpen4(false);
                 setIsOpen5(false);
-                setIsOpen6(false);
                 setIsOpen7(false);
             }
         }
@@ -162,7 +159,6 @@ export const NewSalaryPage = () => {
         setIsOpen3(false)
         setIsOpen4(false)
         setIsOpen5(false)
-        setIsOpen6(false)
         setIsOpen7(false)
     };
 
@@ -172,7 +168,6 @@ export const NewSalaryPage = () => {
         setIsOpen3(false)
         setIsOpen4(false)
         setIsOpen5(false)
-        setIsOpen6(false)
         setIsOpen7(false)
     };
 
@@ -182,7 +177,6 @@ export const NewSalaryPage = () => {
         setIsOpen2(false)
         setIsOpen4(false)
         setIsOpen5(false)
-        setIsOpen6(false)
         setIsOpen7(false)
     };
 
@@ -192,7 +186,6 @@ export const NewSalaryPage = () => {
         setIsOpen2(false)
         setIsOpen3(false)
         setIsOpen5(false)
-        setIsOpen6(false)
         setIsOpen7(false)
     };
 
@@ -202,19 +195,10 @@ export const NewSalaryPage = () => {
         setIsOpen2(false)
         setIsOpen3(false)
         setIsOpen4(false)
-        setIsOpen6(false)
         setIsOpen7(false)
     };
 
-    // const toggleDropdown6 = () => {
-    //     setIsOpen6(!isOpen6);
-    //     setIsOpen1(false)
-    //     setIsOpen2(false)
-    //     setIsOpen3(false)
-    //     setIsOpen4(false)
-    //     setIsOpen5(false)
-    //     setIsOpen7(false)
-    // };
+
 
     // const toggleDropdown7 = () => {
     //     setIsOpen7(!isOpen7);
@@ -223,24 +207,16 @@ export const NewSalaryPage = () => {
     //     setIsOpen3(false)
     //     setIsOpen4(false)
     //     setIsOpen5(false)
-    //     setIsOpen6(false)
     // };
-
-
-
 
     useEffect(() => {
         dispatch(getAllSalaryAsync());
     }, []);
 
-
-
-
-
     // filters
 
     const groupList = useSelector((state: any) => state.group.groups);
-    const sortedgroupList = [...groupList].sort((a: any, b: any) =>a.groupName.localeCompare(b.groupName));
+    const sortedgroupList = [...groupList].sort((a: any, b: any) => a.groupName.localeCompare(b.groupName));
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
@@ -254,7 +230,6 @@ export const NewSalaryPage = () => {
     );
 
 
-   
 
 
     useEffect(() => {
@@ -320,22 +295,6 @@ export const NewSalaryPage = () => {
     };
 
 
-    const handleMCodeCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                employeeCodes: [...prevFilter.employeeCodes, value],
-            }));
-
-        } else {
-            setFilter({
-                ...filter,
-                employeeCodes: filter.employeeCodes.filter((profile: any) => profile !== value),
-            });
-        }
-    };
-
 
     const selectAll = () => {
         const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
@@ -379,11 +338,6 @@ export const NewSalaryPage = () => {
             groupName: [],
         });
     };
-
-
-
-
-
 
 
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -441,46 +395,38 @@ export const NewSalaryPage = () => {
     }, [startDate, endDate])
 
 
-    // excel
 
 
-    const exportToExcel = () => {
-        if (getAllSalaryAsync) {
-            const columnOrder = [
-                'Name',
-                'EmployeeCode',
+    const handleEmployeeCheckboxChange = (event: any) => {
+        const { value, checked } = event.target;
 
-
-            ];
-
-            const modifiedData = getAllSalaryAsync.map((record: any) => {
-                const mappedData = columnOrder.map((column) => {
-                    switch (column) {
-                        case 'EmployeeCode':
-                            return record.employee?.employeeCode;
-                        case 'Name':
-                            return record.employee?.name;
-
-
-                        default:
-                            return '';
-                    }
-                });
-
-                return Object.fromEntries(mappedData.map((value, index) => [columnOrder[index], value]));
+        if (checked) {
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                employeeCodes: [...prevFilter.employeeCodes, value],
+            }));
+        } else {
+            setFilter({
+                ...filter,
+                employeeCodes: filter.employeeCodes.filter((code: any) => code !== value),
             });
-
-
-
-            const ws = XLSX.utils.json_to_sheet(modifiedData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Master Report Data');
-            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            saveAs(blob, 'Master Report.xlsx');
-            toast.success("CSV Download Successfully");
         }
     };
+
+
+
+    // const handleShiftCheckboxChange = (event: any) => {
+    //     const { value, checked } = event.target;
+
+    //     if (checked) {
+    //         setSelectedShifts((prevSelectedShifts) => [...prevSelectedShifts, value]);
+    //     } else {
+    //         setSelectedShifts((prevSelectedShifts) =>
+    //             prevSelectedShifts.filter((shift) => shift !== value)
+    //         );
+    //     }
+    // };
+
 
 
 
@@ -494,12 +440,6 @@ export const NewSalaryPage = () => {
                             <div className="text-2xl font-bold text-[#2E2E2E]">
                                 Salary Database
                             </div>
-
-                            <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
-
-                                <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
-                            </div>
-
                         </div>
 
                         <div className='border flex gap-[15px] px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
@@ -605,20 +545,20 @@ export const NewSalaryPage = () => {
                                     </div>
                                     <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
 
-                                        {salaryData && salaryData.map((element: any) => (
-                                            <label
-                                                key={element.id}
-                                                className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox h-5 w-5 text-blue-600"
+                                        {salaryData &&
+                                            salaryData.map((element: any) => (
+                                                <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        value={element.employee.employeeCode} // Use the employee code as the value
+                                                        checked={filter.employeeCodes.includes(element.employee.employeeCode)}
+                                                        onChange={handleEmployeeCheckboxChange} // Use the updated function
+                                                        className="form-checkbox h-5 w-5 text-blue-600"
+                                                    />
+                                                    {element.employee.employeeCode}
+                                                </label>
+                                            ))}
 
-                                                />
-                                                {element?.employee?.employeeCode}
-
-                                            </label>
-                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -690,49 +630,12 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
-                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef6}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown6}
-
-                            >
-                                MOnth
-                            </button>
-
-                            {isOpen6 && (
-                                <div className=" absolute left-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="flex flex-row px-4 py-2 gap-3">
-                                        <img src={SelectAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-
-                                        {options2.map((option) => (
-                                            <label
-                                                className="flex items-center gap-[10px] justify-between px-4 py-2 cursor-pointer"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox h-5 w-5 text-blue-600"
-
-                                                />
-                                                {option.label}
-
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
-                        </div> */}
 
                         {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
                                 onClick={toggleDropdown7}
-
                             >
                                 Shift
                             </button>
@@ -744,25 +647,26 @@ export const NewSalaryPage = () => {
                                         <img src={ClearAll} className="h-5 w-5 " />
                                     </div>
                                     <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-
                                         {options2.map((option) => (
                                             <label
+                                                key={option.label}
                                                 className="flex items-center gap-[10px] justify-between px-4 py-2 cursor-pointer"
                                             >
                                                 <input
                                                     type="checkbox"
                                                     className="form-checkbox h-5 w-5 text-blue-600"
-
+                                                    value={option.label}
+                                                    checked={selectedShifts.includes(option.label)}
+                                                    onChange={handleShiftCheckboxChange}
                                                 />
                                                 {option.label}
-
                                             </label>
                                         ))}
                                     </div>
                                 </div>
                             )}
-
                         </div> */}
+
 
 
                     </div>
@@ -783,7 +687,6 @@ export const NewSalaryPage = () => {
                     </div>
 
 
-
                     <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
                         <p className="text-[14px] font-medium  text-[#2E2E2E]">
                             Total Salary B
@@ -792,18 +695,6 @@ export const NewSalaryPage = () => {
                             {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
                         </div>
                     </div>
-
-                    {/* <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary C
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            5,45,000
-                        </div>
-                    </div> */}
-
-
-
 
 
                     <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
@@ -855,44 +746,43 @@ export const NewSalaryPage = () => {
                                         Job Profile
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Over Time
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary
                                     </td>
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Duty hour required
+                                        Punch IN
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Punch Out
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Lunch
                                     </td>
+
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        total working hours
+                                        Duty hour required
                                     </td>
-                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Added By
-                                    </td> */}
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Actual working hour
+                                        Final working hours
+                                    </td>
+
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Actual Duty hour
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total working hours
+                                        Over Time
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Duty hours
-                                    </td>
-                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        over time hours
-                                    </td> */}
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Earning in a day/Salary A
                                     </td>
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary B
                                     </td>
-                                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary c
-                                    </td> */}
+
 
                                 </tr>
 
@@ -915,47 +805,39 @@ export const NewSalaryPage = () => {
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
                                             </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.overTime ? element?.employee?.overTime : "-"}
-                                            </td>
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.salary ? element?.employee?.salary : "-"}
                                             </td>
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
+                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.lastPunchOut ? element?.lastPunchOut.slice(0, 10) : "-"}
                                             </td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
                                             </td>
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
                                             </td>
-                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                Added By
-                                            </td> */}
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.actualWorkinghours ? element?.actualWorkinghours : "-"}
                                             </td>
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
+                                                {element?.employee?.overTime ? element?.employee?.overTime : "-"}
                                             </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.totalWorkingHours ? element?.totalWorkingHours : "-"}
-                                            </td>
-                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                Overtime rate
-                                            </td> */}
+
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
                                             </td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
                                             </td>
-
-                                            {/* <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                SalaryC
-                                            </td> */}
-
 
                                         </tr>
                                     ))}

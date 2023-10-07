@@ -453,12 +453,7 @@ export const NewPage = () => {
     setIsEditStatusPopupOpen(false);
   };
 
-
-
-
   const [StatusValue, setStatusValue] = useState<boolean | null>(null);
-
-
   useEffect(() => {
     setEmployeeId(singleEmployee?._id);
     setStatusValue(singleEmployee?.active);
@@ -747,10 +742,10 @@ export const NewPage = () => {
                           <div className="flex gap-[10px]">
                             <div>
                               {element?.role === 'attendanceManager' ? 'Attendance Manager' :
-                                element?.role === 'employee' ? 'Employee' :
-                                  element?.role === 'dbManager' ? 'Database Manager' :
-                                    element?.role === 'admin' ? 'Admin' :
-                                      element?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
+                              element?.role === 'employee' ? 'Employee' :
+                              element?.role === 'dbManager' ? 'Database Manager' :
+                              element?.role === 'admin' ? 'Admin' :
+                              element?.role === 'manufacturing' ? 'Manufacturing' : 'Role'
                               }
                             </div>
                             <img
