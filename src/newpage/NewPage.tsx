@@ -59,7 +59,10 @@ export const NewPage = () => {
     departmentName: [""],
     page: 1,
     limit: 20,
-    aadhar: "0"
+    aadhar: "0",
+    createdSort:"",
+    updatedSort:""
+
   });
 
 
@@ -68,7 +71,7 @@ export const NewPage = () => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
       const arr = [];
-
+      console.log("Filter",filter)
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -87,7 +90,7 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name, filter.departmentName]);
+  }, [filter]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -168,6 +171,22 @@ export const NewPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
+  const [createdAt,setCreatedAt]=useState("")
+  const [updatedAt,setUpdatedAt]=useState("")
+  useEffect(()=>{
+    setFilter({
+      ...filter,
+      createdSort:createdAt
+    })
+
+  },[createdAt])
+  useEffect(()=>{
+    setFilter({
+      ...filter,
+      updatedSort:updatedAt
+    })
+
+  },[updatedAt])
 
 
 
@@ -600,6 +619,38 @@ export const NewPage = () => {
                   </div>
                 </div>
               )}
+            </div>
+            <div className="relative inline-block text-left ml-3">
+              <select
+              onChange={(event)=>setCreatedAt(event.target.value)}
+              value={createdAt}
+             
+              
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                
+              >
+                <option value="">Sorted By Created Date</option>
+                 <option value="True">New</option>
+                    <option value="">Old</option>
+              </select>
+              
+            </div>
+            <div className="relative inline-block text-left text-sm">
+              <select
+              onChange={(event)=>setUpdatedAt(event.target.value)}
+              value={updatedAt}
+             
+              
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                
+              >
+                <option value="">Sorted By Updated Date</option>
+                 <option value="True">New</option>
+                    <option value="False">Old</option>
+              </select>
+              
             </div>
           </div>
         </div>
