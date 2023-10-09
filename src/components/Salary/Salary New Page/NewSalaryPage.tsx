@@ -342,8 +342,8 @@ export const NewSalaryPage = () => {
     };
 
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
-
+    const [, setSelectedDate] = useState(new Date());
+    
 
     //   date
     const formatDateToYYMMDD = (date: any) => {
