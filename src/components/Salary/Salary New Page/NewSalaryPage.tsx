@@ -26,7 +26,7 @@ export const NewSalaryPage = () => {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
-    const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
+    const [selectedShifts, ] = useState<string[]>([]);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
@@ -42,6 +42,7 @@ export const NewSalaryPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getNewSalaryDataApi(filter);
+            console.log("data",data);
             setTotal(data.count);
             const newPageCount = Math.ceil(data.count / limit);
             setPageCount(newPageCount);
@@ -51,7 +52,6 @@ export const NewSalaryPage = () => {
         };
         fetchData();
     }, [limit, page]);
-
 
 
     const handlePageChange = (newPage: number) => {
@@ -85,7 +85,6 @@ export const NewSalaryPage = () => {
 
 
     useEffect(() => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", filter)
         dispatch(getAllSalaryAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
 
@@ -111,7 +110,6 @@ export const NewSalaryPage = () => {
 
 
     const [isOpen7, setIsOpen7] = useState(false);
-    console.log(isOpen5, isOpen7, isOpen3)
     const dropdownRef7 = useRef<HTMLDivElement | null>(null);
 
 
@@ -354,7 +352,6 @@ export const NewSalaryPage = () => {
 
 
     useEffect(() => {
-        console.log("Filter:", filter);
         dispatch(getAllSalaryAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
 
@@ -734,6 +731,9 @@ export const NewSalaryPage = () => {
                                         Sr No.
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Date
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Employee Code
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -746,7 +746,33 @@ export const NewSalaryPage = () => {
                                         Job Profile
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Department
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary
+                                    </td>
+                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        OverTime
+                                    </td>
+                                    
+                                  
+
+
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Duty hour required
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Lunch
+                                    </td>
+
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Total Working Hours by Database
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Salary Per Hours
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Punch IN BY
                                     </td>
 
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -755,17 +781,17 @@ export const NewSalaryPage = () => {
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Punch Out
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Lunch
+                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Punch Out BY
                                     </td>
-
-
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Duty hour required
+                                       Shift
                                     </td>
-
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Final working hours
+                                      Status
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                     Approved by
                                     </td>
 
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -793,6 +819,9 @@ export const NewSalaryPage = () => {
                                                 {index + 1}
                                             </td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
                                             </td>
 
@@ -805,17 +834,19 @@ export const NewSalaryPage = () => {
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
                                             </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.department.departName : "-"}
+                                            </td>
+                                            
 
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.salary ? element?.employee?.salary : "-"}
                                             </td>
 
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
+                                            {element?.employee?.overTime ? element?.employee?.overTime : "-"}
                                             </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.lastPunchOut ? element?.lastPunchOut.slice(0, 10) : "-"}
-                                            </td>
+                                            
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.lunchTime ? element?.employee?.lunchTime : "-"}
                                             </td>
@@ -830,6 +861,21 @@ export const NewSalaryPage = () => {
 
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                 {element?.employee?.overTime ? element?.employee?.overTime : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.attendance ? element?.attendance?.punches[0]?.punchInBy: "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.lastPunchOut ? element?.lastPunchOut.slice(0, 10) : "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.attendance ? element?.attendance?.punches[0]?.punchOutBy: "-"}
+                                            </td>
+                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                {element?.attendance ? element?.attendance?.shift: "-"}
                                             </td>
 
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
