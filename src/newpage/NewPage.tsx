@@ -60,8 +60,8 @@ export const NewPage = () => {
     page: 1,
     limit: 20,
     aadhar: "0",
-    createdSort: "",
-    updatedSort: ""
+    createdSort:"",
+    updatedSort:""
 
   });
 
@@ -71,7 +71,7 @@ export const NewPage = () => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
       const arr = [];
-      console.log("Filter", filter)
+      console.log("Filter",filter)
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -171,22 +171,22 @@ export const NewPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isGroupOpen, setIsGroupOpen] = useState(false);
   const [isDepartmentOpen, setIsDepartmentOpen] = useState(false);
-  const [createdAt, setCreatedAt] = useState("")
-  const [updatedAt, setUpdatedAt] = useState("")
-  useEffect(() => {
+  const [createdAt,setCreatedAt]=useState("")
+  const [updatedAt,setUpdatedAt]=useState("")
+  useEffect(()=>{
     setFilter({
       ...filter,
-      createdSort: createdAt
+      createdSort:createdAt
     })
 
-  }, [createdAt])
-  useEffect(() => {
+  },[createdAt])
+  useEffect(()=>{
     setFilter({
       ...filter,
-      updatedSort: updatedAt
+      updatedSort:updatedAt
     })
 
-  }, [updatedAt])
+  },[updatedAt])
 
 
 
@@ -209,7 +209,7 @@ export const NewPage = () => {
 
   };
 
-
+ 
 
 
   const handleJobCheckboxChange = (event: any) => {
@@ -472,7 +472,12 @@ export const NewPage = () => {
     setIsEditStatusPopupOpen(false);
   };
 
+
+
+
   const [StatusValue, setStatusValue] = useState<boolean | null>(null);
+
+
   useEffect(() => {
     setEmployeeId(singleEmployee?._id);
     setStatusValue(singleEmployee?.active);
@@ -509,142 +514,149 @@ export const NewPage = () => {
 
       <div className="flex gap-5 flex-wrap">
         <div className="flex gap-4">
+          <div>
+          
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-          <div className="relative inline-block text-left">
-            <button
-              type="button"
-              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+                onClick={GrouptoggleDropdown}
+              >
+                All Group
+              </button>
+              {isGroupOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
-              onClick={GrouptoggleDropdown}
-            >
-              All Group
-            </button>
-            {isGroupOpen && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {groupList &&
+                      groupList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.groupName}
+                            checked={filter.groupName.includes(element.groupName)}
 
-                <div className="flex flex-row p-2 gap-3">
-                  <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                  <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                            onChange={handleGroupCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.groupName}</span>
+                        </label>
+                      ))}
+                  </div>
                 </div>
-                <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                  {groupList &&
-                    groupList.map((element: any, index: any) => (
-                      <label key={index} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value={element.groupName}
-                          checked={filter.groupName.includes(element.groupName)}
-
-                          onChange={handleGroupCheckboxChange}
-                          className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                        />
-                        <span>{element.groupName}</span>
-                      </label>
-                    ))}
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
+          <div>
+          
+            <div className="relative inline-block text-left  ml-3 " >
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-          <div className="relative inline-block text-left  ml-3 " >
-            <button
-              type="button"
-              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-              onClick={toggleDropdown}
-            >
-              All Job Profiles
-            </button>
-            {isOpen && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                <div className="flex flex-row p-2 gap-3">
-                  <img src={SelectAll} onClick={selectAll} className="h-5 w-5" />
-                  <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                onClick={toggleDropdown}
+              >
+                All Job Profiles
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectAll} className="h-5 w-5" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {jobProfileList &&
+                      jobProfileList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.jobProfileName}
+                            checked={filter.jobProfileName.includes(element.jobProfileName)}
+                            onChange={handleJobCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.jobProfileName}</span>
+                        </label>
+                      ))}
+                  </div>
                 </div>
-                <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                  {jobProfileList &&
-                    jobProfileList.map((element: any, index: any) => (
-                      <label key={index} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value={element.jobProfileName}
-                          checked={filter.jobProfileName.includes(element.jobProfileName)}
-                          onChange={handleJobCheckboxChange}
-                          className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                        />
-                        <span>{element.jobProfileName}</span>
-                      </label>
-                    ))}
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-          <div className="relative inline-block text-left">
-            <button
-              type="button"
-              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+          <div>
+           
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-              onClick={DepartmenttoggleDropdown}
-            >
-              All Department
-            </button>
-            {isDepartmentOpen && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                onClick={DepartmenttoggleDropdown}
+              >
+                All Department
+              </button>
+              {isDepartmentOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
-                <div className="flex flex-row p-2 gap-3">
-                  <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
-                  <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {departmentList &&
+                      departmentList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.departmentName}
+                            checked={filter.departmentName.includes(element.departmentName)}
+
+                            onChange={handleDepartmentCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.departmentName}</span>
+                        </label>
+                      ))}
+                  </div>
                 </div>
-                <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                  {departmentList &&
-                    departmentList.map((element: any, index: any) => (
-                      <label key={index} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          value={element.departmentName}
-                          checked={filter.departmentName.includes(element.departmentName)}
-
-                          onChange={handleDepartmentCheckboxChange}
-                          className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                        />
-                        <span>{element.departmentName}</span>
-                      </label>
-                    ))}
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="relative inline-block text-left ml-3">
-            <select
-              onChange={(event) => setCreatedAt(event.target.value)}
+              )}
+            </div>
+            <div className="relative inline-block text-left ml-3">
+              <select
+              onChange={(event)=>setCreatedAt(event.target.value)}
               value={createdAt}
+             
+              
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-
-              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-
-            >
-              <option value="">Sorted By Created Date</option>
-              <option value="True">New</option>
-              <option value="">Old</option>
-            </select>
-
-          </div>
-          <div className="relative inline-block text-left text-sm">
-            <select
-              onChange={(event) => setUpdatedAt(event.target.value)}
+                
+              >
+                <option value="">Sorted By Created Date</option>
+                 <option value="True">New</option>
+                    <option value="">Old</option>
+              </select>
+              
+            </div>
+            <div className="relative inline-block text-left text-sm">
+              <select
+              onChange={(event)=>setUpdatedAt(event.target.value)}
               value={updatedAt}
+             
+              
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-
-              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-
-            >
-              <option value="">Sorted By Updated Date</option>
-              <option value="True">New</option>
-              <option value="False">Old</option>
-            </select>
-
+                
+              >
+                <option value="">Sorted By Updated Date</option>
+                 <option value="True">New</option>
+                    <option value="False">Old</option>
+              </select>
+              
+            </div>
           </div>
         </div>
 
@@ -970,7 +982,7 @@ export const NewPage = () => {
                     </div>
 
                   </div>
-
+                  
 
 
                   <div className="flex gap-[10px] pt-[20px]">
@@ -1032,5 +1044,3 @@ export const NewPage = () => {
     </div>
   );
 };
-
-
