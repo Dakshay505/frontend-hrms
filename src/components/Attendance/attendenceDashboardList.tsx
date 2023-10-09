@@ -630,6 +630,7 @@ export const AttendenceDashboardList = () => {
     dispatch(getGroupAttendanceAsync());
   }, []);
 
+
   // pending rejected total
   const navigate = useNavigate();
   const handleTableRowClick = (data: any) => {
@@ -707,6 +708,7 @@ export const AttendenceDashboardList = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
+
                 {approvedCount + pendingCount + rejectedCount}
               </span>
             </div>
