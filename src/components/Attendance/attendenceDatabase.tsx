@@ -168,8 +168,8 @@ export const AttendenceDtabase = () => {
     dispatch(getAllPunchInPunchOutAsync());
   }, []);
 
-  const totalPresent = items?.length
-  console.log(totalPresent)
+  // const totalPresent = items?.length
+  // console.log(totalPresent)
   // const totalEmployees = groupAttendanceList.reduce(
   //   (acc: any, group: any) => acc + group.totalEmployeesInGroup,
   //   0
@@ -246,7 +246,7 @@ export const AttendenceDtabase = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalPresent}
+                {pendingCount+approvedCount}
               </span>
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">

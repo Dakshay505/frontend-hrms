@@ -629,8 +629,8 @@ export const AttendenceDashboardList = () => {
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
   }, []);
-  const totalPresent = items?.length
-  console.log(totalPresent)
+  // const totalPresent = items?.length
+  // console.log(totalPresent)
 
   // pending rejected total
   const navigate = useNavigate();
@@ -709,7 +709,7 @@ export const AttendenceDashboardList = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalPresent}
+                {pendingCount+rejectedCount+approvedCount}
               </span>
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">

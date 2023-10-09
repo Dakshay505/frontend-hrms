@@ -99,9 +99,6 @@ export const NewProfile = () => {
 
      }
      
-    
-
-
 
     function formatDate(date: any) {
         const year = date.getFullYear();
