@@ -21,7 +21,7 @@ import { getAllAttandenceAsync, getGroupAttendanceAsync, getShopFilterAttandence
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
-import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
+// import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
@@ -75,7 +75,7 @@ export const AttendenceDashboardList = () => {
 
   const [isLabelVisible, setLabelVisible] = useState(true);
   const [search, setSearch] = useState("");
- 
+
   const observerTarget = useRef(null);
   const [suggestions, setSuggestions] = useState<any>([]);
 
@@ -111,7 +111,7 @@ export const AttendenceDashboardList = () => {
 
 
 
-    
+
   useEffect(() => {
     dispatch(getAllGroupsAsync());
     dispatch(getAllJobProfileAsync());
@@ -250,16 +250,16 @@ export const AttendenceDashboardList = () => {
       filter.nextDate = filter.date
     }
     const currentDate = new Date(date);
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const day = String(currentDate.getDate()).padStart(2, "0");
     const nDate = new Date(nextDate);
-      const nextyear = nDate.getFullYear();
-      const nextmonth = String(nDate.getMonth() + 1).padStart(2, "0");
+    const nextyear = nDate.getFullYear();
+    const nextmonth = String(nDate.getMonth() + 1).padStart(2, "0");
     const nextday = String(nDate.getDate()).padStart(2, "0");
-    
-    filter.date=`${year}-${month}-${day}`
-    filter.nextDate=`${nextyear}-${nextmonth}-${nextday}`;
+
+    filter.date = `${year}-${month}-${day}`
+    filter.nextDate = `${nextyear}-${nextmonth}-${nextday}`;
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
@@ -272,7 +272,7 @@ export const AttendenceDashboardList = () => {
         Setloading(false)
       }
     });
-  }, [date,nextDate]);
+  }, [date, nextDate]);
   // const handlerFatchMore = () => {
   //   setPage((prevPage) => prevPage + 1);
   // };
@@ -296,7 +296,7 @@ export const AttendenceDashboardList = () => {
     //localStorage.setItem("jobProfileName", filter.jobProfileName)
     //localStorage.setItem("groupName", filter.groupName)
     //localStorage.setItem("departmentName", filter.departmentName)
-   filter.date=new Date().toISOString().slice(0, 10)
+    filter.date = new Date().toISOString().slice(0, 10)
 
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
@@ -609,12 +609,12 @@ export const AttendenceDashboardList = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedProfileImage, setSelectedProfileImage] = useState("");
 
-  const handleImageClick = (imageSrc: any,profileSrc:any) => {
+  const handleImageClick = (imageSrc: any, profileSrc: any) => {
     setSelectedImage(imageSrc);
-    
+
     setSelectedProfileImage(profileSrc)
-    
-    
+
+
     setIsImageOpen(true);
   };
 
@@ -629,8 +629,6 @@ export const AttendenceDashboardList = () => {
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
   }, []);
-  const totalPresent = items?.length
-  console.log(totalPresent)
 
   // pending rejected total
   const navigate = useNavigate();
@@ -654,7 +652,7 @@ export const AttendenceDashboardList = () => {
     } else if (entry.status === "rejected") {
       rejectedCount++;
     }
-  
+
   }
 
   return (
@@ -689,7 +687,7 @@ export const AttendenceDashboardList = () => {
               <span className="text-[#283093] text-2xl font-semibold">
                 {pendingCount}
               </span>
-           
+
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
               Pending
@@ -700,7 +698,7 @@ export const AttendenceDashboardList = () => {
               <span className="text-[#283093] text-2xl font-semibold">
                 {rejectedCount}
               </span>
-             
+
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
               Rejected
@@ -709,7 +707,7 @@ export const AttendenceDashboardList = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalPresent}
+                {approvedCount + pendingCount + rejectedCount}
               </span>
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
@@ -1049,6 +1047,11 @@ export const AttendenceDashboardList = () => {
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Date
               </td>
+
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Image
+              </td>
+
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Employee Code
               </td>
@@ -1102,6 +1105,12 @@ export const AttendenceDashboardList = () => {
                         {latestPunches.punchIn
                           ? latestPunches.punchIn.slice(0, 10)
                           : "Not Avilable"}
+                      </td>
+                      <td className=""  >
+                        {element.profilePicture
+                          ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                          : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+
                       </td>
                       <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
                         {element.employeeId?.employeeCode
@@ -1235,32 +1244,17 @@ export const AttendenceDashboardList = () => {
 
                       {/* photo open */}
 
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                      <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                         {element?.status === "approved" &&
                           element.approvedImage && (
-                            <div className="flex gap-[10px] cursor-pointer">
-                              <div>
-                                <p
-                                  className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                  onClick={() =>
-                                    handleImageClick(
-                                      element.approvedImage,
-                                      element?.profilePicture
-                                      
-                                    )
-                                  } 
-                                >
-                                  Open Photo
-                                </p>
-                              </div>
-                              <div>
-                                <img
-                                  src={ArrowSqureOut}
-                                  className="w-[14px] h-[14px]"
-                                  alt="arrowsqureout"
-                                />
-                              </div>
-                            </div>
+                            <img onClick={() =>
+                              handleImageClick(
+                                element.approvedImage,
+                                element?.profilePicture
+
+                              )
+                            } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+
                           )}
                       </td>
                     </tr>
@@ -1269,6 +1263,9 @@ export const AttendenceDashboardList = () => {
                       sortedPunches.slice(1).map((element: any) => {
                         return (
                           <tr key={element._id + element.punchIn}>
+                            <td>
+                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                            </td>
                             <td>
                               <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
                             </td>
@@ -1458,38 +1455,6 @@ export const AttendenceDashboardList = () => {
                                   <div>{temp.shopName ? temp.shopName : "-"}</div>
                                 )}
                               </td>
-
-
-                              {/* photo open */}
-
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                                {element?.status === "approved" &&
-                                  element.approvedImage && (
-                                    <div className="flex gap-[10px] cursor-pointer">
-                                      <div>
-                                        <p
-                                          className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                                          onClick={() =>
-                                            handleImageClick(
-                                              element.approvedImage,
-                                              element?.profilePicture
-                                              
-                                            )
-                                          }
-                                        >
-                                          Open Photo
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <img
-                                          src={ArrowSqureOut}
-                                          className="w-[14px] h-[14px]"
-                                          alt="arrowsqureout"
-                                        />
-                                      </div>
-                                    </div>
-                                  )}
-                              </td>
                             </tr>
                             {showTableRow.includes(index) &&
                               sortedPunches &&
@@ -1542,36 +1507,36 @@ export const AttendenceDashboardList = () => {
           }
           <div ref={observerTarget}></div>
           {isImageOpen && (
-              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-                <div className="flex flex-row gap-2">
-                  <div className="flex flex-col text-center gap-2">
-                    <p className="font-bold text-white ">Profile Image</p>
-                    {selectedProfileImage?
+            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+              <div className="flex flex-row gap-2">
+                <div className="flex flex-col text-center gap-2">
+                  <p className="font-bold text-white ">Profile Image</p>
+                  {selectedProfileImage ?
 
-                <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
-                    :<img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
-                    
-              }
+                    <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
+                    : <img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+
+                  }
                 </div>
                 <div className="flex flex-col text-center gap-2">
-                <p className="font-bold text-white">Approved Image</p>
-                <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                  <p className="font-bold text-white">Approved Image</p>
+                  <img src={selectedImage} alt="Approved" className="h-[20rem]" />
                 </div>
-                
-                </div>
-                <button
-                  className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
-                  onClick={handleCloseImage}
-                >
-                  
-                  <img
-                    src={close}
-                    alt=""
-                    className="h-[25px] w-[25px] bg-white rounded-full "
-                  />
-                </button>
+
               </div>
-            )}
+              <button
+                className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
+                onClick={handleCloseImage}
+              >
+
+                <img
+                  src={close}
+                  alt=""
+                  className="h-[25px] w-[25px] bg-white rounded-full "
+                />
+              </button>
+            </div>
+          )}
         </table>
         {/* TABLE ENDS HERE */}
       </div>
@@ -1583,10 +1548,10 @@ export const AttendenceDashboardList = () => {
               const temp = new Date(date);
               temp.setDate(date.getDate() - 1);
               setDate(temp);
-              const datePart= temp.toISOString().slice(0, 10);
+              const datePart = temp.toISOString().slice(0, 10);
               setFilter({
                 ...filter,
-                date:datePart
+                date: datePart
               }
               )
             }}
@@ -1601,7 +1566,7 @@ export const AttendenceDashboardList = () => {
                   if (calenderDayClicked.length === 0) {
                     setDate(event);
                     // const datePart= date.toISOString().slice(0, 10);
-                  
+
                     // setFilter({
                     //   ...filter,
                     //   date:datePart
@@ -1610,14 +1575,14 @@ export const AttendenceDashboardList = () => {
 
                   } else if (calenderDayClicked.length === 1) {
                     setnextDate(event);
-              //       const datePart= nextDate.toISOString().slice(0, 10);
-              // setFilter({
-              //   ...filter,
-              //   nextDate:datePart
-              // }
-              // )
+                    //       const datePart= nextDate.toISOString().slice(0, 10);
+                    // setFilter({
+                    //   ...filter,
+                    //   nextDate:datePart
+                    // }
+                    // )
                   }
-                  
+
                   if (calenderDayClicked.length < 1) {
                     setcalenderDayClicked([...calenderDayClicked, 1]);
                   }
@@ -1647,7 +1612,7 @@ export const AttendenceDashboardList = () => {
             onClick={() => {
               const temp = new Date(nextDate);
               temp.setDate(nextDate.getDate() + 1);
-              console.log("Date",temp)
+              console.log("Date", temp)
               setnextDate(temp);
               // const datePart= temp.toISOString().slice(0, 10);
               // setFilter({

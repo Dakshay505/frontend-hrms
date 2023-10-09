@@ -168,8 +168,8 @@ export const AttendenceDtabase = () => {
     dispatch(getAllPunchInPunchOutAsync());
   }, []);
 
-  const totalPresent = items?.length
-  console.log(totalPresent)
+  // const totalPresent = items?.length
+  // console.log(totalPresent)
   // const totalEmployees = groupAttendanceList.reduce(
   //   (acc: any, group: any) => acc + group.totalEmployeesInGroup,
   //   0
@@ -246,7 +246,7 @@ export const AttendenceDtabase = () => {
           <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
               <span className="text-[#283093] text-2xl font-semibold">
-                {totalPresent}
+                {pendingCount+approvedCount}
               </span>
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
@@ -480,31 +480,9 @@ export const AttendenceDtabase = () => {
                           </p>
 
                         </td>
-                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&
                             element.approvedImage && (
-                              // <div className="flex gap-[10px] cursor-pointer">
-                              //   <div>
-                              //     <p
-                              //       className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                              //       onClick={() =>
-                              //         handleImageClick(
-                              //           element.approvedImage
-                              //         )
-                              //       }
-                              //     >
-                              //       Open
-                              //     </p>
-                              //   </div>
-
-                              //   <div>
-                              //     <img
-                              //       src={ArrowSqureOut}
-                              //       className="w-[14px] h-[14px]"
-                              //       alt="arrowsqureout"
-                              //     />
-                              //   </div>
-                              // </div>
                               <img   onClick={() =>
                                         handleImageClick(
                                           element.approvedImage,
