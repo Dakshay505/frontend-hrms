@@ -50,8 +50,8 @@ const MonthlyReport = () => {
     page: 1,
     limit: 20,
     aadhar: "0",
-    createdSort:"",
-    updatedSort:"",
+    createdSort: "",
+    updatedSort: "",
   });
   const changetime = (createdAtDate: any) => {
     const date = new Date(createdAtDate)
@@ -171,7 +171,7 @@ const MonthlyReport = () => {
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const year = date.getFullYear();
     return `${day}-${month}-${year} ${changetime(date)}`;
-  } 
+  }
   const exportToExcel = () => {
     if (employeeDetailList) {
       const columnOrder = [
@@ -303,22 +303,22 @@ const MonthlyReport = () => {
 
 
   const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
-  const [createdAt,setCreatedAt]=useState("")
-  const [updatedAt,setUpdatedAt]=useState("")
-  useEffect(()=>{
+  const [createdAt, setCreatedAt] = useState("")
+  const [updatedAt, setUpdatedAt] = useState("")
+  useEffect(() => {
     setFilter({
       ...filter,
-      createdSort:createdAt
+      createdSort: createdAt
     })
 
-  },[createdAt])
-  useEffect(()=>{
+  }, [createdAt])
+  useEffect(() => {
     setFilter({
       ...filter,
-      updatedSort:updatedAt
+      updatedSort: updatedAt
     })
 
-  },[updatedAt])
+  }, [updatedAt])
   useEffect(() => {
     setPagiArrIncludes([page - 1]);
   }, [page]);
@@ -629,37 +629,37 @@ const MonthlyReport = () => {
 
           </div>
           <div className="relative inline-block text-left ml-3">
-              <select
-              onChange={(event)=>setCreatedAt(event.target.value)}
+            <select
+              onChange={(event) => setCreatedAt(event.target.value)}
               value={createdAt}
-             
-              
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                
-              >
-                <option value="">Sorted By Created Date</option>
-                 <option value="True">New</option>
-                    <option value="">Old</option>
-              </select>
-              
-            </div>
-            <div className="relative inline-block text-left text-sm">
-              <select
-              onChange={(event)=>setUpdatedAt(event.target.value)}
+
+              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+
+            >
+              <option value="">Sorted By Created Date</option>
+              <option value="True">New</option>
+              <option value="">Old</option>
+            </select>
+
+          </div>
+          <div className="relative inline-block text-left text-sm">
+            <select
+              onChange={(event) => setUpdatedAt(event.target.value)}
               value={updatedAt}
-             
-              
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                
-              >
-                <option value="">Sorted By Updated Date</option>
-                 <option value="True">New</option>
-                    <option value="False">Old</option>
-              </select>
-              
-            </div>
+
+              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+
+            >
+              <option value="">Sorted By Updated Date</option>
+              <option value="True">New</option>
+              <option value="False">Old</option>
+            </select>
+
+          </div>
         </div>
         <div>
           <div className="relative">
@@ -741,7 +741,7 @@ const MonthlyReport = () => {
                     Profile Photo
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Employee ID
+                    Employee Code
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                     Name
@@ -794,16 +794,22 @@ const MonthlyReport = () => {
                     Bank Name
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Bank Account Number
+                    Branch
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                    Bank IFSC NUMBER
+                    Bank Account No.
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Bank IFSC No.
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                     Updated at
                   </td>
                   <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                     Created at
+                  </td>
+                  <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                    Last Status of Login
                   </td>
 
 
@@ -881,13 +887,15 @@ const MonthlyReport = () => {
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                          {element.overTime
-                            ? element.overTime
-                            : "Not Avilable"}
+                          {element.overTime && element.overTime === true ? "Yes" : element.overTime === false ? "No" : "-"}
+                        </td>
+
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.bankDetails ? element.bankDetails.bankName : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.bankDetails
-                            ? element.bankDetails.bankName
+                            ? element.bankDetails.branch
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
@@ -908,6 +916,11 @@ const MonthlyReport = () => {
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.createdAt
                             ? `${element.createdAt.slice(0, 10)}: ${changetime(element.createdAt)}`
+                            : "Not Avilable"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {element.loggedHistory
+                            ? `${element.loggedHistory.logInTime.slice(0, 10)}: ${changetime(element.loggedHistory.logInTime)}`
                             : "Not Avilable"}
                         </td>
 
