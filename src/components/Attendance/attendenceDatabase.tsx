@@ -480,31 +480,9 @@ export const AttendenceDtabase = () => {
                           </p>
 
                         </td>
-                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                        <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&
                             element.approvedImage && (
-                              // <div className="flex gap-[10px] cursor-pointer">
-                              //   <div>
-                              //     <p
-                              //       className="text-[12px] leading-4 font-medium text-[#283093] underline"
-                              //       onClick={() =>
-                              //         handleImageClick(
-                              //           element.approvedImage
-                              //         )
-                              //       }
-                              //     >
-                              //       Open
-                              //     </p>
-                              //   </div>
-
-                              //   <div>
-                              //     <img
-                              //       src={ArrowSqureOut}
-                              //       className="w-[14px] h-[14px]"
-                              //       alt="arrowsqureout"
-                              //     />
-                              //   </div>
-                              // </div>
                               <img   onClick={() =>
                                         handleImageClick(
                                           element.approvedImage,
