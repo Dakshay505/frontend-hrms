@@ -12,7 +12,7 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
-    // console.log(loggedInUserData)
+    console.log("home page",loggedInUserData)
 
     useEffect(() => {
         dispatch(getLoggedInUserDataAsync());
@@ -46,7 +46,7 @@ const Home = () => {
                     <h3 className='text-2xl font-bold leading-8 text-[#2E2E2E]'>View/Update Database</h3>
                 </div>
                 <div className='flex gap-4'>
-                    {loggedInUserData.employee.role==='admin' || (loggedInUserData.employee.role === 'dbManager') ? (
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ||  (loggedInUserData.employee.role === 'admin') ? (
                         <Link to='/addemployee'>
                             <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
                                 <img className='w-[32px] h-[32px]' src={userPlus} alt="Add Employee" />
@@ -56,7 +56,7 @@ const Home = () => {
                     ) : null}
 
 
-                    {loggedInUserData.employee.role==='admin' || (loggedInUserData.employee.role === 'dbManager') ? (
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ||  (loggedInUserData.employee.role === 'admin') ? (
 
                         <Link to='/add-department'>
                             <div className='flex flex-col items-center justify-center gap-[12px]  bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
@@ -66,7 +66,7 @@ const Home = () => {
                         </Link>
                     ) : null}
 
-                    {loggedInUserData.employee.role==='admin' || (loggedInUserData.employee.role === 'dbManager') ? (
+                    {loggedInUserData.admin || (loggedInUserData.employee.role === 'dbManager') ||  (loggedInUserData.employee.role === 'admin') ? (
 
                         <Link to='/add-job-profile'>
                             <div className='flex flex-col items-center justify-center gap-[12px] bg-[#ECEDFE] rounded-lg w-[218.67px] h-[120px]'>
@@ -87,7 +87,7 @@ const Home = () => {
                     </Link>
                 </div>
             </div>
-            {loggedInUserData.employee.role==='admin'|| (loggedInUserData.employee.role === 'dbManager') ? (
+            {loggedInUserData.admin|| (loggedInUserData.employee.role === 'dbManager') ||  (loggedInUserData.employee.role === 'admin') ? (
 
                 <div>
                     <div className='my-8'>

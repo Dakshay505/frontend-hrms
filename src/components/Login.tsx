@@ -16,6 +16,7 @@ export function Login() {
     const { register, handleSubmit } = useForm();
     const dispatch = useDispatch();
     const loggedInUserData = useSelector((state: any) => state.login.loggedInUserData)
+    console.log("loginpage",loggedInUserData)
     const loaderStatus = useSelector((state: any) => state.login.status)
     const [Data, setData] = useState<any>({});
 
