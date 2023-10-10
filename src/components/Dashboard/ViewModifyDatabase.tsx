@@ -520,7 +520,7 @@ const ViewModifyDatabase = () => {
             </form>
           </div>
         </div>
-        {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
+        {loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin') ? (
 
           <div className="flex gap-6">
             {databaseValue !== "Employees" && databaseValue !== "Shop" && (
@@ -941,7 +941,7 @@ const ViewModifyDatabase = () => {
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
 
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
                             ? handleGroupTableRowClick(element)
                             : null}
                         >
@@ -999,7 +999,7 @@ const ViewModifyDatabase = () => {
                             {index + 1}
                           </td>
                           <td
-                            onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                            onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
                               ? handleJobprofileTableRowClick(element)
                               : null}
 
@@ -1023,7 +1023,7 @@ const ViewModifyDatabase = () => {
                                     ? element.department.departmentName
                                     : "invaild"}
                                 </p>
-                                {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' ? (
+                                {loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin') ? (
 
                                   <div className="">
                                     <img src={deleteIcon} alt="delete" />
@@ -1090,7 +1090,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
                             ? handleDepartmentTableRowClick(element)
                             : null}
                         >
@@ -1157,7 +1157,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
                             ? handleParentDepartmentTableRowClick(element)
                             : null}
                         >
@@ -1205,7 +1205,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager'
+                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
                             ? handleShopTableRowClick(element)
                             : null}
 

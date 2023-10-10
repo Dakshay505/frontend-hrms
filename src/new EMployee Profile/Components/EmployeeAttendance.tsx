@@ -251,7 +251,7 @@ export const EmployeeAttendance = (props: any) => {
                             <option value="December">December</option>
                         </select>
                     </div>
-                    {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
+                    {loggedInUserData.admin|| loggedInUserData.employee.role === 'attendanceManager' ||  (loggedInUserData.employee.role === 'admin') ? (
 
                         <div onClick={() => setShowAddPopup(true)} className="flex cursor-pointer gap-[5px]  items-center px-[15px] h-9 w-20 bg-[#4648D9] rounded-lg">
                             <img src={plus} className="w-[12px] h-[12px]" alt="plus" />
@@ -533,7 +533,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={GreenCheck} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#186A3B]'>Approved</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
+                                                        {loggedInUserData.admin|| loggedInUserData.employee.role === 'attendanceManager' ||  (loggedInUserData.employee.role === 'admin') ? (
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
                                                     </span>}
@@ -541,7 +541,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={RedX} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#8A2626]'>Rejected</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
+                                                        {loggedInUserData.admin|| loggedInUserData.employee.role === 'attendanceManager' ||  (loggedInUserData.employee.role === 'admin') ? (
 
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
@@ -551,7 +551,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Pending</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
+                                                        {loggedInUserData.admin|| loggedInUserData.employee.role === 'attendanceManager' ||  (loggedInUserData.employee.role === 'admin') ? (
 
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
@@ -561,7 +561,7 @@ export const EmployeeAttendance = (props: any) => {
                                                     <span className='flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4'>
                                                         <img src={SpinnerGap} className='h-[10px] w-[10px]' alt="check" />
                                                         <span className='text-sm font-normal text-[#945D2D]'>Manual</span>
-                                                        {loggedInUserData.admin || loggedInUserData.employee.role === 'attendanceManager' ? (
+                                                        {loggedInUserData.admin|| loggedInUserData.employee.role === 'attendanceManager' ||  (loggedInUserData.employee.role === 'admin') ? (
                                                             <img onClick={() => handlePopup((latestPunches.punchIn).slice(0, 10), latestPunches, element?.date)} src={dots} className="w-[12px] h-[12px]" alt="plus" />
                                                         ) : null}
 

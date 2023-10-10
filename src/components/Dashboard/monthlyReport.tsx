@@ -473,36 +473,10 @@ const MonthlyReport = () => {
 
       </div>
 
-      <div className="mt-10 flex gap-5">
+      <div className="mt-10 flex gap-5 flex-wrap">
         <div className="flex gap-4">
           <div>
-            {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Groups") {
-                    setFilter({
-                      ...filter,
-                      groupName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      groupName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-              >
-                <option value="All Groups">All Groups</option>
-                {groupList &&
-                  groupList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.groupName}>
-                        {element.groupName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+          
             <div className="relative inline-block text-left">
               <button
                 type="button"
@@ -541,33 +515,7 @@ const MonthlyReport = () => {
             </div>
           </div>
           <div>
-            {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Job Profiles") {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.jobProfileName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-              >
-                <option value="All Job Profiles">All Job Profiles</option>
-                {jobProfileList &&
-                  jobProfileList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.jobProfileName}>
-                        {element.jobProfileName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+           
             <div className="relative inline-block text-left">
               <button
                 type="button"

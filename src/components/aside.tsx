@@ -113,7 +113,7 @@ export default function aside(props: Props) {
             </Link>
           }
           {/* asd */}
-          {loggedInUserData.admin && loggedInUserData.admin ? (
+          {/* {loggedInUserData.admin && loggedInUserData.employee.role==='dbManager' &&  (loggedInUserData.employee.role === 'admin')? (  */}
 
             <div
               onClick={() => {
@@ -127,7 +127,7 @@ export default function aside(props: Props) {
               </div>
             </div>
 
-          ) : null}
+           {/* ) : null}   */}
 
           <Link to='/show-notifications'>
             <div>

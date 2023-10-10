@@ -1,9 +1,9 @@
 export const apiPath = `http://localhost:5050`;
 //export const apiPath = ``;
 
-
-
-
+// export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `http://localhost:5050`;
+// export const apiPath = ``;
 
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 
@@ -146,9 +146,7 @@ export const showWorkDayApiPath = `${apiPath}/api/v2/workingDay/`;
 // Login history Api
 export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
 
-
 // Login history Api
 export const changePasswordPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`;
-
 
 export const getNewSalaryApiPath = `${apiPath}/api/v2/salary/salary`;
