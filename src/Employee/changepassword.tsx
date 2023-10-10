@@ -4,16 +4,16 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 // import { updateEmployeeAsync } from '../redux/Slice/EmployeeSlice';
 import Asterisk from '../assets/Asterisk.svg'
-import { newPasswordAsync, updatePasswordAsync } from '../redux/Slice/EmployeeSlice';
+import {  updatePasswordAsync } from '../redux/Slice/EmployeeSlice';
 
-import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
+// import { getLoggedInUserDataAsync } from "../redux/Slice/loginSlice";
 import toast from 'react-hot-toast';
 
 
 export function ChangePassword() {
   // const dispatch = useDispatch();
 
-  const [employeeId, setEmployeeId] = useState("")
+  const [, setEmployeeId] = useState("")
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

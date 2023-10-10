@@ -85,9 +85,9 @@ export default function EmployeeAside(props: Props) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleChangePassword = () => {
-    setIsDropdownOpen(false);
-  };
+  // const handleChangePassword = () => {
+  //   setIsDropdownOpen(false);
+  // };
   return (
     // main
     <div className="flex flex-col">
