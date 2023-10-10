@@ -356,9 +356,8 @@ export const AttendenceDashboardList = () => {
         'PunchOut',
         'Status',
         'Signature',
-        'Shop',
-        // 'ApprovedBy',
-        // 'ApprovedTime',
+        'Shop Code',
+        'Shop Name',
         // 'Remark'
         ""
       ];
@@ -401,11 +400,10 @@ export const AttendenceDashboardList = () => {
               return record.employeeId.jobProfileId.jobProfileName;
             case 'Group':
               return record.employeeId.groupId.groupName;
-            // case 'ApprovedBy':
-            //   return record.approvedBy?.name;
-            // case 'ApprovedTime':
-            //   const time3 = extractTime(record.approvedTime);
-            //   return time3;
+            case 'Shop Code':
+              return record.shopCode? record.shopCode : "-";
+            case 'Shop Name':
+              return record.shopName? record.shopName : "-";
             // case 'Remark':
             //   return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
             default:

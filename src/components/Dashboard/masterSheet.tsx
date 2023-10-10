@@ -192,10 +192,12 @@ const MasterSheet = () => {
         'Over Time Status',
         'Lunch Time',
         'Bank Name',
+        'Branch',
         'Bank Account Number',
         'Bank IFSC Code',
         'updatedAt',
-        'createdAt'
+        'createdAt',
+        'last Status'
         // 'ApprovedBy',
         // 'ApprovedTime',
         // 'Remark'
@@ -229,31 +231,28 @@ const MasterSheet = () => {
               return record.lunchTime
             case 'Bank Name':
               return record?.bankDetails?.bankName
+            case 'Branch':
+              return record?.bankDetails?.branch
             case 'Bank Account Number':
               return record?.bankDetails?.accountNumber
             case 'Bank IFSC Code':
               return record?.bankDetails?.IFSC_Code
-
             case 'updatedAt':
-
               return formatDateExcel(record.updatedAt);
             case 'createdAt':
-
-
               return formatDateExcel(record.createdAt);
-
             case 'Email':
               return record.email;
             case 'Contact Number':
               return record.contactNumber;
-
             case 'JobProfile':
               return record.jobProfileId.jobProfileName;
             case 'Group':
               return record.groupId.groupName;
             case 'Gender':
               return record.gender
-
+            case 'last Status':
+              return record.loggedHistory ? record.loggedHistory?.logInTime : "-"
             default:
               return '';
           }
@@ -476,7 +475,7 @@ const MasterSheet = () => {
       <div className="mt-10 flex gap-5 flex-wrap">
         <div className="flex gap-4">
           <div>
-          
+
             <div className="relative inline-block text-left">
               <button
                 type="button"
@@ -515,7 +514,7 @@ const MasterSheet = () => {
             </div>
           </div>
           <div>
-           
+
             <div className="relative inline-block text-left">
               <button
                 type="button"
