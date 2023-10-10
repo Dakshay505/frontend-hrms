@@ -1079,6 +1079,9 @@ export const AttendenceDashboardList = () => {
                 Shop
               </td>
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                Shop Code
+              </td>
+              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                 Photos
               </td>
             </tr>
@@ -1237,10 +1240,11 @@ export const AttendenceDashboardList = () => {
 
                       </td>
 
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" && (
-                          <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
-                        )}
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
+                        <p className="">{element.shopName ? element.shopName : "-"}</p>
+                      </td>
+                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
+                        <p className="">{element.shopCode ? element.shopCode : "-"}</p>
                       </td>
 
 
@@ -1456,6 +1460,28 @@ export const AttendenceDashboardList = () => {
                                 {element?.status === "approved" && (
                                   <div>{temp.shopName ? temp.shopName : "-"}</div>
                                 )}
+                              </td>
+                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                                {element?.status === "approved" && (
+                                  <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
+                                )}
+                              </td>
+
+
+                              {/* photo open */}
+
+                              <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                                {element?.status === "approved" &&
+                                  element.approvedImage && (
+                                    <img onClick={() =>
+                                      handleImageClick(
+                                        element.approvedImage,
+                                        element?.profilePicture
+
+                                      )
+                                    } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+
+                                  )}
                               </td>
                             </tr>
                             {showTableRow.includes(index) &&

@@ -1,5 +1,3 @@
-// export const apiPath = `http://localhost:5050`;
-// export const apiPath = ``;
 
 export const apiPath = `https://chawlacomponents.com`;
 // export const apiPath = `http://localhost:5050`;
