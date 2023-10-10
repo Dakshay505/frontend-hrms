@@ -141,7 +141,7 @@ export default function aside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="">
+      <div className="relative">
         {showSidebar ? (
           <button
             className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
@@ -154,8 +154,9 @@ export default function aside(props: Props) {
             className="fixed h-[24px] w-[24px] p-[5px] border rounded-full border-border-primary shadow-lg  z-30 flex items-center cursor-pointer left-[258px] top-[14%]" />
 
         )}
-        <aside className={`flex flex-col justify-between fixed mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
-          } transition-all ease-in-out duration-500`}>
+        {!showSidebar &&
+        <aside className={`flex flex-col justify-between absolute mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
+          } transition-all ease-in-out duration-500`} >
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
               // Conditional rendering for the "Employees" item
@@ -195,10 +196,11 @@ export default function aside(props: Props) {
             </Link>
           </div>
         </aside>
+        }
         {/* Your Content here */}
-        <div className="ml-[270px] mt-[74px]">
-          {props.children}
-        </div>
+       <div className={`ml-[${showSidebar ? '270px' : '0px'}] mt-[74px]`}>
+        {props.children}
+      </div>
       </div>
 
     </div>
