@@ -401,9 +401,9 @@ export const AttendenceDashboardList = () => {
             case 'Group':
               return record.employeeId.groupId.groupName;
             case 'Shop Code':
-              return record.shopCode? record.shopCode : "-";
+              return record.shopCode ? record.shopCode : "-";
             case 'Shop Name':
-              return record.shopName? record.shopName : "-";
+              return record.shopName ? record.shopName : "-";
             // case 'Remark':
             //   return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
             default:
@@ -1331,6 +1331,14 @@ export const AttendenceDashboardList = () => {
                                   ? latestPunches.punchIn.slice(0, 10)
                                   : "Not Avilable"}
                               </td>
+
+                              <td className=""  >
+                                {element.profilePicture
+                                  ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                                  : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+
+                              </td>
+
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
                                 {element.employeeId?.employeeCode
                                   ? element.employeeId.employeeCode
@@ -1464,11 +1472,7 @@ export const AttendenceDashboardList = () => {
                                   <div>{temp.shopCode ? temp.shopCode : "-"}</div>
                                 )}
                               </td>
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                                {element?.status === "approved" && (
-                                  <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
-                                )}
-                              </td>
+                         
 
 
                               {/* photo open */}
@@ -1572,7 +1576,7 @@ export const AttendenceDashboardList = () => {
         {/* TABLE ENDS HERE */}
       </div>
 
-      <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+      <div className="fixed flex justify-center bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
           <button
             onClick={() => {
