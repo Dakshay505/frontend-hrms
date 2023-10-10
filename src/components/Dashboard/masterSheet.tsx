@@ -36,7 +36,7 @@ import toast from "react-hot-toast";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 
-const MonthlyReport = () => {
+const MasterSheet = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -931,4 +931,4 @@ const MonthlyReport = () => {
   );
 };
 
-export default MonthlyReport;
+export default MasterSheet;

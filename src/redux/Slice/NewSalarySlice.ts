@@ -1,6 +1,6 @@
 // salarySlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getNewSalaryDataApi } from '../API/NewSalaryApi';
+import { getMonthlyReportsApi, getNewSalaryDataApi } from '../API/NewSalaryApi';
 
 
 const initialState = {
@@ -30,6 +30,21 @@ export const getAllSalaryAsync:any = createAsyncThunk(
 
 
 
+export const getAllMonthlyReportAsync:any = createAsyncThunk(
+  "getAllMonthlyReportAsync",
+  async (Data) => {
+    try {
+      const response: any = await getMonthlyReportsApi(Data);
+      return response; 
+    } catch (error:any) {
+      return (error.message);
+    }
+  }
+);
+
+
+
+
 
 export const NewSalarySlice = createSlice({
   name: "NewSalarySlice",
@@ -46,6 +61,18 @@ export const NewSalarySlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getAllSalaryAsync.rejected, (state: any, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllMonthlyReportAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllMonthlyReportAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+      })
+      .addCase(getAllMonthlyReportAsync.rejected, (state: any, action) => {
         state.loading = false;
         state.error = action.payload;
       });

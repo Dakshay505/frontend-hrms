@@ -83,7 +83,8 @@ import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
 // import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 //import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
-import MonthlyReport from "./components/Dashboard/monthlyReport";
+import {MonthlyReport} from "./components/Monthly-report";
+import MasterSheet from "./components/Dashboard/masterSheet";
 
 
 const router = createBrowserRouter([
@@ -647,6 +648,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <SalaryDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/master-Sheet",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <MasterSheet/>
         </Aside>
       </ProductedRoute>
     ),
