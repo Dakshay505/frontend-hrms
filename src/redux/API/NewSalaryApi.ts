@@ -17,11 +17,11 @@ export const getNewSalaryDataApi = async (Data:any) => {
  
 
 export const getMonthlyReportsApi = async (Data:any) => {
-    try {
+  console.log(Data)
+  try {
       const {data}= await axios.post(`${getMonthlyReportApiPath}`,Data, {
         withCredentials: true,
       });
-      // console.log(data)
       return data;
     } catch (err: any) {
       console.log(err.data);

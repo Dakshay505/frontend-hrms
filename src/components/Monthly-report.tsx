@@ -17,8 +17,8 @@ export const MonthlyReport = () => {
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
 
-    const montlyData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
-    // console.log("uuuuuuuuuuuuuuuuuuuu", montlyData)
+    const monthlyData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    // console.log("uuuuuuuuuuuuuuuuuuuu", monthlyData)
 
     const dispatch = useDispatch();
 
@@ -355,23 +355,23 @@ export const MonthlyReport = () => {
 
     useEffect(() => {
         dispatch(getAllMonthlyReportAsync(filter)).then((res: any) => {
-            const montlyData = res.payload.salaryRecords;
-            console.log("aaaaaaaaaaaaaa", montlyData)
+            const monthlyData = res.payload.salaryRecords;
+            console.log("aaaaaaaaaaaaaa", monthlyData)
             const arr = [];
 
-            for (let i = 0; i < montlyData.length; i++) {
-                if (montlyData[i].profilePicture) {
+            for (let i = 0; i < monthlyData.length; i++) {
+                if (monthlyData[i].profilePicture) {
                     arr.push({
-                        name: montlyData[i]?.employee?.name,
-                        jobProfileName: montlyData[i]?.employee.jobProfileId.jobProfileName,
+                        name: monthlyData[i]?.employee?.name,
+                        jobProfileName: monthlyData[i]?.employee.jobProfileId.jobProfileName,
                     });
                 }
                 else {
                     arr.push({
-                        name: montlyData[i]?.employee.name,
+                        name: monthlyData[i]?.employee.name,
                         profilePicture:
                             "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-                        jobProfileName: montlyData[i]?.employee.jobProfileId.jobProfileName,
+                        jobProfileName: monthlyData[i]?.employee.jobProfileId.jobProfileName,
                     });
                 }
             }
@@ -547,8 +547,8 @@ export const MonthlyReport = () => {
                                     </div>
                                     <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
 
-                                        {montlyData &&
-                                            montlyData.map((element?: any) => (
+                                        {monthlyData &&
+                                            monthlyData.map((element?: any) => (
                                                 <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
@@ -699,30 +699,30 @@ export const MonthlyReport = () => {
 
                                 </tr>
 
-                                {montlyData && montlyData.map((element:any, index:any) => (
+                                {monthlyData && monthlyData.map((element:any, index:any) => (
                                     <tr key={index}>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{index + 1}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.name}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId.groupName}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId.department}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId.jobProfileName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId?.groupName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department.departmentName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.jobProfileName}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.overTime ? 'Yes' : 'No'}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.workingHours}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.lunchTime}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalWorkingHours}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{/* Add the field for Duty per month */}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.dutyPerMonth}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.numberofduty}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.approvedduty}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{/* Add the field for Sum Final Working Hours */}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{/* Add the field for Sum Duty Hours */}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC.toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody >
@@ -736,6 +736,7 @@ export const MonthlyReport = () => {
                                 value={limit.toString()}
                                 onChange={(event) => {
                                     const selectedLimit = Number(event.target.value);
+                                    console.log("aaaaaa",selectedLimit)
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
@@ -750,9 +751,7 @@ export const MonthlyReport = () => {
                                 <option value="10">10</option>
                                 <option value="1">1</option>
                                 <option value="20">20</option>
-                                <option value={total} selected={limit === total}>
-                                    All
-                                </option>
+                               
                             </select>
 
                             <label className="text-zinc-400 pl-2">Items per page</label>
