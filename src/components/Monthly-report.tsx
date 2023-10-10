@@ -712,17 +712,17 @@ export const MonthlyReport = () => {
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.workingHours}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.lunchTime}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalWorkingHours}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours?.toFixed(2)}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.dutyPerMonth}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.numberofduty}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.approvedduty}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC?.toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody >
