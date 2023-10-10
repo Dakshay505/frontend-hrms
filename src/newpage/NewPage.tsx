@@ -52,26 +52,28 @@ export const NewPage = () => {
   const [totalPage, setTotalPage] = useState(1);
 
 
-  const [filter, setFilter] = useState({
-    name: localStorage.getItem("name") || "",
-    groupName: [""],
-    jobProfileName: [""],
-    departmentName: [""],
-    page: 1,
-    limit: 20,
-    aadhar: "0",
-    createdSort: "",
-    updatedSort: ""
-
+  const [filter, setFilter] = useState(() => {
+    const storedFilterString = sessionStorage.getItem("filterData");
+  
+    if (storedFilterString) {
+      return JSON.parse(storedFilterString);
+    } else {
+      return {
+        name: "",
+        groupName: [""],
+        jobProfileName: [""],
+        page: 1,
+        limit: 20,
+        aadhar: "0"
+      };
+    }
   });
-
-
+  
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
       const arr = [];
-      console.log("Filter", filter)
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -90,22 +92,13 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter]);
+  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
 
-  // clearLocalStorageOnUnload
   useEffect(() => {
-    const clearLocalStorageOnUnload = () => {
-      localStorage.removeItem("groupName");
-      localStorage.removeItem("jobProfileName");
-      localStorage.removeItem("departmentName");
-    };
-
-    window.addEventListener("beforeunload", clearLocalStorageOnUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", clearLocalStorageOnUnload);
-    };
-  }, []);
+    const filterString = JSON.stringify(filter);
+    sessionStorage.setItem("filterData", filterString);
+  }, [filter]);
+  
   // PAGINATION =
   useEffect(() => {
     setTotalPage(Math.ceil(count / filter.limit));
@@ -525,7 +518,7 @@ export const NewPage = () => {
               All Group
             </button>
             {isGroupOpen && (
-              <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+              <div className="absolute right-0 z-50 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
                 <div className="flex flex-row p-2 gap-3">
                   <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />

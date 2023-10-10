@@ -45,26 +45,28 @@ const ViewModifyDatabase = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
 
-  const [filter, setFilter] = useState({
-    name: localStorage.getItem("name") || "",
-    //groupName: localStorage.getItem("groupName") || "",
-    groupName: [""],
-    //jobProfileName: localStorage.getItem("jobProfileName") || "",
-    jobProfileName: [""],
-    page: 1,
-    limit: 20,
-    aadhar: "0"
+  const [filter, setFilter] = useState(() => {
+    const storedFilterString = sessionStorage.getItem("filterData");
+  
+    if (storedFilterString) {
+      return JSON.parse(storedFilterString);
+    } else {
+      return {
+        name: "",
+        groupName: [""],
+        jobProfileName: [""],
+        page: 1,
+        limit: 20,
+        aadhar: "0"
+      };
+    }
   });
-
+  
   useEffect(() => {
-    // console.log("filter", filter)
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
       const employeeData = data.payload.employees;
-      //console.log("djhjhjhjhjhj",employeeData)
       const arr = [];
-      // localStorage.setItem("groupName", filter.groupName);
-      // localStorage.setItem("jobProfileName", filter.jobProfileName);
       for (let i = 0; i < employeeData.length; i++) {
         if (employeeData[i].profilePicture) {
           arr.push({
@@ -85,19 +87,11 @@ const ViewModifyDatabase = () => {
     });
   }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
 
-  // clearLocalStorageOnUnload
   useEffect(() => {
-    const clearLocalStorageOnUnload = () => {
-      localStorage.removeItem("groupName");
-      localStorage.removeItem("jobProfileName");
-    };
-
-    window.addEventListener("beforeunload", clearLocalStorageOnUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", clearLocalStorageOnUnload);
-    };
-  }, []);
+    const filterString = JSON.stringify(filter);
+    sessionStorage.setItem("filterData", filterString);
+  }, [filter]);
+  
   // PAGINATION =
   useEffect(() => {
     setTotalPage(Math.ceil(count / filter.limit));
@@ -114,7 +108,7 @@ const ViewModifyDatabase = () => {
 
   const dispatch = useDispatch();
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
-  console.log("Hii",employeeDetailList)
+  console.log("Hii", employeeDetailList)
 
 
   const loaderStatus = useSelector((state: any) => state.employee.status);
@@ -520,7 +514,7 @@ const ViewModifyDatabase = () => {
             </form>
           </div>
         </div>
-        {loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin') ? (
+        {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin') ? (
 
           <div className="flex gap-6">
             {databaseValue !== "Employees" && databaseValue !== "Shop" && (
@@ -819,7 +813,7 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-4 text-sm  font-normal text-[#2E2E2E] whitespace-nowrap">
                             <div className="rounded-full  overflow-hidden">
                               <img
-                                src={element?.profilePicture ? element?.profilePicture :img3}
+                                src={element?.profilePicture ? element?.profilePicture : img3}
                                 alt="Profile Photo"
                                 className="rounded-full object-cover w-[80px] h-[80px]"
                               />
@@ -941,7 +935,7 @@ const ViewModifyDatabase = () => {
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
 
-                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin')
                             ? handleGroupTableRowClick(element)
                             : null}
                         >
@@ -999,7 +993,7 @@ const ViewModifyDatabase = () => {
                             {index + 1}
                           </td>
                           <td
-                            onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
+                            onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin')
                               ? handleJobprofileTableRowClick(element)
                               : null}
 
@@ -1023,7 +1017,7 @@ const ViewModifyDatabase = () => {
                                     ? element.department.departmentName
                                     : "invaild"}
                                 </p>
-                                {loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin') ? (
+                                {loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin') ? (
 
                                   <div className="">
                                     <img src={deleteIcon} alt="delete" />
@@ -1090,7 +1084,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin')
                             ? handleDepartmentTableRowClick(element)
                             : null}
                         >
@@ -1157,7 +1151,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin')
                             ? handleParentDepartmentTableRowClick(element)
                             : null}
                         >
@@ -1205,7 +1199,7 @@ const ViewModifyDatabase = () => {
                         <tr
                           key={index}
                           className="hover:bg-[#FAFAFA] cursor-default"
-                          onClick={() => loggedInUserData.admin|| loggedInUserData.employee.role === 'dbManager' ||  (loggedInUserData.employee.role === 'admin')
+                          onClick={() => loggedInUserData.admin || loggedInUserData.employee.role === 'dbManager' || (loggedInUserData.employee.role === 'admin')
                             ? handleShopTableRowClick(element)
                             : null}
 
