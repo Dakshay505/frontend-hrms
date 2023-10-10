@@ -35,7 +35,7 @@ export const MonthlyReport = () => {
 
             try {
                 const data = await getMonthlyReportsApi(filter);
-                // console.log("data", data);
+                console.log("data", data);
 
                 setTotal(data.count);
                 const newPageCount = Math.ceil(data.count / filter.limit);
