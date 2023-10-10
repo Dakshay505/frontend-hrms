@@ -1459,6 +1459,11 @@ export const AttendenceDashboardList = () => {
                                   <div>{temp.shopName ? temp.shopName : "-"}</div>
                                 )}
                               </td>
+                              <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
+                                {element?.status === "approved" && (
+                                  <div>{temp.shopCode ? temp.shopCode : "-"}</div>
+                                )}
+                              </td>
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                                 {element?.status === "approved" && (
                                   <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
