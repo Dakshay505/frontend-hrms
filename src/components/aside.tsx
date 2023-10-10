@@ -74,10 +74,10 @@ const navItems: NavItem[] = [
     Link: "/monthly-report",
   },
   // {
-  //   id: "Page",
-  //   name: "Page",
-  //   icon: training,
-  //   Link: "/page",
+  //   id: "Report",
+  //   name: "Monthly Report",
+  //   icon: employees,
+  //   Link: "/report",
   // },
 ];
 

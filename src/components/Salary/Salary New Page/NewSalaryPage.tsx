@@ -16,17 +16,17 @@ import Calendar from "react-calendar";
 // import { saveAs } from 'file-saver';
 
 
-const options2 = [
-    { label: 'Day' },
-    { label: 'Night' },
-];
+// const options2 = [
+//     { label: 'Day' },
+//     { label: 'Night' },
+// ];
 
 export const NewSalaryPage = () => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
-    const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
+    // const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
@@ -42,16 +42,28 @@ export const NewSalaryPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getNewSalaryDataApi(filter);
-            console.log("data", data);
-            setTotal(data.count);
-            const newPageCount = Math.ceil(data.count / limit);
-            setPageCount(newPageCount);
-            if (page > newPageCount) {
-                setPage(newPageCount);
+            const filter = {
+                limit: 20,
+                page: 1,
+            };
+
+            try {
+                const data = await getNewSalaryDataApi(filter);
+                // console.log("data", data);
+
+                setTotal(data.count);
+                const newPageCount = Math.ceil(data.count / filter.limit);
+                setPageCount(newPageCount);
+                if (page > newPageCount) {
+                    setPage(newPageCount);
+                }
+            } catch (error) {
+                console.error("Error fetching new salary data:", error);
             }
         };
+
         fetchData();
+
     }, [limit, page]);
 
 
@@ -74,23 +86,23 @@ export const NewSalaryPage = () => {
 
 
     const [filter, setFilter] = useState<any>({
-        groupName: [],
-        jobProfileName: [],
-        departmentName: [],
-        employeeCodes: [],
+        groupName: [""],
+        jobProfileName: [""],
+        departmentName: [""],
+        // employeeCodes: [""],
         page: 1,
         limit: 20,
-        shifts: [], 
+        // shifts: [""],
 
     });
 
 
     useEffect(() => {
-        console.log(filter)
+
+        // console.log(filter)
 
         dispatch(getAllSalaryAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
-
     }, [filter]);
 
 
@@ -102,8 +114,8 @@ export const NewSalaryPage = () => {
     const [isOpen2, setIsOpen2] = useState(false);
     const dropdownRef2 = useRef<HTMLDivElement | null>(null);
 
-    const [isOpen3, setIsOpen3] = useState(false);
-    const dropdownRef3 = useRef<HTMLDivElement | null>(null);
+    // const [isOpen3, setIsOpen3] = useState(false);
+    // const dropdownRef3 = useRef<HTMLDivElement | null>(null);
 
     const [isOpen4, setIsOpen4] = useState(false);
     const dropdownRef4 = useRef<HTMLDivElement | null>(null);
@@ -112,8 +124,8 @@ export const NewSalaryPage = () => {
     const dropdownRef5 = useRef<HTMLDivElement | null>(null);
 
 
-    const [isOpen7, setIsOpen7] = useState(false);
-    const dropdownRef7 = useRef<HTMLDivElement | null>(null);
+    // const [isOpen7, setIsOpen7] = useState(false);
+    // const dropdownRef7 = useRef<HTMLDivElement | null>(null);
 
 
 
@@ -124,17 +136,17 @@ export const NewSalaryPage = () => {
             if (
                 dropdownRef1.current && !dropdownRef1.current.contains(event.target) &&
                 dropdownRef2.current && !dropdownRef2.current.contains(event.target) &&
-                dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
+                // dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
                 dropdownRef4.current && !dropdownRef4.current.contains(event.target) &&
-                dropdownRef5.current && !dropdownRef5.current.contains(event.target) &&
-                dropdownRef7.current && !dropdownRef7.current.contains(event.target)
+                dropdownRef5.current && !dropdownRef5.current.contains(event.target)
+                // dropdownRef7.current && !dropdownRef7.current.contains(event.target)
             ) {
                 setIsOpen1(false);
                 setIsOpen2(false);
-                setIsOpen3(false);
+                // setIsOpen3(false);
                 setIsOpen4(false);
                 setIsOpen5(false);
-                setIsOpen7(false);
+                // setIsOpen7(false);
             }
         }
 
@@ -157,58 +169,58 @@ export const NewSalaryPage = () => {
             }));
         }
         setIsOpen2(false)
-        setIsOpen3(false)
+        // setIsOpen3(false)
         setIsOpen4(false)
         setIsOpen5(false)
-        setIsOpen7(false)
+        // setIsOpen7(false)
     };
 
     const toggleDropdown2 = () => {
         setIsOpen2(!isOpen2);
         setIsOpen1(false)
-        setIsOpen3(false)
+        // setIsOpen3(false)
         setIsOpen4(false)
         setIsOpen5(false)
-        setIsOpen7(false)
+        // setIsOpen7(false)
     };
 
-    const toggleDropdown3 = () => {
-        setIsOpen3(!isOpen3);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
-    };
+    // const toggleDropdown3 = () => {
+    //     setIsOpen3(!isOpen3);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen4(false)
+    //     setIsOpen5(false)
+    //     setIsOpen7(false)
+    // };
 
     const toggleDropdown4 = () => {
         setIsOpen4(!isOpen4);
         setIsOpen1(false)
         setIsOpen2(false)
-        setIsOpen3(false)
+        // setIsOpen3(false)
         setIsOpen5(false)
-        setIsOpen7(false)
+        // setIsOpen7(false)
     };
 
     const toggleDropdown5 = () => {
         setIsOpen5(!isOpen5);
         setIsOpen1(false)
         setIsOpen2(false)
-        setIsOpen3(false)
+        // setIsOpen3(false)
         setIsOpen4(false)
-        setIsOpen7(false)
+        // setIsOpen7(false)
     };
 
 
 
-    const toggleDropdown7 = () => {
-        setIsOpen7(!isOpen7);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
-    };
+    // const toggleDropdown7 = () => {
+    //     setIsOpen7(!isOpen7);
+    //     setIsOpen1(false)
+    //     setIsOpen2(false)
+    //     setIsOpen3(false)
+    //     setIsOpen4(false)
+    //     setIsOpen5(false)
+    // };
 
     useEffect(() => {
         dispatch(getAllSalaryAsync());
@@ -245,7 +257,6 @@ export const NewSalaryPage = () => {
 
     const handleJobCheckboxChange = (event: any) => {
         const { value, checked } = event.target;
-
 
         if (checked) {
             setFilter((prevFilter: any) => ({
@@ -342,7 +353,7 @@ export const NewSalaryPage = () => {
     };
 
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [, setSelectedDate] = useState(new Date());
 
 
     //   date
@@ -380,63 +391,128 @@ export const NewSalaryPage = () => {
 
 
 
-    const handleEmployeeCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
+    // const handleEmployeeCheckboxChange = (event: any) => {
+    //     const { value, checked } = event.target;
 
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                employeeCodes: [...prevFilter.employeeCodes, value],
-            }));
+    //     if (checked) {
+    //         setFilter((prevFilter: any) => ({
+    //             ...prevFilter,
+    //             employeeCodes: [...prevFilter.employeeCodes, value],
+    //         }));
+    //     } else {
+    //         setFilter({
+    //             ...filter,
+    //             employeeCodes: filter.employeeCodes.filter((code: any) => code !== value),
+    //         });
+    //     }
+    // };
+
+
+
+    // const handleShiftCheckboxChange = (event: any) => {
+    //     const { value, checked } = event.target;
+
+    //     if (checked) {
+    //         setSelectedShifts((prevSelectedShifts) => [...prevSelectedShifts, value]);
+    //         setFilter((prevFilter: any) => ({
+    //             ...prevFilter,
+    //             shifts: [...prevFilter.shifts, value],
+    //         }));
+    //     } else {
+    //         setSelectedShifts((prevSelectedShifts) =>
+    //             prevSelectedShifts.filter((shift) => shift !== value)
+    //         );
+    //         setFilter((prevFilter: any) => ({
+    //             ...prevFilter,
+    //             shifts: prevFilter.shifts.filter((shift: any) => shift !== value),
+    //         }));
+    //     }
+    // };
+
+
+    // const selectAllShifts = () => {
+    //     const allShifts = options2.map((option) => option.label);
+    //     setSelectedShifts(allShifts);
+    //     setFilter((prevFilter: any) => ({
+    //         ...prevFilter,
+    //         shifts: allShifts,
+    //     }));
+    // };
+
+    // const clearAllShifts = () => {
+    //     setSelectedShifts([]);
+    //     setFilter((prevFilter: any) => ({
+    //         ...prevFilter,
+    //         shifts: [],
+    //     }));
+    // };
+
+
+
+    // search 
+    const [input, setInput] = useState("")
+    const [suggestions, setSuggestions] = useState<any>([]);
+    const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+    const [isLabelVisible, setLabelVisible] = useState(true);
+
+
+
+    const getSuggestions = (inputValue: any) => {
+        const filteredSuggestions = fetchedSuggestions.filter((suggestion: any) =>
+            suggestion.name?.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        setSuggestions(filteredSuggestions);
+    };
+
+
+    const handleInputChange = (event: any) => {
+        setInput(event.target.value);
+        setFilter({
+            ...filter,
+            name: event.target.value,
+        });
+        if (event.target.value !== "") {
+            setPage(1);
+            setLabelVisible(false);
+            getSuggestions(event.target.value);
         } else {
-            setFilter({
-                ...filter,
-                employeeCodes: filter.employeeCodes.filter((code: any) => code !== value),
-            });
+            setLabelVisible(true);
+            setSuggestions([]);
         }
+
+
     };
 
+    useEffect(() => {
+        dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+            const Salarydata = res.payload.salaryRecords;
+            console.log("aaaaaaaaaaaaaa", Salarydata)
+            const arr = [];
 
+            for (let i = 0; i < Salarydata.length; i++) {
+                if (Salarydata[i].profilePicture) {
+                  arr.push({
+                    name: Salarydata[i]?.employee?.name,
+                    jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                  });
+                }
+                else {
+                  arr.push({
+                    name: Salarydata[i]?.employee.name,
+                    profilePicture:
+                      "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+                    jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                  });
+                }
+              }
 
-    const handleShiftCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
+            setFetchedSuggestions(arr);
+        });
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllDepartmentAsync());
 
-        if (checked) {
-            setSelectedShifts((prevSelectedShifts) => [...prevSelectedShifts, value]);
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                shifts: [...prevFilter.shifts, value],
-            }));
-        } else {
-            setSelectedShifts((prevSelectedShifts) =>
-                prevSelectedShifts.filter((shift) => shift !== value)
-            );
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                shifts: prevFilter.shifts.filter((shift: any) => shift !== value),
-            }));
-        }
-    };
-
-
-    const selectAllShifts = () => {
-        const allShifts = options2.map((option) => option.label);
-        setSelectedShifts(allShifts);
-        setFilter((prevFilter: any) => ({
-            ...prevFilter,
-            shifts: allShifts,
-        }));
-    };
-
-    const clearAllShifts = () => {
-        setSelectedShifts([]);
-        setFilter((prevFilter: any) => ({
-            ...prevFilter,
-            shifts: [],
-        }));
-    };
-
-
+    }, []);
 
     return (
         <div className='p-[40px]'>
@@ -449,11 +525,61 @@ export const NewSalaryPage = () => {
                             </div>
                         </div>
 
+                        {isLabelVisible && (
+                            <div className="absolute top-[10px] left-6">
+                                <label
+                                    htmlFor="searchInput"
+                                    className="flex gap-2 items-center cursor-text"
+                                >
+                                    <img src={search} alt="" className="h-4 w-4" />
+                                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                                </label>
+                            </div>
+                        )}
+
+                        
                         <div className='border flex gap-[15px] px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
                             <img src={search} alt="" className='w-[20px] h-[20px]' />
-                            <input type="search" className='outline-none w-full ' placeholder="Search" />
+                            <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
                         </div>
 
+
+                        {suggestions.length > 0 && (
+                            <div className="absolute top-12 flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                {suggestions.map((element: any, index: any) => {
+                                    return (
+                                        <div
+                                            key={index}
+                                            onClick={() => {
+                                                setInput(element.name);
+                                                setFilter({
+                                                    ...filter,
+                                                    name: element.name,
+                                                });
+                                                setSuggestions([]);
+                                            }}
+                                            className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
+                                        >
+                                            <div>
+                                                <img
+                                                    src={element.profilePicture}
+                                                    className="w-[50px] h-[50px] rounded-full"
+                                                    alt=""
+                                                />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium #1C1C1C">
+                                                    {element.name}
+                                                </p>
+                                                <p className="text-[12px] leading-5 font-normal text-[#757575]">
+                                                    {element.jobProfileName}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
 
                     </div>
 
@@ -483,7 +609,6 @@ export const NewSalaryPage = () => {
                                                         type="checkbox"
                                                         value={element.groupName}
                                                         checked={filter.groupName.includes(element.groupName)}
-
                                                         onChange={handleGroupCheckboxChange}
                                                         className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
                                                     />
@@ -534,7 +659,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -570,7 +695,7 @@ export const NewSalaryPage = () => {
                                 </div>
                             )}
 
-                        </div>
+                        </div> */}
 
                         <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
                             <button
@@ -635,7 +760,7 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
+                        {/* <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -669,7 +794,7 @@ export const NewSalaryPage = () => {
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
 
                     </div>
 
@@ -739,7 +864,7 @@ export const NewSalaryPage = () => {
                     <div className="table-container" style={{ overflowY: 'auto' }}>
                         <table className="w-full">
 
-                            <tbody className="">
+                            <tbody >
                                 <tr className="bg-[#ECEDFE] cursor-default">
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Sr No.
@@ -906,7 +1031,7 @@ export const NewSalaryPage = () => {
                                                 {element?.actualWorkinghours || 0}
                                             </td>
                                             <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.overTime || 0}
+                                                {element?.overTime.toFixed(2) || 0}
                                             </td>
 
 
@@ -934,7 +1059,7 @@ export const NewSalaryPage = () => {
                         <div className="px-3">
                             <select
                                 className="bg-theme-btn-gray px-2 py-0.5 border-2 text-zinc-500 border-gray-50 rounded-lg"
-                                value={limit}
+                                value={limit.toString()}
                                 onChange={(event) => {
                                     const selectedLimit = Number(event.target.value);
                                     if (selectedLimit === total) {
