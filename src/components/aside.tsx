@@ -141,7 +141,7 @@ export default function aside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="relative">
+      <div className="">
         {showSidebar ? (
           <button
             className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
@@ -155,7 +155,7 @@ export default function aside(props: Props) {
 
         )}
        
-        <aside className={`flex flex-col justify-between absolute mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
+        <aside className={`flex flex-col fixed  justify-between gap-[20px] mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
           } transition-all ease-in-out duration-500`} >
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
