@@ -7,6 +7,7 @@ export const getNewSalaryDataApi = async (Data:any) => {
       const {data}= await axios.post(`${getNewSalaryApiPath}`,Data, {
         withCredentials: true,
       });
+      // console.log(data)
       return data;
     } catch (err: any) {
       console.log(err.data);
