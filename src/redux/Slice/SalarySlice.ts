@@ -21,7 +21,13 @@ export const getAllGroupSalaryAsync: any = createAsyncThunk(
         }
     }
 );
-// READ
+
+
+
+
+
+
+
 export const getSingleGroupSalaryAsync: any = createAsyncThunk(
     'getSingleGroupSalaryAsync',
     async (data) => {

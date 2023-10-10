@@ -71,14 +71,14 @@ const navItems: NavItem[] = [
     id: "Monthly Report",
     name: "Master Sheet",
     icon: employees,
+    Link: "/master-Sheet",
+  },
+  {
+    id: "Report",
+    name: "Monthly Report",
+    icon: employees,
     Link: "/monthly-report",
   },
-  // {
-  //   id: "Report",
-  //   name: "Monthly Report",
-  //   icon: employees,
-  //   Link: "/report",
-  // },
 ];
 
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
