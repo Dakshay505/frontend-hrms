@@ -96,7 +96,7 @@ export const AttendenceDtabase = () => {
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
-
+ 
   const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
   // useEffect(() => {
   //   const observer = new IntersectionObserver(

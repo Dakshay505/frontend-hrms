@@ -431,7 +431,7 @@ export const MonthlyReport = () => {
         const selectedMonthName = event.target.value;
         setSelectedMonth(selectedMonthName);
 
-        const year = new Date().getFullYear(); // You can use any desired year
+        const year = new Date().getFullYear(); 
         const monthIndex = months.findIndex((month) => month === selectedMonthName);
 
         if (monthIndex !== -1) {
