@@ -59,12 +59,19 @@ export const updateEmployee = async (employeeData: any) => {
 
 export const getAllEmployee = async (sendData: any) => {
   try {
-    //console.log("hii",sendData)
-    //const queryStr = convertToQueryString(sendData);
     const { data } = await axios.post(`${getEmployeeApiPath}`, sendData,{
       withCredentials: true,
     });
-    // console.log("fattttttttttttta",data)
+    return data;
+  } catch (error: any) {
+    console.log(error.response.data);
+  }
+};
+export const getAllEmployees = async (sendData: any) => {
+  try {
+    const { data } = await axios.post(`${getEmployeeApiPath}`, sendData,{
+      withCredentials: true,
+    });
     return data;
   } catch (error: any) {
     console.log(error.response.data);
