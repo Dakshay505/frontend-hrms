@@ -43,6 +43,8 @@ export const getLoggedInUserData = async () => {
     }
   }
 };
+
+
 // Logout 
 export const logoutUser = async () => {
   try {
