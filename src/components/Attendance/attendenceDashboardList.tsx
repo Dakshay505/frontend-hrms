@@ -721,26 +721,7 @@ export const AttendenceDashboardList = () => {
             </div>
 
 
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {punchesData && punchesData.countIn ? punchesData.countIn : 0}
-                </span>
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-                Punch In
-              </p>
-            </div>
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {punchesData && punchesData.countOut ? punchesData.countOut : 0}
-                </span>
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-                Punch Out
-              </p>
-            </div>
+        
           </div>
         )  
          : (
@@ -1577,7 +1558,6 @@ export const AttendenceDashboardList = () => {
               </div>
             )}
           </table>}
-        {/* TABLE ENDS HERE */}
       </div>
 
       <div className="fixed flex justify-center bottom-0 left-[270px] right-0">
@@ -1669,3 +1649,5 @@ export const AttendenceDashboardList = () => {
     </div >
   );
 };
+
+6
