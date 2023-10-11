@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllEmployeeAsync,
   getEmployeeImageAsync,
-  EmployeeBarCodesAsync
+  EmployeeBarCodesAsync,
+  getAllEmployeesAsync
 } from "../../redux/Slice/EmployeeSlice";
 import {
   getAllGroupsAsync,
@@ -53,6 +54,7 @@ const MasterSheet = () => {
     createdSort: "",
     updatedSort: "",
   });
+
   const changetime = (createdAtDate: any) => {
     const date = new Date(createdAtDate)
     const hours = date.getUTCHours(); // Get the hours in UTC
@@ -133,7 +135,9 @@ const MasterSheet = () => {
   const jobProfileList = useSelector(
     (state: any) => state.jobProfile.jobProfiles
   );
-
+    const f2 ={
+      "limit": 2000,
+    }
   const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((res: any) => {
@@ -157,6 +161,7 @@ const MasterSheet = () => {
       }
       setFetchedSuggestions(arr);
     });
+    dispatch(getAllEmployeesAsync(f2));
     dispatch(getAllGroupsAsync());
     dispatch(getAllGroupsCountEmployeeAsync());
     dispatch(getAllJobProfileAsync());
@@ -165,6 +170,7 @@ const MasterSheet = () => {
     dispatch(EmployeeBarCodesAsync());
     dispatch(allShopAsync())
   }, []);
+  
   function formatDateExcel(dated: any) {
     const date = new Date(dated)
     const day = String(date.getDate()).padStart(2, '0');
@@ -172,8 +178,10 @@ const MasterSheet = () => {
     const year = date.getFullYear();
     return `${day}-${month}-${year} ${changetime(date)}`;
   }
+  const ExcelData = useSelector((state: any) => state.employee.allemployees)
+  console.log("ExcelData---------------------", ExcelData)
   const exportToExcel = () => {
-    if (employeeDetailList) {
+    if (ExcelData.length>0) {
       const columnOrder = [
         'Name',
         'EmployeeCode',
@@ -204,7 +212,7 @@ const MasterSheet = () => {
 
       ];
 
-      const modifiedData = employeeDetailList.map((record: any) => {
+      const modifiedData = ExcelData.map((record: any) => {
 
         const mappedData = columnOrder.map((column) => {
           switch (column) {

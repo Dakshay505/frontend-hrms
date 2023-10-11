@@ -12,11 +12,14 @@ import {
   updatePassword,
   newPassword,
   salaryLog,
-  EmployeeBarCodes
+  EmployeeBarCodes,
+  getAllEmployees
 } from "../API/EmployeeAPI";
 
 const initialState = {
   employees: [],
+  // excel
+  allemployees: [],
   Baremployees: [],
   singleEmployee: {},
   qrAssign: {},
@@ -51,7 +54,18 @@ export const getAllEmployeeAsync: any = createAsyncThunk(
       console.log(error.message);
     }
   }
-
+);
+// for sheet
+export const getAllEmployeesAsync: any = createAsyncThunk(
+  'getAllEmployeesAsync',
+  async (data) => {
+    try {
+      const response: any = await getAllEmployees(data);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
 );
 // READ SINGLE EMPLOYEE
 export const getSingleEmployeeAsync: any = createAsyncThunk(
@@ -231,6 +245,16 @@ export const EmployeeSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.employees = action.payload.employees;
+        }
+      )
+      // for excel
+      .addCase(getAllEmployeesAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getAllEmployeesAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.allemployees = action.payload.employees;
         }
       )
       .addCase(deleteEmployeeAsync.pending, (state) => {
