@@ -9,7 +9,7 @@ const DepartmentOverview = () => {
 
   const departmentList = useSelector((state: any) => state.department.departmentOverview)
   const loaderStatus = useSelector((state: any) => state.attandence.status)
-  console.log("--",departmentList);
+  console.log("--", departmentList);
   useEffect(() => {
     dispatch(getDepartmentOverviewAsync())
   }, [])
@@ -37,18 +37,22 @@ const DepartmentOverview = () => {
             </tr>
             {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
               <img src={LoaderGif} className='w-6 h-6' alt="" />
-            </div> : ""}
-            {departmentList && departmentList.map((element: any, index: number) => {
-              return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.departmentName ? element.departmentName : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pending ? element.pending : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.rejected ? element.rejected : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalPresent ? element.totalPresent : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
-              </tr>
-            })}
+            </div> : (
+              <>
+                {departmentList && departmentList.map((element: any, index: number) => {
+                  return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.departmentName ? element.departmentName : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pending ? element.pending : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.rejected ? element.rejected : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalPresent ? element.totalPresent : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
+                  </tr>
+                })}
+              </>
+            )}
+
           </tbody>
         </table>
       </div>

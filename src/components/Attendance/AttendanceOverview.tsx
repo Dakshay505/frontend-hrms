@@ -12,12 +12,9 @@ const AttendanceOverview = () => {
 
   useEffect(() => {
     dispatch(getGroupAttendancesAsync())
-
   }, [])
   const handleClick = (element: any) => {
-    console.log("selected group-----",element.groupName)
-
-    
+    console.log("selected group-----", element.groupName)
   }
   return (
     <div className="pt-8 px-10">
@@ -32,6 +29,7 @@ const AttendanceOverview = () => {
       <div className="mt-8 overflow-auto">
         <table className="w-full">
           <tbody>
+
             <tr className='bg-[#ECEDFE] cursor-default'>
               <td className='py-4 px-5 text-sm font-bold text-[#2E2E2E] whitespace-nowrap w-[2rem]'>Sr.no</td>
               <td className='py-4 px-5 text-sm font-bold text-[#2E2E2E] whitespace-nowrap'>Group Name</td>
@@ -43,18 +41,22 @@ const AttendanceOverview = () => {
             </tr>
             {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
               <img src={LoaderGif} className='w-6 h-6' alt="" />
-            </div> : ""}
-            {groupAttendanceList && groupAttendanceList.map((element: any, index: number) => {
-              return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer' onClick={() => { handleClick(element)}}>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pending ? element.pending : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.rejected ? element.rejected : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalPresent ? element.totalPresent : "0"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
-              </tr>
-            })}
+            </div> : (
+              <>
+                {groupAttendanceList && groupAttendanceList.map((element: any, index: number) => {
+                  return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer' onClick={() => { handleClick(element) }}>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pending ? element.pending : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.rejected ? element.rejected : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.totalPresent ? element.totalPresent : "0"}</td>
+                    <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap border-b border-solid border-[#EBEBEB]'>{element.totalEmployeesInGroup ? element.totalEmployeesInGroup : "0"}</td>
+                  </tr>
+                })}
+              </>
+            )}
+
           </tbody>
         </table>
       </div>
