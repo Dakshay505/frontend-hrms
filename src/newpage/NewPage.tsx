@@ -95,8 +95,9 @@ export const NewPage = () => {
   }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
 
   useEffect(() => {
-    const filterString = JSON.stringify(filter);
-    sessionStorage.setItem("filterData", filterString);
+    const { name, ...filterWithoutName } = filter;
+    const filterString = JSON.stringify(filterWithoutName);
+    localStorage.setItem("filterData", filterString);
   }, [filter]);
   
   // PAGINATION =
