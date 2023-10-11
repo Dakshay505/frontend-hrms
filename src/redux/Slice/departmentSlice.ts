@@ -5,6 +5,7 @@ import {
   deleteDepartment,
   getAllDepartment,
   getDepartmentByParent,
+  getDepartmentoverview,
   getParentAllDepartment,
   getjobProfileBySubDepartmentName,
   updateDepartment,
@@ -16,6 +17,7 @@ const initialState = {
   parentdepartment: [],
   myDepartment: [],
   departmentJobProfile: [],
+  departmentOverview:[],
   status: "idle",
 };
 
@@ -49,6 +51,18 @@ export const getAllDepartmentAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getAllDepartment();
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+//get all department
+export const getDepartmentOverviewAsync: any = createAsyncThunk(
+  "getDepartmentOverviewAsync",
+  async () => {
+    try {
+      const response: any = await getDepartmentoverview();
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -96,7 +110,6 @@ export const updateDepartmentAsync: any = createAsyncThunk(
   async (data) => {
     try {
       const response = await updateDepartment(data);
-      console.log("llllllllll", response)
       return response;
     } catch (error: any) {
       console.error(error.message);
@@ -196,6 +209,15 @@ export const departmentSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.myDepartment = action.payload;
+        }
+      )
+      .addCase(getDepartmentOverviewAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getDepartmentOverviewAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.departmentOverview = action.payload.departmentStore;
         }
       )
 

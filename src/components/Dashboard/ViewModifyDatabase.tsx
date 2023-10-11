@@ -46,7 +46,7 @@ const ViewModifyDatabase = () => {
   const [totalPage, setTotalPage] = useState(1);
 
   const [filter, setFilter] = useState(() => {
-    const storedFilterString = sessionStorage.getItem("filterData");
+    const storedFilterString = localStorage.getItem("filterData");
   
     if (storedFilterString) {
       return JSON.parse(storedFilterString);
@@ -88,10 +88,10 @@ const ViewModifyDatabase = () => {
   }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
 
   useEffect(() => {
-    const filterString = JSON.stringify(filter);
-    sessionStorage.setItem("filterData", filterString);
+    const { name, ...filterWithoutName } = filter;
+    const filterString = JSON.stringify(filterWithoutName);
+    localStorage.setItem("filterData", filterString);
   }, [filter]);
-  
   // PAGINATION =
   useEffect(() => {
     setTotalPage(Math.ceil(count / filter.limit));

@@ -1,13 +1,9 @@
-//export const apiPath = `http://localhost:5050`;
-//export const apiPath = ``;
-
-export const apiPath = `https://chawlacomponents.com`;
-// export const apiPath = `http://localhost:5050`;
+export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 
-//export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `https://chawlacomponents.com`;
 
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
@@ -86,6 +82,7 @@ export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
 export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPresent`;
+export const getGroupAttendancesApiPath = `${apiPath}/api/v2/attendance/v2/groupview`;
 export const addpuchApiPath = `${apiPath}/api/v2/attendance/addPunches`;
 export const deletepuchApiPath = `${apiPath}/api/v2/attendance/deletePunches`;
 export const editpuchApiPath = `${apiPath}/api/v2/attendance/updatePunches`;
@@ -122,6 +119,7 @@ export const getjobProfileBySubDepartmentNameApiPath = `${apiPath}/api/v1/depart
 export const deleteDepartmentApiPath = `${apiPath}/api/v1/department/delete`;
 export const updateDepartmentApiPath = `${apiPath}/api/v1/department/updateDepartment`;
 export const updateParentDepartmentApiPath = `${apiPath}/api/v1/department/updateParentDepartment`;
+export const DepartmentOverviewApiPath = `${apiPath}/api/v2/attendance/v2/departmentOverview`;
 
 // new Salary
 export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`;
@@ -149,4 +147,7 @@ export const getLoginHistroyApiPath = `${apiPath}/api/v2/loggedInHistory`;
 // Login history Api
 export const changePasswordPasswordApiPath = `${apiPath}/api/v1/employee/newPassword`;
 
+
+// salary
 export const getNewSalaryApiPath = `${apiPath}/api/v2/salary/salary`;
+export const getMonthlyReportApiPath = `${apiPath}/api/v2/salary/month-salary`;

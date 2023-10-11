@@ -54,12 +54,12 @@ const navItems: NavItem[] = [
     icon: training,
     Link: "/traning-dashboard",
   },
-  // {
-  //   id: "New Employee Profile",
-  //   name: "New Employee Profile",
-  //   icon: training,
-  //   Link: "/new-profile-employee",
-  // },
+  {
+    id: "Change-Password",
+    name: "Change Password",
+    icon: training,
+    Link: "/change-password",
+  },
 
   {
     id: "Employees",
@@ -71,14 +71,14 @@ const navItems: NavItem[] = [
     id: "Monthly Report",
     name: "Master Sheet",
     icon: employees,
+    Link: "/master-Sheet",
+  },
+  {
+    id: "Report",
+    name: "Monthly Report",
+    icon: employees,
     Link: "/monthly-report",
   },
-  // {
-  //   id: "Report",
-  //   name: "Monthly Report",
-  //   icon: employees,
-  //   Link: "/report",
-  // },
 ];
 
 const asideButtonCSS = `flex text-[#666] items-center font-medium gap-[8px] cursor-pointer`;
@@ -115,19 +115,19 @@ export default function aside(props: Props) {
           {/* asd */}
           {/* {loggedInUserData.admin && loggedInUserData.employee.role==='dbManager' &&  (loggedInUserData.employee.role === 'admin')? (  */}
 
-            <div
-              onClick={() => {
-                window.location.replace("https://chawlacomponents.com/prd/")
-                // window.location.replace("http://localhost:5050/prd")
-              }}
-              className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
+          <div
+            onClick={() => {
+              window.location.replace("https://chawlacomponents.com/prd/")
+              // window.location.replace("http://localhost:5050/prd")
+            }}
+            className='flex justify-center cursor-pointer items-center  h-[40px] rounded-lg hover:text-black text-white hover:bg-white bg-[#283093] border-[#283093] border-2 py-2 px-4'>
 
-              <div>
-                Production
-              </div>
+            <div>
+              Production
             </div>
+          </div>
 
-           {/* ) : null}   */}
+          {/* ) : null}   */}
 
           <Link to='/show-notifications'>
             <div>
@@ -154,19 +154,19 @@ export default function aside(props: Props) {
             className="fixed h-[24px] w-[24px] p-[5px] border rounded-full border-border-primary shadow-lg  z-30 flex items-center cursor-pointer left-[258px] top-[14%]" />
 
         )}
-       
-        <aside className={`flex flex-col justify-between absolute mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
+
+        <aside className={`flex flex-col fixed  justify-between gap-[20px] mt-[32px] shadow-right-lg bg-white top-[62px] border-r w-[270px] h-[80%] ${showSidebar ? "translate-x-[-243px]" : "translate-x-0"
           } transition-all ease-in-out duration-500`} >
           <div className="flex flex-col gap-3 px-6">
             {navItems.map((item) => (
-              // Conditional rendering for the "Employees" item
-              (item.id !== "Employees" || (item.id === "Employees" && loggedInUserData.admin)) && (
+              (item.id !== "Employees" || (item.id === "Employees" && loggedInUserData.admin)) &&
+              (item.id !== "Change-Password" || (item.id === "Change-Password" && !loggedInUserData.admin )) && (
                 <Link
                   key={item.id}
                   to={item.Link}
                   onClick={() => setActiveItem(item.id)}
-                  className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""
-                    }`}
+                  className={`py-3 px-4 rounded-lg h-11 w-[208px] flex items-center ${activeItem === item.id ? "bg-primary-bg" : ""}
+      `}
                 >
                   <div
                     className={`${activeItem === item.id ? "text-blue-800" : ""} ${asideButtonCSS}`}
@@ -174,7 +174,8 @@ export default function aside(props: Props) {
                     <img
                       src={item.icon}
                       alt={item.name}
-                      className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}`}
+                      className={`w-5 h-5 ${activeItem === item.id ? "filter brightness-0" : ""}
+          `}
                     />
                     <p className="whitespace-nowrap text-sm font-medium">{item.name}</p>
                   </div>
@@ -182,7 +183,7 @@ export default function aside(props: Props) {
               )
             ))}
           </div>
-          
+
           <div className="px-6">
             <Link to="/">
               <div className="flex items-center justify-center">
@@ -196,11 +197,11 @@ export default function aside(props: Props) {
             </Link>
           </div>
         </aside>
-        
+
         {/* Your Content here */}
-       <div className={`ml-[${!showSidebar ? '270px' : '0px'}] mt-[74px]`}>
-        {props.children}
-      </div>
+        <div className={`ml-[${!showSidebar ? '270px' : '0px'}] mt-[74px]`}>
+          {props.children}
+        </div>
       </div>
 
     </div>

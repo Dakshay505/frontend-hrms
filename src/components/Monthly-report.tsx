@@ -1,43 +1,29 @@
 import { useEffect, useState, useRef } from "react";
-import search from "../../../assets/MagnifyingGlass.png"
+import search from "../assets/MagnifyingGlass.png"
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { getAllSalaryAsync } from "../../../redux/Slice/NewSalarySlice";
-import { getNewSalaryDataApi } from "../../../redux/API/NewSalaryApi";
-import { getAllPunchInPunchOutAsync } from "../../../redux/Slice/AttandenceSlice";
-import SelectAll from "../../../assets/Select All.svg"
-import ClearAll from "../../../assets/Clear-all.svg"
-import { getAllGroupsAsync } from "../../../redux/Slice/GroupSlice";
-import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
-import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
-import Calendar from "react-calendar";
-// import * as XLSX from 'xlsx';
-// import toast from "react-hot-toast";
-// import { saveAs } from 'file-saver';
+import SelectAll from "../assets/Select All.svg"
+import ClearAll from "../assets/Clear-all.svg"
+import { getAllMonthlyReportAsync } from "../redux/Slice/NewSalarySlice";
+import { getMonthlyReportsApi } from "../redux/API/NewSalaryApi";
+import { getAllPunchInPunchOutAsync } from "../redux/Slice/AttandenceSlice";
+import { getAllGroupsAsync } from "../redux/Slice/GroupSlice";
+import { getAllJobProfileAsync } from "../redux/Slice/JobProfileSlice";
+import { getAllDepartmentAsync } from "../redux/Slice/departmentSlice";
 
-
-const options2 = [
-    { label: 'Day' },
-    { label: 'Night' },
-];
-
-export const NewSalaryPage = () => {
-    const [limit, setLimit] = useState(1000);
+export const MonthlyReport = () => {
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
-    const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
 
-    const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
-    const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
-    const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
-    const totalSalaryC = useSelector((state: any) => state.newSalary?.data?.totalSalaryC);
-    // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
+    const monthlyData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    // console.log("uuuuuuuuuuuuuuuuuuuu", monthlyData)
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
+        dispatch(getAllMonthlyReportAsync({ limit, page }));
     }, [limit, page, dispatch]);
 
     useEffect(() => {
@@ -48,8 +34,8 @@ export const NewSalaryPage = () => {
             };
 
             try {
-                const data = await getNewSalaryDataApi(filter);
-                // console.log("data", data);
+                const data = await getMonthlyReportsApi(filter);
+                console.log("data", data);
 
                 setTotal(data.count);
                 const newPageCount = Math.ceil(data.count / filter.limit);
@@ -70,18 +56,17 @@ export const NewSalaryPage = () => {
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
-            dispatch(getAllSalaryAsync({ page: newPage, limit }));
+            dispatch(getAllMonthlyReportAsync({ page: newPage, limit }));
         } else {
             setPage(1);
-            dispatch(getAllSalaryAsync({ page: 1, limit }));
+            dispatch(getAllMonthlyReportAsync({ page: 1, limit }));
         }
     }
 
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
+        dispatch(getAllMonthlyReportAsync({ limit, page }));
     }, [limit, page, dispatch]);
-    const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
 
 
 
@@ -91,8 +76,7 @@ export const NewSalaryPage = () => {
         departmentName: [""],
         employeeCodes: [""],
         page: 1,
-        limit: 2000,
-        shifts: [""],
+        limit: 20,
 
     });
 
@@ -101,7 +85,7 @@ export const NewSalaryPage = () => {
 
         console.log(filter)
 
-        dispatch(getAllSalaryAsync(filter));
+        dispatch(getAllMonthlyReportAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
     }, [filter]);
 
@@ -120,16 +104,6 @@ export const NewSalaryPage = () => {
     const [isOpen4, setIsOpen4] = useState(false);
     const dropdownRef4 = useRef<HTMLDivElement | null>(null);
 
-    const [isOpen5, setIsOpen5] = useState(false);
-    const dropdownRef5 = useRef<HTMLDivElement | null>(null);
-
-
-    const [isOpen7, setIsOpen7] = useState(false);
-    const dropdownRef7 = useRef<HTMLDivElement | null>(null);
-
-
-
-
 
     useEffect(() => {
         function handleClickOutside(event: any) {
@@ -137,16 +111,12 @@ export const NewSalaryPage = () => {
                 dropdownRef1.current && !dropdownRef1.current.contains(event.target) &&
                 dropdownRef2.current && !dropdownRef2.current.contains(event.target) &&
                 dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
-                dropdownRef4.current && !dropdownRef4.current.contains(event.target) &&
-                dropdownRef5.current && !dropdownRef5.current.contains(event.target) &&
-                dropdownRef7.current && !dropdownRef7.current.contains(event.target)
+                dropdownRef4.current && !dropdownRef4.current.contains(event.target)
             ) {
                 setIsOpen1(false);
                 setIsOpen2(false);
                 setIsOpen3(false);
                 setIsOpen4(false);
-                setIsOpen5(false);
-                setIsOpen7(false);
             }
         }
 
@@ -171,8 +141,6 @@ export const NewSalaryPage = () => {
         setIsOpen2(false)
         setIsOpen3(false)
         setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
     };
 
     const toggleDropdown2 = () => {
@@ -180,8 +148,6 @@ export const NewSalaryPage = () => {
         setIsOpen1(false)
         setIsOpen3(false)
         setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
     };
 
     const toggleDropdown3 = () => {
@@ -189,8 +155,6 @@ export const NewSalaryPage = () => {
         setIsOpen1(false)
         setIsOpen2(false)
         setIsOpen4(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
     };
 
     const toggleDropdown4 = () => {
@@ -198,32 +162,10 @@ export const NewSalaryPage = () => {
         setIsOpen1(false)
         setIsOpen2(false)
         setIsOpen3(false)
-        setIsOpen5(false)
-        setIsOpen7(false)
-    };
-
-    const toggleDropdown5 = () => {
-        setIsOpen5(!isOpen5);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen7(false)
-    };
-
-
-
-    const toggleDropdown7 = () => {
-        setIsOpen7(!isOpen7);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-        setIsOpen5(false)
     };
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync());
+        dispatch(getAllMonthlyReportAsync());
     }, []);
 
     // filters
@@ -249,7 +191,7 @@ export const NewSalaryPage = () => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
         dispatch(getAllDepartmentAsync());
-        dispatch(getAllSalaryAsync());
+        dispatch(getAllMonthlyReportAsync());
 
     }, []);
 
@@ -310,7 +252,7 @@ export const NewSalaryPage = () => {
 
 
     const selectAll = () => {
-        const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
+        const allProfiles = jobProfileList.map((element: any) => element?.jobProfileName);
         setFilter((prevFilter: any) => ({
             ...prevFilter,
             jobProfileName: allProfiles,
@@ -324,7 +266,7 @@ export const NewSalaryPage = () => {
         });
     };
     const selectDepartmentAll = () => {
-        const allProfiles = departmentList.map((element: any) => element.departmentName);
+        const allProfiles = departmentList.map((element: any) => element?.departmentName);
         setFilter((prevFilter: any) => ({
             ...prevFilter,
             departmentName: allProfiles,
@@ -338,7 +280,7 @@ export const NewSalaryPage = () => {
         });
     };
     const selectGroupAll = () => {
-        const allProfiles = sortedgroupList.map((element: any) => element.groupName);
+        const allProfiles = sortedgroupList.map((element?: any) => element?.groupName);
         setFilter((prevFilter: any) => ({
             ...prevFilter,
             groupName: allProfiles,
@@ -353,42 +295,11 @@ export const NewSalaryPage = () => {
     };
 
 
-    const [, setSelectedDate] = useState(new Date());
-
-
-    //   date
-    const formatDateToYYMMDD = (date: any) => {
-        const year = date.getFullYear().toString();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
-
-
     useEffect(() => {
-        dispatch(getAllSalaryAsync(filter));
+        dispatch(getAllMonthlyReportAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
 
     }, [filter]);
-
-    const [startDate, setStartDate] = useState(new Date());
-
-    const handleDateChange = (date: any) => {
-        setStartDate(date);
-        setSelectedDate(date);
-    };
-
-
-    useEffect(() => {
-        setFilter({
-            ...filter,
-            date: formatDateToYYMMDD(startDate),
-        });
-    }, [startDate]);
-
-
-
 
 
     const handleEmployeeCheckboxChange = (event: any) => {
@@ -406,47 +317,6 @@ export const NewSalaryPage = () => {
             });
         }
     };
-
-
-
-    const handleShiftCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-
-        if (checked) {
-            setSelectedShifts((prevSelectedShifts) => [...prevSelectedShifts, value]);
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                shifts: [...prevFilter.shifts, value],
-            }));
-        } else {
-            setSelectedShifts((prevSelectedShifts) =>
-                prevSelectedShifts.filter((shift) => shift !== value)
-            );
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                shifts: prevFilter.shifts.filter((shift: any) => shift !== value),
-            }));
-        }
-    };
-
-
-    const selectAllShifts = () => {
-        const allShifts = options2.map((option) => option.label);
-        setSelectedShifts(allShifts);
-        setFilter((prevFilter: any) => ({
-            ...prevFilter,
-            shifts: allShifts,
-        }));
-    };
-
-    const clearAllShifts = () => {
-        setSelectedShifts([]);
-        setFilter((prevFilter: any) => ({
-            ...prevFilter,
-            shifts: [],
-        }));
-    };
-
 
 
     // search 
@@ -483,9 +353,40 @@ export const NewSalaryPage = () => {
 
     };
 
+    useEffect(() => {
+        dispatch(getAllMonthlyReportAsync(filter)).then((res: any) => {
+            const monthlyData = res.payload.salaryRecords;
+            console.log("aaaaaaaaaaaaaa", monthlyData)
+            const arr = [];
+
+            for (let i = 0; i < monthlyData.length; i++) {
+                if (monthlyData[i].profilePicture) {
+                    arr.push({
+                        name: monthlyData[i]?.employee?.name,
+                        jobProfileName: monthlyData[i]?.employee.jobProfileId.jobProfileName,
+                    });
+                }
+                else {
+                    arr.push({
+                        name: monthlyData[i]?.employee.name,
+                        profilePicture:
+                            "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+                        jobProfileName: monthlyData[i]?.employee.jobProfileId.jobProfileName,
+                    });
+                }
+            }
+
+            setFetchedSuggestions(arr);
+        });
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllDepartmentAsync());
+
+    }, []);
+
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+        dispatch(getAllMonthlyReportAsync(filter)).then((res: any) => {
             const Salarydata = res.payload.salaryRecords;
             console.log("aaaaaaaaaaaaaa", Salarydata)
             const arr = [];
@@ -515,6 +416,58 @@ export const NewSalaryPage = () => {
 
     }, []);
 
+    const [selectedMonth, setSelectedMonth] = useState("");
+
+
+    const formatDate = (date: any) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
+
+
+    const handleMonthChange = (event: any) => {
+        const selectedMonthName = event.target.value;
+        setSelectedMonth(selectedMonthName);
+
+        const year = new Date().getFullYear(); 
+        const monthIndex = months.findIndex((month) => month === selectedMonthName);
+
+        if (monthIndex !== -1) {
+            const startDate = new Date(year, monthIndex, 1);
+            const endDate = new Date(year, monthIndex + 1, 0);
+
+            const formattedStartDate = formatDate(startDate);
+            const formattedEndDate = formatDate(endDate);
+
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                date: formattedStartDate,
+                nextDate: formattedEndDate,
+            }));
+        }
+    };
+
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+
+
+
+
     return (
         <div className='p-[40px]'>
             <div className='flex flex-col gap-[10px]'>
@@ -522,7 +475,7 @@ export const NewSalaryPage = () => {
                     <div className="flex-col flex gap-[20px] justify-between ">
                         <div className="flex justify-between ">
                             <div className="text-2xl font-bold text-[#2E2E2E]">
-                                Salary Database
+                                Monthly Report
                             </div>
                         </div>
 
@@ -552,10 +505,10 @@ export const NewSalaryPage = () => {
                                         <div
                                             key={index}
                                             onClick={() => {
-                                                setInput(element.name);
+                                                setInput(element?.name);
                                                 setFilter({
                                                     ...filter,
-                                                    name: element.name,
+                                                    name: element?.name,
                                                 });
                                                 setSuggestions([]);
                                             }}
@@ -563,17 +516,17 @@ export const NewSalaryPage = () => {
                                         >
                                             <div>
                                                 <img
-                                                    src={element.profilePicture}
+                                                    src={element?.profilePicture}
                                                     className="w-[50px] h-[50px] rounded-full"
                                                     alt=""
                                                 />
                                             </div>
                                             <div>
                                                 <p className="text-sm font-medium #1C1C1C">
-                                                    {element.name}
+                                                    {element?.name}
                                                 </p>
                                                 <p className="text-[12px] leading-5 font-normal text-[#757575]">
-                                                    {element.jobProfileName}
+                                                    {element?.jobProfileName}
                                                 </p>
                                             </div>
                                         </div>
@@ -609,11 +562,11 @@ export const NewSalaryPage = () => {
                                                     <input
                                                         type="checkbox"
                                                         value={element.groupName}
-                                                        checked={filter.groupName.includes(element.groupName)}
+                                                        checked={filter.groupName.includes(element?.groupName)}
                                                         onChange={handleGroupCheckboxChange}
                                                         className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
                                                     />
-                                                    <span>{element.groupName}</span>
+                                                    <span>{element?.groupName}</span>
                                                 </label>
                                             ))}
                                     </div>
@@ -645,13 +598,13 @@ export const NewSalaryPage = () => {
                                                 <label key={index} className="flex items-center space-x-2">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.departmentName}
-                                                        checked={filter.departmentName.includes(element.departmentName)}
+                                                        value={element?.departmentName}
+                                                        checked={filter.departmentName.includes(element?.departmentName)}
 
                                                         onChange={handleDepartmentCheckboxChange}
                                                         className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
                                                     />
-                                                    <span>{element.departmentName}</span>
+                                                    <span>{element?.departmentName}</span>
                                                 </label>
                                             ))}
                                     </div>
@@ -678,17 +631,17 @@ export const NewSalaryPage = () => {
                                     </div>
                                     <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
 
-                                        {salaryData &&
-                                            salaryData.map((element: any) => (
-                                                <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
+                                        {monthlyData &&
+                                            monthlyData.map((element?: any) => (
+                                                <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.employee.employeeCode} 
-                                                        checked={filter.employeeCodes.includes(element.employee.employeeCode)}
-                                                        onChange={handleEmployeeCheckboxChange} 
+                                                        value={element?.employee.employeeCode}
+                                                        checked={filter.employeeCodes.includes(element?.employee.employeeCode)}
+                                                        onChange={handleEmployeeCheckboxChange}
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
-                                                    {element.employee.employeeCode}
+                                                    {element?.employee.employeeCode}
                                                 </label>
                                             ))}
 
@@ -722,147 +675,39 @@ export const NewSalaryPage = () => {
                                                 <label key={index} className="flex items-center space-x-2">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.jobProfileName}
-                                                        checked={filter.jobProfileName.includes(element.jobProfileName)}
+                                                        value={element?.jobProfileName}
+                                                        checked={filter.jobProfileName.includes(element?.jobProfileName)}
                                                         onChange={handleJobCheckboxChange}
                                                         className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
                                                     />
-                                                    <span>{element.jobProfileName}</span>
+                                                    <span>{element?.jobProfileName}</span>
                                                 </label>
                                             ))}
                                     </div>
                                 </div>
                             )}
-
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E] focus:outline-none"
-                                onClick={toggleDropdown5}
-                            >
-                                {startDate ? `${startDate.toDateString()}` : 'Select a Date'}
-                            </button>
-                            {isOpen5 && (
-                                <div className="absolute left-0 mt-2 w-[300px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="px-4 py-2 space-y-2  overflow-y-auto">
-                                        <Calendar
-                                            value={startDate}
-                                            onChange={handleDateChange}
-                                            tileClassName={({ date }) =>
-                                                date.toDateString() === startDate.toDateString()
-                                                    ? 'text-black selected-date'
-                                                    : ''
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            )}
+                        <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
+                            <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
+                                <option value="" className="font-bold">Select a month</option>
+                                {months.map((month, index) => (
+                                    <option key={index} className="font-bold"  value={month}>
+                                        {month}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
-
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown7}
-                            >
-                                Shift
-                            </button>
-
-                            {isOpen7 && (
-                                <div className=" absolute left-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="flex flex-row px-4 py-2 gap-3">
-                                        <img src={SelectAll} onClick={selectAllShifts} className="h-5 w-5 b" />
-                                        <img src={ClearAll} onClick={clearAllShifts} className="h-5 w-5 " />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                        {options2.map((option) => (
-                                            <label
-                                                key={option.label}
-                                                className="flex items-center gap-[10px] justify-between px-4 py-2 cursor-pointer"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-checkbox h-5 w-5 text-blue-600"
-                                                    value={option.label}
-                                                    checked={selectedShifts.includes(option.label)}
-                                                    onChange={handleShiftCheckboxChange}
-                                                />
-                                                {option.label}
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-
 
                     </div>
+
+
 
 
 
                 </div>
 
                 <hr />
-
-                <div className="flex flex-start pt-[25px] gap-6">
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary A
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-
-                            {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
-                        </div>
-                    </div>
-
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary B
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary C
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {totalSalaryC !== undefined ? totalSalaryC.toFixed(2) : "-"}
-                        </div>
-                    </div>
-
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Punch in
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {punchesData && punchesData.countIn ? punchesData.countIn : 0}
-                        </div>
-                    </div>
-
-
-
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Present
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
-                        </div>
-                    </div>
-
-
-
-
-                </div>
 
 
                 <div className="py-6 mb-24">
@@ -874,9 +719,7 @@ export const NewSalaryPage = () => {
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Sr No.
                                     </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Date
-                                    </td>
+
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Employee Code
                                     </td>
@@ -907,177 +750,84 @@ export const NewSalaryPage = () => {
                                     </td>
 
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total Working Hours by Database
+                                        Total Working Hours
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary Per Hours
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch IN BY
+                                        duty per month
+
                                     </td>
 
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch IN
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch Out BY
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch Out
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Shift
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Status
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Approved by
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Actual working hour By Records
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total Workinghours
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Dutyhours
-                                    </td>
+                                        no. of duty
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Actual Duty hour
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Over Time
-                                    </td>
+                                        approved duty
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Earning in a day/Salary A
                                     </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        sum actual working hour
 
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        sum Final Workinghours
+
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        sum Dutyhours
+
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Over Time Hours
+
+                                    </td>
+                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                        Earn in a day/ Salary A
+
+                                    </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                                         Salary B
+
                                     </td>
                                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary C
+                                        salary c
+
                                     </td>
 
 
                                 </tr>
 
-                                {salaryData && salaryData
-                                    .map((element: any, index: any) => (
-                                        <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {index + 1}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.name ? element?.employee?.name : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.jobProfileId?.department?.departmentName ? element?.employee?.jobProfileId?.department?.departmentName : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
-                                            </td>
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.overTime ? "Yes" : "No"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.salary ? element?.employee?.salary : "-"}
-                                            </td>
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.lunchTime ? element.employee.lunchTime + " hours" : "-"}
-                                            </td>
-
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.totalWorkingHours ? element.totalWorkingHours : "-"}
-                                            </td>
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryPerHours ? element.salaryPerHours.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.punches[0]?.punchInBy?.name || "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(11, 16) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.punches[0]?.punchOutBy?.name || "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.lastPunchOut ? element?.lastPunchOut.slice(11, 16) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance ? element?.attendance?.shift : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.status || "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.approvedBy?.name || "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.actualworkingHoursbyRecord || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.finalWorkingHours || 0}
-
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.dutyHours || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.actualWorkinghours || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.overTime.toFixed(2) || 0}
-                                            </td>
-
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryC !== undefined ? element.salaryC.toFixed(2) : "-"}
-                                            </td>
-
-                                        </tr>
-                                    ))}
-
+                                {monthlyData && monthlyData.map((element: any, index: any) => (
+                                    <tr key={index}>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{index + 1}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.name}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId?.groupName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department.departmentName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.jobProfileName}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.overTime ? 'Yes' : 'No'}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.workingHours}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.lunchTime}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalWorkingHours}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.dutyPerMonth}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.numberofduty}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.approvedduty}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB?.toFixed(2)}</td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC?.toFixed(2)}</td>
+                                    </tr>
+                                ))}
                             </tbody >
-
                         </table>
-
                     </div>
 
                     <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
@@ -1087,14 +837,15 @@ export const NewSalaryPage = () => {
                                 value={limit.toString()}
                                 onChange={(event) => {
                                     const selectedLimit = Number(event.target.value);
+                                    console.log("aaaaaa", selectedLimit)
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: total }));
+                                        dispatch(getAllMonthlyReportAsync({ page: 1, limit: total }));
                                     } else {
                                         setLimit(selectedLimit);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: selectedLimit }));
+                                        dispatch(getAllMonthlyReportAsync({ page: 1, limit: selectedLimit }));
                                     }
                                 }}
                             >
@@ -1102,9 +853,7 @@ export const NewSalaryPage = () => {
                                 <option value="10">10</option>
                                 <option value="1">1</option>
                                 <option value="20">20</option>
-                                <option value={total} selected={limit === total}>
-                                    All
-                                </option>
+
                             </select>
 
                             <label className="text-zinc-400 pl-2">Items per page</label>
@@ -1139,8 +888,6 @@ export const NewSalaryPage = () => {
                     </div>
                 </div>
             </div>
-
-
         </div >
     )
 }

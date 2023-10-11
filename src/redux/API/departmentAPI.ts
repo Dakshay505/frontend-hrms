@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  DepartmentOverviewApiPath,
   addDepartmentApiPath,
   addParentDepartmentApiPath,
   deleteDepartmentApiPath,
@@ -47,6 +48,16 @@ export const getAllDepartment = async () => {
     console.log(err.response.data);
   }
 };
+export const getDepartmentoverview = async () => {
+  try {
+    const { data } = await axios.get(`${DepartmentOverviewApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
 export const getParentAllDepartment = async () => {
   try {
     const { data } = await axios.get(`${getAllParentDepartmentApiPath}`, {
@@ -81,35 +92,34 @@ export const getjobProfileBySubDepartmentName = async (Data: any) => {
     console.log(err.response.data);
   }
 };
- 
 
-export const updateDepartment = async (Data:any) => {
+export const updateDepartment = async (Data: any) => {
   try {
-    console.log("abcd",Data)
+    console.log("abcd", Data);
     const { data } = await axios.patch(
-      `${updateDepartmentApiPath}/${Data.departmentId}`, Data,
+      `${updateDepartmentApiPath}/${Data.departmentId}`,
+      Data,
       { withCredentials: true }
     );
     return data;
-  } catch (error:any) {
-    return error.response.data;
-  }
-};
- 
-
-export const updateParentDepartment = async (Data:any) => {
-  try {
-    console.log("abcd",Data)
-    const { data } = await axios.patch(
-      `${updateParentDepartmentApiPath}/${Data.departmentId}`, Data,
-      { withCredentials: true }
-    );
-    return data;
-  } catch (error:any) {
+  } catch (error: any) {
     return error.response.data;
   }
 };
 
+export const updateParentDepartment = async (Data: any) => {
+  try {
+    console.log("abcd", Data);
+    const { data } = await axios.patch(
+      `${updateParentDepartmentApiPath}/${Data.departmentId}`,
+      Data,
+      { withCredentials: true }
+    );
+    return data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};
 
 export const deleteDepartment = async (id: any) => {
   try {

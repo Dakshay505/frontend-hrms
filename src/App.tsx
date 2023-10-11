@@ -83,7 +83,9 @@ import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
 // import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 //import SalaryWithDepartment from "./components/Salary/SalaryDepartment/SalaryWithDepartment";
 import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
-import MonthlyReport from "./components/Dashboard/monthlyReport";
+import {MonthlyReport} from "./components/Monthly-report";
+import MasterSheet from "./components/Dashboard/masterSheet";
+import DepartmentOverview from "./components/Attendance/DepartmentOverview";
 
 
 const router = createBrowserRouter([
@@ -270,6 +272,16 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/department-overview",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <DepartmentOverview></DepartmentOverview>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
     path: "/single-group-attendance",
     element: (
       <ProductedRoute>
@@ -345,7 +357,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/change-password",
-    element: <ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
+    element: <ProductedRoute><Aside> <ChangePassword></ChangePassword> </Aside></ProductedRoute>
   },
   {
     path: "/employee-notifications",
@@ -647,6 +659,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <SalaryDepartment />
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/master-Sheet",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <MasterSheet/>
         </Aside>
       </ProductedRoute>
     ),

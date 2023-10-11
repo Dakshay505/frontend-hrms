@@ -130,7 +130,7 @@ export const AttendenceDashboardList = () => {
     return formattedTime;
   }
 
-  const [selectedShop,] = useState("All Shop");
+  // const [selectedShop,] = useState("All Shop");
   const [shopName, setShopName] = useState([""]);
 
   // const handleShopChange = (event: any) => {
@@ -176,41 +176,23 @@ export const AttendenceDashboardList = () => {
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
-      console.log("HHHHHHHHHHH", employeeData)
+      console.log("eeeeeeeeeeeee", employeeData)
       setShopItems(employeeData)
-      //setItems(employeeData)
     });
 
   }, [shopName])
   const [dateRange, setDateRange] = useState<any>([]);
   useEffect(() => {
-    // function getDateRange(startDate: any, endDate: any) {
-    //   if (nextDate) {
-    //     const result = [];
-    //     const currentDate = new Date(startDate);
-    //     const finalDate = new Date(endDate);
-    //     while (currentDate <= finalDate) {
-    //       result.push(currentDate.toISOString().slice(0, 10));
-    //       currentDate.setDate(currentDate.getDate() + 1);
-    //     }
-    //     setDateRange([...result]);
-    //   }
-    // }
+
     setShopName([])
     Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    //getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
     if (filter.nextDate === "") {
       filter.nextDate = filter.date
     }
 
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      console.log("---------", data.payload);
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
         setItems(employeeData);
@@ -224,28 +206,9 @@ export const AttendenceDashboardList = () => {
     });
   }, [filter, status]);
   useEffect(() => {
-    // function getDateRange(startDate: any, endDate: any) {
-    //   if (nextDate) {
-    //     const result = [];
-    //     const currentDate = new Date(startDate);
-    //     const finalDate = new Date(endDate);
-    //     while (currentDate <= finalDate) {
-    //       result.push(currentDate.toISOString().slice(0, 10));
-    //       currentDate.setDate(currentDate.getDate() + 1);
-    //     }
-    //     setDateRange([...result]);
-    //   }
-    // }
     setShopName([])
     Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    //getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
     if (filter.nextDate === "") {
       filter.nextDate = filter.date
     }
@@ -273,9 +236,7 @@ export const AttendenceDashboardList = () => {
       }
     });
   }, [date, nextDate]);
-  // const handlerFatchMore = () => {
-  //   setPage((prevPage) => prevPage + 1);
-  // };
+
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
       if (nextDate) {
@@ -401,9 +362,9 @@ export const AttendenceDashboardList = () => {
             case 'Group':
               return record.employeeId.groupId.groupName;
             case 'Shop Code':
-              return record.shopCode? record.shopCode : "-";
+              return record.shopCode ? record.shopCode : "-";
             case 'Shop Name':
-              return record.shopName? record.shopName : "-";
+              return record.shopName ? record.shopName : "-";
             // case 'Remark':
             //   return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
             default:
@@ -609,10 +570,7 @@ export const AttendenceDashboardList = () => {
 
   const handleImageClick = (imageSrc: any, profileSrc: any) => {
     setSelectedImage(imageSrc);
-
     setSelectedProfileImage(profileSrc)
-
-
     setIsImageOpen(true);
   };
 
@@ -654,9 +612,35 @@ export const AttendenceDashboardList = () => {
 
   }
 
+  // console.log("aabcffff",shopitems)
+
+  const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
+
+  let pendingShopCount = 0;
+  let approvedShopCount = 0;
+  let rejectedShopCount = 0;
+  
+  for (const entries of shopitems) {
+    const status = entries.attendance;
+    for(const i of status){
+      console.log("statusssssss",i.status)
+      if (i.status === "pending") {
+      pendingShopCount++;
+    } else if (i.status === "approved") {
+      approvedShopCount++;
+    } else if (i.status === "rejected") {
+      rejectedShopCount++;
+    }
+    }  
+    
+  }
+  
+
+
+
   return (
     <div className="px-[40px] pt-[32px]">
-      <div className="flex flex-col flex-start">
+      <div className="flex flex-col gap-3 flex-start">
         <div className=" flex gap-3 justify-between items-center">
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
@@ -668,90 +652,176 @@ export const AttendenceDashboardList = () => {
 
         </div>
 
-        <div className="flex flex-start pt-4 gap-6">
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
-                {approvedCount}
-              </span>
-              {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
+
+        {loaderStatus === "loading" ? (
+          // Render content with 0 for all counts when loaderStatus is "loading"
+          <div className="flex flex-start pt-4 gap-6">
+
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">Approved</p>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Approved
-
-            </p>
-          </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
-                {pendingCount}
-              </span>
-
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">Pending</p>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Pending
-            </p>
-          </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
-                {rejectedCount}
-              </span>
-
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">Rejected</p>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
-              Rejected
-            </p>
-          </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
-
-                {approvedCount + pendingCount + rejectedCount}
-              </span>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Total Present</p>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-              Total Present
-            </p>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Punch In</p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">0</span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Punch Out</p>
+            </div>
           </div>
+        ): isShopOpen ? (
+          <div className="flex flex-start pt-4 gap-6">
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {approvedShopCount}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                Approved
+
+              </p>
+            </div>
+        
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+
+                  {approvedShopCount + pendingShopCount + rejectedShopCount}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Total Present
+              </p>
+            </div>
 
 
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch In
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch Out
+              </p>
+            </div>
+          </div>
+        )  
+         : (
+          <div className="flex flex-start pt-4 gap-6">
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {approvedCount}
+                </span>
+                {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                Approved
 
-        </div>
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {pendingCount}
+                </span>
+
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                Pending
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {rejectedCount}
+                </span>
+
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                Rejected
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+
+                  {approvedCount + pendingCount + rejectedCount}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Total Present
+              </p>
+            </div>
+
+
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch In
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch Out
+              </p>
+            </div>
+          </div>
+        )
+        }
 
       </div>
 
       <div className=" flex pt-6 justify-between items-center self-stretch ">
-        <div className="flex gap-5">
           <div className="flex gap-3">
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Groups") {
-                    setFilter({
-                      ...filter,
-                      groupName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      groupName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 w-[280px] text-sm font-medium text-[#2E2E2E] min-w-[160px] px-2 focus:outline-none"
-              >
-                <option value="All Groups">All Groups</option>
-                {sortedgroupList &&
-                  sortedgroupList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.groupName}>
-                        {element.groupName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
@@ -789,34 +859,7 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Job Profiles") {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.jobProfileName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
               
-                >
-                <option value="All Job Profiles">All Job Profiles</option>
-                {sortedjobProfileList &&
-                  sortedjobProfileList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.jobProfileName}>
-                        {element.jobProfileName}
-                      </option>
-                    );
-                  })}
-              </select> */}
               <div className="relative inline-block text-left  ml-3">
                 <button
                   type="button"
@@ -853,33 +896,7 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Department") {
-                    setFilter({
-                      ...filter,
-                      departmentName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      departmentName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.departmentName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              >
-                <option value="All Department">All Department</option>
-                {sortedDepartmentList &&
-                  sortedDepartmentList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
-                        {element.departmentName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
@@ -917,24 +934,12 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={handleShopChange}
-                value={selectedShop}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              >
-                <option value="All Shop">All Shop</option>
-                {shoplist && Array.isArray(shoplist) && shoplist.map((element: any, index: any) => (
-                  <option key={index} value={element?.shopName}>
-                    {element?.shopName}
-                  </option>
-                ))}
-
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
                   className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
+                              
                   onClick={ShoptoggleDropdown}
                 >
                   All Shop
@@ -986,11 +991,8 @@ export const AttendenceDashboardList = () => {
               </select>
             </div>
           </div>
-          <div>
+  
 
-          </div>
-
-        </div>
 
       </div>
 
@@ -1041,533 +1043,544 @@ export const AttendenceDashboardList = () => {
 
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
-        <table className="w-full">
-          <tbody>
-            <tr className="bg-[#ECEDFE] cursor-default">
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Date
-              </td>
+        {loaderStatus === "loading" ? (
+          <div className="flex justify-center w-full">
+            <img src={LoaderGif} className="w-6 h-6" alt="" />
+          </div>
+        ) : (
+          ""
+        )
+        }
+        {loaderStatus !== "loading" &&
+          <table className="w-full">
+            <tbody>
+              <tr className="bg-[#ECEDFE] cursor-default">
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Date
+                </td>
 
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Image
-              </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Image
+                </td>
 
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Employee Code
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Name
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Shift
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Punch In
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Punch Out
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Status
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Approved By
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Shop
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Shop Code
-              </td>
-              <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                Photos
-              </td>
-            </tr>
-            {shopName.length < 1 ?
-              items &&
-              items.map((element: any, index: number) => {
-                const punchesList = [...element.punches];
-                const sortedPunches = punchesList.sort((a: any, b: any) => {
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Employee Code
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Name
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Shift
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Punch In
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Punch Out
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Status
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Approved By
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Shop
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Shop Code
+                </td>
+                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                  Photos
+                </td>
+              </tr>
+              {shopName.length < 1 ?
+                items &&
+                items.map((element: any, index: number) => {
+                  const punchesList = [...element.punches];
+                  const sortedPunches = punchesList.sort((a: any, b: any) => {
+                    return (
+                      new Date(b.punchIn).getTime() -
+                      new Date(a.punchIn).getTime()
+                    );
+                  });
+                  const latestPunches = sortedPunches[0];
+                  const firstPunches = sortedPunches[sortedPunches.length - 1]
+
+
                   return (
-                    new Date(b.punchIn).getTime() -
-                    new Date(a.punchIn).getTime()
-                  );
-                });
-                const latestPunches = sortedPunches[0];
-                const firstPunches = sortedPunches[sortedPunches.length - 1]
+                    <>
+                      <tr
+                        key={element._id + latestPunches.punchIn}
+                        className="hover:bg-[#FAFAFA]"
+
+                      >
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {latestPunches.punchIn
+                            ? latestPunches.punchIn.slice(0, 10)
+                            : "Not Avilable"}
+                        </td>
+                        <td className=""  >
+                          {element.profilePicture
+                            ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                            : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                          {element.employeeId?.employeeCode
+                            ? element.employeeId.employeeCode
+                            : "Not Avilable"}{" "}
+                        </td>
+
+                        <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                          <div className="flex flex-col">
+
+                            <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                              ? element.employeeId?.name
+                              : "Not Avilable"}</p>
+
+                            <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                              ? element.employeeId.jobProfileId?.jobProfileName
+                              : "Not Avilable"}</p>
+
+                          </div>
 
 
-                return (
-                  <>
-                    <tr
-                      key={element._id + latestPunches.punchIn}
-                      className="hover:bg-[#FAFAFA]"
-
-                    >
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchIn
-                          ? latestPunches.punchIn.slice(0, 10)
-                          : "Not Avilable"}
-                      </td>
-                      <td className=""  >
-                        {element.profilePicture
-                          ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
-                          : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
-
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                        {element.employeeId?.employeeCode
-                          ? element.employeeId.employeeCode
-                          : "Not Avilable"}{" "}
-                      </td>
-
-                      <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
-                        <div className="flex flex-col">
-
-                          <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
-                            ? element.employeeId?.name
-                            : "Not Avilable"}</p>
-
-                          <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
-                            ? element.employeeId.jobProfileId?.jobProfileName
-                            : "Not Avilable"}</p>
-
-                        </div>
-
-
-                        {sortedPunches.slice(1).length > 0 ? (
-                          <img
-                            onClick={() => {
-                              handleRowClick(index);
-
-                            }} src={
-                              showTableRow.includes(index)
-                                ? CaretUp
-                                : CaretDown
-                            }
-                            alt=""
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </td>
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                        {element.shift === "day" ? "Day" :
-                          element.shift === "night" ? "Night" : "-"}
-                      </td>
-
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {showTableRow.includes(index)
-                          ? latestPunches.punchIn
-                            ? changetime(latestPunches.punchIn)
-                            : "Not Available"
-                          : firstPunches.punchIn
-                            ? changetime(firstPunches.punchIn)
-                            : "Not Available"}
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        {latestPunches.punchOut
-                          ? changetime(latestPunches.punchOut)
-                          : "-"}
-                      </td>
-                      <td className="py-4 px-5">
-                        {element?.status === "approved" && (
-                          <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
+                          {sortedPunches.slice(1).length > 0 ? (
                             <img
-                              src={GreenCheck}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
+                              onClick={() => {
+                                handleRowClick(index);
+
+                              }} src={
+                                showTableRow.includes(index)
+                                  ? CaretUp
+                                  : CaretDown
+                              }
+                              alt=""
                             />
-                            <span className="text-sm font-normal text-[#186A3B]">
-                              Approved
-                            </span>
-                          </span>
-                        )}
-                        {element?.status === "rejected" && (
-                          <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={RedX}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#8A2626]">
-                              Rejected
-                            </span>
-                          </span>
-                        )}
-                        {element.status === "pending" && (
-                          <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={SpinnerGap}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#945D2D]">
-                              Pending
-                            </span>
-                          </span>
-                        )}
-                        {element.status === "added Manually by administrator" && (
-                          <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                            <img
-                              src={SpinnerGap}
-                              className="h-[10px] w-[10px]"
-                              alt="check"
-                            />
-                            <span className="text-sm font-normal text-[#2c2c6d]">
-                              Manual
-                            </span>
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                        <p className="font-medium">
-
-                          {element.approvedBy?.name
-                            ? element.approvedBy?.name
-                            : "-"}
-                        </p>
-                        <p className="text-[12px]">
-
-                          {element.approvedBy?.jobProfileId?.jobProfileName
-                            ? element.approvedBy?.jobProfileId?.jobProfileName
-                            : "-"}
-                        </p>
-
-                      </td>
-
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
-                        <p className="">{element.shopName ? element.shopName : "-"}</p>
-                      </td>
-                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
-                        <p className="">{element.shopCode ? element.shopCode : "-"}</p>
-                      </td>
-
-
-                      {/* photo open */}
-
-                      <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                        {element?.status === "approved" &&
-                          element.approvedImage && (
-                            <img onClick={() =>
-                              handleImageClick(
-                                element.approvedImage,
-                                element?.profilePicture
-
-                              )
-                            } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
-
+                          ) : (
+                            ""
                           )}
-                      </td>
-                    </tr>
-                    {showTableRow.includes(index) &&
-                      sortedPunches &&
-                      sortedPunches.slice(1).map((element: any) => {
-                        return (
-                          <tr key={element._id + element.punchIn}>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td>
-                              <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchIn
-                                ? changetime(element.punchIn)
-                                : "Not Avilable"}
-                            </td>
-                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                              {element.punchOut
-                                ? changetime(element.punchOut)
-                                : "Not Avilable"}
-                            </td>
+                        </td>
+
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                          {element.shift === "day" ? "Day" :
+                            element.shift === "night" ? "Night" : "-"}
+                        </td>
 
 
-                          </tr>
-                        );
-                      })}
-                  </>
-                );
-              })
-              :
-              shopitems && shopitems.map((temp: any) => {
-                return (
-                  <>
-                    {
-                      temp?.attendance
-                      &&
-                      temp?.attendance.map((element: any, index: number) => {
-                        const punchesList = [...element.punches];
-                        const sortedPunches = punchesList.sort((a: any, b: any) => {
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {showTableRow.includes(index)
+                            ? latestPunches.punchIn
+                              ? changetime(latestPunches.punchIn)
+                              : "Not Available"
+                            : firstPunches.punchIn
+                              ? changetime(firstPunches.punchIn)
+                              : "Not Available"}
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          {latestPunches.punchOut
+                            ? changetime(latestPunches.punchOut)
+                            : "-"}
+                        </td>
+                        <td className="py-4 px-5">
+                          {element?.status === "approved" && (
+                            <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={GreenCheck}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#186A3B]">
+                                Approved
+                              </span>
+                            </span>
+                          )}
+                          {element?.status === "rejected" && (
+                            <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={RedX}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#8A2626]">
+                                Rejected
+                              </span>
+                            </span>
+                          )}
+                          {element.status === "pending" && (
+                            <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={SpinnerGap}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#945D2D]">
+                                Pending
+                              </span>
+                            </span>
+                          )}
+                          {element.status === "added Manually by administrator" && (
+                            <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                              <img
+                                src={SpinnerGap}
+                                className="h-[10px] w-[10px]"
+                                alt="check"
+                              />
+                              <span className="text-sm font-normal text-[#2c2c6d]">
+                                Manual
+                              </span>
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                          <p className="font-medium">
+
+                            {element.approvedBy?.name
+                              ? element.approvedBy?.name
+                              : "-"}
+                          </p>
+                          <p className="text-[12px]">
+
+                            {element.approvedBy?.jobProfileId?.jobProfileName
+                              ? element.approvedBy?.jobProfileId?.jobProfileName
+                              : "-"}
+                          </p>
+
+                        </td>
+
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
+                          <p className="">{element.shopName ? element.shopName : "-"}</p>
+                        </td>
+                        <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap">
+                          <p className="">{element.shopCode ? element.shopCode : "-"}</p>
+                        </td>
+
+
+                        {/* photo open */}
+
+                        <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                          {element?.status === "approved" &&
+                            element.approvedImage && (
+                              <img onClick={() =>
+                                handleImageClick(
+                                  element.approvedImage,
+                                  element?.profilePicture
+
+                                )
+                              } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+
+                            )}
+                        </td>
+                      </tr>
+                      {showTableRow.includes(index) &&
+                        sortedPunches &&
+                        sortedPunches.slice(1).map((element: any) => {
                           return (
-                            new Date(b.punchIn).getTime() -
-                            new Date(a.punchIn).getTime()
-                          );
-                        });
-                        const latestPunches = sortedPunches[0];
-                        const firstPunches = sortedPunches[sortedPunches.length - 1]
-
-
-                        return (
-                          <>
-                            <tr
-                              key={element._id + latestPunches.punchIn}
-                              className="hover:bg-[#FAFAFA]"
-
-                            >
+                            <tr key={element._id + element.punchIn}>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
+                              <td>
+                                <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                              </td>
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                {latestPunches.punchIn
-                                  ? latestPunches.punchIn.slice(0, 10)
+                                {element.punchIn
+                                  ? changetime(element.punchIn)
                                   : "Not Avilable"}
                               </td>
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                                {element.employeeId?.employeeCode
-                                  ? element.employeeId.employeeCode
-                                  : "Not Avilable"}{" "}
-                              </td>
-
-                              <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
-                                <div className="flex flex-col">
-
-                                  <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
-                                    ? element.employeeId?.name
-                                    : "Not Avilable"}</p>
-
-                                  <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
-                                    ? element.employeeId.jobProfileId?.jobProfileName
-                                    : "Not Avilable"}</p>
-
-                                </div>
-
-
-                                {sortedPunches.slice(1).length > 0 ? (
-                                  <img
-                                    onClick={() => {
-                                      handleRowClick(index);
-
-                                    }} src={
-                                      showTableRow.includes(index)
-                                        ? CaretUp
-                                        : CaretDown
-                                    }
-                                    alt=""
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </td>
-
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
-                                {element.shift === "day" ? "Day" :
-                                  element.shift === "night" ? "Night" : "-"}
-                              </td>
-
-
                               <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                {showTableRow.includes(index)
-                                  ? latestPunches.punchIn
-                                    ? changetime(latestPunches.punchIn)
-                                    : "Not Available"
-                                  : firstPunches.punchIn
-                                    ? changetime(firstPunches.punchIn)
-                                    : "Not Available"}
-                              </td>
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                {latestPunches.punchOut
-                                  ? changetime(latestPunches.punchOut)
-                                  : "-"}
-                              </td>
-                              <td className="py-4 px-5">
-                                {element?.status === "approved" && (
-                                  <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
-                                    <img
-                                      src={GreenCheck}
-                                      className="h-[10px] w-[10px]"
-                                      alt="check"
-                                    />
-                                    <span className="text-sm font-normal text-[#186A3B]">
-                                      Approved
-                                    </span>
-                                  </span>
-                                )}
-                                {element?.status === "rejected" && (
-                                  <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
-                                    <img
-                                      src={RedX}
-                                      className="h-[10px] w-[10px]"
-                                      alt="check"
-                                    />
-                                    <span className="text-sm font-normal text-[#8A2626]">
-                                      Rejected
-                                    </span>
-                                  </span>
-                                )}
-                                {element.status === "pending" && (
-                                  <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                                    <img
-                                      src={SpinnerGap}
-                                      className="h-[10px] w-[10px]"
-                                      alt="check"
-                                    />
-                                    <span className="text-sm font-normal text-[#945D2D]">
-                                      Pending
-                                    </span>
-                                  </span>
-                                )}
-                                {element.status === "added Manually by administrator" && (
-                                  <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
-                                    <img
-                                      src={SpinnerGap}
-                                      className="h-[10px] w-[10px]"
-                                      alt="check"
-                                    />
-                                    <span className="text-sm font-normal text-[#2c2c6d]">
-                                      Manual
-                                    </span>
-                                  </span>
-                                )}
-                              </td>
-                              <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                <p className="font-medium">
-
-                                  {element.approvedBy?.name
-                                    ? element.approvedBy?.name
-                                    : "-"}
-                                </p>
-                                <p className="text-[12px]">
-
-                                  {element.approvedBy?.jobProfileId?.jobProfileName
-                                    ? element.approvedBy?.jobProfileId?.jobProfileName
-                                    : "-"}
-                                </p>
-
-                              </td>
-
-                              <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
-                                {element?.status === "approved" && (
-                                  <div>{temp.shopName ? temp.shopName : "-"}</div>
-                                )}
-                              </td>
-                              <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                                {element?.status === "approved" && (
-                                  <div>{selectedShop !== "All Shop" ? selectedShop : "-"}</div>
-                                )}
+                                {element.punchOut
+                                  ? changetime(element.punchOut)
+                                  : "Not Avilable"}
                               </td>
 
 
-                              {/* photo open */}
-
-                              <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
-                                {element?.status === "approved" &&
-                                  element.approvedImage && (
-                                    <img onClick={() =>
-                                      handleImageClick(
-                                        element.approvedImage,
-                                        element?.profilePicture
-
-                                      )
-                                    } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
-
-                                  )}
-                              </td>
                             </tr>
-                            {showTableRow.includes(index) &&
-                              sortedPunches &&
-                              sortedPunches.slice(1).map((element: any) => {
-                                return (
-                                  <tr key={element._id + element.punchIn}>
-                                    <td>
-                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                                    </td>
-                                    <td>
-                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                                    </td>
-                                    <td>
-                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                                    </td>
-                                    <td>
-                                      <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                      {element.punchIn
-                                        ? changetime(element.punchIn)
-                                        : "Not Avilable"}
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                      {element.punchOut
-                                        ? changetime(element.punchOut)
-                                        : "Not Avilable"}
-                                    </td>
+                          );
+                        })}
+                    </>
+                  );
+                })
+                :
+                shopitems && shopitems.map((temp: any) => {
+                  return (
+                    <>
+                      {
+                        temp?.attendance
+                        &&
+                        temp?.attendance.map((element: any, index: number) => {
+                          const punchesList = [...element.punches];
+                          const sortedPunches = punchesList.sort((a: any, b: any) => {
+                            return (
+                              new Date(b.punchIn).getTime() -
+                              new Date(a.punchIn).getTime()
+                            );
+                          });
+                          const latestPunches = sortedPunches[0];
+                          const firstPunches = sortedPunches[sortedPunches.length - 1]
 
 
-                                  </tr>
-                                );
-                              })}
-                          </>
-                        );
-                      })}
-                  </>
-                )
-              })
-            }
-          </tbody >
+                          return (
+                            <>
+                              <tr
+                                key={element._id + latestPunches.punchIn}
+                                className="hover:bg-[#FAFAFA]"
 
-          {loaderStatus === "loading" ? (
-            <div className="flex justify-center w-full">
-              <img src={LoaderGif} className="w-6 h-6" alt="" />
-            </div>
-          ) : (
-            ""
-          )
-          }
-          <div ref={observerTarget}></div>
-          {isImageOpen && (
-            <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
-              <div className="flex flex-row gap-2">
-                <div className="flex flex-col text-center gap-2">
-                  <p className="font-bold text-white ">Profile Image</p>
-                  {selectedProfileImage ?
+                              >
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                  {latestPunches.punchIn
+                                    ? latestPunches.punchIn.slice(0, 10)
+                                    : "Not Avilable"}
+                                </td>
 
-                    <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
-                    : <img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+                                <td className=""  >
+                                  {element.profilePicture
+                                    ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                                    : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
 
-                  }
+                                </td>
+
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                                  {element.employeeId?.employeeCode
+                                    ? element.employeeId.employeeCode
+                                    : "Not Avilable"}{" "}
+                                </td>
+
+                                <td className="flex gap-2 py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
+                                  <div className="flex flex-col">
+
+                                    <p onClick={() => handleTableRowClick(element)} className="font-medium hover:underline cursor-pointer">{element.employeeId?.name
+                                      ? element.employeeId?.name
+                                      : "Not Avilable"}</p>
+
+                                    <p className="text-[12px]">{element.employeeId.jobProfileId?.jobProfileName
+                                      ? element.employeeId.jobProfileId?.jobProfileName
+                                      : "Not Avilable"}</p>
+
+                                  </div>
+
+
+                                  {sortedPunches.slice(1).length > 0 ? (
+                                    <img
+                                      onClick={() => {
+                                        handleRowClick(index);
+
+                                      }} src={
+                                        showTableRow.includes(index)
+                                          ? CaretUp
+                                          : CaretDown
+                                      }
+                                      alt=""
+                                    />
+                                  ) : (
+                                    ""
+                                  )}
+                                </td>
+
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
+                                  {element.shift === "day" ? "Day" :
+                                    element.shift === "night" ? "Night" : "-"}
+                                </td>
+
+
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                  {showTableRow.includes(index)
+                                    ? latestPunches.punchIn
+                                      ? changetime(latestPunches.punchIn)
+                                      : "Not Available"
+                                    : firstPunches.punchIn
+                                      ? changetime(firstPunches.punchIn)
+                                      : "Not Available"}
+                                </td>
+                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                  {latestPunches.punchOut
+                                    ? changetime(latestPunches.punchOut)
+                                    : "-"}
+                                </td>
+                                <td className="py-4 px-5">
+                                  {element?.status === "approved" && (
+                                    <span className="flex gap-2 items-center bg-[#E9F7EF] w-[116px] h-[26px] rounded-[46px] py-2 px-4">
+                                      <img
+                                        src={GreenCheck}
+                                        className="h-[10px] w-[10px]"
+                                        alt="check"
+                                      />
+                                      <span className="text-sm font-normal text-[#186A3B]">
+                                        Approved
+                                      </span>
+                                    </span>
+                                  )}
+                                  {element?.status === "rejected" && (
+                                    <span className="flex gap-2 items-center bg-[#FCECEC] w-[110px] h-[26px] rounded-[46px] py-2 px-4">
+                                      <img
+                                        src={RedX}
+                                        className="h-[10px] w-[10px]"
+                                        alt="check"
+                                      />
+                                      <span className="text-sm font-normal text-[#8A2626]">
+                                        Rejected
+                                      </span>
+                                    </span>
+                                  )}
+                                  {element.status === "pending" && (
+                                    <span className="flex gap-2 items-center bg-[#FEF5ED] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                                      <img
+                                        src={SpinnerGap}
+                                        className="h-[10px] w-[10px]"
+                                        alt="check"
+                                      />
+                                      <span className="text-sm font-normal text-[#945D2D]">
+                                        Pending
+                                      </span>
+                                    </span>
+                                  )}
+                                  {element.status === "added Manually by administrator" && (
+                                    <span className="flex gap-2 items-center bg-[#acb7f3] w-[106px] h-[26px] rounded-[46px] py-2 px-4">
+                                      <img
+                                        src={SpinnerGap}
+                                        className="h-[10px] w-[10px]"
+                                        alt="check"
+                                      />
+                                      <span className="text-sm font-normal text-[#2c2c6d]">
+                                        Manual
+                                      </span>
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="py-4 px-5 flex justify-center flex-col text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                  <p className="font-medium">
+
+                                    {element.approvedBy?.name
+                                      ? element.approvedBy?.name
+                                      : "-"}
+                                  </p>
+                                  <p className="text-[12px]">
+
+                                    {element.approvedBy?.jobProfileId?.jobProfileName
+                                      ? element.approvedBy?.jobProfileId?.jobProfileName
+                                      : "-"}
+                                  </p>
+
+                                </td>
+
+                                <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
+                                  {element?.status === "approved" && (
+                                    <div>{temp.shopName ? temp.shopName : "-"}</div>
+                                  )}
+                                </td>
+                                <td className="py-4 px-5 text-sm  font-normal text-[#2E2E2E]  whitespace-wrap">
+                                  {element?.status === "approved" && (
+                                    <div>{temp.shopCode ? temp.shopCode : "-"}</div>
+                                  )}
+                                </td>
+
+
+
+                                {/* photo open */}
+
+                                <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
+                                  {element?.status === "approved" &&
+                                    element.approvedImage && (
+                                      <img onClick={() =>
+                                        handleImageClick(
+                                          element.approvedImage,
+                                          element?.profilePicture
+
+                                        )
+                                      } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+
+                                    )}
+                                </td>
+                              </tr>
+                              {showTableRow.includes(index) &&
+                                sortedPunches &&
+                                sortedPunches.slice(1).map((element: any) => {
+                                  return (
+                                    <tr key={element._id + element.punchIn}>
+                                      <td>
+                                        <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                      </td>
+                                      <td>
+                                        <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                      </td>
+                                      <td>
+                                        <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                      </td>
+                                      <td>
+                                        <div className="ms-8 h-14 border-s border-solid border-[#DEDEDE]"></div>
+                                      </td>
+                                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                        {element.punchIn
+                                          ? changetime(element.punchIn)
+                                          : "Not Avilable"}
+                                      </td>
+                                      <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                        {element.punchOut
+                                          ? changetime(element.punchOut)
+                                          : "Not Avilable"}
+                                      </td>
+
+
+                                    </tr>
+                                  );
+                                })}
+                            </>
+                          );
+                        })}
+                    </>
+                  )
+                })
+              }
+            </tbody >
+
+
+            <div ref={observerTarget}></div>
+            {isImageOpen && (
+              <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
+                <div className="flex flex-row gap-2">
+                  <div className="flex flex-col text-center gap-2">
+                    <p className="font-bold text-white ">Profile Image</p>
+                    {selectedProfileImage ?
+
+                      <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
+                      : <img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+
+                    }
+                  </div>
+                  <div className="flex flex-col text-center gap-2">
+                    <p className="font-bold text-white">Approved Image</p>
+                    <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                  </div>
+
                 </div>
-                <div className="flex flex-col text-center gap-2">
-                  <p className="font-bold text-white">Approved Image</p>
-                  <img src={selectedImage} alt="Approved" className="h-[20rem]" />
-                </div>
+                <button
+                  className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
+                  onClick={handleCloseImage}
+                >
 
+                  <img
+                    src={close}
+                    alt=""
+                    className="h-[25px] w-[25px] bg-white rounded-full "
+                  />
+                </button>
               </div>
-              <button
-                className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
-                onClick={handleCloseImage}
-              >
-
-                <img
-                  src={close}
-                  alt=""
-                  className="h-[25px] w-[25px] bg-white rounded-full "
-                />
-              </button>
-            </div>
-          )}
-        </table>
+            )}
+          </table>}
         {/* TABLE ENDS HERE */}
       </div>
 
-      <div className="fixed flex justify-center bg-white bottom-0 left-[270px] right-0">
+      <div className="fixed flex justify-center bottom-0 left-[270px] right-0">
         <div className="flex gap-3 items-center justify-center w-[300px] h-12 mb-10 border border-solid border-[#DEDEDE] py-4 px-5 rounded-[53px] bg-[#FAFAFA]">
           <button
             onClick={() => {
