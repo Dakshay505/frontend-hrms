@@ -673,79 +673,76 @@ export const AttendenceDashboardList = () => {
         </div>
 
         <div className="flex flex-start pt-4 gap-6">
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
                 {approvedCount}
               </span>
               {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
               Approved
 
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
                 {pendingCount}
               </span>
 
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
               Pending
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
                 {rejectedCount}
               </span>
 
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
               Rejected
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
 
                 {approvedCount + pendingCount + rejectedCount}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Total Present
             </p>
           </div>
 
 
-        </div>
-
-
-        <div className="flex gap-6">
-
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
                 {punchesData && punchesData.countIn ? punchesData.countIn : 0}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Punch In
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-            <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
                 {punchesData && punchesData.countOut ? punchesData.countOut : 0}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Punch Out
             </p>
           </div>
         </div>
+
+
 
 
       </div>
