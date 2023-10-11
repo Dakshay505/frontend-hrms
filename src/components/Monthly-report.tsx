@@ -384,6 +384,90 @@ export const MonthlyReport = () => {
 
     }, []);
 
+
+    useEffect(() => {
+        dispatch(getAllMonthlyReportAsync(filter)).then((res: any) => {
+            const Salarydata = res.payload.salaryRecords;
+            console.log("aaaaaaaaaaaaaa", Salarydata)
+            const arr = [];
+
+            for (let i = 0; i < Salarydata.length; i++) {
+                if (Salarydata[i].profilePicture) {
+                    arr.push({
+                        name: Salarydata[i]?.employee?.name,
+                        jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                    });
+                }
+                else {
+                    arr.push({
+                        name: Salarydata[i]?.employee.name,
+                        profilePicture:
+                            "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+                        jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                    });
+                }
+            }
+
+            setFetchedSuggestions(arr);
+        });
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllDepartmentAsync());
+
+    }, []);
+
+    const [selectedMonth, setSelectedMonth] = useState("");
+
+
+    const formatDate = (date: any) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
+
+
+    const handleMonthChange = (event: any) => {
+        const selectedMonthName = event.target.value;
+        setSelectedMonth(selectedMonthName);
+
+        const year = new Date().getFullYear(); // You can use any desired year
+        const monthIndex = months.findIndex((month) => month === selectedMonthName);
+
+        if (monthIndex !== -1) {
+            const startDate = new Date(year, monthIndex, 1);
+            const endDate = new Date(year, monthIndex + 1, 0);
+
+            const formattedStartDate = formatDate(startDate);
+            const formattedEndDate = formatDate(endDate);
+
+            setFilter((prevFilter: any) => ({
+                ...prevFilter,
+                date: formattedStartDate,
+                nextDate: formattedEndDate,
+            }));
+        }
+    };
+
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+
+
+
+
     return (
         <div className='p-[40px]'>
             <div className='flex flex-col gap-[10px]'>
@@ -603,7 +687,24 @@ export const MonthlyReport = () => {
                                 </div>
                             )}
                         </div>
+
+                        <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
+                            <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
+                                <option value="" className="font-bold">Select a month</option>
+                                {months.map((month, index) => (
+                                    <option key={index} className="font-bold"  value={month}>
+                                        {month}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                     </div>
+
+
+
+
+
                 </div>
 
                 <hr />
@@ -699,7 +800,7 @@ export const MonthlyReport = () => {
 
                                 </tr>
 
-                                {monthlyData && monthlyData.map((element:any, index:any) => (
+                                {monthlyData && monthlyData.map((element: any, index: any) => (
                                     <tr key={index}>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{index + 1}</td>
                                         <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
@@ -736,7 +837,7 @@ export const MonthlyReport = () => {
                                 value={limit.toString()}
                                 onChange={(event) => {
                                     const selectedLimit = Number(event.target.value);
-                                    console.log("aaaaaa",selectedLimit)
+                                    console.log("aaaaaa", selectedLimit)
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
@@ -748,10 +849,11 @@ export const MonthlyReport = () => {
                                     }
                                 }}
                             >
+                                <option value="">select</option>
                                 <option value="10">10</option>
                                 <option value="1">1</option>
                                 <option value="20">20</option>
-                               
+
                             </select>
 
                             <label className="text-zinc-400 pl-2">Items per page</label>

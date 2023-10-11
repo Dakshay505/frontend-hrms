@@ -50,7 +50,7 @@ export const AttendenceDashboardList = () => {
 
   const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
     a.jobProfileName.localeCompare(b.jobProfileName)
-  );
+  ); 
   const loaderStatus = useSelector((state: any) => state.attandence.status);
 
   const [date, setDate] = useState<any>(new Date());
@@ -130,7 +130,7 @@ export const AttendenceDashboardList = () => {
     return formattedTime;
   }
 
-  const [selectedShop,] = useState("All Shop");
+  // const [selectedShop,] = useState("All Shop");
   const [shopName, setShopName] = useState([""]);
 
   // const handleShopChange = (event: any) => {
