@@ -119,6 +119,7 @@ export const getjobProfileBySubDepartmentNameApiPath = `${apiPath}/api/v1/depart
 export const deleteDepartmentApiPath = `${apiPath}/api/v1/department/delete`;
 export const updateDepartmentApiPath = `${apiPath}/api/v1/department/updateDepartment`;
 export const updateParentDepartmentApiPath = `${apiPath}/api/v1/department/updateParentDepartment`;
+export const DepartmentOverviewApiPath = `${apiPath}/api/v2/attendance/v2/departmentOverview`;
 
 // new Salary
 export const getSalaryBySubDepartmentApiPath = `${apiPath}/api/v1/department/newData`;

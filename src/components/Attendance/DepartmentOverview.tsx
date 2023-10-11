@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupAttendancesAsync } from "../../redux/Slice/AttandenceSlice";
 import { useEffect } from "react";
 import LoaderGif from '../../assets/loadergif.gif'
 import { Link } from "react-router-dom";
+import { getDepartmentOverviewAsync } from "../../redux/Slice/departmentSlice";
 
 const DepartmentOverview = () => {
   const dispatch = useDispatch();
 
-  const groupAttendanceList = useSelector((state: any) => state.attandence.groupOverView)
+  const departmentList = useSelector((state: any) => state.department.departmentOverview)
   const loaderStatus = useSelector((state: any) => state.attandence.status)
-
+  console.log("--",departmentList);
   useEffect(() => {
-    dispatch(getGroupAttendancesAsync())
+    dispatch(getDepartmentOverviewAsync())
   }, [])
   return (
     <div className="pt-8 px-10">
@@ -38,10 +38,10 @@ const DepartmentOverview = () => {
             {loaderStatus === "loading" ? <div className='flex justify-center w-full'>
               <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
-            {groupAttendanceList && groupAttendanceList.map((element: any, index: number) => {
+            {departmentList && departmentList.map((element: any, index: number) => {
               return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
-                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
+                <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.departmentName ? element.departmentName : "Not Avilable"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.pending ? element.pending : "0"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.rejected ? element.rejected : "0"}</td>
