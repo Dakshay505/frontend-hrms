@@ -614,6 +614,7 @@ export const NewPage = () => {
               </div>
             )}
           </div>
+          
           <div className="relative inline-block text-left ml-3">
             <select
               onChange={(event) => setCreatedAt(event.target.value)}
