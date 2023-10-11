@@ -60,9 +60,9 @@ export const getAllDepartmentAsync: any = createAsyncThunk(
 //get all department
 export const getDepartmentOverviewAsync: any = createAsyncThunk(
   "getDepartmentOverviewAsync",
-  async () => {
+  async (Date) => {
     try {
-      const response: any = await getDepartmentoverview();
+      const response: any = await getDepartmentoverview(Date);
       return response;
     } catch (error: any) {
       console.log(error.message);

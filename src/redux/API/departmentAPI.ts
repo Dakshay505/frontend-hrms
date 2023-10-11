@@ -48,9 +48,9 @@ export const getAllDepartment = async () => {
     console.log(err.response.data);
   }
 };
-export const getDepartmentoverview = async () => {
+export const getDepartmentoverview = async (Data:any) => {
   try {
-    const { data } = await axios.get(`${DepartmentOverviewApiPath}`, {
+    const { data } = await axios.get(`${DepartmentOverviewApiPath}?date=${Data}`, {
       withCredentials: true,
     });
     return data;

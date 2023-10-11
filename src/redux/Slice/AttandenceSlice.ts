@@ -100,9 +100,9 @@ export const getGroupAttendanceAsync: any = createAsyncThunk(
 );
 export const getGroupAttendancesAsync: any = createAsyncThunk(
   "getGroupAttendancesAsync",
-  async () => {
+  async (Data) => {
     try {
-      const response: any = await getGroupAttendances();
+      const response: any = await getGroupAttendances(Data);
       return response;
     } catch (error: any) {
       console.log(error.message);
