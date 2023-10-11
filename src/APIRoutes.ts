@@ -82,6 +82,7 @@ export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;
 export const getGroupAttendanceApiPath = `${apiPath}/api/v2/attendance/groupPresent`;
+export const getGroupAttendancesApiPath = `${apiPath}/api/v2/attendance/v2/groupview`;
 export const addpuchApiPath = `${apiPath}/api/v2/attendance/addPunches`;
 export const deletepuchApiPath = `${apiPath}/api/v2/attendance/deletePunches`;
 export const editpuchApiPath = `${apiPath}/api/v2/attendance/updatePunches`;

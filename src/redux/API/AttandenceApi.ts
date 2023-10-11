@@ -5,6 +5,7 @@ import {
   editpuchApiPath,
   getAllAttandenceApiPath,
   getGroupAttendanceApiPath,
+  getGroupAttendancesApiPath,
   getMyAttandenceApiPath,
   getStaffAttendanceApiPath,
   punchInPunchOutAttendanceApiPath,
@@ -108,6 +109,16 @@ export const getMyAttandence = async (sendData: any) => {
 export const getGroupAttendance = async () => {
   try {
     const { data } = await axios.get(`${getGroupAttendanceApiPath}`, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (err: any) {
+    console.log(err.response.data);
+  }
+};
+export const getGroupAttendances = async () => {
+  try {
+    const { data } = await axios.get(`${getGroupAttendancesApiPath}`, {
       withCredentials: true,
     });
     return data;

@@ -6,6 +6,7 @@ import {
   getAllAttandence,
   getAllPunchInPunchOut,
   getGroupAttendance,
+  getGroupAttendances,
   getMyAttandence,
   getShopFilterAttendance,
   getSingleGroupAttendance,
@@ -19,7 +20,8 @@ const initialState = {
   staffAttendance: [],
   groupAttendance: [],
   singleGroupAttendance: [],
-  punchInPunchOut:[],
+  punchInPunchOut: [],
+  groupOverView: [],
   status: "idle",
 };
 
@@ -51,7 +53,6 @@ export const getShopFilterAttandenceAsync: any = createAsyncThunk(
   "getShopFilterAttandenceAsync",
   async (data) => {
     try {
-      console.log("data", data);
       const response: any = await getShopFilterAttendance(data);
       return response;
     } catch (error: any) {
@@ -91,7 +92,17 @@ export const getGroupAttendanceAsync: any = createAsyncThunk(
   async () => {
     try {
       const response: any = await getGroupAttendance();
-      console.log(response);
+      return response;
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  }
+);
+export const getGroupAttendancesAsync: any = createAsyncThunk(
+  "getGroupAttendancesAsync",
+  async () => {
+    try {
+      const response: any = await getGroupAttendances();
       return response;
     } catch (error: any) {
       console.log(error.message);
@@ -152,8 +163,6 @@ export const editPunchAsync: any = createAsyncThunk(
 export const deletePunchAsync: any = createAsyncThunk(
   "deletePunchAsync",
   async (data) => {
-    console.log(data);
-
     try {
       const response: any = await deletePunches(data);
       return response;
@@ -262,6 +271,16 @@ export const AttandenceSlice = createSlice({
         function (state: any, action: any) {
           state.status = "idle";
           state.allAttandence = action.payload;
+        }
+      )
+      .addCase(getGroupAttendancesAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        getGroupAttendancesAsync.fulfilled,
+        function (state: any, action: any) {
+          state.status = "idle";
+          state.groupOverView = action.payload.groupStore;
         }
       );
   },
