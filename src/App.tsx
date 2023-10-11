@@ -85,6 +85,7 @@ import { ParentDepartmentInfo } from "./components/Dashboard/ParentDepartment";
 import { NewSalaryPage } from "./components/Salary/Salary New Page/NewSalaryPage";
 import {MonthlyReport} from "./components/Monthly-report";
 import MasterSheet from "./components/Dashboard/masterSheet";
+import DepartmentOverview from "./components/Attendance/DepartmentOverview";
 
 
 const router = createBrowserRouter([
@@ -266,6 +267,16 @@ const router = createBrowserRouter([
       <ProductedRoute>
         <Aside>
           <AttendanceOverview></AttendanceOverview>
+        </Aside>
+      </ProductedRoute>
+    ),
+  },
+  {
+    path: "/department-overview",
+    element: (
+      <ProductedRoute>
+        <Aside>
+          <DepartmentOverview></DepartmentOverview>
         </Aside>
       </ProductedRoute>
     ),
