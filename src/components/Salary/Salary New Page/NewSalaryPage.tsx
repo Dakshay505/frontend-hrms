@@ -10,6 +10,8 @@ import ClearAll from "../../../assets/Clear-all.svg"
 import { getAllGroupsAsync } from "../../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
+import LoaderGif from "../../../assets/loadergif.gif";
+
 import Calendar from "react-calendar";
 // import * as XLSX from 'xlsx';
 // import toast from "react-hot-toast";
@@ -22,7 +24,7 @@ const options2 = [
 ];
 
 export const NewSalaryPage = () => {
-    const [limit, setLimit] = useState(1000);
+    const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -81,6 +83,7 @@ export const NewSalaryPage = () => {
     useEffect(() => {
         dispatch(getAllSalaryAsync({ limit, page }));
     }, [limit, page, dispatch]);
+
     const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
 
 
@@ -91,9 +94,8 @@ export const NewSalaryPage = () => {
         departmentName: [""],
         employeeCodes: [""],
         page: 1,
-        limit: 2000,
+        limit: 20,
         shifts: [""],
-
     });
 
 
@@ -493,16 +495,16 @@ export const NewSalaryPage = () => {
             for (let i = 0; i < Salarydata.length; i++) {
                 if (Salarydata[i].profilePicture) {
                     arr.push({
-                        name: Salarydata[i]?.employee?.name,
-                        jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                        name: Salarydata[i]?.attendance.employeeId?.name,
+                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
                     });
                 }
                 else {
                     arr.push({
-                        name: Salarydata[i]?.employee.name,
+                        name: Salarydata[i]?.attendance.employeeId.name,
                         profilePicture:
                             "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-                        jobProfileName: Salarydata[i]?.employee.jobProfileId.jobProfileName,
+                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
                     });
                 }
             }
@@ -514,6 +516,9 @@ export const NewSalaryPage = () => {
         dispatch(getAllDepartmentAsync());
 
     }, []);
+
+    const loaderStatus = useSelector((state: any) => state.attandence.status);
+    console.log(loaderStatus)
 
     return (
         <div className='p-[40px]'>
@@ -683,12 +688,12 @@ export const NewSalaryPage = () => {
                                                 <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.employee.employeeCode} 
-                                                        checked={filter.employeeCodes.includes(element.employee.employeeCode)}
-                                                        onChange={handleEmployeeCheckboxChange} 
+                                                        value={element.attendance.employeeId.employeeCode}
+                                                        checked={filter.employeeCodes.includes(element.attendance.employeeId.employeeCode)}
+                                                        onChange={handleEmployeeCheckboxChange}
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
-                                                    {element.employee.employeeCode}
+                                                    {element.attendance.employeeId.employeeCode}
                                                 </label>
                                             ))}
 
@@ -797,288 +802,355 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
-
-
                     </div>
-
-
 
                 </div>
 
                 <hr />
 
-                <div className="flex flex-start pt-[25px] gap-6">
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary A
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
+                {loaderStatus === "loading" ? (
 
-                            {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
+                    <div className="flex flex-start pt-[25px] gap-6">
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary A
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+
+                                0
+                            </div>
                         </div>
+
+
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary B
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                0
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary C
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                0
+                            </div>
+                        </div>
+
+
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Punch in
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                0
+                            </div>
+                        </div>
+
+
+
+
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Present
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                0
+                            </div>
+                        </div>
+
                     </div>
 
+                ) : (
 
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary B
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
+
+                    <div className="flex flex-start pt-[25px] gap-6">
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary A
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+
+                                {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Salary C
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {totalSalaryC !== undefined ? totalSalaryC.toFixed(2) : "-"}
+
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary B
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
+                            </div>
                         </div>
-                    </div>
 
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Punch in
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Salary C
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                {totalSalaryC !== undefined ? totalSalaryC.toFixed(2) : "-"}
+                            </div>
                         </div>
-                    </div>
 
 
-
-
-                    <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                        <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                            Total Present
-                        </p>
-                        <div className="flex text-[24px] font-bold justify-center items-center">
-                            {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Punch in
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                            </div>
                         </div>
-                    </div>
 
 
 
 
-                </div>
+                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                Total Present
+                            </p>
+                            <div className="flex text-[24px] font-bold justify-center items-center">
+                                {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
+                            </div>
+                        </div>
+
+
+
+
+                    </div >
+
+                )}
+
 
 
                 <div className="py-6 mb-24">
-                    <div className="table-container" style={{ overflowY: 'auto' }}>
-                        <table className="w-full">
 
-                            <tbody >
-                                <tr className="bg-[#ECEDFE] cursor-default">
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Sr No.
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Date
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Employee Code
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Employee Name
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Group Name
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Department
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Job Profile
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        OverTime
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary
-                                    </td>
+                    {loaderStatus === "loading" ? (
+                        <div className="flex justify-center w-full">
+                            <img src={LoaderGif} className="w-6 h-6" alt="" />
+                        </div>
+                    ) : (
+                   ""
+                    )
+                    }
+                    {loaderStatus !== "loading" &&
+                        <div className="table-container" style={{ overflowY: 'auto' }}>
+                            <table className="w-full">
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Duty hour required
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Lunch
-                                    </td>
+                                <tbody >
+                                    <tr className="bg-[#ECEDFE] cursor-default">
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Sr No.
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Date
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Employee Code
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Employee Name
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Group Name
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Department
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Job Profile
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            OverTime
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total Working Hours by Database
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary Per Hours
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch IN BY
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Duty hour required
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Lunch
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch IN
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch Out BY
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Punch Out
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Shift
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Status
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Approved by
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Actual working hour By Records
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total Workinghours
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Dutyhours
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Total Working Hours by Database
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary Per Hours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Punch IN BY
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Actual Duty hour
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Over Time
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Punch IN
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Punch Out BY
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Punch Out
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Shift
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Status
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Approved by
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Actual working hour By Records
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Total Workinghours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Dutyhours
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Earning in a day/Salary A
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Actual Duty hour
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Over Time
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary B
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary C
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Earning in a day/Salary A
+                                        </td>
 
-
-                                </tr>
-
-                                {salaryData && salaryData
-                                    .map((element: any, index: any) => (
-                                        <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {index + 1}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.employeeCode ? element?.employee?.employeeCode : "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.name ? element?.employee?.name : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.groupId?.groupName ? element?.employee?.groupId?.groupName : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.jobProfileId?.department?.departmentName ? element?.employee?.jobProfileId?.department?.departmentName : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.jobProfileId?.jobProfileName ? element?.employee?.jobProfileId?.jobProfileName : "-"}
-                                            </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary B
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary C
+                                        </td>
 
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.overTime ? "Yes" : "No"}
-                                            </td>
+                                    </tr>
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.salary ? element?.employee?.salary : "-"}
-                                            </td>
+                                    {salaryData && salaryData
+                                        .map((element: any, index: any) => (
+                                            <tr key={index} className={index % 2 === 0 ? "bg-[#FAFAFA]" : ""}>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.employeeCode ? element?.attendance.employeeId?.employeeCode : "-"}
+                                                </td>
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.name ? element?.attendance.employeeId?.name : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.groupId?.groupName ? element?.attendance.employeeId?.groupId?.groupName : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.jobProfileId?.department?.departmentName ? element?.attendance.employeeId?.jobProfileId?.department?.departmentName : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.jobProfileId?.jobProfileName ? element?.attendance.employeeId?.jobProfileId?.jobProfileName : "-"}
+                                                </td>
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.overTime ? "Yes" : "No"}
+                                                </td>
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.employee?.salary ? element?.employee?.salary : "-"}
+                                                </td>
 
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.workingHours ? element?.employee?.workingHours : "-"}
-                                            </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.workingHours ? element?.attendance.employeeId?.workingHours : "-"}
+                                                </td>
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.employee?.lunchTime ? element.employee.lunchTime + " hours" : "-"}
-                                            </td>
-
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.totalWorkingHours ? element.totalWorkingHours : "-"}
-                                            </td>
-
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryPerHours ? element.salaryPerHours.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.punches[0]?.punchInBy?.name || "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.firstPunchIn ? element?.firstPunchIn.slice(11, 16) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.punches[0]?.punchOutBy?.name || "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.lastPunchOut ? element?.lastPunchOut.slice(11, 16) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance ? element?.attendance?.shift : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.status || "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.attendance?.approvedBy?.name || "-"}
-                                            </td>
-
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.actualworkingHoursbyRecord || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.finalWorkingHours || 0}
-
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.dutyHours || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.actualWorkinghours || 0}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.overTime.toFixed(2) || 0}
-                                            </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance.employeeId?.lunchTime ? element.attendance.employeeId.lunchTime + " hours" : "-"}
+                                                </td>
 
 
 
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
-                                            </td>
-                                            <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                {element?.salaryC !== undefined ? element.salaryC.toFixed(2) : "-"}
-                                            </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.totalWorkingHours ? element.totalWorkingHours : "-"}
+                                                </td>
 
-                                        </tr>
-                                    ))}
 
-                            </tbody >
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryPerHours ? element.salaryPerHours.toFixed(2) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.punches[0]?.punchInBy?.name || "-"}
+                                                </td>
 
-                        </table>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.firstPunchIn ? element?.firstPunchIn.slice(11, 16) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.punches[0]?.punchOutBy?.name || "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.lastPunchOut ? element?.lastPunchOut.slice(11, 16) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance ? element?.attendance?.shift : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.status || "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.approvedBy?.name || "-"}
+                                                </td>
 
-                    </div>
+                                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.actualworkingHoursbyRecord || 0}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.finalWorkingHours || 0}
+
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.dutyHours || 0}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.actualWorkinghours || 0}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.overTime.toFixed(2) || 0}
+                                                </td>
+
+
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
+                                                </td>
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryC !== undefined ? element.salaryC.toFixed(2) : "-"}
+                                                </td>
+
+                                            </tr>
+                                        ))}
+
+                                </tbody >
+
+                            </table>
+
+                        </div>}
 
                     <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
                         <div className="px-3">
@@ -1138,7 +1210,7 @@ export const NewSalaryPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
 
         </div >

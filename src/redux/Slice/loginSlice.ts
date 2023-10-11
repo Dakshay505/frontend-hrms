@@ -59,6 +59,7 @@ export const getLoggedInUserDataAsync: any = createAsyncThunk(
           }
     }
 );
+
 // LOGOUT
 export const logoutUserAsync: any = createAsyncThunk(
     'getUserLogout',
