@@ -417,7 +417,20 @@ export const MonthlyReport = () => {
     }, []);
 
     const [selectedMonth, setSelectedMonth] = useState("");
-
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
 
     const formatDate = (date: any) => {
         const year = date.getFullYear();
@@ -426,12 +439,11 @@ export const MonthlyReport = () => {
         return `${year}-${month}-${day}`;
     };
 
-
     const handleMonthChange = (event: any) => {
         const selectedMonthName = event.target.value;
         setSelectedMonth(selectedMonthName);
 
-        const year = new Date().getFullYear(); 
+        const year = new Date().getFullYear();
         const monthIndex = months.findIndex((month) => month === selectedMonthName);
 
         if (monthIndex !== -1) {
@@ -449,22 +461,12 @@ export const MonthlyReport = () => {
         }
     };
 
-    const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    ];
-
-
+    useEffect(() => {
+        // Set the default selected month to the current month
+        const currentDate = new Date();
+        const currentMonthName = months[currentDate.getMonth()];
+        setSelectedMonth(currentMonthName);
+    }, []);
 
 
 
@@ -687,12 +689,12 @@ export const MonthlyReport = () => {
                                 </div>
                             )}
                         </div>
-
+                        
                         <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
                             <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
                                 <option value="" className="font-bold">Select a month</option>
                                 {months.map((month, index) => (
-                                    <option key={index} className="font-bold"  value={month}>
+                                    <option key={index} className="font-bold" value={month}>
                                         {month}
                                     </option>
                                 ))}
