@@ -486,7 +486,7 @@ const MasterSheet = () => {
                 All Group
               </button>
               {isGroupOpen && (
-                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div className="absolute z-50 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
