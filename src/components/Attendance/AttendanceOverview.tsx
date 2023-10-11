@@ -14,6 +14,11 @@ const AttendanceOverview = () => {
     dispatch(getGroupAttendancesAsync())
 
   }, [])
+  const handleClick = (element: any) => {
+    console.log("selected group-----",element.groupName)
+
+    
+  }
   return (
     <div className="pt-8 px-10">
       <div className="flex  items-center justify-between gap-[20rem]">
@@ -40,7 +45,7 @@ const AttendanceOverview = () => {
               <img src={LoaderGif} className='w-6 h-6' alt="" />
             </div> : ""}
             {groupAttendanceList && groupAttendanceList.map((element: any, index: number) => {
-              return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer'>
+              return <tr key={index} className='hover:bg-[#FAFAFA] cursor-pointer' onClick={() => { handleClick(element)}}>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{index + 1 ? index + 1 : "-"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.groupName ? element.groupName : "Not Avilable"}</td>
                 <td className='py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap border-r border-b border-solid border-[#EBEBEB]'>{element.approved ? element.approved : "0"}</td>
