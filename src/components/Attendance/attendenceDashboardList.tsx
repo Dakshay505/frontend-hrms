@@ -176,41 +176,22 @@ export const AttendenceDashboardList = () => {
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
-      console.log("HHHHHHHHHHH", employeeData)
       setShopItems(employeeData)
-      //setItems(employeeData)
     });
 
   }, [shopName])
   const [dateRange, setDateRange] = useState<any>([]);
   useEffect(() => {
-    // function getDateRange(startDate: any, endDate: any) {
-    //   if (nextDate) {
-    //     const result = [];
-    //     const currentDate = new Date(startDate);
-    //     const finalDate = new Date(endDate);
-    //     while (currentDate <= finalDate) {
-    //       result.push(currentDate.toISOString().slice(0, 10));
-    //       currentDate.setDate(currentDate.getDate() + 1);
-    //     }
-    //     setDateRange([...result]);
-    //   }
-    // }
+
     setShopName([])
     Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    //getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
     if (filter.nextDate === "") {
       filter.nextDate = filter.date
     }
 
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
+      console.log("---------", data.payload);
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
         setItems(employeeData);
@@ -224,28 +205,9 @@ export const AttendenceDashboardList = () => {
     });
   }, [filter, status]);
   useEffect(() => {
-    // function getDateRange(startDate: any, endDate: any) {
-    //   if (nextDate) {
-    //     const result = [];
-    //     const currentDate = new Date(startDate);
-    //     const finalDate = new Date(endDate);
-    //     while (currentDate <= finalDate) {
-    //       result.push(currentDate.toISOString().slice(0, 10));
-    //       currentDate.setDate(currentDate.getDate() + 1);
-    //     }
-    //     setDateRange([...result]);
-    //   }
-    // }
     setShopName([])
     Setloading(true)
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
-
-    //getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
-    console.log(filter)
     if (filter.nextDate === "") {
       filter.nextDate = filter.date
     }
@@ -273,9 +235,7 @@ export const AttendenceDashboardList = () => {
       }
     });
   }, [date, nextDate]);
-  // const handlerFatchMore = () => {
-  //   setPage((prevPage) => prevPage + 1);
-  // };
+
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
       if (nextDate) {
@@ -654,7 +614,7 @@ export const AttendenceDashboardList = () => {
 
   }
 
-  console.log("AAAAAAAAAAAAAAAAAAAAA",items)
+  console.log("AAAAAAAAAAAAAAAAAAAAA", items)
 
   const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
 
@@ -1067,7 +1027,16 @@ export const AttendenceDashboardList = () => {
 
       <div className="py-6 mb-24 overflow-auto">
         {/* TABLE STARTS HERE */}
-        <table className="w-full">
+        {loaderStatus === "loading" ? (
+            <div className="flex justify-center w-full">
+              <img src={LoaderGif} className="w-6 h-6" alt="" />
+            </div>
+          ) : (
+            ""
+          )
+          }
+       {loaderStatus !=="loading" && 
+       <table className="w-full">
           <tbody>
             <tr className="bg-[#ECEDFE] cursor-default">
               <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
@@ -1558,14 +1527,7 @@ export const AttendenceDashboardList = () => {
             }
           </tbody >
 
-          {loaderStatus === "loading" ? (
-            <div className="flex justify-center w-full">
-              <img src={LoaderGif} className="w-6 h-6" alt="" />
-            </div>
-          ) : (
-            ""
-          )
-          }
+          
           <div ref={observerTarget}></div>
           {isImageOpen && (
             <div className="fixed  left-0 right-0 m-auto flex   inset-0 z-50  items-center justify-center bg-black bg-opacity-75">
@@ -1598,7 +1560,7 @@ export const AttendenceDashboardList = () => {
               </button>
             </div>
           )}
-        </table>
+        </table> }
         {/* TABLE ENDS HERE */}
       </div>
 
