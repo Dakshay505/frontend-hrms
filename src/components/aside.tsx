@@ -141,7 +141,7 @@ export default function aside(props: Props) {
       </nav>
       {/* aside */}
 
-      <div className="relative">
+      <div className="">
         {showSidebar ? (
           <button
             className="flex  text-center justify-center p-[5px] text-4xl text-primary-blue items-center h-[50px] w-[50px] cursor-pointer fixed left-[22px] top-[13%] z-50 translate-x-[-20px] transition-all ease-in-out duration-500"
