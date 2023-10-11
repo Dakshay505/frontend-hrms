@@ -116,9 +116,9 @@ export const getGroupAttendance = async () => {
     console.log(err.response.data);
   }
 };
-export const getGroupAttendances = async () => {
+export const getGroupAttendances = async (Data:any) => {
   try {
-    const { data } = await axios.get(`${getGroupAttendancesApiPath}`, {
+    const { data } = await axios.get(`${getGroupAttendancesApiPath}?date=${Data}`, {
       withCredentials: true,
     });
     return data;
