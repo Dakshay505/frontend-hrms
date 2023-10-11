@@ -357,7 +357,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/change-password",
-    element: <ProductedRoute><Employeeaside> <ChangePassword></ChangePassword> </Employeeaside></ProductedRoute>
+    element: <ProductedRoute><Aside> <ChangePassword></ChangePassword> </Aside></ProductedRoute>
   },
   {
     path: "/employee-notifications",

@@ -171,12 +171,7 @@ export default function EmployeeAside(props: Props) {
             </div>
             {isDropdownOpen && (
               <div className="absolute -top-32 w-[189px] h-[117px] flex flex-col justify-center items-center gap-[10px] bg-white border border-primary-border rounded-[4px] shadow-md z-10">
-                <Link to="/change-password"
-                  
-                  className="block w-full px-4 py-2 text-center text-sm underline"
-                >
-                  Change Password
-                </Link>
+               
                 <div onClick={() => dispatch(logoutUserAsync())} className="flex justify-center items-center bg-[#283093] h-[31px] w-[125px] py-[10px] px-4 rounded cursor-pointer">
                   <div>
                     <img src={signin} alt="" className='h-[11px] w-[11px]' />
