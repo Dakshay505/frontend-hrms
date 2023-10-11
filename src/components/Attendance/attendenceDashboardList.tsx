@@ -50,7 +50,7 @@ export const AttendenceDashboardList = () => {
 
   const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
     a.jobProfileName.localeCompare(b.jobProfileName)
-  ); 
+  );
   const loaderStatus = useSelector((state: any) => state.attandence.status);
 
   const [date, setDate] = useState<any>(new Date());
@@ -654,9 +654,13 @@ export const AttendenceDashboardList = () => {
 
   }
 
+  console.log("AAAAAAAAAAAAAAAAAAAAA",items)
+
+  const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
+
   return (
     <div className="px-[40px] pt-[32px]">
-      <div className="flex flex-col flex-start">
+      <div className="flex flex-col gap-3 flex-start">
         <div className=" flex gap-3 justify-between items-center">
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
@@ -716,8 +720,33 @@ export const AttendenceDashboardList = () => {
           </div>
 
 
-
         </div>
+
+
+        <div className="flex gap-6">
+
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+              Punch In
+            </p>
+          </div>
+          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center">
+              <span className="text-[#283093] text-2xl font-semibold">
+                {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+              </span>
+            </div>
+            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+              Punch Out
+            </p>
+          </div>
+        </div>
+
 
       </div>
 
@@ -1472,7 +1501,7 @@ export const AttendenceDashboardList = () => {
                                   <div>{temp.shopCode ? temp.shopCode : "-"}</div>
                                 )}
                               </td>
-                         
+
 
 
                               {/* photo open */}
