@@ -176,6 +176,7 @@ export const AttendenceDashboardList = () => {
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
+      console.log("eeeeeeeeeeeee", employeeData)
       setShopItems(employeeData)
     });
 
@@ -569,10 +570,7 @@ export const AttendenceDashboardList = () => {
 
   const handleImageClick = (imageSrc: any, profileSrc: any) => {
     setSelectedImage(imageSrc);
-
     setSelectedProfileImage(profileSrc)
-
-
     setIsImageOpen(true);
   };
 
@@ -614,9 +612,31 @@ export const AttendenceDashboardList = () => {
 
   }
 
-  console.log("AAAAAAAAAAAAAAAAAAAAA", items)
+  // console.log("aabcffff",shopitems)
 
   const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
+
+  let pendingShopCount = 0;
+  let approvedShopCount = 0;
+  let rejectedShopCount = 0;
+  
+  for (const entries of shopitems) {
+    const status = entries.attendance;
+    for(const i of status){
+      console.log("statusssssss",i.status)
+      if (i.status === "pending") {
+      pendingShopCount++;
+    } else if (i.status === "approved") {
+      approvedShopCount++;
+    } else if (i.status === "rejected") {
+      rejectedShopCount++;
+    }
+    }  
+    
+  }
+  
+
+
 
   return (
     <div className="px-[40px] pt-[32px]">
@@ -636,7 +656,7 @@ export const AttendenceDashboardList = () => {
         {loaderStatus === "loading" ? (
           // Render content with 0 for all counts when loaderStatus is "loading"
           <div className="flex flex-start pt-4 gap-6">
-          
+
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
               <div className="flex justify-center items-center ">
                 <span className="text-[#283093] text-xl font-semibold">0</span>
@@ -674,7 +694,56 @@ export const AttendenceDashboardList = () => {
               <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Punch Out</p>
             </div>
           </div>
-        ) : (
+        ): isShopOpen ? (
+          <div className="flex flex-start pt-4 gap-6">
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {approvedShopCount}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                Approved
+
+              </p>
+            </div>
+        
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+
+                  {approvedShopCount + pendingShopCount + rejectedShopCount}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Total Present
+              </p>
+            </div>
+
+
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch In
+              </p>
+            </div>
+            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+              <div className="flex justify-center items-center ">
+                <span className="text-[#283093] text-xl font-semibold">
+                  {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+                </span>
+              </div>
+              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                Punch Out
+              </p>
+            </div>
+          </div>
+        )  
+         : (
           <div className="flex flex-start pt-4 gap-6">
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
               <div className="flex justify-center items-center ">
@@ -750,36 +819,9 @@ export const AttendenceDashboardList = () => {
       </div>
 
       <div className=" flex pt-6 justify-between items-center self-stretch ">
-        <div className="flex gap-5">
           <div className="flex gap-3">
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Groups") {
-                    setFilter({
-                      ...filter,
-                      groupName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      groupName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 w-[280px] text-sm font-medium text-[#2E2E2E] min-w-[160px] px-2 focus:outline-none"
-              >
-                <option value="All Groups">All Groups</option>
-                {sortedgroupList &&
-                  sortedgroupList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.groupName}>
-                        {element.groupName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
@@ -817,34 +859,7 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Job Profiles") {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.jobProfileName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
               
-                >
-                <option value="All Job Profiles">All Job Profiles</option>
-                {sortedjobProfileList &&
-                  sortedjobProfileList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.jobProfileName}>
-                        {element.jobProfileName}
-                      </option>
-                    );
-                  })}
-              </select> */}
               <div className="relative inline-block text-left  ml-3">
                 <button
                   type="button"
@@ -881,33 +896,7 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Department") {
-                    setFilter({
-                      ...filter,
-                      departmentName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      departmentName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.departmentName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              >
-                <option value="All Department">All Department</option>
-                {sortedDepartmentList &&
-                  sortedDepartmentList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} className="max-w-[210px] w-[210px] min-w-[210px]" value={element.departmentName}>
-                        {element.departmentName}
-                      </option>
-                    );
-                  })}
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
@@ -945,24 +934,12 @@ export const AttendenceDashboardList = () => {
               </div>
             </div>
             <div>
-              {/* <select
-                onChange={handleShopChange}
-                value={selectedShop}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-              >
-                <option value="All Shop">All Shop</option>
-                {shoplist && Array.isArray(shoplist) && shoplist.map((element: any, index: any) => (
-                  <option key={index} value={element?.shopName}>
-                    {element?.shopName}
-                  </option>
-                ))}
-
-              </select> */}
+             
               <div className="relative inline-block text-left">
                 <button
                   type="button"
                   className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
+                              
                   onClick={ShoptoggleDropdown}
                 >
                   All Shop
@@ -1014,11 +991,8 @@ export const AttendenceDashboardList = () => {
               </select>
             </div>
           </div>
-          <div>
+  
 
-          </div>
-
-        </div>
 
       </div>
 

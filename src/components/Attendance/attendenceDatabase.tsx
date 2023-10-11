@@ -221,7 +221,6 @@ export const AttendenceDtabase = () => {
               <span className="text-[#283093] text-2xl font-semibold">
                 {approvedCount}
               </span>
-              {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
               Approved
@@ -233,11 +232,7 @@ export const AttendenceDtabase = () => {
               <span className="text-[#283093] text-2xl font-semibold">
                 {pendingCount}
               </span>
-              {/* <img
-                src={up}
-                alt=""
-                className="h-[16px] w-[16px] rotate-180 ms-1"
-              /> */}
+          
             </div>
             <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
               Pending
