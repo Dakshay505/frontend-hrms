@@ -654,7 +654,6 @@ export const AttendenceDashboardList = () => {
 
 
         {loaderStatus === "loading" ? (
-          // Render content with 0 for all counts when loaderStatus is "loading"
           <div className="flex flex-start pt-4 gap-6">
 
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
@@ -719,9 +718,6 @@ export const AttendenceDashboardList = () => {
                 Total Present
               </p>
             </div>
-
-
-        
           </div>
         )  
          : (

@@ -3,11 +3,12 @@ import { getNewSalaryApiPath,getMonthlyReportApiPath } from "../../APIRoutes";
 
 
 export const getNewSalaryDataApi = async (Data:any) => {
+  console.log("Daaataaaa",Data)
     try {
       const {data}= await axios.post(`${getNewSalaryApiPath}`,Data, {
         withCredentials: true,
       });
-      // console.log(data)
+      console.log("daaaaaaaa",data)
       return data;
     } catch (err: any) {
       console.log(err.data);
