@@ -22,7 +22,7 @@ const options2 = [
 ];
 
 export const NewSalaryPage = () => {
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(1000);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -91,7 +91,7 @@ export const NewSalaryPage = () => {
         departmentName: [""],
         employeeCodes: [""],
         page: 1,
-        limit: 20,
+        limit: 2000,
         shifts: [""],
 
     });
@@ -483,6 +483,7 @@ export const NewSalaryPage = () => {
 
     };
 
+
     useEffect(() => {
         dispatch(getAllSalaryAsync(filter)).then((res: any) => {
             const Salarydata = res.payload.salaryRecords;
@@ -682,9 +683,9 @@ export const NewSalaryPage = () => {
                                                 <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.employee.employeeCode} // Use the employee code as the value
+                                                        value={element.employee.employeeCode} 
                                                         checked={filter.employeeCodes.includes(element.employee.employeeCode)}
-                                                        onChange={handleEmployeeCheckboxChange} // Use the updated function
+                                                        onChange={handleEmployeeCheckboxChange} 
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
                                                     {element.employee.employeeCode}
@@ -796,7 +797,11 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
+
+
                     </div>
+
+
 
                 </div>
 
@@ -1093,6 +1098,7 @@ export const NewSalaryPage = () => {
                                     }
                                 }}
                             >
+                                <option value="">select</option>
                                 <option value="10">10</option>
                                 <option value="1">1</option>
                                 <option value="20">20</option>
