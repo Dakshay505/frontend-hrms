@@ -495,16 +495,16 @@ export const NewSalaryPage = () => {
             for (let i = 0; i < Salarydata.length; i++) {
                 if (Salarydata[i].profilePicture) {
                     arr.push({
-                        name: Salarydata[i]?.attendance.employeeId?.name,
-                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
+                        name: Salarydata[i]?.attendance?.employeeId?.name,
+                        jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
                     });
                 }
                 else {
                     arr.push({
-                        name: Salarydata[i]?.attendance.employeeId.name,
+                        name: Salarydata[i]?.attendance?.employeeId.name,
                         profilePicture:
                             "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
+                        jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
                     });
                 }
             }
@@ -688,12 +688,12 @@ export const NewSalaryPage = () => {
                                                 <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.attendance.employeeId.employeeCode}
-                                                        checked={filter.employeeCodes.includes(element.attendance.employeeId.employeeCode)}
+                                                        value={element.attendance?.employeeId.employeeCode}
+                                                        checked={filter.employeeCodes.includes(element.attendance?.employeeId.employeeCode)}
                                                         onChange={handleEmployeeCheckboxChange}
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
-                                                    {element.attendance.employeeId.employeeCode}
+                                                    {element.attendance?.employeeId.employeeCode}
                                                 </label>
                                             ))}
 
@@ -1048,48 +1048,48 @@ export const NewSalaryPage = () => {
                                                     {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.employeeCode ? element?.attendance.employeeId?.employeeCode : "-"}
+                                                    {element?.attendance?.employeeId?.employeeCode ? element?.attendance?.employeeId?.employeeCode : "-"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.name ? element?.attendance.employeeId?.name : "-"}
+                                                    {element?.attendance?.employeeId?.name ? element?.attendance?.employeeId?.name : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.groupId?.groupName ? element?.attendance.employeeId?.groupId?.groupName : "-"}
+                                                    {element?.attendance?.employeeId?.groupId?.groupName ? element?.attendance?.employeeId?.groupId?.groupName : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.jobProfileId?.department?.departmentName ? element?.attendance.employeeId?.jobProfileId?.department?.departmentName : "-"}
+                                                    {element?.attendance?.employeeId?.jobProfileId?.department?.departmentName ? element?.attendance?.employeeId?.jobProfileId?.department?.departmentName : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.jobProfileId?.jobProfileName ? element?.attendance.employeeId?.jobProfileId?.jobProfileName : "-"}
-                                                </td>
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.overTime ? "Yes" : "No"}
+                                                    {element?.attendance?.employeeId?.jobProfileId?.jobProfileName ? element?.attendance?.employeeId?.jobProfileId?.jobProfileName : "-"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.employee?.salary ? element?.employee?.salary : "-"}
-                                                </td>
-
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.workingHours ? element?.attendance.employeeId?.workingHours : "-"}
+                                                    {element?.attendance?.employeeId?.overTime ? "Yes" : "No"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.lunchTime ? element.attendance.employeeId.lunchTime + " hours" : "-"}
-                                                </td>
-
-
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.totalWorkingHours ? element.totalWorkingHours : "-"}
+                                                    {element?.employee?.salary ? element?.employee?.salary?.toFixed(2) : "-"}
                                                 </td>
 
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryPerHours ? element.salaryPerHours.toFixed(2) : "-"}
+                                                    {element?.attendance?.employeeId?.workingHours ? element?.attendance?.employeeId?.workingHours?.toFixed(2) : "-"}
+                                                </td>
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.employeeId?.lunchTime ? element.attendance?.employeeId.lunchTime?.toFixed(2) + " hours" : "-"}
+                                                </td>
+
+
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.totalWorkingHours ? element.totalWorkingHours?.toFixed(2) : "-"}
+                                                </td>
+
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryPerHours ? element.salaryPerHours?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                     {element?.attendance?.punches[0]?.punchInBy?.name || "-"}
@@ -1105,7 +1105,7 @@ export const NewSalaryPage = () => {
                                                     {element?.lastPunchOut ? element?.lastPunchOut.slice(11, 16) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance ? element?.attendance?.shift : "-"}
+                                                    {element?.attendance ? element?.attendance?.shift?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                     {element?.attendance?.status || "-"}
@@ -1115,32 +1115,32 @@ export const NewSalaryPage = () => {
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.actualworkingHoursbyRecord || 0}
+                                                    {element?.actualworkingHoursbyRecord?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.finalWorkingHours || 0}
+                                                    {element?.finalWorkingHours?.toFixed(2) || 0}
 
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.dutyHours || 0}
+                                                    {element?.dutyHours?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.actualWorkinghours || 0}
+                                                    {element?.actualWorkinghours?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.overTime.toFixed(2) || 0}
+                                                    {element?.overTime?.toFixed(2)|| 0}
                                                 </td>
 
 
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
+                                                    {element?.salaryA !== undefined ? element.salaryA?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
+                                                    {element?.salaryB !== undefined ? element.salaryB?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryC !== undefined ? element.salaryC.toFixed(2) : "-"}
+                                                    {element?.salaryC !== undefined ? element.salaryC?.toFixed(2) : "-"}
                                                 </td>
 
                                             </tr>
