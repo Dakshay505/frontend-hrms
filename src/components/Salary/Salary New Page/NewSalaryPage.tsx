@@ -28,9 +28,31 @@ export const NewSalaryPage = () => {
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
+    const [filter, setFilter] = useState<any>({
+        groupName: [""],
+        jobProfileName: [""],
+        departmentName: [""],
+        employeeCodes: [""],
+        page: 1,
+        limit: 20,
+        shifts: [""],
+    });
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     const salaryDataa = useSelector((state: any) => state.newSalary?.data?.count);
+    // if(salaryDataa){
+    //     
+
+    // }
+     useEffect(()=>{
+        setTotal(salaryDataa);
+     const newPageCount = Math.ceil(salaryDataa / filter.limit);
+    setPageCount(newPageCount);
+    if (page > newPageCount) {
+     setPage(newPageCount);
+    }
+
+     },[limit])
 
 
     const loaderStatus = useSelector((state: any) => state.newSalary.status);
@@ -49,51 +71,61 @@ export const NewSalaryPage = () => {
     const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
 
 
-    const [filter, setFilter] = useState<any>({
-        groupName: [""],
-        jobProfileName: [""],
-        departmentName: [""],
-        employeeCodes: [""],
-        page: 1,
-        limit: 20,
-        shifts: [""],
-    });
+    
 
 
 
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setTotal(salaryDataa);
-                const newPageCount = Math.ceil(salaryDataa / filter.limit);
-                setPageCount(newPageCount);
-                if (page > newPageCount) {
-                    setPage(newPageCount);
-                }
-            } catch (error) {
-                console.error("Error fetching new salary data:", error);
-            }
-           dispatch(getAllSalaryAsync(filter));
+        
+        dispatch(getAllSalaryAsync(filter));
            dispatch(getAllPunchInPunchOutAsync());
-        };
-        fetchData();
     }, [filter]);
-
+    useEffect(() => {
+        //     // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+        //     //     const Salarydata = res.payload.salaryRecords;
+        //     //     console.log("aaaaaaaaaaaaaa", Salarydata)
+        //     //     const arr = [];
+    
+        //     //     for (let i = 0; i < Salarydata.length; i++) {
+        //     //         if (Salarydata[i].profilePicture) {
+        //     //             arr.push({
+        //     //                 name: Salarydata[i]?.attendance?.employeeId?.name,
+        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //     //             });
+        //     //         }
+        //     //         else {
+        //     //             arr.push({
+        //     //                 name: Salarydata[i]?.attendance?.employeeId.name,
+        //     //                 profilePicture:
+        //     //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //     //             });
+        //     //         }
+        //     //     }
+    
+        //     //     setFetchedSuggestions(arr);
+        //     // });
+            dispatch(getAllGroupsAsync());
+            dispatch(getAllJobProfileAsync());
+            dispatch(getAllDepartmentAsync());
+        }, []);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
+            setFilter({...filter,page:page})
         } else {
             setPage(1);
+            setFilter({...filter,page:page})
         }
     }
 
 
-    // useEffect(() => {
-    //     dispatch(getAllSalaryAsync(filter));
-    // }, []);
+    useEffect(() => {
+       setFilter({...filter,limit:limit})
+    }, [limit]);
 
 
 
@@ -454,35 +486,7 @@ export const NewSalaryPage = () => {
     };
 
 
-    useEffect(() => {
-    //     // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
-    //     //     const Salarydata = res.payload.salaryRecords;
-    //     //     console.log("aaaaaaaaaaaaaa", Salarydata)
-    //     //     const arr = [];
-
-    //     //     for (let i = 0; i < Salarydata.length; i++) {
-    //     //         if (Salarydata[i].profilePicture) {
-    //     //             arr.push({
-    //     //                 name: Salarydata[i]?.attendance?.employeeId?.name,
-    //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-    //     //             });
-    //     //         }
-    //     //         else {
-    //     //             arr.push({
-    //     //                 name: Salarydata[i]?.attendance?.employeeId.name,
-    //     //                 profilePicture:
-    //     //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-    //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-    //     //             });
-    //     //         }
-    //     //     }
-
-    //     //     setFetchedSuggestions(arr);
-    //     // });
-        dispatch(getAllGroupsAsync());
-        dispatch(getAllJobProfileAsync());
-        dispatch(getAllDepartmentAsync());
-    }, []);
+    
 
 
     return (
