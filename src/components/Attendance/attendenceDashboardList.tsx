@@ -17,7 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
 // import up from "../../assets/arrow-up.png";
-import { getAllAttandenceAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
+import { getAllAttandenceAsync, getAllPunchInPunchOutAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
@@ -584,7 +584,8 @@ export const AttendenceDashboardList = () => {
 
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
-  }, []);
+    dispatch(getAllPunchInPunchOutAsync(date, nextDate))
+  }, [date, nextDate]);
 
 
   // pending rejected total

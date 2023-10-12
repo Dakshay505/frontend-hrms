@@ -44,9 +44,6 @@ export const NewSalaryPage = () => {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
-    }, [limit, page, dispatch]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,20 +75,19 @@ export const NewSalaryPage = () => {
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
-            dispatch(getAllSalaryAsync({ page: newPage, limit }));
         } else {
             setPage(1);
-            dispatch(getAllSalaryAsync({ page: 1, limit }));
         }
     }
 
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
-    }, [limit, page, dispatch]);
+        dispatch(getAllSalaryAsync(filter));
+        dispatch(getAllPunchInPunchOutAsync());
+    }, []);
+
 
     const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
-
 
 
     const [filter, setFilter] = useState<any>({
@@ -230,9 +226,6 @@ export const NewSalaryPage = () => {
         setIsOpen5(false)
     };
 
-    useEffect(() => {
-        dispatch(getAllSalaryAsync());
-    }, []);
 
     // filters
 
@@ -249,18 +242,6 @@ export const NewSalaryPage = () => {
     const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
         a.departmentName.localeCompare(b.departmentName)
     );
-
-
-
-
-    useEffect(() => {
-        dispatch(getAllGroupsAsync());
-        dispatch(getAllJobProfileAsync());
-        dispatch(getAllDepartmentAsync());
-        dispatch(getAllSalaryAsync());
-
-    }, []);
-
 
 
     const handleJobCheckboxChange = (event: any) => {
@@ -371,14 +352,6 @@ export const NewSalaryPage = () => {
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-
-
-
-    useEffect(() => {
-        dispatch(getAllSalaryAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
-
-    }, [filter]);
 
     const [startDate, setStartDate] = useState(new Date());
 
@@ -520,18 +493,7 @@ export const NewSalaryPage = () => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
         dispatch(getAllDepartmentAsync());
-
     }, []);
-
-    // if (salaryData === null || salaryData === undefined) {
-    //     return (
-    //         <div className="flex justify-center w-full">
-    //             <img src={LoaderGif} className="w-6 h-6" alt="" />
-    //         </div>
-    //     );
-    // }
-
-
 
 
     return (
@@ -1175,11 +1137,9 @@ export const NewSalaryPage = () => {
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: total }));
                                     } else {
                                         setLimit(selectedLimit);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: selectedLimit }));
                                     }
                                 }}
                             >
