@@ -10,6 +10,7 @@ import { getAllPunchInPunchOutAsync } from "../redux/Slice/AttandenceSlice";
 import { getAllGroupsAsync } from "../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../redux/Slice/departmentSlice";
+import LoaderGif from "../assets/loadergif.gif";
 
 export const MonthlyReport = () => {
     const [limit, setLimit] = useState(10);
@@ -19,6 +20,9 @@ export const MonthlyReport = () => {
 
     const monthlyData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     // console.log("uuuuuuuuuuuuuuuuuuuu", monthlyData)
+
+    const loaderStatus = useSelector((state: any) => state.newSalary.status);
+    console.log(loaderStatus)
 
     const dispatch = useDispatch();
 
@@ -584,7 +588,7 @@ export const MonthlyReport = () => {
                                 onClick={toggleDropdown2}
 
                             >
-                                Departmnt
+                                Department
                             </button>
 
                             {isOpen2 && (
@@ -638,12 +642,12 @@ export const MonthlyReport = () => {
                                                 <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element?.employee.employeeCode}
-                                                        checked={filter.employeeCodes.includes(element?.employee.employeeCode)}
+                                                        value={element?.employee?.employeeCode}
+                                                        checked={filter.employeeCodes.includes(element?.employee?.employeeCode)}
                                                         onChange={handleEmployeeCheckboxChange}
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
-                                                    {element?.employee.employeeCode}
+                                                    {element?.employee?.employeeCode}
                                                 </label>
                                             ))}
 
@@ -689,7 +693,7 @@ export const MonthlyReport = () => {
                                 </div>
                             )}
                         </div>
-                        
+
                         <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
                             <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
                                 <option value="" className="font-bold">Select a month</option>
@@ -713,124 +717,133 @@ export const MonthlyReport = () => {
 
 
                 <div className="py-6 mb-24">
-                    <div className="table-container" style={{ overflowY: 'auto' }}>
-                        <table className="w-full">
+                    {loaderStatus === "loading" ? (
+                        <div className="flex justify-center w-full">
+                            <img src={LoaderGif} className="w-6 h-6" alt="" />
+                        </div>
+                    ) : (
+                        ""
+                    )
+                    }
+                    {loaderStatus !== "loading" &&
+                        <div className="table-container" style={{ overflowY: 'auto' }}>
+                            <table className="w-full">
 
-                            <tbody >
-                                <tr className="bg-[#ECEDFE] cursor-default">
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Sr No.
-                                    </td>
+                                <tbody >
+                                    <tr className="bg-[#ECEDFE] cursor-default">
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Sr No.
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Employee Code
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Employee Name
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Group Name
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Department
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Job Profile
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        OverTime
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Employee Code
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Employee Name
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Group Name
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Department
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Job Profile
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            OverTime
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Duty hour required
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Lunch
-                                    </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Duty hour required
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Lunch
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Total Working Hours
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary Per Hours
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        duty per month
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Total Working Hours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary Per Hours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            duty per month
 
-                                    </td>
+                                        </td>
 
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        no. of duty
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            no. of duty
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        approved duty
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            approved duty
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        sum actual working hour
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            sum actual working hour
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        sum Final Workinghours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            sum Final Workinghours
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        sum Dutyhours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            sum Dutyhours
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Over Time Hours
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Over Time Hours
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Earn in a day/ Salary A
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Earn in a day/ Salary A
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        Salary B
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            Salary B
 
-                                    </td>
-                                    <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                        salary c
+                                        </td>
+                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
+                                            salary c
 
-                                    </td>
+                                        </td>
 
 
-                                </tr>
-
-                                {monthlyData && monthlyData.map((element: any, index: any) => (
-                                    <tr key={index}>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{index + 1}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.name}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId?.groupName}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department.departmentName}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.jobProfileName}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.overTime ? 'Yes' : 'No'}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.workingHours}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.lunchTime}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalWorkingHours}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.dutyPerMonth}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.numberofduty}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.approvedduty}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB?.toFixed(2)}</td>
-                                        <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC?.toFixed(2)}</td>
                                     </tr>
-                                ))}
-                            </tbody >
-                        </table>
-                    </div>
+
+                                    {monthlyData && monthlyData.map((element: any, index: any) => (
+                                        <tr key={index}>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{index + 1}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.name}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId?.groupName}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department.departmentName}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.jobProfileName}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.overTime ? 'Yes' : 'No'}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.workingHours}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.lunchTime}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalWorkingHours}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryPerHours?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.dutyPerMonth}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.numberofduty}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.approvedduty}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.totalactual?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumFinalWorkingHours?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.sumDutyHours?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.overTime?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryA?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryB?.toFixed(2)}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.salaryC?.toFixed(2)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody >
+                            </table>
+                        </div>}
 
                     <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
                         <div className="px-3">

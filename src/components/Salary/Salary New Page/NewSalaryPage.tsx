@@ -31,6 +31,12 @@ export const NewSalaryPage = () => {
     const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+
+
+    const loaderStatus = useSelector((state: any) => state.newSalary.status);
+    console.log(loaderStatus)
+
+
     const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
     const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
     const totalSalaryC = useSelector((state: any) => state.newSalary?.data?.totalSalaryC);
@@ -517,8 +523,16 @@ export const NewSalaryPage = () => {
 
     }, []);
 
-    const loaderStatus = useSelector((state: any) => state.attandence.status);
-    console.log(loaderStatus)
+    // if (salaryData === null || salaryData === undefined) {
+    //     return (
+    //         <div className="flex justify-center w-full">
+    //             <img src={LoaderGif} className="w-6 h-6" alt="" />
+    //         </div>
+    //     );
+    // }
+
+
+
 
     return (
         <div className='p-[40px]'>
@@ -634,7 +648,7 @@ export const NewSalaryPage = () => {
                                 onClick={toggleDropdown2}
 
                             >
-                                Departmnt
+                                Department
                             </button>
 
                             {isOpen2 && (
@@ -808,6 +822,7 @@ export const NewSalaryPage = () => {
 
                 <hr />
 
+
                 {loaderStatus === "loading" ? (
 
                     <div className="flex flex-start pt-[25px] gap-6">
@@ -935,7 +950,7 @@ export const NewSalaryPage = () => {
                             <img src={LoaderGif} className="w-6 h-6" alt="" />
                         </div>
                     ) : (
-                   ""
+                        ""
                     )
                     }
                     {loaderStatus !== "loading" &&
@@ -1035,7 +1050,7 @@ export const NewSalaryPage = () => {
                                             Salary C
                                         </td>
 
-
+ 
                                     </tr>
 
                                     {salaryData && salaryData
@@ -1078,7 +1093,7 @@ export const NewSalaryPage = () => {
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance?.employeeId?.lunchTime ? element.attendance?.employeeId.lunchTime?.toFixed(2) + " hours" : "-"}
+                                                    {element?.attendance?.employeeId?.lunchTime ? element.attendance?.employeeId.lunchTime + " hours" : "-"}
                                                 </td>
 
 
@@ -1105,7 +1120,7 @@ export const NewSalaryPage = () => {
                                                     {element?.lastPunchOut ? element?.lastPunchOut.slice(11, 16) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance ? element?.attendance?.shift?.toFixed(2) : "-"}
+                                                    {element?.attendance ? element?.attendance?.shift : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                     {element?.attendance?.status || "-"}
@@ -1128,10 +1143,8 @@ export const NewSalaryPage = () => {
                                                     {element?.actualWorkinghours?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.overTime?.toFixed(2)|| 0}
+                                                    {element?.overTime || 0}
                                                 </td>
-
-
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                     {element?.salaryA !== undefined ? element.salaryA?.toFixed(2) : "-"}

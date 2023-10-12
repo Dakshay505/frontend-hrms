@@ -279,6 +279,9 @@ const MasterSheet = () => {
       saveAs(blob, 'Master Report.xlsx');
       toast.success("CSV Download Successfully");
     }
+    else{
+      toast.error("Please Wait Data Is Loading")
+    }
   };
 
 
