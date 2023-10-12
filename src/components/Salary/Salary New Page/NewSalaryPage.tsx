@@ -3,7 +3,6 @@ import search from "../../../assets/MagnifyingGlass.png"
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getAllSalaryAsync } from "../../../redux/Slice/NewSalarySlice";
-import { getNewSalaryDataApi } from "../../../redux/API/NewSalaryApi";
 import { getAllPunchInPunchOutAsync } from "../../../redux/Slice/AttandenceSlice";
 import SelectAll from "../../../assets/Select All.svg"
 import ClearAll from "../../../assets/Clear-all.svg"
@@ -29,65 +28,6 @@ export const NewSalaryPage = () => {
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
-
-    const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
-    const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
-    const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
-    const totalSalaryC = useSelector((state: any) => state.newSalary?.data?.totalSalaryC);
-    // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
-    }, [limit, page, dispatch]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const filter = {
-                limit: 20,
-                page: 1,
-            };
-
-            try {
-                const data = await getNewSalaryDataApi(filter);
-                // console.log("data", data);
-
-                setTotal(data.count);
-                const newPageCount = Math.ceil(data.count / filter.limit);
-                setPageCount(newPageCount);
-                if (page > newPageCount) {
-                    setPage(newPageCount);
-                }
-            } catch (error) {
-                console.error("Error fetching new salary data:", error);
-            }
-        };
-
-        fetchData();
-
-    }, [limit, page]);
-
-
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= pageCount) {
-            setPage(newPage);
-            dispatch(getAllSalaryAsync({ page: newPage, limit }));
-        } else {
-            setPage(1);
-            dispatch(getAllSalaryAsync({ page: 1, limit }));
-        }
-    }
-
-
-    useEffect(() => {
-        dispatch(getAllSalaryAsync({ limit, page }));
-    }, [limit, page, dispatch]);
-
-    const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
-
-
-
     const [filter, setFilter] = useState<any>({
         groupName: [""],
         jobProfileName: [""],
@@ -98,14 +38,97 @@ export const NewSalaryPage = () => {
         shifts: [""],
     });
 
+    const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    const salaryDataa = useSelector((state: any) => state.newSalary?.data?.count);
+    // if(salaryDataa){
+    //     
+
+    // }
+     useEffect(()=>{
+        setTotal(salaryDataa);
+     const newPageCount = Math.ceil(salaryDataa / filter.limit);
+    setPageCount(newPageCount);
+    if (page > newPageCount) {
+     setPage(newPageCount);
+    }
+
+     },[limit])
+
+
+    const loaderStatus = useSelector((state: any) => state.newSalary.status);
+    console.log(loaderStatus)
+
+
+    const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
+    const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
+    const totalSalaryC = useSelector((state: any) => state.newSalary?.data?.totalSalaryC);
+    // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
+
+    const dispatch = useDispatch();
+
+
+
+    const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
+
+
+    
+
+
+
+
 
     useEffect(() => {
-
-        console.log(filter)
-
+        
         dispatch(getAllSalaryAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
+           dispatch(getAllPunchInPunchOutAsync());
     }, [filter]);
+    useEffect(() => {
+        //     // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+        //     //     const Salarydata = res.payload.salaryRecords;
+        //     //     console.log("aaaaaaaaaaaaaa", Salarydata)
+        //     //     const arr = [];
+    
+        //     //     for (let i = 0; i < Salarydata.length; i++) {
+        //     //         if (Salarydata[i].profilePicture) {
+        //     //             arr.push({
+        //     //                 name: Salarydata[i]?.attendance?.employeeId?.name,
+        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //     //             });
+        //     //         }
+        //     //         else {
+        //     //             arr.push({
+        //     //                 name: Salarydata[i]?.attendance?.employeeId.name,
+        //     //                 profilePicture:
+        //     //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //     //             });
+        //     //         }
+        //     //     }
+    
+        //     //     setFetchedSuggestions(arr);
+        //     // });
+            dispatch(getAllGroupsAsync());
+            dispatch(getAllJobProfileAsync());
+            dispatch(getAllDepartmentAsync());
+        }, []);
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= pageCount) {
+            setPage(newPage);
+            setFilter({...filter,page:page})
+        } else {
+            setPage(1);
+            setFilter({...filter,page:page})
+        }
+    }
+
+
+    useEffect(() => {
+       setFilter({...filter,limit:limit})
+    }, [limit]);
+
+
+
 
 
     // filter
@@ -224,9 +247,6 @@ export const NewSalaryPage = () => {
         setIsOpen5(false)
     };
 
-    useEffect(() => {
-        dispatch(getAllSalaryAsync());
-    }, []);
 
     // filters
 
@@ -243,18 +263,6 @@ export const NewSalaryPage = () => {
     const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
         a.departmentName.localeCompare(b.departmentName)
     );
-
-
-
-
-    useEffect(() => {
-        dispatch(getAllGroupsAsync());
-        dispatch(getAllJobProfileAsync());
-        dispatch(getAllDepartmentAsync());
-        dispatch(getAllSalaryAsync());
-
-    }, []);
-
 
 
     const handleJobCheckboxChange = (event: any) => {
@@ -365,14 +373,6 @@ export const NewSalaryPage = () => {
         const day = date.getDate().toString().padStart(2, '0');
         return `${year}-${month}-${day}`;
     };
-
-
-
-    useEffect(() => {
-        dispatch(getAllSalaryAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
-
-    }, [filter]);
 
     const [startDate, setStartDate] = useState(new Date());
 
@@ -486,39 +486,8 @@ export const NewSalaryPage = () => {
     };
 
 
-    useEffect(() => {
-        dispatch(getAllSalaryAsync(filter)).then((res: any) => {
-            const Salarydata = res.payload.salaryRecords;
-            console.log("aaaaaaaaaaaaaa", Salarydata)
-            const arr = [];
+    
 
-            for (let i = 0; i < Salarydata.length; i++) {
-                if (Salarydata[i].profilePicture) {
-                    arr.push({
-                        name: Salarydata[i]?.attendance.employeeId?.name,
-                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
-                    });
-                }
-                else {
-                    arr.push({
-                        name: Salarydata[i]?.attendance.employeeId.name,
-                        profilePicture:
-                            "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-                        jobProfileName: Salarydata[i]?.attendance.employeeId.jobProfileId.jobProfileName,
-                    });
-                }
-            }
-
-            setFetchedSuggestions(arr);
-        });
-        dispatch(getAllGroupsAsync());
-        dispatch(getAllJobProfileAsync());
-        dispatch(getAllDepartmentAsync());
-
-    }, []);
-
-    const loaderStatus = useSelector((state: any) => state.attandence.status);
-    console.log(loaderStatus)
 
     return (
         <div className='p-[40px]'>
@@ -634,7 +603,7 @@ export const NewSalaryPage = () => {
                                 onClick={toggleDropdown2}
 
                             >
-                                Departmnt
+                                Department
                             </button>
 
                             {isOpen2 && (
@@ -688,12 +657,12 @@ export const NewSalaryPage = () => {
                                                 <label key={element.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
-                                                        value={element.attendance.employeeId.employeeCode}
-                                                        checked={filter.employeeCodes.includes(element.attendance.employeeId.employeeCode)}
+                                                        value={element.attendance?.employeeId.employeeCode}
+                                                        checked={filter.employeeCodes.includes(element.attendance?.employeeId.employeeCode)}
                                                         onChange={handleEmployeeCheckboxChange}
                                                         className="form-checkbox h-5 w-5 text-blue-600"
                                                     />
-                                                    {element.attendance.employeeId.employeeCode}
+                                                    {element.attendance?.employeeId.employeeCode}
                                                 </label>
                                             ))}
 
@@ -807,6 +776,7 @@ export const NewSalaryPage = () => {
                 </div>
 
                 <hr />
+
 
                 {loaderStatus === "loading" ? (
 
@@ -935,7 +905,7 @@ export const NewSalaryPage = () => {
                             <img src={LoaderGif} className="w-6 h-6" alt="" />
                         </div>
                     ) : (
-                   ""
+                        ""
                     )
                     }
                     {loaderStatus !== "loading" &&
@@ -1035,7 +1005,7 @@ export const NewSalaryPage = () => {
                                             Salary C
                                         </td>
 
-
+ 
                                     </tr>
 
                                     {salaryData && salaryData
@@ -1048,48 +1018,48 @@ export const NewSalaryPage = () => {
                                                     {element?.firstPunchIn ? element?.firstPunchIn.slice(0, 10) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.employeeCode ? element?.attendance.employeeId?.employeeCode : "-"}
+                                                    {element?.attendance?.employeeId?.employeeCode ? element?.attendance?.employeeId?.employeeCode : "-"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.name ? element?.attendance.employeeId?.name : "-"}
+                                                    {element?.attendance?.employeeId?.name ? element?.attendance?.employeeId?.name : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.groupId?.groupName ? element?.attendance.employeeId?.groupId?.groupName : "-"}
+                                                    {element?.attendance?.employeeId?.groupId?.groupName ? element?.attendance?.employeeId?.groupId?.groupName : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.jobProfileId?.department?.departmentName ? element?.attendance.employeeId?.jobProfileId?.department?.departmentName : "-"}
+                                                    {element?.attendance?.employeeId?.jobProfileId?.department?.departmentName ? element?.attendance?.employeeId?.jobProfileId?.department?.departmentName : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.jobProfileId?.jobProfileName ? element?.attendance.employeeId?.jobProfileId?.jobProfileName : "-"}
-                                                </td>
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.overTime ? "Yes" : "No"}
+                                                    {element?.attendance?.employeeId?.jobProfileId?.jobProfileName ? element?.attendance?.employeeId?.jobProfileId?.jobProfileName : "-"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.employee?.salary ? element?.employee?.salary : "-"}
-                                                </td>
-
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.workingHours ? element?.attendance.employeeId?.workingHours : "-"}
+                                                    {element?.attendance?.employeeId?.overTime ? "Yes" : "No"}
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.attendance.employeeId?.lunchTime ? element.attendance.employeeId.lunchTime + " hours" : "-"}
-                                                </td>
-
-
-
-                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.totalWorkingHours ? element.totalWorkingHours : "-"}
+                                                    {element?.employee?.salary ? element?.employee?.salary?.toFixed(2) : "-"}
                                                 </td>
 
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryPerHours ? element.salaryPerHours.toFixed(2) : "-"}
+                                                    {element?.attendance?.employeeId?.workingHours ? element?.attendance?.employeeId?.workingHours?.toFixed(2) : "-"}
+                                                </td>
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.attendance?.employeeId?.lunchTime ? element.attendance?.employeeId.lunchTime + " hours" : "-"}
+                                                </td>
+
+
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.totalWorkingHours ? element.totalWorkingHours?.toFixed(2) : "-"}
+                                                </td>
+
+
+                                                <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
+                                                    {element?.salaryPerHours ? element.salaryPerHours?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                                                     {element?.attendance?.punches[0]?.punchInBy?.name || "-"}
@@ -1115,32 +1085,30 @@ export const NewSalaryPage = () => {
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.actualworkingHoursbyRecord || 0}
+                                                    {element?.actualworkingHoursbyRecord?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.finalWorkingHours || 0}
+                                                    {element?.finalWorkingHours?.toFixed(2) || 0}
 
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.dutyHours || 0}
+                                                    {element?.dutyHours?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.actualWorkinghours || 0}
+                                                    {element?.actualWorkinghours?.toFixed(2) || 0}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.overTime.toFixed(2) || 0}
+                                                    {element?.overTime || 0}
                                                 </td>
 
-
-
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryA !== undefined ? element.salaryA.toFixed(2) : "-"}
+                                                    {element?.salaryA !== undefined ? element.salaryA?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryB !== undefined ? element.salaryB.toFixed(2) : "-"}
+                                                    {element?.salaryB !== undefined ? element.salaryB?.toFixed(2) : "-"}
                                                 </td>
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.salaryC !== undefined ? element.salaryC.toFixed(2) : "-"}
+                                                    {element?.salaryC !== undefined ? element.salaryC?.toFixed(2) : "-"}
                                                 </td>
 
                                             </tr>
@@ -1162,11 +1130,9 @@ export const NewSalaryPage = () => {
                                     if (selectedLimit === total) {
                                         setLimit(total);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: total }));
                                     } else {
                                         setLimit(selectedLimit);
                                         setPage(1);
-                                        dispatch(getAllSalaryAsync({ page: 1, limit: selectedLimit }));
                                     }
                                 }}
                             >

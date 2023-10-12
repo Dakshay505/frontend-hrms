@@ -63,12 +63,12 @@ export const AttendenceDtabase = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedProfileImage, setSelectedProfileImage] = useState("");
 
-  const handleImageClick = (imageSrc: any,profileSrc:any) => {
+  const handleImageClick = (imageSrc: any, profileSrc: any) => {
     setSelectedImage(imageSrc);
-    
+
     setSelectedProfileImage(profileSrc)
-    
-    
+
+
     setIsImageOpen(true);
   };
 
@@ -96,7 +96,7 @@ export const AttendenceDtabase = () => {
   const observerTarget = useRef(null);
   // const [isLoading, setIsLoading] = useState(false);
   const loaderStatus = useSelector((state: any) => state.attandence.status);
- 
+
   const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
   // useEffect(() => {
   //   const observer = new IntersectionObserver(
@@ -188,13 +188,18 @@ export const AttendenceDtabase = () => {
 
   let pendingCount = 0;
   let approvedCount = 0;
+  let rejectedCount = 0;
 
   for (const entry of items) {
+    // console.log(entry)
     if (entry.status === "pending") {
       pendingCount++;
     } else if (entry.status === "approved") {
       approvedCount++;
+    } else if (entry.status === "rejected") {
+      rejectedCount++;
     }
+
   }
 
 
@@ -216,55 +221,68 @@ export const AttendenceDtabase = () => {
           </Link>
         </div>
         <div className="flex flex-start pt-4 gap-6">
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg  justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+              <span className="text-[#283093] text-xl font-semibold">
                 {approvedCount}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
               Approved
 
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg  justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+              <span className="text-[#283093] text-xl font-semibold">
                 {pendingCount}
               </span>
-          
+
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E]">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
               Pending
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+            <div className="flex justify-center items-center ">
+              <span className="text-[#283093] text-xl font-semibold">
+                {rejectedCount}
+              </span>
+
+            </div>
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+              Rejected
+            </p>
+          </div>
+
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg  justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
-                {pendingCount+approvedCount}
+              <span className="text-[#283093] text-xl font-semibold">
+                {pendingCount + approvedCount + rejectedCount}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Total Present
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg  justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+              <span className="text-[#283093] text-xl font-semibold">
                 {punchesData && punchesData.countIn ? punchesData.countIn : 0}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Punch In
             </p>
           </div>
-          <div className="flex flex-col w-[196px] h-[100px] justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+          <div className="flex flex-col w-[150px] h-[70px] shadow-lg  justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
             <div className="flex justify-center items-center">
-              <span className="text-[#283093] text-2xl font-semibold">
+              <span className="text-[#283093] text-xl font-semibold">
                 {punchesData && punchesData.countOut ? punchesData.countOut : 0}
               </span>
             </div>
-            <p className="text-lg font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+            <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
               Punch Out
             </p>
           </div>
@@ -291,7 +309,7 @@ export const AttendenceDtabase = () => {
           <table className="w-full">
             <tbody>
               <tr className="bg-[#ECEDFE] cursor-default" >
-             
+
                 <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                   Date
                 </td>
@@ -348,11 +366,11 @@ export const AttendenceDtabase = () => {
                             : "Not Avilable"}
                         </td>
                         <td className="py-4 px-5"  >
-                            {element.profilePicture
-                              ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
-                              : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
-                          
-                          </td>
+                          {element.profilePicture
+                            ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                            : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+
+                        </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
                           {element.employeeId?.employeeCode
                             ? element.employeeId.employeeCode
@@ -478,14 +496,14 @@ export const AttendenceDtabase = () => {
                         <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&
                             element.approvedImage && (
-                              <img   onClick={() =>
-                                        handleImageClick(
-                                          element.approvedImage,
-                                          element?.profilePicture
-                                          
-                                        )
-                                      } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
-                                
+                              <img onClick={() =>
+                                handleImageClick(
+                                  element.approvedImage,
+                                  element?.profilePicture
+
+                                )
+                              } src={element.approvedImage} className="w-[60px] h-[60px] rounded-full" />
+
                             )}
                         </td>
                       </tr>
@@ -542,24 +560,24 @@ export const AttendenceDtabase = () => {
                 <div className="flex flex-row gap-2">
                   <div className="flex flex-col text-center gap-2">
                     <p className="font-bold text-white ">Profile Image</p>
-                    {selectedProfileImage?
+                    {selectedProfileImage ?
 
-                <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
-                    :<img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
-                    
-              }
-                </div>
-                <div className="flex flex-col text-center gap-2">
-                <p className="font-bold text-white">Approved Image</p>
-                <img src={selectedImage} alt="Approved" className="h-[20rem]" />
-                </div>
-                
+                      <img src={selectedProfileImage} alt="Profile image" className="h-[20rem]" />
+                      : <img src={DummyProfilr} alt="Profile image" className="h-[20rem]" />
+
+                    }
+                  </div>
+                  <div className="flex flex-col text-center gap-2">
+                    <p className="font-bold text-white">Approved Image</p>
+                    <img src={selectedImage} alt="Approved" className="h-[20rem]" />
+                  </div>
+
                 </div>
                 <button
                   className="close-button absolute top-[10rem] right-[30rem] p-[10px]  rounded-full shadow-lg"
                   onClick={handleCloseImage}
                 >
-                  
+
                   <img
                     src={close}
                     alt=""

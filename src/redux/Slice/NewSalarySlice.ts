@@ -53,27 +53,27 @@ export const NewSalarySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllSalaryAsync.pending, (state) => {
-        state.loading = true;
+        state.status = "loading";
         state.error = null;
       })
       .addCase(getAllSalaryAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "idle";
         state.data = action.payload;
       })
       .addCase(getAllSalaryAsync.rejected, (state: any, action) => {
-        state.loading = false;
+        state.status = "loading";
         state.error = action.payload;
       })
       .addCase(getAllMonthlyReportAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.status = "loading";
+        state.error = null; 
       })
       .addCase(getAllMonthlyReportAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "idle";
         state.data = action.payload;
       })
       .addCase(getAllMonthlyReportAsync.rejected, (state: any, action) => {
-        state.loading = false;
+        state.status = "loading";
         state.error = action.payload;
       });
   },
