@@ -1,11 +1,11 @@
 // export const apiPath = `http://localhost:5050`;
 // export const apiPath = ``;
 
-// export const apiPath = `http://localhost:5050`;
+export const apiPath = `http://localhost:5050`;
 
 // export const apiPath = `https://hrms-lix0.onrender.com`;
 
-export const apiPath = `https://chawlacomponents.com`;
+// export const apiPath = `https://chawlacomponents.com`;
 
 // export const apiPath = `https://hrms-backend-04fw.onrender.com`;
 
@@ -79,7 +79,7 @@ export const getAllLeavesAndGatePassApiPath = `${apiPath}/api/v1/leave/all`;
 
 // attendance
 export const updateAttendanceApiPath = `${apiPath}/api/v2/attendance/updateAttendance`;
-export const punchInPunchOutAttendanceApiPath = `${apiPath}/api/v2/attendance/getPunchInPunchOut`;
+export const punchInPunchOutAttendanceApiPath = `${apiPath}/api/v2/attendance/getPunchInPunchOutNumber`;
 export const getAllAttandenceApiPath = `${apiPath}/api/v2/attendance`;
 export const getMyAttandenceApiPath = `${apiPath}/api/v2/attendance/myAttendance`;
 export const getStaffAttendanceApiPath = `${apiPath}/api/v2/attendance/staffAttendance`;

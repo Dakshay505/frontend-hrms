@@ -584,8 +584,8 @@ export const AttendenceDashboardList = () => {
 
   useEffect(() => {
     dispatch(getGroupAttendanceAsync());
-    dispatch(getAllPunchInPunchOutAsync(date, nextDate))
-  }, [date, nextDate]);
+    dispatch(getAllPunchInPunchOutAsync())
+  }, []);
 
 
   // pending rejected total

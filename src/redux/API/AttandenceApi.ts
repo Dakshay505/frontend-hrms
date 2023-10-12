@@ -49,10 +49,9 @@ export const getAllAttandence = async (sendData: any) => {
     console.log(err.response.data);
   }
 };
-export const getAllPunchInPunchOut = async (date:any, nextDate:any) => {
-  
+export const getAllPunchInPunchOut = async () => {
   try {
-    const { data } = await axios.get(`${punchInPunchOutAttendanceApiPath}?${date}${nextDate}`, {
+    const { data } = await axios.get(`${punchInPunchOutAttendanceApiPath}`, {
       withCredentials: true,
     });
     return data;

@@ -3,7 +3,6 @@ import search from "../../../assets/MagnifyingGlass.png"
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getAllSalaryAsync } from "../../../redux/Slice/NewSalarySlice";
-import { getNewSalaryDataApi } from "../../../redux/API/NewSalaryApi";
 import { getAllPunchInPunchOutAsync } from "../../../redux/Slice/AttandenceSlice";
 import SelectAll from "../../../assets/Select All.svg"
 import ClearAll from "../../../assets/Clear-all.svg"
@@ -31,6 +30,7 @@ export const NewSalaryPage = () => {
     const [selectedShifts, setSelectedShifts] = useState<string[]>([]);
 
     const salaryData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    const salaryDataa = useSelector((state: any) => state.newSalary?.data?.count);
 
 
     const loaderStatus = useSelector((state: any) => state.newSalary.status);
@@ -44,47 +44,6 @@ export const NewSalaryPage = () => {
 
     const dispatch = useDispatch();
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const filter = {
-                limit: 20,
-                page: 1,
-            };
-
-            try {
-                const data = await getNewSalaryDataApi(filter);
-                // console.log("data", data);
-
-                setTotal(data.count);
-                const newPageCount = Math.ceil(data.count / filter.limit);
-                setPageCount(newPageCount);
-                if (page > newPageCount) {
-                    setPage(newPageCount);
-                }
-            } catch (error) {
-                console.error("Error fetching new salary data:", error);
-            }
-        };
-
-        fetchData();
-
-    }, [limit, page]);
-
-
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= pageCount) {
-            setPage(newPage);
-        } else {
-            setPage(1);
-        }
-    }
-
-
-    useEffect(() => {
-        dispatch(getAllSalaryAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
-    }, []);
 
 
     const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
@@ -101,13 +60,43 @@ export const NewSalaryPage = () => {
     });
 
 
+
+
+
     useEffect(() => {
-
-        console.log(filter)
-
-        dispatch(getAllSalaryAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
+        const fetchData = async () => {
+            try {
+                setTotal(salaryDataa);
+                const newPageCount = Math.ceil(salaryDataa / filter.limit);
+                setPageCount(newPageCount);
+                if (page > newPageCount) {
+                    setPage(newPageCount);
+                }
+            } catch (error) {
+                console.error("Error fetching new salary data:", error);
+            }
+           dispatch(getAllSalaryAsync(filter));
+           dispatch(getAllPunchInPunchOutAsync());
+        };
+        fetchData();
     }, [filter]);
+
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= pageCount) {
+            setPage(newPage);
+        } else {
+            setPage(1);
+        }
+    }
+
+
+    // useEffect(() => {
+    //     dispatch(getAllSalaryAsync(filter));
+    // }, []);
+
+
+
 
 
     // filter
@@ -466,30 +455,30 @@ export const NewSalaryPage = () => {
 
 
     useEffect(() => {
-        dispatch(getAllSalaryAsync(filter)).then((res: any) => {
-            const Salarydata = res.payload.salaryRecords;
-            console.log("aaaaaaaaaaaaaa", Salarydata)
-            const arr = [];
+    //     // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+    //     //     const Salarydata = res.payload.salaryRecords;
+    //     //     console.log("aaaaaaaaaaaaaa", Salarydata)
+    //     //     const arr = [];
 
-            for (let i = 0; i < Salarydata.length; i++) {
-                if (Salarydata[i].profilePicture) {
-                    arr.push({
-                        name: Salarydata[i]?.attendance?.employeeId?.name,
-                        jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-                    });
-                }
-                else {
-                    arr.push({
-                        name: Salarydata[i]?.attendance?.employeeId.name,
-                        profilePicture:
-                            "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-                        jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-                    });
-                }
-            }
+    //     //     for (let i = 0; i < Salarydata.length; i++) {
+    //     //         if (Salarydata[i].profilePicture) {
+    //     //             arr.push({
+    //     //                 name: Salarydata[i]?.attendance?.employeeId?.name,
+    //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+    //     //             });
+    //     //         }
+    //     //         else {
+    //     //             arr.push({
+    //     //                 name: Salarydata[i]?.attendance?.employeeId.name,
+    //     //                 profilePicture:
+    //     //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+    //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+    //     //             });
+    //     //         }
+    //     //     }
 
-            setFetchedSuggestions(arr);
-        });
+    //     //     setFetchedSuggestions(arr);
+    //     // });
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
         dispatch(getAllDepartmentAsync());
