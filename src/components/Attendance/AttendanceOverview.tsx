@@ -15,7 +15,7 @@ const AttendanceOverview = () => {
   const handleDateChange = (date: any) => {
     setStartDate(date);
     //setSelectedDate(date);
-};
+  };
 
 
   useEffect(() => {
@@ -47,29 +47,29 @@ const AttendanceOverview = () => {
         </Link>
       </div>
       <div className="relative shadow-sm inline-block text-left" >
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[40px] text-sm font-bold text-[#2E2E2E] focus:outline-none"
-                                onClick={()=>setIsOpen(!isOpen)}
-                            >
-                                {startDate ? `${startDate.toDateString()}` : 'Select a Date'}
-                            </button>
-                            {isOpen && (
-                                <div className="absolute left-0 mt-2 w-[280px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="px-4 py-2 space-y-2  overflow-y-auto">
-                                        <Calendar
-                                            value={startDate}
-                                            onChange={handleDateChange}
-                                            tileClassName={({ date }) =>
-                                                date.toDateString() === startDate.toDateString()
-                                                    ? 'text-black selected-date'
-                                                    : ''
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            )}
+        <button
+          type="button"
+          className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[40px] text-sm font-bold text-[#2E2E2E] focus:outline-none"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {startDate ? `${startDate.toDateString()}` : 'Select a Date'}
+        </button>
+        {isOpen && (
+          <div className="absolute left-0 mt-2 w-[280px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="px-4 py-2 space-y-2  overflow-y-auto">
+              <Calendar
+                value={startDate}
+                onChange={handleDateChange}
+                tileClassName={({ date }) =>
+                  date.toDateString() === startDate.toDateString()
+                    ? 'text-black selected-date'
+                    : ''
+                }
+              />
             </div>
+          </div>
+        )}
+      </div>
       <div className="mt-8 overflow-auto">
         <table className="w-full">
           <tbody>

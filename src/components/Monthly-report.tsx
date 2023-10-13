@@ -39,10 +39,7 @@ export const MonthlyReport = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const filter = {
-                limit: 20,
-                page: 1,
-            };
+        
 
             try {
                 const data = await getMonthlyReportsApi(filter);
@@ -58,7 +55,7 @@ export const MonthlyReport = () => {
                 console.error("Error fetching new salary data:", error);
             }
         };
-
+ 
         fetchData();
 
     }, [limit, page]);
