@@ -66,7 +66,7 @@ const MasterSheet = () => {
     const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     return formattedTime;
   }
-
+  const [apply,setApply]=useState(false)
   useEffect(() => {
     console.log("filter", filter)
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
@@ -94,7 +94,7 @@ const MasterSheet = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter]);
+  }, [apply,filter.name,filter.aadhar,filter.createdSort,filter.updatedSort,filter.limit,filter.page,filter.name]);
 
   // clearLocalStorageOnUnload
   useEffect(() => {
@@ -502,6 +502,9 @@ const MasterSheet = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                   </div>
 
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
@@ -542,6 +545,9 @@ const MasterSheet = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {jobProfileList &&

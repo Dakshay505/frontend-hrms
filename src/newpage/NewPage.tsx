@@ -50,6 +50,8 @@ export const NewPage = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [apply,setApply]=useState(false)
+
 
 
   const [filter, setFilter] = useState(() => {
@@ -62,9 +64,12 @@ export const NewPage = () => {
         name: "",
         groupName: [""],
         jobProfileName: [""],
+        departmentName:[""],
         page: 1,
         limit: 20,
-        aadhar: "0"
+        aadhar: "0",
+        createdSort:"",
+        updatedSort:""
       };
     }
   });
@@ -92,7 +97,7 @@ export const NewPage = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [filter.groupName, filter.jobProfileName, filter.name, filter.page, filter.aadhar]);
+  }, [apply,filter.name, filter.page, filter.aadhar,filter.createdSort,filter.updatedSort]);
 
   useEffect(() => {
     const { name, ...filterWithoutName } = filter;
@@ -524,6 +529,9 @@ export const NewPage = () => {
                 <div className="flex flex-row p-2 gap-3">
                   <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
                   <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                  <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                 </div>
                 <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                   {groupList &&
@@ -559,6 +567,9 @@ export const NewPage = () => {
                 <div className="flex flex-row p-2 gap-3">
                   <img src={SelectAll} onClick={selectAll} className="h-5 w-5" />
                   <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                  <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                 </div>
                 <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                   {jobProfileList &&
@@ -594,6 +605,9 @@ export const NewPage = () => {
                 <div className="flex flex-row p-2 gap-3">
                   <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
                   <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                  <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                 </div>
                 <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                   {departmentList &&
