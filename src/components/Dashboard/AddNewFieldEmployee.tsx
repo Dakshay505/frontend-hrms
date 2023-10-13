@@ -130,7 +130,6 @@ const AddNewFieldEmployee = () => {
                     </div>
                 </form>
             </div>
-            {/* UPDATE EXISTING CUSTOM FIELDS END */}
         </div>
     )
 }
