@@ -223,6 +223,8 @@ export const AttendenceDashboardList = () => {
 
     filter.date = `${year}-${month}-${day}`
     filter.nextDate = `${nextyear}-${nextmonth}-${nextday}`;
+
+    
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {

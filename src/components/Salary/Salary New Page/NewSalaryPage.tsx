@@ -593,7 +593,7 @@ export const NewSalaryPage = () => {
                             break;
                         case 'Total Workinghours':
                             mappedData[column] = record.finalWorkingHours.toFixed(2) || 0;
-                            break;
+                            break; 
                         case 'Dutyhours':
                             mappedData[column] = record.dutyHours.toFixed(2) || 0;
                             break;
