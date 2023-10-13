@@ -511,11 +511,11 @@ export const MonthlyReport = () => {
             'Salary B',
             'salary C',
         ];
-    
+
         if (ExcelData && ExcelData.length > 0) {
-            const modifiedData = ExcelData.map((record:any) => {
-                const mappedData:any = {};
-    
+            const modifiedData = ExcelData.map((record: any) => {
+                const mappedData: any = {};
+
                 for (const column of columnOrder) {
                     switch (column) {
                         case 'Employee Code':
@@ -586,10 +586,10 @@ export const MonthlyReport = () => {
                             mappedData[column] = '-';
                     }
                 }
-    
+
                 return mappedData;
             });
-    
+
             const ws = XLSX.utils.json_to_sheet(modifiedData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Monthly Report Data');
@@ -601,7 +601,7 @@ export const MonthlyReport = () => {
             toast.error("Please Wait, Data Is Loading");
         }
     };
-    
+
 
 
 
@@ -622,227 +622,235 @@ export const MonthlyReport = () => {
                             </div>
                         </div>
 
-                        {isLabelVisible && (
-                            <div className="absolute top-[10px] left-6">
-                                <label
-                                    htmlFor="searchInput"
-                                    className="flex gap-2 items-center cursor-text"
+                        <div className='flex py-[20px] gap-[10px]'>
+
+                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef1}>
+                                <button
+                                    type="button"
+                                    className="border border-solid border-[#DEDEDE] font-bold  bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none"
+                                    onClick={toggleDropdown1}
                                 >
-                                    <img src={search} alt="" className="h-4 w-4" />
-                                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-                                </label>
-                            </div>
-                        )}
+                                    All Group
+                                </button>
 
+                                {isOpen1 && (
+                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
-                        <div className='border flex gap-[15px] px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
-                            <img src={search} alt="" className='w-[20px] h-[20px]' />
-                            <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
-                        </div>
-
-
-                        {suggestions.length > 0 && (
-                            <div className="absolute z-50 top-[15rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
-                                {suggestions.map((element: any, index: any) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            onClick={() => {
-                                                setInput(element?.name);
-                                                setFilter({
-                                                    ...filter,
-                                                    name: element?.name,
-                                                });
-                                                setSuggestions([]);
-                                            }}
-                                            className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
-                                        >
-                                            <div>
-                                                <img
-                                                    src={element?.profilePicture}
-                                                    className="w-[50px] h-[50px] rounded-full"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium #1C1C1C">
-                                                    {element?.name}
-                                                </p>
-                                                <p className="text-[12px] leading-5 font-normal text-[#757575]">
-                                                    {element?.jobProfileName}
-                                                </p>
-                                            </div>
+                                        <div className="flex flex-row p-2 gap-3">
+                                            <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
                                         </div>
-                                    );
-                                })}
+                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                            {sortedgroupList &&
+                                                sortedgroupList.map((element: any, index: any) => (
+                                                    <label key={index} className="flex items-center space-x-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={element.groupName}
+                                                            checked={filter.groupName.includes(element?.groupName)}
+                                                            onChange={handleGroupCheckboxChange}
+                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                        />
+                                                        <span>{element?.groupName}</span>
+                                                    </label>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
-                        )}
+
+                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef2}>
+                                <button
+                                    type="button"
+                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                    onClick={toggleDropdown2}
+
+                                >
+                                    Department
+                                </button>
+
+                                {isOpen2 && (
+                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                                        <div className="flex flex-row p-2 gap-3">
+                                            <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                                        </div>
+                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                            {sortedDepartmentList &&
+                                                sortedDepartmentList.map((element: any, index: any) => (
+                                                    <label key={index} className="flex items-center space-x-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={element?.departmentName}
+                                                            checked={filter.departmentName.includes(element?.departmentName)}
+
+                                                            onChange={handleDepartmentCheckboxChange}
+                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                        />
+                                                        <span>{element?.departmentName}</span>
+                                                    </label>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                                <button
+                                    type="button"
+                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                    onClick={toggleDropdown3}
+
+                                >
+                                    Employee Code
+                                </button>
+
+                                {isOpen3 && (
+                                    <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                        <div className="flex flex-row px-4 py-2 gap-3">
+                                            <img src={SelectAll} className="h-5 w-5 b" />
+                                            <img src={ClearAll} className="h-5 w-5 " />
+                                        </div>
+                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+
+                                            {monthlyData &&
+                                                monthlyData.map((element?: any) => (
+                                                    <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={element?.employee?.employeeCode}
+                                                            checked={filter.employeeCodes.includes(element?.employee?.employeeCode)}
+                                                            onChange={handleEmployeeCheckboxChange}
+                                                            className="form-checkbox h-5 w-5 text-blue-600"
+                                                        />
+                                                        {element?.employee?.employeeCode}
+                                                    </label>
+                                                ))}
+
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
+                                <button
+                                    type="button"
+                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
+                                    onClick={toggleDropdown4}
+
+                                >
+                                    Job Profile
+                                </button>
+
+
+                                {isOpen4 && (
+                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                                        <div className="flex flex-row p-2 gap-3">
+                                            <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
+                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                                        </div>
+                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                                            {sortedjobProfileList &&
+                                                sortedjobProfileList.map((element, index) => (
+                                                    <label key={index} className="flex items-center space-x-2">
+                                                        <input
+                                                            type="checkbox"
+                                                            value={element?.jobProfileName}
+                                                            checked={filter.jobProfileName.includes(element?.jobProfileName)}
+                                                            onChange={handleJobCheckboxChange}
+                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                                                        />
+                                                        <span>{element?.jobProfileName}</span>
+                                                    </label>
+                                                ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
+                                <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
+                                    <option value="" className="font-bold">Select a month</option>
+                                    {months.map((month, index) => (
+                                        <option key={index} className="font-bold" value={month}>
+                                            {month}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
+                                {isLabelVisible && (
+                                    <div className="absolute top-[10px] left-6">
+                                        <label
+                                            htmlFor="searchInput"
+                                            className="flex gap-2 items-center cursor-text"
+                                        >
+                                            <img src={search} alt="" className="h-4 w-4" />
+                                            <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                                        </label>
+                                    </div>
+                                )}
+
+
+                                <div className='border flex gap-[15px] h-[60px] items-center px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
+                                    <img src={search} alt="" className='w-[20px] h-[20px]' />
+                                    <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
+                                </div>
+
+
+                                {suggestions.length > 0 && (
+                                    <div className="absolute z-50 top-[15rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                        {suggestions.map((element: any, index: any) => {
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    onClick={() => {
+                                                        setInput(element?.name);
+                                                        setFilter({
+                                                            ...filter,
+                                                            name: element?.name,
+                                                        });
+                                                        setSuggestions([]);
+                                                    }}
+                                                    className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
+                                                >
+                                                    <div>
+                                                        <img
+                                                            src={element?.profilePicture}
+                                                            className="w-[50px] h-[50px] rounded-full"
+                                                            alt=""
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-medium #1C1C1C">
+                                                            {element?.name}
+                                                        </p>
+                                                        <p className="text-[12px] leading-5 font-normal text-[#757575]">
+                                                            {element?.jobProfileName}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+
+                        </div>
+
+
+
+
 
                     </div>
 
-                    <div className='flex py-[20px] gap-[10px]'>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef1}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] font-bold  bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown1}
-                            >
-                                All Group
-                            </button>
-
-                            {isOpen1 && (
-                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                                    <div className="flex flex-row p-2 gap-3">
-                                        <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                        {sortedgroupList &&
-                                            sortedgroupList.map((element: any, index: any) => (
-                                                <label key={index} className="flex items-center space-x-2">
-                                                    <input
-                                                        type="checkbox"
-                                                        value={element.groupName}
-                                                        checked={filter.groupName.includes(element?.groupName)}
-                                                        onChange={handleGroupCheckboxChange}
-                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                    />
-                                                    <span>{element?.groupName}</span>
-                                                </label>
-                                            ))}
-                                    </div>
-                                </div>
-                            )}
-
-                        </div>
-
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef2}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown2}
-
-                            >
-                                Department
-                            </button>
-
-                            {isOpen2 && (
-                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                                    <div className="flex flex-row p-2 gap-3">
-                                        <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                        {sortedDepartmentList &&
-                                            sortedDepartmentList.map((element: any, index: any) => (
-                                                <label key={index} className="flex items-center space-x-2">
-                                                    <input
-                                                        type="checkbox"
-                                                        value={element?.departmentName}
-                                                        checked={filter.departmentName.includes(element?.departmentName)}
-
-                                                        onChange={handleDepartmentCheckboxChange}
-                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                    />
-                                                    <span>{element?.departmentName}</span>
-                                                </label>
-                                            ))}
-                                    </div>
-                                </div>
-                            )}
-
-                        </div>
-
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown3}
-
-                            >
-                                Employee Code
-                            </button>
-
-                            {isOpen3 && (
-                                <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                    <div className="flex flex-row px-4 py-2 gap-3">
-                                        <img src={SelectAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-
-                                        {monthlyData &&
-                                            monthlyData.map((element?: any) => (
-                                                <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        value={element?.employee?.employeeCode}
-                                                        checked={filter.employeeCodes.includes(element?.employee?.employeeCode)}
-                                                        onChange={handleEmployeeCheckboxChange}
-                                                        className="form-checkbox h-5 w-5 text-blue-600"
-                                                    />
-                                                    {element?.employee?.employeeCode}
-                                                </label>
-                                            ))}
-
-                                    </div>
-                                </div>
-                            )}
-
-                        </div>
-
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
-                            <button
-                                type="button"
-                                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                onClick={toggleDropdown4}
-
-                            >
-                                Job Profile
-                            </button>
-
-
-                            {isOpen4 && (
-                                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                                    <div className="flex flex-row p-2 gap-3">
-                                        <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
-                                        <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                                    </div>
-                                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                        {sortedjobProfileList &&
-                                            sortedjobProfileList.map((element, index) => (
-                                                <label key={index} className="flex items-center space-x-2">
-                                                    <input
-                                                        type="checkbox"
-                                                        value={element?.jobProfileName}
-                                                        checked={filter.jobProfileName.includes(element?.jobProfileName)}
-                                                        onChange={handleJobCheckboxChange}
-                                                        className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                    />
-                                                    <span>{element?.jobProfileName}</span>
-                                                </label>
-                                            ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
-                            <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
-                                <option value="" className="font-bold">Select a month</option>
-                                {months.map((month, index) => (
-                                    <option key={index} className="font-bold" value={month}>
-                                        {month}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                    </div>
                 </div>
 
                 <hr />
@@ -953,7 +961,7 @@ export const MonthlyReport = () => {
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.employeeCode}</td>
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.name}</td>
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.groupId?.groupName}</td>
-                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department.departmentName}</td>
+                                            <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.department?.departmentName}</td>
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.jobProfileId?.jobProfileName}</td>
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.overTime ? 'Yes' : 'No'}</td>
                                             <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">{element?.employee?.salary}</td>

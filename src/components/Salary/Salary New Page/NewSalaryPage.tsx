@@ -593,7 +593,7 @@ export const NewSalaryPage = () => {
                             break;
                         case 'Total Workinghours':
                             mappedData[column] = record.finalWorkingHours.toFixed(2) || 0;
-                            break; 
+                            break;
                         case 'Dutyhours':
                             mappedData[column] = record.dutyHours.toFixed(2) || 0;
                             break;
@@ -644,72 +644,131 @@ export const NewSalaryPage = () => {
                                 Salary Database
                             </div>
                             <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
-
                                 <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
                             </div>
                         </div>
-
-                        {isLabelVisible && (
-                            <div className="absolute top-[10px] left-6">
-                                <label
-                                    htmlFor="searchInput"
-                                    className="flex gap-2 items-center cursor-text"
-                                >
-                                    <img src={search} alt="" className="h-4 w-4" />
-                                    <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
-                                </label>
-                            </div>
-                        )}
-
-
-                        <div className='border flex gap-[15px] px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
-                            <img src={search} alt="" className='w-[20px] h-[20px]' />
-                            <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
-                        </div>
-
-
-                        {suggestions.length > 0 && (
-                            <div className="absolute z-50 top-[15rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
-                                {suggestions.map((element: any, index: any) => {
-                                    return (
-                                        <div
-                                            key={index}
-                                            onClick={() => {
-                                                setInput(element.name);
-                                                setFilter({
-                                                    ...filter,
-                                                    name: element.name,
-                                                });
-                                                setSuggestions([]);
-                                            }}
-                                            className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
-                                        >
-                                            <div>
-                                                <img
-                                                    src={element.profilePicture}
-                                                    className="w-[50px] h-[50px] rounded-full"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-medium #1C1C1C">
-                                                    {element.name}
-                                                </p>
-                                                <p className="text-[12px] leading-5 font-normal text-[#757575]">
-                                                    {element.jobProfileName}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-
                     </div>
+
+                    {loaderStatus === "loading" ? (
+                        <div className="flex flex-start pt-[25px] gap-6">
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+
+                                    0                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary A
+                                </p>
+
+                            </div>
+
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    0                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary B
+                                </p>
+
+                            </div>
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    0                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary C
+                                </p>
+
+                            </div>
+
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    0                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Punch in
+                                </p>
+
+                            </div>
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    0                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Present
+                                </p>
+
+                            </div>
+                        </div >
+
+                    ) : (
+                        <div className="flex flex-start pt-[25px] gap-6">
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+
+                                    {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
+                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary A
+                                </p>
+
+                            </div>
+
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
+                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary B
+                                </p>
+
+                            </div>
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    {totalSalaryC !== undefined ? totalSalaryC.toFixed(2) : "-"}
+                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Salary C
+                                </p>
+
+                            </div>
+
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-[65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Punch in
+                                </p>
+
+                            </div>
+
+
+
+
+                            <div className="flex flex-col w-[150px] shadow-lg h-65px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+
+                                <div className="flex text-[#283093] text-xl font-bold justify-center items-center">
+                                    {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
+                                </div>
+                                <p className="text-[14px] font-medium  text-[#2E2E2E]">
+                                    Total Present
+                                </p>
+
+                            </div>
+
+
+
+
+                        </div >
+                    )}
 
                     <div className='flex py-[20px] gap-[10px]'>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef1}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef1}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] font-bold  bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none"
@@ -745,7 +804,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef2}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef2}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -783,7 +842,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef3}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -821,7 +880,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef4}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -859,7 +918,7 @@ export const NewSalaryPage = () => {
 
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef5}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef5}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E] focus:outline-none"
@@ -884,7 +943,7 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
-                        <div className="relative shadow-sm inline-block text-left" ref={dropdownRef7}>
+                        <div className="relative bg-[#FAFAFA] shadow-sm inline-block text-left" ref={dropdownRef7}>
                             <button
                                 type="button"
                                 className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
@@ -920,131 +979,72 @@ export const NewSalaryPage = () => {
                             )}
                         </div>
 
+
+                        <div>
+                            {isLabelVisible && (
+                                <div className="absolute top-[10px] left-6">
+                                    <label
+                                        htmlFor="searchInput"
+                                        className="flex gap-2 items-center cursor-text"
+                                    >
+                                        <img src={search} alt="" className="h-4 w-4" />
+                                        <p className="text-sm text-[#B0B0B0] font-medium">Search</p>
+                                    </label>
+                                </div>
+                            )}
+
+
+                            <div className='border flex gap-[15px] px-[15px] py-[13px] items-center shadow-lg h-[60px]  border-solid border-[#DEDEDE] rounded-full'>
+                                <img src={search} alt="" className='w-[20px] h-[20px]' />
+                                <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
+                            </div>
+
+
+                            {suggestions.length > 0 && (
+                                <div className="absolute z-50 top-[15rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                    {suggestions.map((element: any, index: any) => {
+                                        return (
+                                            <div
+                                                key={index}
+                                                onClick={() => {
+                                                    setInput(element.name);
+                                                    setFilter({
+                                                        ...filter,
+                                                        name: element.name,
+                                                    });
+                                                    setSuggestions([]);
+                                                }}
+                                                className="flex gap-3 p-3 hover:bg-[#F5F5F5] cursor-pointer"
+                                            >
+                                                <div>
+                                                    <img
+                                                        src={element.profilePicture}
+                                                        className="w-[50px] h-[50px] rounded-full"
+                                                        alt=""
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium #1C1C1C">
+                                                        {element.name}
+                                                    </p>
+                                                    <p className="text-[12px] leading-5 font-normal text-[#757575]">
+                                                        {element.jobProfileName}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+
+
                     </div>
 
                 </div>
 
                 <hr />
-
-
-                {loaderStatus === "loading" ? (
-
-                    <div className="flex flex-start pt-[25px] gap-6">
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary A
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-
-                                0
-                            </div>
-                        </div>
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary B
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                0
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary C
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                0
-                            </div>
-                        </div>
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Punch in
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                0
-                            </div>
-                        </div>
-
-
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Present
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                0
-                            </div>
-                        </div>
-
-                    </div>
-
-                ) : (
-
-
-                    <div className="flex flex-start pt-[25px] gap-6">
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary A
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-
-                                {totalSalaryA !== undefined ? totalSalaryA.toFixed(2) : "-"}
-                            </div>
-                        </div>
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary B
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                {totalSalaryB !== undefined ? totalSalaryB.toFixed(2) : "-"}
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Salary C
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                {totalSalaryC !== undefined ? totalSalaryC.toFixed(2) : "-"}
-                            </div>
-                        </div>
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Punch in
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                {punchesData && punchesData.countIn ? punchesData.countIn : 0}
-                            </div>
-                        </div>
-
-
-
-
-                        <div className="flex flex-col w-[190px] shadow-lg h-[85px] justify-center items-center gap-1 py-[7px] px-[21px] rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-                            <p className="text-[14px] font-medium  text-[#2E2E2E]">
-                                Total Present
-                            </p>
-                            <div className="flex text-[24px] font-bold justify-center items-center">
-                                {punchesData && punchesData.totalPresent ? punchesData.totalPresent : 0}
-                            </div>
-                        </div>
-
-
-
-
-                    </div >
-
-                )}
-
 
 
                 <div className="py-6 mb-24">
@@ -1262,7 +1262,6 @@ export const NewSalaryPage = () => {
 
                                             </tr>
                                         ))}
-
                                 </tbody >
 
                             </table>
