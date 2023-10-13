@@ -104,8 +104,10 @@ export const AttendenceDashboardList = () => {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     return formattedTime;
+   
   }
   const [shopName, setShopName] = useState([""]);
+  const [apply,setApply]=useState(false)
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -129,9 +131,11 @@ export const AttendenceDashboardList = () => {
     sendData = {
       shopNames: shopName,
       date: filter.date,
-      nextDate: filter.nextDate
+      nextDate: filter.nextDate,
+      limit:2000
 
     }
+  
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
@@ -176,7 +180,7 @@ export const AttendenceDashboardList = () => {
         Setloading(false)
       }
     });
-  }, [date, nextDate,filter,status]);
+  }, [date, nextDate,filter.date,filter.nextDate,filter.limit,filter.page,status,apply]);
 
 
   useEffect(() => {
@@ -748,6 +752,9 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {sortedgroupList &&
@@ -786,6 +793,9 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {sortedjobProfileList &&
@@ -823,6 +833,7 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                    
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {sortedDepartmentList &&
@@ -862,6 +873,9 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                        Apply
+                      </div>
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {shoplist &&
