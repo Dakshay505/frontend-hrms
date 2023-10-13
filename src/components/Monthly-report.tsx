@@ -19,7 +19,8 @@ import { saveAs } from 'file-saver';
 
 
 export const MonthlyReport = () => {
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(20);
+    const [apply,setApply]=useState(false)
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -93,11 +94,11 @@ export const MonthlyReport = () => {
 
     useEffect(() => {
 
-        console.log(filter)
+        //console.log(filter)
 
         dispatch(getAllMonthlyReportAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
-    }, [filter]);
+    }, [filter.limit,filter.page,apply]);
 
 
     // filter
@@ -305,11 +306,11 @@ export const MonthlyReport = () => {
     };
 
 
-    useEffect(() => {
-        dispatch(getAllMonthlyReportAsync(filter));
-        dispatch(getAllPunchInPunchOutAsync());
+    // useEffect(() => {
+    //     dispatch(getAllMonthlyReportAsync(filter));
+    //     dispatch(getAllPunchInPunchOutAsync());
 
-    }, [filter]);
+    // }, [filter]);
 
 
     const handleEmployeeCheckboxChange = (event: any) => {
@@ -639,6 +640,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                                             Apply
+                                        </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedgroupList &&
@@ -676,6 +680,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                                             Apply
+                                        </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedDepartmentList &&
@@ -713,6 +720,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row px-4 py-2 gap-3">
                                             <img src={SelectAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " />
+                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                                             Apply
+                                        </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
 
@@ -753,6 +763,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
+                                             Apply
+                                        </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedjobProfileList &&
