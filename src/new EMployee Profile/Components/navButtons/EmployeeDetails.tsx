@@ -645,6 +645,18 @@ export const EmployeeDetails = () => {
                                 </p>
                             </div>
                         </div>
+                        <div className="px-[16px] py-[8px]  border border-[#CFD3D4] rounded-[8px] flex gap-[10px] flex-col">
+                            <div className="flex items-center gap-3">
+                                <p className="text-sm font-semibold text-[#2E2E2E] tracking-[0.25px]">
+                                    Added By
+                                </p>
+                            </div>
+                            <div>
+                                <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
+                                    {singleEmployee?.addedby?singleEmployee?.addedby?.name:"Admin"}
+                                </p>
+                            </div>
+                        </div>
 
                     </div>
                 ) : (
@@ -706,6 +718,7 @@ export const EmployeeDetails = () => {
                                 </div>
                             </div>
                         )}
+
 
 
 
@@ -851,6 +864,7 @@ export const EmployeeDetails = () => {
                                 </p>
                             </div>
                         </div>
+                        
 
                     </div>
                 )
