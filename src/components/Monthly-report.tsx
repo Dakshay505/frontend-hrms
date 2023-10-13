@@ -1,11 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import search from "../assets/MagnifyingGlass.png"
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import SelectAll from "../assets/Select All.svg"
 import ClearAll from "../assets/Clear-all.svg"
 import { getAllMonthlyReportAsync } from "../redux/Slice/NewSalarySlice";
-import { getMonthlyReportsApi } from "../redux/API/NewSalaryApi";
 import { getAllPunchInPunchOutAsync } from "../redux/Slice/AttandenceSlice";
 import { getAllGroupsAsync } from "../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../redux/Slice/JobProfileSlice";
@@ -16,17 +14,20 @@ import * as XLSX from 'xlsx';
 import toast from "react-hot-toast";
 import { saveAs } from 'file-saver';
 
-
+import CaretLeft from "../assets/CaretLeft.svg";
+import CaretRight1 from "../assets/CaretRight1.svg";
 
 export const MonthlyReport = () => {
-    const [limit, setLimit] = useState(20);
-    const [apply,setApply]=useState(false)
+    const [apply, setApply] = useState(false)
     const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [pageCount, setPageCount] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
 
     const monthlyData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     // console.log("uuuuuuuuuuuuuuuuuuuu", monthlyData)
+
+    const pageData = useSelector((state: any) => state.newSalary?.data?.count)
+    console.log(pageData)
+
 
     const loaderStatus = useSelector((state: any) => state.newSalary.status);
     console.log(loaderStatus)
@@ -34,50 +35,40 @@ export const MonthlyReport = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllMonthlyReportAsync({ limit, page }));
-    }, [limit, page, dispatch]);
+        setTotalPage(Math.ceil(pageData / filter.limit));
+    }, [pageData]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const filter = {
-                limit: 20,
-                page: 1,
-            };
-
-            try {
-                const data = await getMonthlyReportsApi(filter);
-                console.log("data", data);
-
-                setTotal(data.count);
-                const newPageCount = Math.ceil(data.count / filter.limit);
-                setPageCount(newPageCount);
-                if (page > newPageCount) {
-                    setPage(newPageCount);
-                }
-            } catch (error) {
-                console.error("Error fetching new salary data:", error);
-            }
-        };
-
-        fetchData();
-
-    }, [limit, page]);
+        setFilter({ ...filter, page: page });
+    }, [page]);
 
 
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= pageCount) {
-            setPage(newPage);
-            dispatch(getAllMonthlyReportAsync({ page: newPage, limit }));
-        } else {
-            setPage(1);
-            dispatch(getAllMonthlyReportAsync({ page: 1, limit }));
+    const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
+
+    useEffect(() => {
+        setPagiArrIncludes([page - 1]);
+    }, [page]);
+    const pagination = () => {
+        const element = [];
+        for (let i = 0; i < totalPage; i++) {
+            element.push(
+                <p
+                    onClick={() => {
+                        setPage(i + 1);
+                        setPagiArrIncludes([i]);
+                    }}
+                    className={`${pagiArrIncludes.includes(i) ? "bg-[#ECEDFE]" : ""
+                        } rounded-full px-3 cursor-pointer`}
+                    key={i}
+                >
+                    {i + 1}
+                </p>
+            );
         }
-    }
+        return element;
+    };
 
 
-    useEffect(() => {
-        dispatch(getAllMonthlyReportAsync({ limit, page }));
-    }, [limit, page, dispatch]);
 
 
 
@@ -98,7 +89,7 @@ export const MonthlyReport = () => {
 
         dispatch(getAllMonthlyReportAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
-    }, [filter.limit,filter.page,apply]);
+    }, [filter.limit, filter.page, apply]);
 
 
     // filter
@@ -486,7 +477,7 @@ export const MonthlyReport = () => {
 
 
     const ExcelData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
-    console.log("ExcelData---------------------", ExcelData);
+    // console.log("ExcelData---------------------", ExcelData);
 
     const exportToExcel = () => {
         const columnOrder = [
@@ -640,9 +631,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                                             Apply
-                                        </div>
+                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
+                                                Apply
+                                            </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedgroupList &&
@@ -680,9 +671,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                                             Apply
-                                        </div>
+                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
+                                                Apply
+                                            </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedDepartmentList &&
@@ -720,9 +711,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row px-4 py-2 gap-3">
                                             <img src={SelectAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " />
-                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                                             Apply
-                                        </div>
+                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
+                                                Apply
+                                            </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
 
@@ -763,9 +754,9 @@ export const MonthlyReport = () => {
                                         <div className="flex flex-row p-2 gap-3">
                                             <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
                                             <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                                             Apply
-                                        </div>
+                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
+                                                Apply
+                                            </div>
                                         </div>
                                         <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                                             {sortedjobProfileList &&
@@ -998,7 +989,7 @@ export const MonthlyReport = () => {
                             </table>
                         </div>}
 
-                    <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
+                    {/* <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
                         <div className="px-3">
                             <select
                                 className="bg-theme-btn-gray px-2 py-0.5 border-2 text-zinc-500 border-gray-50 rounded-lg"
@@ -1053,8 +1044,47 @@ export const MonthlyReport = () => {
                                 </div>
                             </label>
                         </div>
+                    </div> */}
+                    <div className="flex gap-4 items-center justify-center">
+                        <div 
+                        className="cursor-pointer"
+                            onClick={() => {
+                                if (page > 1) {
+                                    setPage(page - 1);
+                                }
+                            }}
+                        >
+                           
+                            <img src={CaretLeft} alt="" />{" "}
+                        </div>
+                        {pagination().map((element: any, index) => {
+                            if (pagiArrIncludes.includes(index) && element) {
+                                return (
+                                    <div key={index} className="flex">
+                                        {filter.page > 2 ? "..." : ""}
+                                        {filter.page === 1 ? "" : pagination()[index - 1]}
+                                        {pagination()[index]}
+                                        {pagination()[index + 1]}
+                                        {filter.page === 1 ? pagination()[index + 2] : ""}
+                                        {filter.page >= totalPage - 1 ? "" : "..."}
+                                    </div>
+                                );
+                            }
+                        })}
+                        <div 
+                        className="cursor-pointer"
+                            onClick={() => {
+                                if (page !== totalPage) {
+                                    setPage(page + 1);
+                                }
+                            }}
+                        >
+                            <img src={CaretRight1} alt="" />
+                        </div>
                     </div>
+
                 </div>
+
             </div>
         </div >
     )

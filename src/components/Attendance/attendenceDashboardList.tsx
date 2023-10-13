@@ -838,7 +838,7 @@ export const AttendenceDashboardList = () => {
                     <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
                         Apply
                       </div>
-                    
+
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {sortedDepartmentList &&
@@ -878,10 +878,12 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
+
                     <div className="cursor-pointer text-blue-600" onClick={()=>setShopApply(!shopapply)}>
                         Apply
                       </div>
                     
+
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {shoplist &&
