@@ -109,6 +109,7 @@ export const AttendenceDashboardList = () => {
   }
   const [shopName, setShopName] = useState([""]);
   const [apply,setApply]=useState(false)
+  const [shopapply,setShopApply]=useState(false)
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -144,7 +145,7 @@ export const AttendenceDashboardList = () => {
       setShopItems(employeeData)
     });
 
-  }, [shopName])
+  }, [shopapply])
   const [dateRange, setDateRange] = useState<any>([]);
 
 
@@ -632,7 +633,7 @@ export const AttendenceDashboardList = () => {
               <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Punch Out</p>
             </div>
           </div>
-        ) : isShopOpen ? (
+        ) : shopName.length>0 ? (
           <div className="flex flex-start pt-4 gap-6">
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
               <div className="flex justify-center items-center ">
@@ -837,6 +838,7 @@ export const AttendenceDashboardList = () => {
                     <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
                         Apply
                       </div>
+
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {sortedDepartmentList &&
@@ -876,7 +878,12 @@ export const AttendenceDashboardList = () => {
                   <div className="flex flex-row p-2 gap-3">
                     <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
                     <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
-              
+
+                    <div className="cursor-pointer text-blue-600" onClick={()=>setShopApply(!shopapply)}>
+                        Apply
+                      </div>
+                    
+
                   </div>
                   <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
                     {shoplist &&
