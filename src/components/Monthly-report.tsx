@@ -12,6 +12,12 @@ import { getAllJobProfileAsync } from "../redux/Slice/JobProfileSlice";
 import { getAllDepartmentAsync } from "../redux/Slice/departmentSlice";
 import LoaderGif from "../assets/loadergif.gif";
 
+import * as XLSX from 'xlsx';
+import toast from "react-hot-toast";
+import { saveAs } from 'file-saver';
+
+
+
 export const MonthlyReport = () => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -474,6 +480,132 @@ export const MonthlyReport = () => {
 
 
 
+
+
+
+
+    const ExcelData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    console.log("ExcelData---------------------", ExcelData);
+
+    const exportToExcel = () => {
+        const columnOrder = [
+            'Employee Code',
+            'Employee Name',
+            'Group Name',
+            'Department',
+            'Job Profile',
+            'OverTime',
+            'Salary',
+            'Duty hour required',
+            'Lunch',
+            'Total Working Hours',
+            'Salary Per Hours',
+            'duty per month',
+            'no. of duty',
+            'approved duty',
+            'sum actual working hour',
+            'sum Final Workinghours',
+            'sum Dutyhours',
+            'Over Time Hours',
+            'Earn in a day/ Salary A',
+            'Salary B',
+            'salary C',
+        ];
+    
+        if (ExcelData && ExcelData.length > 0) {
+            const modifiedData = ExcelData.map((record:any) => {
+                const mappedData:any = {};
+    
+                for (const column of columnOrder) {
+                    switch (column) {
+                        case 'Employee Code':
+                            mappedData[column] = record.employee?.employeeCode || '-';
+                            break;
+                        case 'Employee Name':
+                            mappedData[column] = record.employee?.name || '-';
+                            break;
+                        case 'Group Name':
+                            mappedData[column] = record.employee?.groupId?.groupName || '-';
+                            break;
+                        case 'Department':
+                            mappedData[column] = record.employee?.jobProfileId?.department.departmentName || '-';
+                            break;
+                        case 'Job Profile':
+                            mappedData[column] = record.employee?.jobProfileId?.jobProfileName || '-';
+                            break;
+                        case 'OverTime':
+                            mappedData[column] = record.employee?.overTime ? 'Yes' : 'No';
+                            break;
+                        case 'Salary':
+                            mappedData[column] = record.employee?.salary || '-';
+                            break;
+                        case 'Duty hour required':
+                            mappedData[column] = record.employee?.workingHours || '-';
+                            break;
+                        case 'Lunch':
+                            // Fill this field with your data logic or use a placeholder '-'
+                            mappedData[column] = record.employee?.lunchTime || '-';
+                            break;
+                        case 'Total Working Hours':
+                            mappedData[column] = record.totalWorkingHours || '-';
+                            break;
+                        case 'Salary Per Hours':
+                            mappedData[column] = record.salaryPerHours?.toFixed(2) || '-';
+                            break;
+                        case 'duty per month':
+                            mappedData[column] = record.dutyPerMonth || '-';
+                            break;
+                        case 'no. of duty':
+                            mappedData[column] = record.numberofduty || '-';
+                            break;
+                        case 'approved duty':
+                            mappedData[column] = record.approvedduty || '-';
+                            break;
+                        case 'sum actual working hour':
+                            mappedData[column] = record.totalactual?.toFixed(2) || '-';
+                            break;
+                        case 'sum Final Workinghours':
+                            mappedData[column] = record.sumFinalWorkingHours?.toFixed(2) || '-';
+                            break;
+                        case 'sum Dutyhours':
+                            mappedData[column] = record.sumDutyHours?.toFixed(2) || '-';
+                            break;
+                        case 'Over Time Hours':
+                            mappedData[column] = record.overTime?.toFixed(2) || '-';
+                            break;
+                        case 'Earn in a day/ Salary A':
+                            mappedData[column] = record.salaryA || '-';
+                            break;
+                        case 'Salary B':
+                            mappedData[column] = record.salaryB || '-';
+                            break;
+                        case 'salary C':
+                            mappedData[column] = record.salaryC || '-';
+                            break;
+                        default:
+                            mappedData[column] = '-';
+                    }
+                }
+    
+                return mappedData;
+            });
+    
+            const ws = XLSX.utils.json_to_sheet(modifiedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Monthly Report Data');
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, 'Monthly Report.xlsx');
+            toast.success("Excel Downloaded Successfully");
+        } else {
+            toast.error("Please Wait, Data Is Loading");
+        }
+    };
+    
+
+
+
+
     return (
         <div className='p-[40px]'>
             <div className='flex flex-col gap-[10px]'>
@@ -482,6 +614,11 @@ export const MonthlyReport = () => {
                         <div className="flex justify-between ">
                             <div className="text-2xl font-bold text-[#2E2E2E]">
                                 Monthly Report
+                            </div>
+
+                            <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+
+                                <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
                             </div>
                         </div>
 
@@ -706,11 +843,6 @@ export const MonthlyReport = () => {
                         </div>
 
                     </div>
-
-
-
-
-
                 </div>
 
                 <hr />

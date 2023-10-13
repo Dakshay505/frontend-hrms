@@ -12,9 +12,9 @@ import { getAllDepartmentAsync } from "../../../redux/Slice/departmentSlice";
 import LoaderGif from "../../../assets/loadergif.gif";
 
 import Calendar from "react-calendar";
-// import * as XLSX from 'xlsx';
-// import toast from "react-hot-toast";
-// import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
+import toast from "react-hot-toast";
+import { saveAs } from 'file-saver';
 
 
 const options2 = [
@@ -23,7 +23,7 @@ const options2 = [
 ];
 
 export const NewSalaryPage = () => {
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(20);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -44,15 +44,16 @@ export const NewSalaryPage = () => {
     //     
 
     // }
-     useEffect(()=>{
+    useEffect(() => {
         setTotal(salaryDataa);
-     const newPageCount = Math.ceil(salaryDataa / filter.limit);
-    setPageCount(newPageCount);
-    if (page > newPageCount) {
-     setPage(newPageCount);
-    }
 
-     },[limit])
+        const newPageCount = Math.ceil(salaryDataa / filter.limit);
+        setPageCount(newPageCount);
+
+        if (page > newPageCount) {
+            setPage(newPageCount);
+        }
+    }, [limit, filter.limit, filter.page, salaryDataa]);
 
 
     const loaderStatus = useSelector((state: any) => state.newSalary.status);
@@ -62,7 +63,7 @@ export const NewSalaryPage = () => {
     const totalSalaryA = useSelector((state: any) => state.newSalary?.data?.totalSalaryA);
     const totalSalaryB = useSelector((state: any) => state.newSalary?.data?.totalSalaryB);
     const totalSalaryC = useSelector((state: any) => state.newSalary?.data?.totalSalaryC);
-    // console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
+    console.log("uuuuuuuuuuuuuuuuuuuu", salaryData)
 
     const dispatch = useDispatch();
 
@@ -71,60 +72,61 @@ export const NewSalaryPage = () => {
     const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
 
 
-    
+
 
 
 
 
 
     useEffect(() => {
-        
+
         dispatch(getAllSalaryAsync(filter));
-           dispatch(getAllPunchInPunchOutAsync());
+        dispatch(getAllPunchInPunchOutAsync());
     }, [filter]);
+
     useEffect(() => {
-        //     // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
-        //     //     const Salarydata = res.payload.salaryRecords;
-        //     //     console.log("aaaaaaaaaaaaaa", Salarydata)
-        //     //     const arr = [];
-    
-        //     //     for (let i = 0; i < Salarydata.length; i++) {
-        //     //         if (Salarydata[i].profilePicture) {
-        //     //             arr.push({
-        //     //                 name: Salarydata[i]?.attendance?.employeeId?.name,
-        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-        //     //             });
-        //     //         }
-        //     //         else {
-        //     //             arr.push({
-        //     //                 name: Salarydata[i]?.attendance?.employeeId.name,
-        //     //                 profilePicture:
-        //     //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
-        //     //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
-        //     //             });
-        //     //         }
-        //     //     }
-    
-        //     //     setFetchedSuggestions(arr);
-        //     // });
-            dispatch(getAllGroupsAsync());
-            dispatch(getAllJobProfileAsync());
-            dispatch(getAllDepartmentAsync());
-        }, []);
+        // dispatch(getAllSalaryAsync(filter)).then((res: any) => {
+        //     const Salarydata = res.payload.salaryRecords;
+        //     console.log("aaaaaaaaaaaaaa", Salarydata)
+        //     const arr = [];
+
+        //     for (let i = 0; i < Salarydata.length; i++) {
+        //         if (Salarydata[i].profilePicture) {
+        //             arr.push({
+        //                 name: Salarydata[i]?.attendance?.employeeId?.name,
+        //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //             });
+        //         }
+        //         else {
+        //             arr.push({
+        //                 name: Salarydata[i]?.attendance?.employeeId.name,
+        //                 profilePicture:
+        //                     "https://cdn-icons-png.flaticon.com/512/219/219983.png",
+        //                 jobProfileName: Salarydata[i]?.attendance?.employeeId.jobProfileId.jobProfileName,
+        //             });
+        //         }
+        //     }
+
+        //     setFetchedSuggestions(arr);
+        // });
+        dispatch(getAllGroupsAsync());
+        dispatch(getAllJobProfileAsync());
+        dispatch(getAllDepartmentAsync());
+    }, []);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= pageCount) {
             setPage(newPage);
-            setFilter({...filter,page:page})
+            setFilter({ ...filter, page: page })
         } else {
             setPage(1);
-            setFilter({...filter,page:page})
+            setFilter({ ...filter, page: page })
         }
     }
 
 
     useEffect(() => {
-       setFilter({...filter,limit:limit})
+        setFilter({ ...filter, limit: limit })
     }, [limit]);
 
 
@@ -454,7 +456,7 @@ export const NewSalaryPage = () => {
     // search 
     const [input, setInput] = useState("")
     const [suggestions, setSuggestions] = useState<any>([]);
-    const [fetchedSuggestions, setFetchedSuggestions] = useState<any>([]);
+    const [fetchedSuggestions,] = useState<any>([]);
     const [isLabelVisible, setLabelVisible] = useState(true);
 
 
@@ -486,7 +488,150 @@ export const NewSalaryPage = () => {
     };
 
 
-    
+
+
+
+    const ExcelData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
+    // console.log("ExcelData---------------------", ExcelData);
+
+    const exportToExcel = () => {
+        const columnOrder = [
+            'Date',
+            'Employee Code',
+            'Employee Name',
+            'Group Name',
+            'Department',
+            'Job Profile',
+            'OverTime',
+            'Salary',
+            'Duty hour required',
+            'Lunch',
+            'Total Working Hours by Database',
+            'Salary Per Hours',
+            'Punch IN BY',
+            'Punch IN',
+            'Punch Out BY',
+            'Punch Out',
+            'Shift',
+            'Status',
+            'Approved by',
+            'Actual working hour By Records',
+            'Total Workinghours',
+            'Dutyhours',
+            'Actual Duty hour',
+            'Over Time',
+            'Earning in a day/Salary A',
+            'Salary B',
+            'Salary C',
+        ];
+
+        if (ExcelData && ExcelData.length > 0) {
+            const modifiedData = ExcelData.map((record: any) => {
+                const mappedData: any = {};
+
+                for (const column of columnOrder) {
+                    switch (column) {
+                        case 'Date':
+                            mappedData[column] = record.firstPunchIn || '-';
+                            break;
+                        case 'Employee Code':
+                            mappedData[column] = record.attendance?.employeeId?.employeeCode || '-';
+                            break;
+                        case 'Employee Name':
+                            mappedData[column] = record.attendance?.employeeId?.name || '-';
+                            break;
+                        case 'Group Name':
+                            mappedData[column] = record.attendance?.employeeId?.groupId?.groupName || '-';
+                            break;
+                        case 'Department':
+                            mappedData[column] = record.attendance?.employeeId?.jobProfileId?.department?.departmentName || '-';
+                            break;
+                        case 'Job Profile':
+                            mappedData[column] = record.attendance?.employeeId?.jobProfileId?.jobProfileName || '-';
+                            break;
+                        case 'OverTime':
+                            mappedData[column] = record.attendance?.employeeId?.overTime ? 'Yes' : 'No';
+                            break;
+                        case 'Salary':
+                            mappedData[column] = record.attendance?.employeeId?.salary ? record.attendance?.employeeId?.salary.toFixed(2) : '-';
+                            break;
+                        case 'Duty hour required':
+                            mappedData[column] = record.attendance?.employeeId?.dutyHourRequired ? record.attendance?.employeeId?.dutyHourRequired.toFixed(2) : '-';
+                            break;
+                        case 'Lunch':
+                            mappedData[column] = record.attendance?.employeeId?.lunch ? 'Yes' : 'No';
+                            break;
+                        case 'Total Working Hours by Database':
+                            mappedData[column] = record.attendance?.employeeId?.totalWorkingHoursDatabase ? record.attendance?.employeeId?.totalWorkingHoursDatabase.toFixed(2) : '-';
+                            break;
+                        case 'Salary Per Hours':
+                            mappedData[column] = record.attendance?.employeeId?.salaryPerHours ? record.attendance?.employeeId?.salaryPerHours.toFixed(2) : '-';
+                            break;
+                        case 'Punch IN BY':
+                            mappedData[column] = record.attendance?.punches[0]?.punchInBy?.name || '-';
+                            break;
+                        case 'Punch IN':
+                            mappedData[column] = record.firstPunchIn ? record.firstPunchIn.slice(11, 16) : '-';
+                            break;
+                        case 'Punch Out BY':
+                            mappedData[column] = record.attendance?.punches[0]?.punchOutBy?.name || '-';
+                            break;
+                        case 'Punch Out':
+                            mappedData[column] = record.lastPunchOut ? record.lastPunchOut.slice(11, 16) : '-';
+                            break;
+                        case 'Shift':
+                            mappedData[column] = record.attendance ? record.attendance.shift : '-';
+                            break;
+                        case 'Status':
+                            mappedData[column] = record.attendance?.status || '-';
+                            break;
+                        case 'Approved by':
+                            mappedData[column] = record.attendance?.approvedBy?.name || '-';
+                            break;
+                        case 'Actual working hour By Records':
+                            mappedData[column] = record.actualworkingHoursbyRecord.toFixed(2) || 0;
+                            break;
+                        case 'Total Workinghours':
+                            mappedData[column] = record.finalWorkingHours.toFixed(2) || 0;
+                            break;
+                        case 'Dutyhours':
+                            mappedData[column] = record.dutyHours.toFixed(2) || 0;
+                            break;
+                        case 'Actual Duty hour':
+                            mappedData[column] = record.actualWorkinghours.toFixed(2) || 0;
+                            break;
+                        case 'Over Time':
+                            mappedData[column] = record.overTime || 0;
+                            break;
+                        case 'Earning in a day/Salary A':
+                            mappedData[column] = record.salaryA !== undefined ? record.salaryA.toFixed(2) : '-';
+                            break;
+                        case 'Salary B':
+                            mappedData[column] = record.salaryB !== undefined ? record.salaryB.toFixed(2) : '-';
+                            break;
+                        case 'Salary C':
+                            mappedData[column] = record.salaryC !== undefined ? record.salaryC.toFixed(2) : '-';
+                            break;
+                        default:
+                            mappedData[column] = '-';
+                    }
+                }
+
+                return mappedData;
+            });
+
+            const ws = XLSX.utils.json_to_sheet(modifiedData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Salary Report Data');
+            const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, 'Salary Report.xlsx');
+            toast.success("Excel Downloaded Successfully");
+        } else {
+            toast.error("Please Wait, Data Is Loading");
+        }
+    };
+
 
 
     return (
@@ -497,6 +642,10 @@ export const NewSalaryPage = () => {
                         <div className="flex justify-between ">
                             <div className="text-2xl font-bold text-[#2E2E2E]">
                                 Salary Database
+                            </div>
+                            <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+
+                                <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
                             </div>
                         </div>
 
@@ -1005,7 +1154,7 @@ export const NewSalaryPage = () => {
                                             Salary C
                                         </td>
 
- 
+
                                     </tr>
 
                                     {salaryData && salaryData
@@ -1039,7 +1188,7 @@ export const NewSalaryPage = () => {
                                                 </td>
 
                                                 <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                                                    {element?.employee?.salary ? element?.employee?.salary?.toFixed(2) : "-"}
+                                                    {element?.attendance?.employeeId?.salary ? element?.attendance?.employeeId?.salary?.toFixed(2) : "-"}
                                                 </td>
 
 
@@ -1137,8 +1286,8 @@ export const NewSalaryPage = () => {
                                 }}
                             >
                                 <option value="">select</option>
-                                <option value="10">10</option>
                                 <option value="1">1</option>
+                                <option value="10">10</option>
                                 <option value="20">20</option>
                                 <option value={total} selected={limit === total}>
                                     All
