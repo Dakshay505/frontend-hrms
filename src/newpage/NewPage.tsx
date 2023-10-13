@@ -62,6 +62,7 @@ export const NewPage = () => {
         name: "",
         groupName: [""],
         jobProfileName: [""],
+        departmentName:[""],
         page: 1,
         limit: 20,
         aadhar: "0"
@@ -117,7 +118,7 @@ export const NewPage = () => {
   const dispatch = useDispatch();
   const employeeDetailList = useSelector((state: any) => state.employee.employees);
   console.log(employeeDetailList)
-  const departmentList = useSelector((state: any) => state.department.department)
+  const departmentList = useSelector((state: any) => state.department?.department)
   // const sortedDepartmentList = [...departmentList].sort((a: any, b: any) =>
   //   a.departmentName.localeCompare(b.departmentName)
   // );
@@ -203,9 +204,6 @@ export const NewPage = () => {
 
   };
 
-
-
-
   const handleJobCheckboxChange = (event: any) => {
     const { value, checked } = event.target;
 
@@ -275,7 +273,7 @@ export const NewPage = () => {
     });
   };
   const selectDepartmentAll = () => {
-    const allProfiles = departmentList.map((element: any) => element.departmentName);
+    const allProfiles = departmentList.map((element: any) => element?.departmentName);
     setFilter((prevFilter: any) => ({
       ...prevFilter,
       departmentName: allProfiles,
@@ -303,12 +301,7 @@ export const NewPage = () => {
     });
   };
 
-
-
-
   // pagination
-
-
   const [pagiArrIncludes, setPagiArrIncludes] = useState<any>([]);
 
   useEffect(() => {
@@ -357,10 +350,6 @@ export const NewPage = () => {
   };
 
 
-
-
-
-
   // edit role pop up
 
   const [isEditRolePopupOpen, setIsEditRolePopupOpen] = useState(false);
@@ -390,9 +379,6 @@ export const NewPage = () => {
     setEmployeeId(singleEmployee?._id);
     setInputRoleValue(singleEmployee?.role);
   }, [singleEmployee]);
-
-
-
 
 
   // Change Password pop up
@@ -465,9 +451,6 @@ export const NewPage = () => {
   const closeEditStatusPopup = () => {
     setIsEditStatusPopupOpen(false);
   };
-
-
-
 
   const [StatusValue, setStatusValue] = useState<boolean | null>(null);
 
@@ -601,13 +584,12 @@ export const NewPage = () => {
                       <label key={index} className="flex items-center space-x-2">
                         <input
                           type="checkbox"
-                          value={element.departmentName}
-                          checked={filter.departmentName.includes(element.departmentName)}
-
+                          value={element?.departmentName}
+                          checked={filter.departmentName.includes(element?.departmentName)}
                           onChange={handleDepartmentCheckboxChange}
                           className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
                         />
-                        <span>{element.departmentName}</span>
+                        <span>{element?.departmentName}</span>
                       </label>
                     ))}
                 </div>
@@ -767,17 +749,20 @@ export const NewPage = () => {
                             ? element.employeeCode
                             : "-"}
                         </td>
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-wrap ">
                           <p className="font-medium hover:underline cursor-pointer"> {element.name ? element.name : "-"} </p>
                           <p className="text-[12px]"> {element.jobProfileId?.jobProfileName
                             ? element.jobProfileId?.jobProfileName
                             : "-"}</p>
                         </td>
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.groupId?.groupName
                             ? element.groupId?.groupName
                             : "-"}
                         </td>
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.contactNumber ? element.contactNumber : "-"}
                         </td>
@@ -818,7 +803,6 @@ export const NewPage = () => {
                           </div>
                         </td>
 
-
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           <div className="flex gap-[10px]">
                             Change Password
@@ -828,6 +812,7 @@ export const NewPage = () => {
                           </div>
 
                         </td>
+
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.updatedAt ? formatDate(new Date(element.createdAt)) : "-"}
                         </td>
@@ -894,7 +879,6 @@ export const NewPage = () => {
             )}
           </div>
 
-
           {isEditStatusPopupOpen && (
             <div className="fixed inset-0 flex items-center justify-center z-50 ">
               <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
@@ -919,10 +903,6 @@ export const NewPage = () => {
             </div>
           )}
 
-
-
-
-
           {isChangePasswordPopupOpen && (
             <div className="fixed inset-0 flex items-center justify-center z-50">
               <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
@@ -938,7 +918,7 @@ export const NewPage = () => {
                   <div className="flex  flex-col gap-[10px]">
                     <div>
                       <input
-                        type={showPassword ? 'text' : 'password'} // Use 'text' to show, 'password' to hide
+                        type={showPassword ? 'text' : 'password'} 
                         placeholder="Change Password"
                         id="newPassword"
                         name="newPassword"
@@ -987,8 +967,6 @@ export const NewPage = () => {
             </div>
           )}
 
-
-
           <div className="flex gap-4 items-center justify-center">
             <div
               onClick={() => {
@@ -1025,7 +1003,6 @@ export const NewPage = () => {
               <img src={CaretRight1} alt="" />
             </div>
           </div>
-
 
         </div>
       </div>
