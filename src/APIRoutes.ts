@@ -1,7 +1,5 @@
 
-//export const apiPath = ``;
-
-
+// export const apiPath = ``;
 
 // export const apiPath = `http://localhost:5050`;
 

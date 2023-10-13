@@ -294,16 +294,25 @@ export const AttendenceDashboardList = () => {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
-  function extractTime(dateTime: any) {
-    if (!dateTime) {
-      return '';
-    }
-    const date = new Date(dateTime);
-    const hours = String(date.getUTCHours()).padStart(2, '0');
-    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
+  // function extractTime(dateTime: any) {
+  //   if (!dateTime) {
+  //     return '';
+  //   }
+  //   const date = new Date(dateTime);
+  //   const hours = String(date.getUTCHours()).padStart(2, '0');
+  //   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  //   return `${hours}:${minutes}`;
+  // }
 
+  function extractTimeFromISOString(isoString:any) {
+    if (!isoString) {
+      return null;
+    }
+  
+    const timePart = isoString.split('T')[1]; // Split the ISO string at 'T' and take the time part
+    const timeWithoutMilliseconds = timePart.split('.')[0]; // Remove milliseconds if present
+    return timeWithoutMilliseconds;
+  }
   const exportToExcel = () => {
     if (items) {
       const columnOrder = [
@@ -313,6 +322,7 @@ export const AttendenceDashboardList = () => {
         'Name',
         'JobProfile',
         'Group',
+        'Shift',
         'PunchIn',
         'PunchOut',
         'Status',
@@ -337,6 +347,7 @@ export const AttendenceDashboardList = () => {
 
         console.log({ ...rest });
         // Map the data according to the column order
+
         const mappedData = columnOrder.map((column) => {
           switch (column) {
             case 'Sr.no':
@@ -349,11 +360,15 @@ export const AttendenceDashboardList = () => {
               const date = new Date(record.date);
               const formattedDate = formatDateExcel(date);
               return formattedDate;
+            case 'Shift':
+              return record.shift;
             case 'PunchIn':
-              const time = extractTime(record.punches[0]?.punchIn);
+              // const time = extractTime(record.punches[0]?.punchIn);
+              const time = record.punches[0]?.punchIn.split('T')[1].split('.')[0];
               return time;
+            // const time2 = extractTime(record.punches.length > 0 ? record.punches[record.punches.length - 1]?.punchOut : null);
             case 'PunchOut':
-              const time2 = extractTime(record.punches.length > 0 ? record.punches[record.punches.length - 1]?.punchOut : null);
+              const time2 = record.punches.length > 0 ? extractTimeFromISOString(record.punches[record.punches.length - 1]?.punchOut) : null;
               return time2;
             case 'Status':
               return record.status;
@@ -612,7 +627,7 @@ export const AttendenceDashboardList = () => {
     }
 
   }
- 
+
   // console.log("aabcffff",shopitems)
 
   const punchesData = useSelector((state: any) => state.attandence.punchInPunchOut);
@@ -620,22 +635,22 @@ export const AttendenceDashboardList = () => {
   let pendingShopCount = 0;
   let approvedShopCount = 0;
   let rejectedShopCount = 0;
-  
+
   for (const entries of shopitems) {
     const status = entries.attendance;
-    for(const i of status){
-      console.log("statusssssss",i.status)
+    for (const i of status) {
+      console.log("statusssssss", i.status)
       if (i.status === "pending") {
-      pendingShopCount++;
-    } else if (i.status === "approved") {
-      approvedShopCount++;
-    } else if (i.status === "rejected") {
-      rejectedShopCount++;
+        pendingShopCount++;
+      } else if (i.status === "approved") {
+        approvedShopCount++;
+      } else if (i.status === "rejected") {
+        rejectedShopCount++;
+      }
     }
-    }  
-    
+
   }
-  
+
 
 
 
@@ -694,7 +709,7 @@ export const AttendenceDashboardList = () => {
               <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">Punch Out</p>
             </div>
           </div>
-        ): isShopOpen ? (
+        ) : isShopOpen ? (
           <div className="flex flex-start pt-4 gap-6">
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
               <div className="flex justify-center items-center ">
@@ -707,7 +722,7 @@ export const AttendenceDashboardList = () => {
 
               </p>
             </div>
-        
+
             <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
               <div className="flex justify-center items-center ">
                 <span className="text-[#283093] text-xl font-semibold">
@@ -720,256 +735,256 @@ export const AttendenceDashboardList = () => {
               </p>
             </div>
           </div>
-        )  
-         : (
-          <div className="flex flex-start pt-4 gap-6">
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {approvedCount}
-                </span>
-                {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
-                Approved
-
-              </p>
-            </div>
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {pendingCount}
-                </span>
-
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
-                Pending
-              </p>
-            </div>
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {rejectedCount}
-                </span>
-
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
-                Rejected
-              </p>
-            </div>
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-
-                  {approvedCount + pendingCount + rejectedCount}
-                </span>
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-                Total Present
-              </p>
-            </div>
-
-
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {punchesData && punchesData.countIn ? punchesData.countIn : 0}
-                </span>
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-                Punch In
-              </p>
-            </div>
-            <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
-              <div className="flex justify-center items-center ">
-                <span className="text-[#283093] text-xl font-semibold">
-                  {punchesData && punchesData.countOut ? punchesData.countOut : 0}
-                </span>
-              </div>
-              <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
-                Punch Out
-              </p>
-            </div>
-          </div>
         )
+          : (
+            <div className="flex flex-start pt-4 gap-6">
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+                    {approvedCount}
+                  </span>
+                  {/* <img src={up} alt="" className="h-[16px] w-[16px] ms-1" /> */}
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                  Approved
+
+                </p>
+              </div>
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+                    {pendingCount}
+                  </span>
+
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                  Pending
+                </p>
+              </div>
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+                    {rejectedCount}
+                  </span>
+
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E]">
+                  Rejected
+                </p>
+              </div>
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+
+                    {approvedCount + pendingCount + rejectedCount}
+                  </span>
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                  Total Present
+                </p>
+              </div>
+
+
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+                    {punchesData && punchesData.countIn ? punchesData.countIn : 0}
+                  </span>
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                  Punch In
+                </p>
+              </div>
+              <div className="flex flex-col w-[150px] h-[70px] shadow-lg justify-center items-center gap-1 py-5 px-16 rounded-xl bg-[#FAFAFA] border border-solid border-[#DEDEDE]">
+                <div className="flex justify-center items-center ">
+                  <span className="text-[#283093] text-xl font-semibold">
+                    {punchesData && punchesData.countOut ? punchesData.countOut : 0}
+                  </span>
+                </div>
+                <p className="text-sm font-medium leading-6 text-[#2E2E2E] whitespace-nowrap">
+                  Punch Out
+                </p>
+              </div>
+            </div>
+          )
         }
 
       </div>
 
       <div className=" flex pt-6 justify-between items-center self-stretch ">
-          <div className="flex gap-3">
-            <div>
-             
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+        <div className="flex gap-3">
+          <div>
 
-                  onClick={GrouptoggleDropdown}
-                >
-                  All Group
-                </button>
-                {isGroupOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {sortedgroupList &&
-                        sortedgroupList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.groupName}
-                              checked={filter.groupName.includes(element.groupName)}
-
-                              onChange={handleGroupCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.groupName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-              
-              <div className="relative inline-block text-left  ml-3">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-                  onClick={toggleDropdown}
-                >
-                  All Job Profiles
-                </button>
-                {isOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {sortedjobProfileList &&
-                        sortedjobProfileList.map((element, index) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.jobProfileName}
-                              checked={filter.jobProfileName.includes(element.jobProfileName)}
-                              onChange={handleJobCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.jobProfileName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-             
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-                  onClick={DepartmenttoggleDropdown}
-                >
-                  All Department
-                </button>
-                {isDepartmentOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {sortedDepartmentList &&
-                        sortedDepartmentList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.departmentName}
-                              checked={filter.departmentName.includes(element.departmentName)}
-
-                              onChange={handleDepartmentCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.departmentName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-             
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-                              
-                  onClick={ShoptoggleDropdown}
-                >
-                  All Shop
-                </button>
-                {isShopOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {shoplist &&
-                        shoplist.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.shopName}
-                              checked={shopName.includes(element.shopName)}
-
-                              onChange={handleShopCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.shopName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <select
-                onChange={(event) => {
-                  Setstatus(event.target.value)
-                }}
-                value={status}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+                onClick={GrouptoggleDropdown}
               >
-                <option value="">All Status</option>
-                <option value="approved">Approved</option>
-                <option value="added Manually by administrator">Manual</option>
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
+                All Group
+              </button>
+              {isGroupOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
 
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {sortedgroupList &&
+                      sortedgroupList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.groupName}
+                            checked={filter.groupName.includes(element.groupName)}
 
-              </select>
+                            onChange={handleGroupCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.groupName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-  
+          <div>
+
+            <div className="relative inline-block text-left  ml-3">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={toggleDropdown}
+              >
+                All Job Profiles
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {sortedjobProfileList &&
+                      sortedjobProfileList.map((element, index) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.jobProfileName}
+                            checked={filter.jobProfileName.includes(element.jobProfileName)}
+                            onChange={handleJobCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.jobProfileName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div>
+
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={DepartmenttoggleDropdown}
+              >
+                All Department
+              </button>
+              {isDepartmentOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {sortedDepartmentList &&
+                      sortedDepartmentList.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.departmentName}
+                            checked={filter.departmentName.includes(element.departmentName)}
+
+                            onChange={handleDepartmentCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.departmentName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <div>
+
+            <div className="relative inline-block text-left">
+              <button
+                type="button"
+                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
+
+                onClick={ShoptoggleDropdown}
+              >
+                All Shop
+              </button>
+              {isShopOpen && (
+                <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+
+
+                  <div className="flex flex-row p-2 gap-3">
+                    <img src={SelectAll} onClick={selectShopAll} className="h-5 w-5 b" />
+                    <img src={ClearAll} className="h-5 w-5 " onClick={clearShopAll} />
+                  </div>
+                  <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
+                    {shoplist &&
+                      shoplist.map((element: any, index: any) => (
+                        <label key={index} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            value={element.shopName}
+                            checked={shopName.includes(element.shopName)}
+
+                            onChange={handleShopCheckboxChange}
+                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
+                          />
+                          <span>{element.shopName}</span>
+                        </label>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <select
+              onChange={(event) => {
+                Setstatus(event.target.value)
+              }}
+              value={status}
+              className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
+            >
+              <option value="">All Status</option>
+              <option value="approved">Approved</option>
+              <option value="added Manually by administrator">Manual</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+
+
+            </select>
+          </div>
+        </div>
+
 
 
       </div>
