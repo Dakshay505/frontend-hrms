@@ -16,26 +16,21 @@ import DummyProfilr from "../../assets/Dummy.jpeg"
 import "react-datepicker/dist/react-datepicker.css";
 import Calendar from "react-calendar";
 import { useNavigate } from "react-router-dom";
-// import up from "../../assets/arrow-up.png";
 import { getAllAttandenceAsync, getAllPunchInPunchOutAsync, getGroupAttendanceAsync, getShopFilterAttandenceAsync } from "../../redux/Slice/AttandenceSlice";
 import CaretDown from "../../assets/CaretDown11.svg";
 import CaretUp from "../../assets/CaretUp.svg";
 import LoaderGif from "../../assets/loadergif.gif";
-// import ArrowSqureOut from "../../assets/ArrowSquareOut.svg";
 import close from "../../assets/x1.png";
 import { getAllDepartmentAsync } from "../../redux/Slice/departmentSlice";
 import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
-// import { AnyAction } from "@reduxjs/toolkit";
 
 
 export const AttendenceDashboardList = () => {
   const dispatch = useDispatch();
   const groupList = useSelector((state: any) => state.group.groups);
-  // const employeeList = useSelector((state: any) => state.employee.employees);
-  // const totalEmployees = employeeList.length;
   const sortedgroupList = [...groupList].sort((a: any, b: any) =>
     a.groupName.localeCompare(b.groupName
     )
@@ -81,36 +76,17 @@ export const AttendenceDashboardList = () => {
 
   const [filter, setFilter] = useState({
     name: "",
-    //groupName: localStorage.getItem("groupName") || "",
     groupName: [""],
-    //jobProfileName: localStorage.getItem("jobProfileName") || [],
     jobProfileName: [""],
-    //departmentName: localStorage.getItem("departmentName") || "",
     departmentName: [""],
     date: "",
     nextDate: "",
     page: 1,
     limit: 2000,
   });
-  // const [page, setPage] = useState(1);
   const [items, setItems] = useState<any[]>([]);
   const [shopitems, setShopItems] = useState<any[]>([]);
   const shoplist = useSelector((state: any) => state.Shop.shop)
-
-  // useEffect(() => {
-  //   const currentDate = new Date(date);
-  //   const year = currentDate.getFullYear();
-  //   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  //   const day = String(currentDate.getDate()).padStart(2, "0");
-  //   setFilter({
-  //     ...filter,
-  //     date: `${year}-${month}-${day}`,
-  //     page: 1,
-  //   });
-  // }, [date]);
-
-
-
 
   useEffect(() => {
     dispatch(getAllGroupsAsync());
@@ -129,21 +105,7 @@ export const AttendenceDashboardList = () => {
     const formattedTime = `${formattedHours}:${formattedMinutes} ${period}`;
     return formattedTime;
   }
-
-  // const [selectedShop,] = useState("All Shop");
   const [shopName, setShopName] = useState([""]);
-
-  // const handleShopChange = (event: any) => {
-
-  //   const selectedValue = event.target.value;
-  //   setSelectedShop(selectedValue);
-
-  //   if (selectedValue === "All Shop") {
-  //     setShopName("");
-  //   } else {
-  //     setShopName(selectedValue);
-  //   }
-  // };
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -163,8 +125,6 @@ export const AttendenceDashboardList = () => {
       return;
     }
 
-    // const currentDate = new Date();
-    // const formattedDate = currentDate.toISOString().slice(0, 10);
     let sendData = {}
     sendData = {
       shopNames: shopName,
@@ -172,7 +132,6 @@ export const AttendenceDashboardList = () => {
       nextDate: filter.nextDate
 
     }
-    //console.log("Daatta",sendData)
 
     dispatch(getShopFilterAttandenceAsync(sendData)).then((data: any) => {
       const employeeData = data.payload.shopData;
@@ -182,29 +141,9 @@ export const AttendenceDashboardList = () => {
 
   }, [shopName])
   const [dateRange, setDateRange] = useState<any>([]);
-  useEffect(() => {
 
-    setShopName([])
-    Setloading(true)
-    filter.page = 1;
-    if (filter.nextDate === "") {
-      filter.nextDate = filter.date
-    }
 
-    dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
-      console.log("---------", data.payload);
-      const employeeData = data.payload.attendanceRecords;
-      if (status === "") {
-        setItems(employeeData);
-        Setloading(false)
-      }
-      else {
-        const filteredItems = employeeData.filter((element: any) => element.status === status);
-        setItems(filteredItems)
-        Setloading(false)
-      }
-    });
-  }, [filter, status]);
+  
   useEffect(() => {
     setShopName([])
     Setloading(true)
@@ -224,7 +163,7 @@ export const AttendenceDashboardList = () => {
     filter.date = `${year}-${month}-${day}`
     filter.nextDate = `${nextyear}-${nextmonth}-${nextday}`;
 
-    
+
     dispatch(getAllAttandenceAsync(filter)).then((data: any) => {
       const employeeData = data.payload.attendanceRecords;
       if (status === "") {
@@ -237,7 +176,8 @@ export const AttendenceDashboardList = () => {
         Setloading(false)
       }
     });
-  }, [date, nextDate]);
+  }, [date, nextDate,filter,status]);
+
 
   useEffect(() => {
     function getDateRange(startDate: any, endDate: any) {
@@ -255,15 +195,10 @@ export const AttendenceDashboardList = () => {
     setShopName([])
     Setloading(true)
 
-
-    //localStorage.setItem("jobProfileName", filter.jobProfileName)
-    //localStorage.setItem("groupName", filter.groupName)
-    //localStorage.setItem("departmentName", filter.departmentName)
     filter.date = new Date().toISOString().slice(0, 10)
 
     getDateRange(filter.date, filter.nextDate);
     filter.page = 1;
-    //dispatch(getAllEmployeeAsync(filter))
     console.log(filter)
     if (filter.nextDate === "") {
       filter.nextDate = filter.date
@@ -292,27 +227,19 @@ export const AttendenceDashboardList = () => {
   };
   function formatDateExcel(date: any) {
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
-  // function extractTime(dateTime: any) {
-  //   if (!dateTime) {
-  //     return '';
-  //   }
-  //   const date = new Date(dateTime);
-  //   const hours = String(date.getUTCHours()).padStart(2, '0');
-  //   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  //   return `${hours}:${minutes}`;
-  // }
+  
 
   function extractTimeFromISOString(isoString:any) {
     if (!isoString) {
       return null;
     }
   
-    const timePart = isoString.split('T')[1]; // Split the ISO string at 'T' and take the time part
-    const timeWithoutMilliseconds = timePart.split('.')[0]; // Remove milliseconds if present
+    const timePart = isoString.split('T')[1];
+    const timeWithoutMilliseconds = timePart.split('.')[0]; 
     return timeWithoutMilliseconds;
   }
   const exportToExcel = () => {
@@ -331,12 +258,10 @@ export const AttendenceDashboardList = () => {
         'Signature',
         'Shop Code',
         'Shop Name',
-        // 'Remark'
         ""
       ];
 
       const modifiedData = items.map((record, index: number) => {
-        // Destructure the record, omit unwanted properties
         const {
           updatedAt,
           createdAt,
@@ -348,7 +273,6 @@ export const AttendenceDashboardList = () => {
 
 
         console.log({ ...rest });
-        // Map the data according to the column order
 
         const mappedData = columnOrder.map((column) => {
           switch (column) {
@@ -365,10 +289,8 @@ export const AttendenceDashboardList = () => {
             case 'Shift':
               return record.shift;
             case 'PunchIn':
-              // const time = extractTime(record.punches[0]?.punchIn);
               const time = record.punches[0]?.punchIn.split('T')[1].split('.')[0];
               return time;
-            // const time2 = extractTime(record.punches.length > 0 ? record.punches[record.punches.length - 1]?.punchOut : null);
             case 'PunchOut':
               const time2 = record.punches.length > 0 ? extractTimeFromISOString(record.punches[record.punches.length - 1]?.punchOut) : null;
               return time2;
@@ -382,8 +304,6 @@ export const AttendenceDashboardList = () => {
               return record.shopCode ? record.shopCode : "-";
             case 'Shop Name':
               return record.shopName ? record.shopName : "-";
-            // case 'Remark':
-            //   return record.remarks.length > 0 ? record.remarks[record.remarks.length - 1]?.remark : undefined;
             default:
               return '';
           }
@@ -650,11 +570,7 @@ export const AttendenceDashboardList = () => {
         rejectedShopCount++;
       }
     }
-
   }
-
-
-
 
   return (
     <div className="px-[40px] pt-[32px]">
