@@ -1,6 +1,7 @@
 import right from "../../assets/r-arrow.png";
 // import up from "../../assets/arrow-up.png";
 import GreenCheck from "../../assets/GreenCheck.svg";
+import { LazyLoadImage} from 'react-lazy-load-image-component';
 import RedX from "../../assets/RedX.svg";
 import SpinnerGap from "../../assets/SpinnerGap.svg";
 import { Link, useNavigate } from "react-router-dom";
@@ -367,8 +368,8 @@ export const AttendenceDtabase = () => {
                         </td>
                         <td className="py-4 px-5"  >
                           {element.profilePicture
-                            ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
-                            : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+                            ? <LazyLoadImage src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                            : <LazyLoadImage src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
 
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap  ">
@@ -496,7 +497,7 @@ export const AttendenceDtabase = () => {
                         <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                           {element?.status === "approved" &&
                             element.approvedImage && (
-                              <img onClick={() =>
+                              <LazyLoadImage onClick={() =>
                                 handleImageClick(
                                   element.approvedImage,
                                   element?.profilePicture

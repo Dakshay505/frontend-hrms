@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllGroupsAsync } from "../../redux/Slice/GroupSlice";
 import { getAllJobProfileAsync } from "../../redux/Slice/JobProfileSlice";
+import { LazyLoadImage} from 'react-lazy-load-image-component';
 import CaretLeft from "../../assets/CaretLeft.svg";
 import { saveAs } from 'file-saver';
 import toast from "react-hot-toast";
@@ -1270,8 +1271,8 @@ export const AttendenceDashboardList = () => {
 
                                 <td className=""  >
                                   {element.profilePicture
-                                    ? <img src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
-                                    : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
+                                    ? <LazyLoadImage src={element.profilePicture} className="w-[60px] h-[60px] rounded-full" />
+                                    : <LazyLoadImage src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[60px] h-[60px] rounded-full" />}
 
                                 </td>
 
@@ -1416,7 +1417,7 @@ export const AttendenceDashboardList = () => {
                                 <td className="text-sm font-normal text-[#2E2E2E] text-center whitespace-nowrap">
                                   {element?.status === "approved" &&
                                     element.approvedImage && (
-                                      <img onClick={() =>
+                                      <LazyLoadImage onClick={() =>
                                         handleImageClick(
                                           element.approvedImage,
                                           element?.profilePicture

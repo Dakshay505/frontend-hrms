@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { useDispatch, useSelector } from "react-redux";
+import { LazyLoadImage} from 'react-lazy-load-image-component';
 import {
   getAllEmployeeAsync,
   getEmployeeImageAsync,
@@ -791,8 +792,8 @@ const MasterSheet = () => {
                       >
                         <td className="py-4 px-5"  >
                           {element.profilePicture
-                            ? <img src={element.profilePicture} className="w-[80px] h-[80px] rounded-full" />
-                            : <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[80px] h-[80px] rounded-full" />}
+                            ? <LazyLoadImage src={element.profilePicture} className="w-[80px] h-[80px] rounded-full" />
+                            : <LazyLoadImage src="https://cdn-icons-png.flaticon.com/512/219/219983.png" className="w-[80px] h-[80px] rounded-full" />}
                         </td>
                         <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                           {element.employeeCode
