@@ -3,7 +3,7 @@ import BluePlus from "../../assets/BluePlus.png";
 import greyPlus from "../../assets/gretyPlus.svg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LazyLoadImage} from 'react-lazy-load-image-component';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import {
   getAllEmployeeAsync,
   getEmployeeImageAsync,
@@ -33,23 +33,23 @@ import {
 } from "../../redux/Slice/departmentSlice";
 import userIcon from "../../assets/UsersThree.svg";
 import deleteIcon from "../../assets/Trash.svg";
-import SelectAll from "../../assets/Select All.svg"
-import ClearAll from "../../assets/Clear-all.svg"
+
 import toast from "react-hot-toast";
 import mongoose from 'mongoose';
 import { allShopAsync, getSingleShopAsync } from "../../redux/Slice/ShopSlice";
 import { getLoggedInUserDataAsync } from "../../redux/Slice/loginSlice";
 import img3 from "../../assets/pngimg.png"
+import Multiselect from 'multiselect-react-dropdown';
+
 
 const ViewModifyDatabase = () => {
   const [count, setCount] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  const [apply,setApply]=useState(false)
 
   const [filter, setFilter] = useState(() => {
     const storedFilterString = localStorage.getItem("filterData");
-  
+
     if (storedFilterString) {
       return JSON.parse(storedFilterString);
     } else {
@@ -63,7 +63,7 @@ const ViewModifyDatabase = () => {
       };
     }
   });
-  
+
   useEffect(() => {
     dispatch(getAllEmployeeAsync(filter)).then((data: any) => {
       setCount(data.payload.count);
@@ -87,7 +87,7 @@ const ViewModifyDatabase = () => {
       }
       setFetchedSuggestions(arr);
     });
-  }, [apply,filter.name, filter.page, filter.aadhar]);
+  }, [ filter.name, filter.page, filter.aadhar,filter.groupName,filter.jobProfileName]);
 
   useEffect(() => {
     const { name, ...filterWithoutName } = filter;
@@ -259,80 +259,20 @@ const ViewModifyDatabase = () => {
     }
     return element;
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const [isGroupOpen, setIsGroupOpen] = useState(false);
 
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-    setIsGroupOpen(false);
-  };
-  const GrouptoggleDropdown = () => {
-    setIsGroupOpen(!isGroupOpen);
-    setIsOpen(false);
-  };
-  const handleJobCheckboxChange = (event: any) => {
-    const { value, checked } = event.target;
+  const handleJobCheckboxChange = (selectedList: any) => {
+    const jobProfileName = selectedList.map((item: any) => item.jobProfileName);
+    setFilter((prevFilter: any) => ({ ...prevFilter, jobProfileName }));
+};
 
 
-    if (checked) {
-      setFilter((prevFilter: any) => ({
-        ...prevFilter,
-        jobProfileName: [...prevFilter.jobProfileName, value],
-      }));
 
-    } else {
-      setFilter({
-        ...filter,
-        jobProfileName: filter.jobProfileName.filter((profile: any) => profile !== value),
-      });
-    }
-  };
-  const handleGroupCheckboxChange = (event: any) => {
-    const { value, checked } = event.target;
+  const handleGroupCheckboxChange = (selectedList: any) => {
+    const groupName = selectedList.map((item: any) => item.groupName);
+    setFilter((prevFilter: any) => ({ ...prevFilter, groupName }));
+};
 
-
-    if (checked) {
-      setFilter((prevFilter: any) => ({
-        ...prevFilter,
-        groupName: [...prevFilter.groupName, value],
-      }));
-
-    } else {
-      setFilter({
-        ...filter,
-        groupName: filter.groupName.filter((profile: any) => profile !== value),
-      });
-    }
-  };
-  const selectAll = () => {
-    const allProfiles = jobProfileList.map((element: any) => element.jobProfileName);
-    setFilter((prevFilter: any) => ({
-      ...prevFilter,
-      jobProfileName: allProfiles,
-    }));
-  };
-
-  const clearAll = () => {
-    setFilter({
-      ...filter,
-      jobProfileName: [],
-    });
-  };
-  const selectGroupAll = () => {
-    const allProfiles = groupList.map((element: any) => element.groupName);
-    setFilter((prevFilter: any) => ({
-      ...prevFilter,
-      groupName: allProfiles,
-    }));
-  };
-
-  const clearGroupAll = () => {
-    setFilter({
-      ...filter,
-      groupName: [],
-    });
-  };
   const handleInputChange = (event: any) => {
     setSearch(event.target.value);
     setFilter({
@@ -418,12 +358,7 @@ const ViewModifyDatabase = () => {
       </div>
     ) : null;
   };
-  // const handlerAadhar = () => {
-  //   if (items.length > 1) {
-  //     const filteredItems = items.filter((element: any) => element.aadharNumber !== 0);
-  //     setItems(filteredItems)
-  //   }
-  // }
+
   interface Department {
     departmentName: string;
     _id: mongoose.Types.ObjectId;
@@ -432,7 +367,6 @@ const ViewModifyDatabase = () => {
     useState<Department | null>(null);
   const handleDeleteClick = (element: Department) => {
     setConfirmationOpen(true);
-    // console.log(element, "element to delete");
     setDepartmentToDelete(element);
   };
 
@@ -467,6 +401,10 @@ const ViewModifyDatabase = () => {
   useEffect(() => {
     dispatch(getLoggedInUserDataAsync());
   }, [])
+
+
+
+ 
   return (
     <div className="mx-10">
       <div className="flex justify-between pt-8">
@@ -540,142 +478,34 @@ const ViewModifyDatabase = () => {
       {databaseValue === "Employees" && (
         <div className="mt-10 flex gap-5">
           <div className="flex gap-4">
-            <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Groups") {
-                    setFilter({
-                      ...filter,
-                      groupName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      groupName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.groupName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-              >
-                <option value="All Groups">All Groups</option>
-                {groupList &&
-                  groupList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.groupName}>
-                        {element.groupName}
-                      </option>
-                    );
-                  })}
-              </select> */}
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
 
-                  onClick={GrouptoggleDropdown}
-                >
-                  All Group
-                </button>
-                {isGroupOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+        
 
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
-                      <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                        Apply
-                      </div>
-                    </div>
+            <Multiselect
+              options={groupList.map((element:any)=>({
+                groupName:element.groupName
+              }))}
+              selectedValues={groupList.filter((item:any) => filter.groupName.includes(item.groupName))}
+              onSelect={handleGroupCheckboxChange}
+              onRemove={handleGroupCheckboxChange}
+              displayValue="groupName"
+              placeholder="Select Group"
+            />
 
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {groupList &&
-                        groupList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.groupName}
-                              checked={filter.groupName.includes(element.groupName)}
-
-                              onChange={handleGroupCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.groupName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div>
-              {/* <select
-                onChange={(event) => {
-                  if (event.target.value === "All Job Profiles") {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: "",
-                    });
-                  } else {
-                    setFilter({
-                      ...filter,
-                      jobProfileName: event.target.value,
-                    });
-                  }
-                }}
-                value={filter.jobProfileName}
-                className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] min-w-[176px] px-5 focus:outline-none"
-              >
-                <option value="All Job Profiles">All Job Profiles</option>
-                {jobProfileList &&
-                  jobProfileList.map((element: any, index: number) => {
-                    return (
-                      <option key={index} value={element.jobProfileName}>
-                        {element.jobProfileName}
-                      </option>
-                    );
-                  })}
-              </select> */}
-              <div className="relative inline-block text-left">
-                <button
-                  type="button"
-                  className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg h-10 text-sm font-medium text-[#2E2E2E] w-[210px] px-5 focus:outline-none"
-
-                  onClick={toggleDropdown}
-                >
-                  All Job Profiles
-                </button>
-                {isOpen && (
-                  <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+            <Multiselect
+              options={jobProfileList.map((element:any)=>({
+                jobProfileName:element.jobProfileName
+              }))}
+              selectedValues={jobProfileList.filter((item:any) => filter.jobProfileName.includes(item.jobProfileName))}
+              onSelect={handleJobCheckboxChange}
+              onRemove={handleJobCheckboxChange}
+              displayValue="jobProfileName"
+              placeholder="Select Job Profile"
+            />
 
 
-                    <div className="flex flex-row p-2 gap-3">
-                      <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
-                      <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                      <div className="cursor-pointer text-blue-600" onClick={()=>setApply(!apply)}>
-                        Apply
-                      </div>
-                    </div>
-                    <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                      {jobProfileList &&
-                        jobProfileList.map((element: any, index: any) => (
-                          <label key={index} className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              value={element.jobProfileName}
-                              checked={filter.jobProfileName.includes(element.jobProfileName)}
 
-                              onChange={handleJobCheckboxChange}
-                              className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                            />
-                            <span>{element.jobProfileName}</span>
-                          </label>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+
             <div>
               <select
                 onChange={(event) => {
@@ -806,9 +636,7 @@ const ViewModifyDatabase = () => {
                     <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
                       Current Barcode
                     </td>
-                    {/* <td className="py-4 px-5 text-sm font-medium text-[#2E2E2E] whitespace-nowrap">
-                      Number of  Barcode
-                    </td> */}
+
                   </tr>
                   {employeeDetailList &&
                     employeeDetailList.map((element: any, index: number) => {
@@ -820,14 +648,14 @@ const ViewModifyDatabase = () => {
                         >
                           <td className="py-4 px-4 text-sm  font-normal text-[#2E2E2E] whitespace-nowrap">
                             <div className="rounded-full  overflow-hidden">
-                            <LazyLoadImage
-                              alt="Profile Photo"
-                              effect="opacity"
-                              
-                              src={element?.profilePicture ? element?.profilePicture : img3} // use normal <img> attributes as props
-                               className="rounded-full object-cover w-[80px] h-[80px]" />
-    
-                            
+                              <LazyLoadImage
+                                alt="Profile Photo"
+                                effect="opacity"
+
+                                src={element?.profilePicture ? element?.profilePicture : img3} // use normal <img> attributes as props
+                                className="rounded-full object-cover w-[80px] h-[80px]" />
+
+
 
                             </div>
                           </td>
@@ -864,17 +692,7 @@ const ViewModifyDatabase = () => {
                           <td className="py-4 px-5 text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
                             <img src={element.currentBarCode} alt="barcode" />
                           </td>
-                          {/* <td className="py-4  m-auto text-sm font-normal text-[#2E2E2E] whitespace-nowrap">
-                            <div className="flex gap-[10px]">
-                              {BarcodeStore[element.employeeCode] &&
-                                BarcodeStore[element.employeeCode].barCodes.map((element: any) => (
-                                  <div>
-                                    {element + " ,"}
-                                  </div>
-                                ))
-                              }
-                            </div>
-                          </td> */}
+
                         </tr>
                       );
                     })}

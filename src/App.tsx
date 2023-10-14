@@ -404,17 +404,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
-  // {
-  //   path: "/employee-profile",
-  //   element: (
-  //     <ProductedRoute>
-  //       <Aside>
-  //         {" "}
-  //         <EmployeeProfile></EmployeeProfile>{" "}
-  //       </Aside>
-  //     </ProductedRoute>
-  //   ),
-  // },
+ 
   {
     path: "/employee-profile",
     element: (
@@ -445,6 +435,7 @@ const router = createBrowserRouter([
       </ProductedRoute>
     ),
   },
+
   {
     path: "/employees",
     element: (
