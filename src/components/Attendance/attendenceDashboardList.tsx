@@ -183,7 +183,7 @@ export const AttendenceDashboardList = () => {
         Setloading(false)
       }
     });
-  }, [date, nextDate,filter.date,filter.nextDate,filter.limit,filter.page,status,apply]);
+  }, [date, nextDate,filter.date,filter.nextDate,filter.limit,filter.page,status,apply,filter.name]);
 
 
   useEffect(() => {
