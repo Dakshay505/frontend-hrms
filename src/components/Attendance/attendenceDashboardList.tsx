@@ -27,6 +27,7 @@ import { getEmployeeImageAsync } from "../../redux/Slice/EmployeeSlice";
 import { allShopAsync } from "../../redux/Slice/ShopSlice";
 import SelectAll from "../../assets/Select All.svg"
 import ClearAll from "../../assets/Clear-all.svg"
+import { exportShopToExcel } from "./shopExcel";
 
 
 export const AttendenceDashboardList = () => {
@@ -585,10 +586,16 @@ export const AttendenceDashboardList = () => {
           <div className="text-2xl font-bold text-[#2E2E2E]">
             Attendance Database
           </div>
-          <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+          {shopName.length>0 ?
+          <div onClick={()=>exportShopToExcel(shopitems)} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
 
             <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
-          </div>
+          </div>:
+           <div onClick={exportToExcel} className="flex cursor-pointer   gap-[5px]  items-center px-[15px] h-9 w-30 bg-[#244a1d] rounded-lg">
+
+           <p className="text-sm  font-medium whitespace-nowrap text-[#FFFFFF] tracking-[0.25px] ">Export to Excel</p>
+         </div>
+          }
 
         </div>
 
