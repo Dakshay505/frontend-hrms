@@ -67,6 +67,7 @@ const navItems: NavItem[] = [
     icon: employees,
     Link: "/employees",
   },
+
   {
     id: "Monthly Report",
     name: "Master Sheet",

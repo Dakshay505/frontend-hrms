@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import search from "../assets/MagnifyingGlass.png"
 import { useDispatch, useSelector } from "react-redux";
-import SelectAll from "../assets/Select All.svg"
-import ClearAll from "../assets/Clear-all.svg"
+
 import { getAllMonthlyReportAsync } from "../redux/Slice/NewSalarySlice";
 import { getAllPunchInPunchOutAsync } from "../redux/Slice/AttandenceSlice";
 import { getAllGroupsAsync } from "../redux/Slice/GroupSlice";
@@ -16,9 +15,9 @@ import { saveAs } from 'file-saver';
 
 import CaretLeft from "../assets/CaretLeft.svg";
 import CaretRight1 from "../assets/CaretRight1.svg";
+import Multiselect from 'multiselect-react-dropdown';
 
 export const MonthlyReport = () => {
-    const [apply, setApply] = useState(false)
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
 
@@ -68,10 +67,6 @@ export const MonthlyReport = () => {
         return element;
     };
 
-
-
-
-
     const [filter, setFilter] = useState<any>({
         groupName: [""],
         jobProfileName: [""],
@@ -79,92 +74,14 @@ export const MonthlyReport = () => {
         employeeCodes: [""],
         page: 1,
         limit: 20,
-
     });
 
 
     useEffect(() => {
-
-        //console.log(filter)
-
+        console.log(filter)
         dispatch(getAllMonthlyReportAsync(filter));
         dispatch(getAllPunchInPunchOutAsync());
-    }, [filter.limit, filter.page, apply]);
-
-
-    // filter
-
-    const [isOpen1, setIsOpen1] = useState(false);
-    const dropdownRef1 = useRef<HTMLDivElement | null>(null);
-
-    const [isOpen2, setIsOpen2] = useState(false);
-    const dropdownRef2 = useRef<HTMLDivElement | null>(null);
-
-    const [isOpen3, setIsOpen3] = useState(false);
-    const dropdownRef3 = useRef<HTMLDivElement | null>(null);
-
-    const [isOpen4, setIsOpen4] = useState(false);
-    const dropdownRef4 = useRef<HTMLDivElement | null>(null);
-
-
-    useEffect(() => {
-        function handleClickOutside(event: any) {
-            if (
-                dropdownRef1.current && !dropdownRef1.current.contains(event.target) &&
-                dropdownRef2.current && !dropdownRef2.current.contains(event.target) &&
-                dropdownRef3.current && !dropdownRef3.current.contains(event.target) &&
-                dropdownRef4.current && !dropdownRef4.current.contains(event.target)
-            ) {
-                setIsOpen1(false);
-                setIsOpen2(false);
-                setIsOpen3(false);
-                setIsOpen4(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const toggleDropdown1 = () => {
-        if (!isOpen1) {
-            setIsOpen1(true);
-        } else {
-            setIsOpen1(false);
-
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                groupName: [],
-            }));
-        }
-        setIsOpen2(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-    };
-
-    const toggleDropdown2 = () => {
-        setIsOpen2(!isOpen2);
-        setIsOpen1(false)
-        setIsOpen3(false)
-        setIsOpen4(false)
-    };
-
-    const toggleDropdown3 = () => {
-        setIsOpen3(!isOpen3);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen4(false)
-    };
-
-    const toggleDropdown4 = () => {
-        setIsOpen4(!isOpen4);
-        setIsOpen1(false)
-        setIsOpen2(false)
-        setIsOpen3(false)
-    };
+    }, [filter.limit, filter.page,  filter.groupName, filter.departmentName, filter.jobProfileName, filter.employeeCodes]);
 
     useEffect(() => {
         dispatch(getAllMonthlyReportAsync());
@@ -173,7 +90,8 @@ export const MonthlyReport = () => {
     // filters
 
     const groupList = useSelector((state: any) => state.group.groups);
-    const sortedgroupList = [...groupList].sort((a: any, b: any) => a.groupName.localeCompare(b.groupName));
+    const sortedgroupList = [...groupList].sort((a, b) => a.groupName.localeCompare(b.groupName));
+
 
     const jobProfileList = useSelector((state: any) => state.jobProfile.jobProfiles);
     const sortedjobProfileList = [...jobProfileList].sort((a: any, b: any) =>
@@ -187,8 +105,6 @@ export const MonthlyReport = () => {
     );
 
 
-
-
     useEffect(() => {
         dispatch(getAllGroupsAsync());
         dispatch(getAllJobProfileAsync());
@@ -199,126 +115,34 @@ export const MonthlyReport = () => {
 
 
 
-    const handleJobCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                jobProfileName: [...prevFilter.jobProfileName, value],
-            }));
-
-        } else {
-            setFilter({
-                ...filter,
-                jobProfileName: filter.jobProfileName.filter((profile: any) => profile !== value),
-            });
-        }
-    };
-
-    const handleGroupCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-
-
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                groupName: [...prevFilter.groupName, value],
-            }));
-
-        } else {
-            setFilter({
-                ...filter,
-                groupName: filter.groupName.filter((profile: any) => profile !== value),
-            });
-        }
-    };
-    const handleDepartmentCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-
-
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                departmentName: [...prevFilter.departmentName, value],
-            }));
-
-        } else {
-            setFilter({
-                ...filter,
-                departmentName: filter.departmentName.filter((profile: any) => profile !== value),
-            });
-        }
-    };
-
-
-
-    const selectAll = () => {
-        const allProfiles = jobProfileList.map((element: any) => element?.jobProfileName);
+    const handleJobCheckboxChange = (selectedList: any) => {
         setFilter((prevFilter: any) => ({
             ...prevFilter,
-            jobProfileName: allProfiles,
+            jobProfileName: selectedList.map((item: any) => item.jobProfileName),
         }));
     };
 
-    const clearAll = () => {
-        setFilter({
-            ...filter,
-            jobProfileName: [],
-        });
-    };
-    const selectDepartmentAll = () => {
-        const allProfiles = departmentList.map((element: any) => element?.departmentName);
+    const handleGroupCheckboxChange = (selectedList: any) => {
         setFilter((prevFilter: any) => ({
             ...prevFilter,
-            departmentName: allProfiles,
+            groupName: selectedList.map((item: any) => item.groupName),
         }));
     };
 
-    const clearDepartmentAll = () => {
-        setFilter({
-            ...filter,
-            departmentName: [],
-        });
-    };
-    const selectGroupAll = () => {
-        const allProfiles = sortedgroupList.map((element?: any) => element?.groupName);
+    const handleDepartmentCheckboxChange = (selectedList: any) => {
         setFilter((prevFilter: any) => ({
             ...prevFilter,
-            groupName: allProfiles,
+            departmentName: selectedList.map((item: any) => item.departmentName),
         }));
     };
 
-    const clearGroupAll = () => {
-        setFilter({
-            ...filter,
-            groupName: [],
-        });
+
+
+    const handleEmployeeCodeChange = (selectedList: any) => {
+        const employeeCodes = selectedList.map((item: any) => item.name);
+        setFilter((prevFilter: any) => ({ ...prevFilter, employeeCodes }));
     };
 
-
-    // useEffect(() => {
-    //     dispatch(getAllMonthlyReportAsync(filter));
-    //     dispatch(getAllPunchInPunchOutAsync());
-
-    // }, [filter]);
-
-
-    const handleEmployeeCheckboxChange = (event: any) => {
-        const { value, checked } = event.target;
-
-        if (checked) {
-            setFilter((prevFilter: any) => ({
-                ...prevFilter,
-                employeeCodes: [...prevFilter.employeeCodes, value],
-            }));
-        } else {
-            setFilter({
-                ...filter,
-                employeeCodes: filter.employeeCodes.filter((code: any) => code !== value),
-            });
-        }
-    };
 
 
     // search 
@@ -472,10 +296,6 @@ export const MonthlyReport = () => {
 
 
 
-
-
-
-
     const ExcelData = useSelector((state: any) => state.newSalary?.data?.salaryRecords);
     // console.log("ExcelData---------------------", ExcelData);
 
@@ -594,10 +414,6 @@ export const MonthlyReport = () => {
         }
     };
 
-
-
-
-
     return (
         <div className='p-[40px]'>
             <div className='flex flex-col gap-[10px]'>
@@ -614,170 +430,52 @@ export const MonthlyReport = () => {
                             </div>
                         </div>
 
-                        <div className='flex py-[20px] gap-[10px]'>
-
-                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef1}>
-                                <button
-                                    type="button"
-                                    className="border border-solid border-[#DEDEDE] font-bold  bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none"
-                                    onClick={toggleDropdown1}
-                                >
-                                    All Group
-                                </button>
-
-                                {isOpen1 && (
-                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                                        <div className="flex flex-row p-2 gap-3">
-                                            <img src={SelectAll} onClick={selectGroupAll} className="h-5 w-5 b" />
-                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearGroupAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
-                                                Apply
-                                            </div>
-                                        </div>
-                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                            {sortedgroupList &&
-                                                sortedgroupList.map((element: any, index: any) => (
-                                                    <label key={index} className="flex items-center space-x-2">
-                                                        <input
-                                                            type="checkbox"
-                                                            value={element.groupName}
-                                                            checked={filter.groupName.includes(element?.groupName)}
-                                                            onChange={handleGroupCheckboxChange}
-                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                        />
-                                                        <span>{element?.groupName}</span>
-                                                    </label>
-                                                ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-
-                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef2}>
-                                <button
-                                    type="button"
-                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                    onClick={toggleDropdown2}
-
-                                >
-                                    Department
-                                </button>
-
-                                {isOpen2 && (
-                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-
-                                        <div className="flex flex-row p-2 gap-3">
-                                            <img src={SelectAll} onClick={selectDepartmentAll} className="h-5 w-5 b" />
-                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearDepartmentAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
-                                                Apply
-                                            </div>
-                                        </div>
-                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                            {sortedDepartmentList &&
-                                                sortedDepartmentList.map((element: any, index: any) => (
-                                                    <label key={index} className="flex items-center space-x-2">
-                                                        <input
-                                                            type="checkbox"
-                                                            value={element?.departmentName}
-                                                            checked={filter.departmentName.includes(element?.departmentName)}
-
-                                                            onChange={handleDepartmentCheckboxChange}
-                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                        />
-                                                        <span>{element?.departmentName}</span>
-                                                    </label>
-                                                ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-
-                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef3}>
-                                <button
-                                    type="button"
-                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                    onClick={toggleDropdown3}
-
-                                >
-                                    Employee Code
-                                </button>
-
-                                {isOpen3 && (
-                                    <div className=" absolute left-0 mt-2 w-[200px]  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                        <div className="flex flex-row px-4 py-2 gap-3">
-                                            <img src={SelectAll} className="h-5 w-5 b" />
-                                            <img src={ClearAll} className="h-5 w-5 " />
-                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
-                                                Apply
-                                            </div>
-                                        </div>
-                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-
-                                            {monthlyData &&
-                                                monthlyData.map((element?: any) => (
-                                                    <label key={element?.id} className="flex items-center gap-[10px]  px-4 py-2 cursor-pointer">
-                                                        <input
-                                                            type="checkbox"
-                                                            value={element?.employee?.employeeCode}
-                                                            checked={filter.employeeCodes.includes(element?.employee?.employeeCode)}
-                                                            onChange={handleEmployeeCheckboxChange}
-                                                            className="form-checkbox h-5 w-5 text-blue-600"
-                                                        />
-                                                        {element?.employee?.employeeCode}
-                                                    </label>
-                                                ))}
-
-                                        </div>
-                                    </div>
-                                )}
-
-                            </div>
-
-                            <div className="relative shadow-sm inline-block text-left" ref={dropdownRef4}>
-                                <button
-                                    type="button"
-                                    className="border border-solid border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm font-bold text-[#2E2E2E]  focus:outline-none"
-                                    onClick={toggleDropdown4}
-
-                                >
-                                    Job Profile
-                                </button>
+                        <div className='flex py-[20px] gap-[10px] flex-wrap'>
 
 
-                                {isOpen4 && (
-                                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                            <Multiselect
+                                options={sortedgroupList}
+                                selectedValues={sortedgroupList.filter(item => filter.groupName.includes(item.groupName))}
+                                onSelect={handleGroupCheckboxChange}
+                                onRemove={handleGroupCheckboxChange}
+                                displayValue="groupName"
+                                placeholder="Select Group"
+                            />
 
-                                        <div className="flex flex-row p-2 gap-3">
-                                            <img src={SelectAll} onClick={selectAll} className="h-5 w-5 b" />
-                                            <img src={ClearAll} className="h-5 w-5 " onClick={clearAll} />
-                                            <div className="cursor-pointer text-blue-600" onClick={() => setApply(!apply)}>
-                                                Apply
-                                            </div>
-                                        </div>
-                                        <div className="px-2 py-2 space-y-2 max-h-36 overflow-y-auto">
-                                            {sortedjobProfileList &&
-                                                sortedjobProfileList.map((element, index) => (
-                                                    <label key={index} className="flex items-center space-x-2">
-                                                        <input
-                                                            type="checkbox"
-                                                            value={element?.jobProfileName}
-                                                            checked={filter.jobProfileName.includes(element?.jobProfileName)}
-                                                            onChange={handleJobCheckboxChange}
-                                                            className="w-4 h-4 text-blue-600 rounded focus:ring focus:ring-blue-200"
-                                                        />
-                                                        <span>{element?.jobProfileName}</span>
-                                                    </label>
-                                                ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
 
-                            <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[60px] text-sm  text-[#2E2E2E]  focus:outline-none">
+
+                            <Multiselect
+                                options={sortedDepartmentList}
+                                selectedValues={sortedDepartmentList.filter(item => filter.departmentName.includes(item.departmentName))}
+                                onSelect={handleDepartmentCheckboxChange}
+                                onRemove={handleDepartmentCheckboxChange}
+                                displayValue="departmentName"
+                                placeholder="Select Department"
+                            />
+
+
+                            <Multiselect
+                                options={sortedjobProfileList}
+                                selectedValues={sortedjobProfileList.filter(item => filter.jobProfileName.includes(item.jobProfileName))}
+                                onSelect={handleJobCheckboxChange}
+                                onRemove={handleJobCheckboxChange}
+                                displayValue="jobProfileName"
+                                placeholder="Select Job Profile"
+                            />
+
+
+                            <Multiselect
+                                options={monthlyData.map((element:any) => ({
+                                    id: element?.id,
+                                    name: element?.employee?.employeeCode,
+                                }))}
+                                selectedValues={[]}
+                                onSelect={handleEmployeeCodeChange}
+                                onRemove={handleEmployeeCodeChange}
+                                displayValue="name"
+                            />
+
+                            <div className="border flex  border-solid font-bold border-[#DEDEDE] bg-[#FAFAFA] rounded-lg px-[10px] py-[8px] w-[150px] h-[40px] text-sm  text-[#2E2E2E]  focus:outline-none">
                                 <select value={selectedMonth} className="bg-[#FAFAFA] outline-none" onChange={handleMonthChange}>
                                     <option value="" className="font-bold">Select a month</option>
                                     {months.map((month, index) => (
@@ -802,14 +500,14 @@ export const MonthlyReport = () => {
                                 )}
 
 
-                                <div className='border flex gap-[15px] h-[60px] items-center px-[15px] py-[13px] shadow-lg  border-solid border-[#DEDEDE] rounded-[8px]'>
+                                <div className='border flex gap-[15px] h-[40px] items-center px-[15px] py-[13px]  border-solid border-[#DEDEDE] rounded-[8px]'>
                                     <img src={search} alt="" className='w-[20px] h-[20px]' />
                                     <input type="search" value={input} onChange={handleInputChange} className='outline-none w-full ' placeholder="Search" />
                                 </div>
 
 
                                 {suggestions.length > 0 && (
-                                    <div className="absolute z-50 top-[15rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
+                                    <div className="absolute z-50 top-[19rem] flex flex-col text-[#2E2E2E] border border-solid border-[#DEDEDE] rounded py-3 min-w-[320px] max-h-[320px] overflow-y-auto bg-[#FFFFFF]">
                                         {suggestions.map((element: any, index: any) => {
                                             return (
                                                 <div
@@ -847,18 +545,10 @@ export const MonthlyReport = () => {
                             </div>
 
                         </div>
-
-
-
-
-
                     </div>
-
-
                 </div>
 
                 <hr />
-
 
                 <div className="py-6 mb-24">
                     {loaderStatus === "loading" ? (
@@ -989,72 +679,16 @@ export const MonthlyReport = () => {
                             </table>
                         </div>}
 
-                    {/* <div className="flex bg-white border-t-2 border-gray-100 py-6 text-sm">
-                        <div className="px-3">
-                            <select
-                                className="bg-theme-btn-gray px-2 py-0.5 border-2 text-zinc-500 border-gray-50 rounded-lg"
-                                value={limit.toString()}
-                                onChange={(event) => {
-                                    const selectedLimit = Number(event.target.value);
-                                    console.log("aaaaaa", selectedLimit)
-                                    if (selectedLimit === total) {
-                                        setLimit(total);
-                                        setPage(1);
-                                        dispatch(getAllMonthlyReportAsync({ page: 1, limit: total }));
-                                    } else {
-                                        setLimit(selectedLimit);
-                                        setPage(1);
-                                        dispatch(getAllMonthlyReportAsync({ page: 1, limit: selectedLimit }));
-                                    }
-                                }}
-                            >
-                                <option value="">select</option>
-                                <option value="10">10</option>
-                                <option value="1">1</option>
-                                <option value="20">20</option>
-
-                            </select>
-
-                            <label className="text-zinc-400 pl-2">Items per page</label>
-                            <label className="text-zinc-700 pl-4">{(page - 1) * limit + 1}-{Math.min(page * limit, total)} of {total} items</label>
-                        </div>
-                        <div className="ml-auto px-6 flex items-center">
-                            <div
-                                className="bg-theme-btn-gray px-2 py-0.5 border-2 text-zinc-500 border-gray-50 rounded-lg"
-                            >
-                                <p>{page}</p>
-                            </div>
-                            <label className="text-zinc-700 pl-2">of {pageCount} pages</label>
-                            <label className="text-zinc-700 pl-4">
-                                <div className="inline-block">
-                                    <button onClick={() => handlePageChange(page - 1)}>
-                                        <Icon
-                                            className="inline-block"
-                                            icon="ic:round-keyboard-arrow-left"
-                                            width="20"
-                                        />
-                                    </button>
-                                    <button onClick={() => handlePageChange(page + 1)}>
-                                        <Icon
-                                            className="inline-block"
-                                            icon="material-symbols:keyboard-arrow-right"
-                                            width="20"
-                                        />
-                                    </button>
-                                </div>
-                            </label>
-                        </div>
-                    </div> */}
                     <div className="flex gap-4 items-center justify-center">
-                        <div 
-                        className="cursor-pointer"
+                        <div
+                            className="cursor-pointer"
                             onClick={() => {
                                 if (page > 1) {
                                     setPage(page - 1);
                                 }
                             }}
                         >
-                           
+
                             <img src={CaretLeft} alt="" />{" "}
                         </div>
                         {pagination().map((element: any, index) => {
@@ -1071,8 +705,8 @@ export const MonthlyReport = () => {
                                 );
                             }
                         })}
-                        <div 
-                        className="cursor-pointer"
+                        <div
+                            className="cursor-pointer"
                             onClick={() => {
                                 if (page !== totalPage) {
                                     setPage(page + 1);
