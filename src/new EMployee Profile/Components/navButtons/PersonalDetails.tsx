@@ -167,7 +167,7 @@ export const PersonalDetails = () => {
                   setShowInputBoxEmail(!showInputBoxEmail);
                 }}>
                   <p className="text-[12px] leading-5 font-normal text-[#1C1C1C] tracking-[0.25px]">
-                    {singleEmployee?.email}
+                    {singleEmployee?.email?singleEmployee?.email:"-"}
                   </p>
                 </div>
               </div>
@@ -235,9 +235,9 @@ export const PersonalDetails = () => {
                       onChange={(event) =>
                         setInputBoxGenderValue(event.target.value)
                       }>
-                      <option value="">Male</option>
-                      <option value="">Female</option>
-                      <option value="">Trans</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
                 </div>
@@ -268,5 +268,3 @@ export const PersonalDetails = () => {
 
   )
 }
-
-
